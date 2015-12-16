@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="FormHandler tests">
+            <directory>./Tests/</directory>
+        </testsuite>
+    </testsuites>
+    <log type="coverage-clover" target="build/logs/clover.xml"/>
+</phpunit>
