@@ -1,0 +1,17 @@
+{
+    "name": "formhandler/formhandler",
+    "description": "Interactive forms within 10 lines",
+    "authors": [
+        {
+            "name": "Marien den Besten",
+            "email": "marien@sitsat.nl"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "files": [
+            "src/class.FormHandler.php",
+            "src/class.dbFormHandler.php"
+        ]
+    }
+}
