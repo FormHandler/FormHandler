@@ -1,0 +1,12 @@
+language: php
+php:
+- 5.5
+- 5.4
+- 5.3
+- 5.2
+- 5.1
+- 5.0
+
+before_script:
+    - travis_retry composer self-update
+    - travis_retry composer --prefer-source --dev install
