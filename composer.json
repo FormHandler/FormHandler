@@ -1,10 +1,11 @@
 {
     "name": "formhandler/formhandler",
     "description": "Interactive forms within 10 lines",
+    "license": "LGPL-2.1",
     "authors": [
         {
             "name": "Marien den Besten",
-            "email": "marien@sitsat.nl"
+            "email": "info@formhandler.net"
         }
     ],
     "require": {},
