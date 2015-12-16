@@ -1,11 +1,21 @@
 {
     "name": "formhandler/formhandler",
+    "type": "library",
     "description": "Interactive forms within 10 lines",
+    "homepage": "http://www.formhandler.net/",
     "license": "LGPL-2.1",
+    "support": {
+        "email": "info@formhandler.net",
+        "forum": "http://www.formhandler.net/forum_index.html",
+        "docs": "http://www.formhandler.net/manual/manual.html",
+        "issues": "https://github.com/FormHandler/FormHandler/issues"
+    },
     "authors": [
         {
             "name": "Marien den Besten",
-            "email": "info@formhandler.net"
+            "email": "info@formhandler.net",
+            "homepage": "http://www.formhandler.net/",
+            "role": "Project lead"
         }
     ],
     "require": {},
