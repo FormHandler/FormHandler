@@ -24,5 +24,8 @@
             "src/class.FormHandler.php",
             "src/class.dbFormHandler.php"
         ]
+    },
+    "extra": {
+        "dev-master": "v3.3.x-dev"
     }
 }
