@@ -5,15 +5,6 @@
  * @package FormHandler
  */
 
-// include the "basic" formhandler
-include_once( dirname(__FILE__).'/class.FormHandler.php' );
-
-// make sure this file is not accessed directly
-if(strtolower(basename($_SERVER['PHP_SELF'])) == strtolower(basename(__FILE__)))
-{
-	die('This file cannot be accessed directly! Include it in your script instead!');
-}
-
 /**
  * class dbFormHandler
  *
@@ -1736,4 +1727,3 @@ class dbFormHandler extends FormHandler
 		return (sizeof($data) ? " WHERE \n " . implode("\n  AND ", $data) : '');
 	}
 }
-?>
