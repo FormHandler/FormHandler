@@ -1,16 +1,10 @@
 <?php
 /**
- * FormHandler v3.2
+ * FormHandler v3.3
  *
  * Look for more info at http://www.formhandler.net
  * @package FormHandler
  */
-
-// make sure this file is not accessed directly
-if(strtolower(basename($_SERVER['PHP_SELF'])) == strtolower(basename(__FILE__)))
-{
-	die('This file cannot be accessed directly! Include it in your script instead!');
-}
 
 /******* BUILD IN VALIDATOR FUNCTIONS *******/
 define('FH_STRING',     'IsString',    true);	// any string that doesn't have control characters (ASCII 0 - 31) but spaces are allowed
