@@ -22,7 +22,7 @@ $fh_lang = array(
   13 => 'The given date is not valid!',
   14 => 'You did not enter a correct value for this field!',
   15 => 'The passwords are not the same!',
-  16 => 'These fields are required!',
+  16 => 'This field is required!',
   17 => 'The password has to be at least %d characters long!',
   18 => 'The password contains invalid characters!',
   19 => 'Only enter this field if you want to overwrite the current value (<a href="%path%%filename%" target="_blank">%filename%</a>)<br />',

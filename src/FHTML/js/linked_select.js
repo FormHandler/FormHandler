@@ -1,222 +1,321 @@
-// create a new XHConn object which makes it possible to
-// retrieve the content of a specific page
-function XHConn()
+//Formhandler dynamic fields
+(function(FormHandler,$,undefined)
 {
-  	var xmlhttp, bComplete = false;
-  	try
-  	{
-  		xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-  	}
-  	catch (e)
-  	{
-  		try
-  		{
-  			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-  		}
-  		catch (e)
-  		{
-  			try
-  			{
-  			    xmlhttp = new XMLHttpRequest();
-  			}
-  			catch (e)
-  			{
-  				xmlhttp = false;
-  			}
-  		}
-  	}
-
-  	if (!xmlhttp)
-  	{
-  		return null;
-  	}
-
-  	this.connect = function(sURL, sMethod, sVars, fnDone, buffer, fnAttach, fnArgs)
-  	{
-    	if (!xmlhttp)
-    	{
-    		return false;
-    	}
-    	bComplete = false;
-    	sMethod = sMethod.toUpperCase();
-
-    	try
-    	{
-      		if (sMethod == "GET")
-      		{
-        		xmlhttp.open(sMethod, sURL+"?"+sVars, true);
-        		sVars = "";
-      		}
-      		else
-      		{
-        		xmlhttp.open(sMethod, sURL, true);
-        		xmlhttp.setRequestHeader("Method", "POST "+sURL+" HTTP/1.1");
-        		xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  			}
-
-  			xmlhttp.onreadystatechange = function()
-  			{
-  				if (xmlhttp.readyState == 4 && !bComplete)
-  				{
-          			bComplete = true;
-          			fnDone(xmlhttp, buffer, fnAttach, fnArgs);
-        		}
-  			};
-      		xmlhttp.send(sVars);
-    	}
-    	catch(z)
-    	{
-    		return false;
-    	}
-
-    	return true;
-  	};
-  	return this;
-}
-
-// get a specific element on the current page
-function GetElement( id )
-{
-	result = document.getElementById ? document.getElementById(id): document.all? document.all[id]: null;
-
-	if( !result )
-	{
-	    id += '[]';
-	    return document.getElementById ? document.getElementById(id): document.all? document.all[id]: null;
-	}
-	else
-	{
-	    return result;
-	}
-}
-
-// display the contents which is retrieved from the document
-function displayExternal(oXML, buffer, fnAttach, fnArgs )
-{
-	lyr = GetElement( buffer );
-
-	// get the value for this field
-	if( typeof( fnArgs ) && fnArgs.constructor == Array && fnArgs.length > 0 )
-	{
-	   value = fnArgs.shift();
-	}
-	else
-	{
-	    value = null;
-	}
-
-	if( lyr )
-	{
-		var msg = null;
-		try
-		{
-			// any text received ?
-			if( oXML.responseText != "" )
-			{
-				// eval the js code
-				eval( oXML.responseText );
-
-				if( options != null )
-				{
-					loadOptions( lyr, options, value );
-				}
-			}
-		}
-		catch( q )
-		{
-
-			msg =
-			"Could not load dynamic values!\n"+
-			"Error: " + q.description + "\n" +
-			"Received data: \n" +
-			"----------------------------\n" +
-			oXML.responseText;
-		};
-
-		if( msg )
-		{
-			alert( msg );
-		}
-
-		// run the function given by the user (if given)
-	    if ( fnAttach )
-	    {
-	    	fnAttach( fnArgs );
-	    }
-	}
-}
-
-// set the new options in the field
-function loadOptions( oFld, aOptions, sValue )
-{
-	// remove all current options of the selectfield
-	oFld.options.length = 0;
-
-	// add the new options
-	len = 0;
-	for( i = 0; i < aOptions.length; i++ )
-	{
-		elem = aOptions[i];
-
-		if( typeof(elem) == "string" )
-		{
-			oFld.options[len] = new Option( elem );
-			oFld.options[len].value = elem;
-			if( elem == sValue )
-			{
-			    oFld.options[len].selected = true;
-			}
-		}
-		else if( typeof( elem ) && elem.constructor == Array && elem.length >= 2 )
-		{
-			oFld.options[len] = new Option( elem[1] );
-			oFld.options[len].value = elem[0];
-			if( elem[0] == sValue )
-			{
-			    oFld.options[len].selected = true;
-			}
-		}
-		else
-		{
-			//alert( elem );
-		}
-		len++;
-	}
-}
-
-// load the given file with the given params
-// filename: the name of the file which we should load
-// params: the params we should give to the file
-// buffer: the name of the buffer object (like a div) which should contain the retrieved contents of the loaded page
-// fnAttach: name of a function we should run after the contents is retrieved (can be set to null of none)
-// fnArgs: array of extra arguments which we should pass to the fnAttach function
-function loadexternal(filename, params, buffer, fnAttach, fnArgs)
-{
-    var myConn = new XHConn();
-
-    if (!myConn)
+    //transform field
+    function changeField(fld,field_type_new)
     {
-    	alert("XMLHTTP not available. Try a newer/better browser.");
+        //no changes needed when original is already set
+        if((field_type_new === 'select'
+                && fld.is('select')) //select
+            || (field_type_new === 'text'
+                && fld.is('input')
+                && fld.attr('type') === 'text') //text
+        )
+        {
+            return fld;
+        }
+
+        var translate = {text:'text',integer:'text',date:'hidden',checkbox:'checkbox',password:'password'},
+            newObject = (field_type_new === 'select')
+                            ? $('<select><option></option></select>')
+                            : $('<input type="'+ translate[field_type_new] +'" />');
+
+        newObject = (field_type_new === 'textarea') ? $('<textarea></textarea>') : newObject;
+
+        //make sure field only accepts integers
+        if(field_type_new === 'integer')
+        {
+            newObject.on('keypress',function(event)
+            {
+                if(document.all)
+                {
+                    if((event.keyCode < 48 || event.keyCode > 57) && event.keyCode !== 0)
+                        return false;
+                }
+                else
+                {
+                    if((event.charCode < 48 || event.charCode > 57) && event.charCode !== 0)
+                        return false;
+                }
+                return true;
+            });
+        }
+
+        if(fld.attr('name') !== undefined) newObject.attr('name',fld.attr('name'));
+        if(fld.attr('id') !== undefined) newObject.attr('id',fld.attr('id'));
+        if(fld.attr('class') !== undefined) newObject.attr('class',fld.attr('class'));
+        newObject.data('field_type',field_type_new);
+        fld.replaceWith(newObject);
+
+        if(field_type_new === 'date')
+        {
+            //when updating please update the date_field in the FH class
+
+            //date placeholder
+            var v = (newObject.val() !== "") ? newObject.val() : 'Please select a date',
+                date_placeholder = $('<span id="-date-placeholder-'+ newObject.attr('id') +'">'+ v +'</span>');
+
+            newObject.after(date_placeholder); //add to dom
+            date_placeholder.after('<button type="button" class="-date-picker-button" id="button-'+ newObject.attr('id') +'">Change</button>');
+            DatePickerLoad(newObject.attr('id'));
+        }
+        else
+        {
+            //remove date picker fields
+            $('#button-'+ newObject.attr('id')).remove();
+            $('#-date-placeholder-'+ newObject.attr('id')).remove();
+        }
+
+        return newObject;
     }
-    else
+
+    // set the new options in the field
+    function loadField(oFld,response,wished_value,initial)
     {
-    	myConn.connect(filename, "POST", params, displayExternal, buffer, fnAttach, fnArgs);
+        //get field type
+        var field_type = (typeof(response.field_type) !== 'undefined') ? response.field_type : null,
+            field_name_clean = oFld.attr('name').replace('[]',''),
+            value = (typeof(response.value) !== 'undefined') ? response.value : null,
+            disabled = (typeof(response.disabled) !== 'undefined') ? response.disabled : null,
+            aOptions = (typeof(response.new_options) !== 'undefined') ? response.new_options : null,
+            hide = (typeof(response.hide) !== 'undefined') ? response.hide : null,
+            old_value = FormHandler.getValue(oFld),
+            disabled_original = oFld.attr('disabled') === 'disabled',
+            hide_original = $('#'+ field_name_clean +'_field').is(':hidden');
+
+        // remove all current options of the field
+        oFld.attr('disabled',false);
+        $('#'+ field_name_clean +'_help').css('visibility','visible');
+        $('#'+ field_name_clean +'_field').css('display','block');
+
+        if(field_type !== null
+            && oFld.length === 1
+            && field_type !== 'checkbox'
+            && oFld.data('field_type') !== field_type)
+        {
+            oFld = changeField(oFld,field_type);
+        }
+
+        var new_value = (value === null) ? old_value : value;
+
+        if(initial == true
+            && value === null
+            && typeof wished_value !== 'undefined'
+            && wished_value.hasOwnProperty(field_name_clean) === true)
+        {
+            if(wished_value[field_name_clean] !== null
+                && ((typeof wished_value[field_name_clean] === 'object'
+                        && wished_value[field_name_clean].length !== 0)
+                    || typeof wished_value[field_name_clean] !== 'object'))
+            {
+                new_value = wished_value[field_name_clean]; //wished value comes hardcoded of the page
+            }
+        }
+        value = new_value;
+
+        var change_value = (field_type !== 'checkbox'
+                && value !== null
+                && typeof value !== 'object'
+                && value !== old_value);
+
+        if(field_type === 'checkbox'
+            && value !== null)
+        {
+            change_value = true;
+        }
+
+        if(oFld.length === 1
+            && aOptions !== null
+            && field_type === 'select')
+        {
+            change_value = true;
+            oFld.find('option').remove().end();
+            oFld.find('optgroup').remove().end();
+
+            // add the new options
+            var len = 0;
+            var group_start = 0;
+            for(var i in aOptions)
+            {
+                var elem = aOptions[i];
+
+                if(typeof(elem.value) === "string")
+                {
+                    var ekey = elem.key;
+                    var evalue = elem.value;
+
+                    if(ekey.substr(0,7) === '__LABEL')
+                    {
+                        //create optgroup
+                        if(group_start === 1)
+                        {
+                            oFld.append(group);
+                        }
+
+                        var group = $('<optgroup label="'+ evalue +'"></optgroup>');
+
+                        group_start = 1;
+                    }
+                    else
+                    {
+                        var option = $('<option value="'+ ekey +'">'+ evalue +'</option>');
+
+                        if(group_start === 1) //put in group
+                        {
+                            group.append(option);
+                        }
+                        else //put directly in option
+                        {
+                            oFld.append(option);
+                        }
+                    }
+                }
+                len++;
+            }
+
+            if(group_start === 1)
+            {
+                oFld.append(group);
+            }
+            oFld[0].selectedIndex = 0;
+        }
+
+        if(change_value === true)
+        {
+            FormHandler.setValue(oFld,value);
+        }
+
+        oFld.attr('disabled',disabled_original);
+
+        var trigger = (field_type === 'checkbox') ? 'click' : 'change';
+        oFld.triggerHandler(trigger, wished_value, initial);
+
+        if(disabled !== null && disabled === true)
+        {
+            oFld.attr('disabled',true);
+
+            if(oFld.is(':focus'))
+            {
+                oFld.blur();
+            }
+
+            $('#'+ field_name_clean +'_help').css('visibility','hidden');
+        }
+        else if(disabled !== null && disabled === false)
+        {
+            oFld.attr('disabled',false);
+        }
+
+        $('#'+ field_name_clean +'_field').css('display',(hide_original === true ? 'none' : 'block'));
+        if(hide !== null && hide === true)
+        {
+            $('#'+ field_name_clean +'_field').css('display','none');
+        }
+        else if(hide !== null && hide === false)
+        {
+            $('#'+ field_name_clean +'_field').css('display','block');
+        }
     }
-}
 
-// attach an event to an element
-function attachelement(id, event, func)
-{
-	el = GetElement( id );
+    FormHandler.removeErrorState = function($field)
+    {
+        $field.removeClass('error').parent().find('label').removeClass('error');
+        var name = $field.attr('name').replace('[]','');
+        $('#error_'+ name).remove();
+    };
 
-	// Mozilla, Netscape, Firefox
-	if(window.addEventListener)
-	{
-		el.addEventListener(event, func, false);
-	}
-	// IE
-	else
-	{
-		el.attachEvent("on"+event, func);
-	}
-}
+    FormHandler.setValue = function($field,value)
+    {
+        if($field.is(':radio'))
+        {
+            $field.filter('input[value='+ value +']').prop('checked', true);
+            return;
+        }
+        if($field.is(':checkbox')
+            || $field.is('[multiple]'))
+        {
+            var value_new = ($.isArray(value)) ? value : [value],
+                value = [];
+
+            $.each(value_new, function(k,v){
+                value[String(k)] = String(v);
+            });
+        }
+        else
+        {
+            value = value + '';
+        }
+
+        //check if current value is available in field options. Select first value if not.
+        if($field.is('select')
+            && $('#' + $field.attr('id') + ' option[value=' + value + ']').length  === 0)
+        {
+            value = $('#' + $field.attr('id') + ' option').val();
+        }
+
+        if($field.is(':checkbox'))
+        {
+            $.each($field,function(i,el)
+            {
+                var ell = $(el),
+                    value_element = String(ell.val());
+
+                ell.prop('checked', ($.inArray(value_element,value) > -1));
+            });
+            return;
+        }
+        if($field.is(':file'))
+        {
+            return;
+        }
+        $field.val(value);
+    };
+
+    FormHandler.load = function(filename, filter, fields, extra, values, $field_from, form_name, from)
+    {
+        var initial = (values && values.hasOwnProperty('fh_initial') ? 1 : 0);
+        if(!initial)
+        {
+            FormHandler.removeErrorState($field_from);
+        }
+
+        $.ajax(filename,{
+            type: 'POST',
+            data: 'linkselect=true&field_from='+ from +'&filter='+ filter +'&fields='+ fields +'&form_name='+ (typeof form_name != 'undefined' ? form_name : 'FH') + ((extra != '') ? '&'+ extra : '') + (typeof values != 'undefined' ? '&initial='+ initial : ''),
+            cache: false,
+            success: function(data)
+            {
+                for(var key in data)
+                {
+                    //only deal with own properties
+                    if(!data.hasOwnProperty(key))
+                        continue;
+
+                    //load an html buffer
+                    if(typeof data[key]['other'] != 'undefined')
+                    {
+                        $(key).html(data[key]['other']);
+                        continue;
+                    }
+
+                    var names = [
+                        '#'+ form_name +' input[name="'+ key +'"]',
+                        '#'+ form_name +' select[name="'+ key +'"]',
+                        '#'+ form_name +' textarea[name="'+ key +'"]',
+                        '#'+ form_name +' input[name="'+ key +'[]"]',
+                        '#'+ form_name +' select[name="'+ key +'[]"]'
+                    ];
+                    var fld = $(names.join(','));
+                    if(fld.length !== 0)
+                    {
+                        if(!initial)
+                        {
+                            FormHandler.removeErrorState(fld);
+                        }
+                        loadField(fld,data[key],values,initial);
+                    }
+                }
+            }
+        });
+    };
+}(window.FormHandler = window.FormHandler || {}, jQuery));

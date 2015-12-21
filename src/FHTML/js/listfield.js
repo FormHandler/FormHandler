@@ -1,57 +1,42 @@
-function trim(value) {
-  value = value.replace(/^\s+/,'');
-  value = value.replace(/\s+$/,'');
-  return value;
-}
-
-function changeValue( field, set) {
-
+function changeValue( field, set)
+{
     // the fields
-    FromField  = document.getElementById( field + (set?"_ListOff":"_ListOn") );
-    ToField    = document.getElementById( field + (set?"_ListOn":"_ListOff") );
-    SelField   = document.getElementById( field + "_ListOn");
-    ValueField = document.getElementById( field );
-    
-    // remove empty value from the from and to field ( <option /> tag's)
-    for( i = 0; i < ToField.options.length; i++ ) {
-        if( trim(ToField.options[i].text) == "" && trim(ToField.options[i].value) == "") {
-            ToField.remove(i);
+    var FromField  = $('#'+  field + (set?"_ListOff":"_ListOn") ),
+        ToField    = $('#'+   field + (set?"_ListOn":"_ListOff") ),
+        SelField   = $('#'+   field + "_ListOn"),
+        ValueField = $('#'+   field );
+
+    //remove empty options
+    ToField.children("option").each(function()
+    {
+        if($.trim($(this).val()) == '')
+            $(this).remove();
+    });
+
+    //move fields and focus correctly
+    FromField.children('option').each(function()
+    {
+        var v = $(this);
+        if(v.is(':selected'))
+        {
+            v.remove().appendTo(ToField);
         }
-    }              
+    });
 
-    // is something selected ?
-    while(FromField.value != "") {
-        // get the number of options of the "new" field
-        var len = ToField.options.length;
+    //set hidden value
+    ValueField.val('__FH_JSON__' + JSON.stringify(SelField.find('option').map(function(){return this.value;}).get()));
 
-        // add the option
-        ToField.options[len] = new Option(FromField.options[FromField.selectedIndex].text);
-        ToField.options[len].value = FromField.options[FromField.selectedIndex].value;
-        
-        // remove the option from the old list
-        FromField.options[FromField.selectedIndex] = null;        
-    }
-    
-    // set the focus and select the top item if there is one.
-    FromField.focus();
-    if( FromField.options.length > 0 ) {
-        FromField.options[0].selected = true;
-    }
+    //set focus and selected values properly
+    FromField.get(0).focus();
+    FromField.get(0).selectedIndex = -1;
+    ToField.get(0).selectedIndex = -1;
 
-    // put the selected value's in the hidden field
-    SelectedVars = new Array();
-    for(i = 0; i < SelField.options.length; i++)
-      SelectedVars[i] = SelField.options[i].value;
-
-    ValueField.value = SelectedVars.join(", ");
+    return false;
 }
 
 // function to move all values..
-function moveAll( field, set ) {
-    FromField  = document.getElementById( field + (set?"_ListOff":"_ListOn") );
-
-    for( i = 0; i < FromField.options.length; i++ ) {
-        FromField.options[i].selected = true;
-    }
+function moveAll( field, set )
+{
+    $('#'+ field + (set?"_ListOff":"_ListOn") ).find('option').attr('selected','selected');
     changeValue( field, set );
 }

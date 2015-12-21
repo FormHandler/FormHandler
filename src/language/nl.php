@@ -22,7 +22,7 @@ $fh_lang = array(
   13 => 'De opgegeven datum is niet geldig!',
   14 => 'De opgegeven waarde is ongeldig!',
   15 => 'De wachtwoorden zijn niet hetzelfde!',
-  16 => 'Deze velden zijn verplicht!',
+  16 => 'Dit veld is verplicht!',
   17 => 'Het wachtwoord moet minstens %d tekens lang zijn!',
   18 => 'Het wachtwoord bevat ongeldige tekens!',
   19 => 'Dit veld alleen invullen als u de bestaande waarde wilt overschrijven: (<a href="%path%%filename%" target="_blank">%filename%</a>)<br />',

@@ -17,14 +17,15 @@
         }
     ],
     "require": {},
+    "suggest": {
+        "formhandler/formhandler-legacy": "Wrapper to allow old code with new class"
+    },
     "autoload": {
-        "files": [
-            "src/class.FormHandler.php",
-            "src/class.dbFormHandler.php",
-            "src/yadal/class.Yadal.php"
-        ]
+        "psr-4": {
+            "FormHandler\\": "src/"
+        }
     },
     "extra": {
-        "dev-master": "v3.3.x-dev"
+        "dev-master": "v4.0.x-dev"
     }
 }

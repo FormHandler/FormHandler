@@ -1,4 +1,4 @@
-# FormHandler
+# FormHandler version 4 beta
 
 [![GitHub license](https://img.shields.io/badge/license-GPLv2-blue.svg)](https://raw.githubusercontent.com/FormHandler/FormHandler/master/LICENSE)
 [![Build Status](https://travis-ci.org/FormHandler/FormHandler.svg?branch=master)](https://travis-ci.org/FormHandler/FormHandler)
@@ -21,7 +21,7 @@ For example: map vendor/formhandler/formhandler/src/FHTML to /FHTML/ of your web
 ```php
 <?php
 
-fh_conf('FH_FHTML_DIR', '/FHTML/');
+\FormHandler\Configuration::set('fhtml_dir', '/FHTML/');
 ```
 
 ## Basic Usage
@@ -30,38 +30,40 @@ fh_conf('FH_FHTML_DIR', '/FHTML/');
 <?php
 
 //include the class (only needed when not using Composer)
-include "FH3/class.FormHandler.php";
+include './path/to/formhandler/src/Loader.php';
 
 //when using composer include the autoloader of composer
 require __DIR__ . '/vendor/autoload.php';
+
+use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 //create a new FormHandler object
 $form = new FormHandler();
 
 //some fields.. (see manual for examples)
-$form->textField("Name", "name", FH_STRING, 20, 40);
-$form->textField("Age", "age", FH_INTEGER, 4, 2);
+Field\Text::set($form, 'Name', 'name', FH_STRING)
+    ->setMaxlength(40);
+
+Field\Number::set($form, 'Age', 'age', FH_INTEGER)
+    ->setMin(1)
+    ->setMax(110)
+    ->setStep(1);
 
 //button for submitting
-$form->submitButton();
+Button\Submit::set($form, 'Send');
 
 //set the 'commit-after-form' function
-$form->onCorrect('doRun');
-
-//display the form
-$form->flush();
-
-//the 'commit-after-form' function
-function doRun($data)
+$form->onCorrect(function($data)
 {
-    echo "Hello ". $data['name'].", you are ".$data['age'] ." years old!";
-}
+    return "Hello " . $data['name'] . ", you are " . $data['age'] . " years old!";
+});
 ```
 
 ### Documentation
 
-For an extended version of the documentation please check our manual located at
-http://www.formhandler.net/manual/manual.html
+An extended version for FormHandler version 4 is currently not available due to continues development. 
 
 ### License
 
