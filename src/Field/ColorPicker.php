@@ -92,12 +92,14 @@ class ColorPicker extends \FormHandler\Field\Text
             $this->extra = "class=\"color\"" . (isset($this->extra) ? $this->extra : '');
         }
 
+        $max_length = $this->getMaxLength();
+
         return sprintf(
             '<input type="text" name="%s" id="%1$s" value="%s" size="%d" %s' . \FormHandler\Configuration::get('xhtml_close') . '>%s',
             $this->name,
             htmlspecialchars($this->getValue()),
             $this->getSize(),
-            (!empty($this->getMaxLength()) ? 'maxlength="' . $this->getMaxLength() . '" ' : '')
+            (!empty($max_length) ? 'maxlength="' . $max_length . '" ' : '')
                 . (isset($this->tab_index) ? 'tabindex="' . $this->tab_index . '" ' : '')
                 . (isset($this->extra) ? ' ' . $this->extra . ' ' : ''),
             (isset($this->extra_after) ? $this->extra_after : '')
