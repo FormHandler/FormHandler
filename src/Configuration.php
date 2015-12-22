@@ -47,7 +47,7 @@ class Configuration
         if(is_null($this->default))
         {
             //hard coded default configuration
-            $this->directory = '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
+            $this->directory = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
             $this->default = $this->directory  . 'default.ini';
             self::loadFile($this->default);
 

@@ -769,7 +769,7 @@ class FormHandler
         if(is_null($language))
         {
             // auto detect language ?
-            $bSet = false;
+            $isset = false;
             if(Configuration::get('auto_detect_language') == true)
             {
                 // get all accepted languages by the browser
@@ -798,58 +798,60 @@ class FormHandler
                     {
                         // set the language
                         $this->setLanguage($l);
-                        $bSet = true;
+                        $isset = true;
                         break;
                     }
                 }
             }
 
-            // no language is set yet.. set the default language
-            if(!$bSet)
+            // no language is set yet.. set the default configured language
+            if(!$isset
+                && !is_null(Configuration::get('default_language')))
+            {
+                return $this->setLanguage(Configuration::get('default_language'));
+            }
+            
+            //we default to hardcoded english
+            return $this->setLanguage('en');
+
+        }
+
+        // make sure that the language is set in lower case
+        $language = strtolower($language);
+
+        // check if the language does not contain any slashes or dots
+        if(preg_match('/\.|\/|\\\/', $language))
+        {
+            if($language != Configuration::get('default_language'))
             {
                 $this->setLanguage(Configuration::get('default_language'));
             }
+            return $this;
         }
-        // when a language is given
+
+        // check if the file exists
+        if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . $language . '.php'))
+        {
+            // include the language file
+            include __DIR__ . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . $language . '.php';
+
+            // load the array from the text file
+            $this->languageArray = $fh_lang;
+
+            // save the language
+            $this->languageActive = $language;
+        }
+        elseif($language != Configuration::get('default_language'))
+        {
+            $this->setLanguage(Configuration::get('default_language'));
+        }
+        // language file does not exists
         else
         {
-            // make sure that the language is set in lower case
-            $language = strtolower($language);
-
-            // check if the language does not contain any slashes or dots
-            if(preg_match('/\.|\/|\\\/', $language))
-            {
-                if($language != Configuration::get('default_language'))
-                {
-                    $this->setLanguage(Configuration::get('default_language'));
-                }
-                return $this;
-            }
-
-            // check if the file exists
-            if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . $language . '.php'))
-            {
-                // include the language file
-                include __DIR__ . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . $language . '.php';
-
-                // load the array from the text file
-                $this->languageArray = $fh_lang;
-
-                // save the language
-                $this->languageActive = $language;
-            }
-            elseif($language != Configuration::get('default_language'))
-            {
-                $this->setLanguage(Configuration::get('default_language'));
-            }
-            // language file does not exists
-            else
-            {
-                trigger_error(
-                    'Unknown language: ' . $language . '. Can not find ' .
-                    'file ./language/' . $language . '.php!', E_USER_ERROR
-                );
-            }
+            trigger_error(
+                'Unknown language: ' . $language . '. Can not find ' .
+                'file ./language/' . $language . '.php!', E_USER_ERROR
+            );
         }
         return $this;
     }
