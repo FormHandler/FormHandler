@@ -290,7 +290,7 @@ class Length extends \FormHandler\Field\Number
     {
         return is_null($this->length->getValue()) || trim($this->length->getValue()) == '' 
             ? null
-            : array($this->length->getValue(), $this->unit->getValue();
+            : array($this->length->getValue(), $this->unit->getValue());
     }
 
     /**
