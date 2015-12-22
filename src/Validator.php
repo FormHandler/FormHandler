@@ -468,22 +468,6 @@ class Validator
     }
 
     /**
-     * Check the capthcafield using Securimage
-     *
-     * @param string $value
-     * @return boolean
-     * @author Johan Wiegel
-     * @since 27-11-2008
-     */
-    public function FH_CAPTCHA($value)
-    {
-        require(FH_FHTML_INCLUDE_DIR . 'securimage/securimage.php');
-        $img = new Securimage();
-        $valid = $img->check($value);
-        return ($valid == true);
-    }
-
-    /**
      * Check if file is uploaded correctly
      *
      * @param array $value

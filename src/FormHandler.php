@@ -430,90 +430,6 @@ class FormHandler
             '<div class="' . implode(' ', $classes) . '">' . $html . $fields . '</div><div class="clear"></div>', false
         );
     }
-    /*     * ***************************************************** */
-    /*     * *********** FIELDS ********************************** */
-    /*     * ***************************************************** */
-
-    /**
-     * FormHandler::captchaField()
-     *
-     * Creates a captchafield on the form using Securimage - A PHP class for creating and managing form CAPTCHA images
-     *
-     * @param string $title: The title of the field
-     * @param string $name: The name of the field
-     * @param int $size: The size of the field
-     * @param int $maxlength: The allowed max input of the field
-     * @param string $extra: CSS, Javascript or other which are inserted into the HTML tag
-     * @return void
-     * @author Johan Wiegel
-     * @since 27-11-2007
-     */
-    public function CaptchaField(
-        $title, $name, $width = null, $height = null, $length = null, $size = null, $maxlength = null, $extra = null, $url = null)
-    {
-        static $bCaptcha = true;
-        if(!$bCaptcha)
-        {
-            trigger_error("Please use only one Captcha field in a form", E_USER_WARNING);
-        }
-
-        $bCaptcha = false;
-        // create the field
-        $fld = new Field\Text($this, $name);
-        if($this->isPosted())
-        {
-            $fld->setValidator('FH_CAPTCHA');
-        }
-        if(!empty($size))
-        {
-            $fld->setSize($size);
-        }
-        if(!empty($maxlength))
-        {
-            $fld->setMaxlength($maxlength);
-        }
-        if(!empty($extra))
-        {
-            $fld->setExtra($extra);
-        }
-
-        if($title !== null)
-        {
-            $this->addHTML('<label for="' . $name . '">' . $title . ':</label>');
-        }
-
-        if(session_id() == '')
-        {
-            session_start();
-        }
-
-        $session_id = session_id();
-
-        if(is_null($url))
-        {
-            $url = \FormHandler\Configuration::get('fhtml_dir') .'securimage/securimage_show.php';
-        }
-
-        $url .=  '?sid=' . md5(uniqid(time())). '&session_id=' . $session_id . '&width=' . $width . '&height=' . $height . '&length=' . $length;
-
-        $this->ImageButton($url, $name . '_image', 'onclick="return false;" style="cursor:default;"');
-
-        $refresh_text = class_exists('language') ? language::_('REFRESH_CAPTCHA') : 'Refresh captcha';
-        $current_url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-
-        $this->addHTML('<a id="captcha_refresh" href="' . $current_url
-            . '" onclick="document.getElementById(\'' . $name . '_image\').src=\'' . $url . '\'; return false;">'
-            . $refresh_text . '</a>');
-
-        // register the field
-        $this->registerField($name, $fld);
-
-        // empty the field if the value was not correct.
-        if($this->isPosted() && !$this->isCorrect())
-        {
-            $this->setValue($name, '', true);
-        }
-    }
 
     /*     * ***************************************************** */
     /*     * *********** LOOK & FEEL ***************************** */
@@ -2514,7 +2430,7 @@ class FormHandler
         }
 
         // return the language string
-        return utf8_encode($languageList[$index]);
+        return $languageList[$index];
     }
 
     /**
