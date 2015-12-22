@@ -1533,7 +1533,7 @@ class FormHandler
         if(!is_null($fld) && is_object($fld))
         {
             // check if the field is a child of the "field" class
-            if(is_subclass_of($fld, 'field'))
+            if($fld instanceof Field\Field)
             {
                 // return the title
                 return $this->fields[$field][0];
@@ -2670,7 +2670,7 @@ class FormHandler
                 $title,
                 $field . '_help'
             ),
-            FH_HELP_MASK
+            Configuration::get('help_mask')
         );
     }
 
