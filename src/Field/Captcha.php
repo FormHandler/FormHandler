@@ -72,7 +72,8 @@ class Captcha extends \FormHandler\Field\Text
 
         // call the constructor of the Field class
         parent::__construct($form, $name)
-            ->setSize(4)
+            ->setSize(\FormHandler\Configuration::get('captcha_length'))
+            ->setWidth(\FormHandler\Configuration::get('captcha_width'))
             ->setMaxlength(0)
             ->setValidator(function($value)
             {
