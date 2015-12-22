@@ -87,7 +87,7 @@ class Field
         //register the field
         $form->registerField($name, $fld, $title)
             ->setOnCorrectField($name);
-        
+
         return $fld;
     }
 
@@ -108,7 +108,8 @@ class Field
         $this->form_object = $form;
         $this->name = $name;
         $this->setFocusName($name)
-            ->setJsSelectorValue('#' . $form->getFormName() . ' input[name="' . $name . '"]');
+            ->setJsSelectorValue('#' . $form->getFormName() . ' input[name="' . $name . '"]')
+            ->useArrayKeyAsValue(\FormHandler\Configuration::get('default_usearraykey'));
 
         // check if there are spaces in the fieldname
         if(strpos($name, ' ') !== false)
@@ -129,7 +130,7 @@ class Field
 
     /**
      * Hide field value from onCorrect function
-     * 
+     *
      * @param boolean $bool
      * @return static
      */
@@ -862,7 +863,7 @@ class Field
     {
         if(!is_null($mode))
         {
-            $this->use_array_key_as_value = $mode;
+            $this->use_array_key_as_value = (bool) $mode;
         }
         return $this;
     }
