@@ -1411,11 +1411,9 @@ class FormHandler
                 'Y/m/d' => 'Y/m/d',
                 'Y-m-d' => 'Y-m-d',
             );
-            $preference = (class_exists('account_person'))
-                ? account_person::get_localization_preference('date_short')
-                : null;
+            $preference = Configuration::get('default_date_short');
             $user_js_format = (!array_key_exists($preference, $js_format))
-                ? (defined('DEFAULT_DATE_SHORT') ? $js_format[DEFAULT_DATE_SHORT] : 'd-m-Y')
+                ? 'd-m-Y'
                 : $js_format[$preference];
             $this->_setJS('var FH__DatePickerFormat = "' . $user_js_format . '";' . "\n");
         }
