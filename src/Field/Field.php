@@ -835,7 +835,10 @@ class Field
      */
     public function setOptions($options)
     {
-        $this->options = $options;
+        if(!is_null($options))
+        {
+            $this->options = $options;
+        }
         return $this;
     }
 
