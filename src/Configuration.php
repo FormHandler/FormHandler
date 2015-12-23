@@ -154,6 +154,13 @@ class Configuration
         $lookup = strtolower($name);
         if(array_key_exists($lookup, $instance->data))
         {
+            $replace = array_key_exists('fhtml_dir', $instance->data) ? $instance->data['fhtml_dir'] : null;
+
+            if(!is_null($replace))
+            {
+                return str_replace('%fhtml_dir%', $replace, $instance->data[$lookup]);
+            }
+
             return $instance->data[$lookup];
         }
         return null;

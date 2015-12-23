@@ -243,7 +243,7 @@ class FormHandler
         $this->tabIndexes = array();
         $this->fieldsBuffer = array();
         $this->displayErrors = true;
-        $this->focus = Configuration::get('set_focus');
+        $this->focus = Configuration::get('set_focus') == 1 ? null : false;
         $this->focusBuffer = null;
         $this->pageCounter = 1;
         $this->attachSelect = array();
@@ -2674,6 +2674,12 @@ class FormHandler
         );
     }
 
+    /**
+     * Set field appearance watch
+     * 
+     * @param array|string $fieldsToWatch Key is field name
+     * @param string $forField
+     */
     private function setFieldAppearanceWatch($fieldsToWatch, $forField)
     {
         $this->loadJsLibrary('appearance');
@@ -3267,7 +3273,7 @@ class FormHandler
             $focus = (!empty($this->focus)) ? $this->focus : $this->focusBuffer;
             $this->_setJS(
                 "var elem = $('#" . $this->getField($focus)->getFocus() . "') \n" .
-                "if(elem.length != 0 && elem.is(':hidden') == false)  elem.focus();\n", 0, 0
+                "if(elem.length != 0 && elem.is(':hidden') == false) { elem.focus(); }\n", 0, 0
             );
         }
 
