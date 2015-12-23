@@ -24,6 +24,8 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
@@ -31,7 +33,7 @@ $form = new FormHandler();
 
 for($i = 1; $i <= 15; $i++)
 {
-    \FormHandler\Field\Text::set($form, 'Field '. $i, 'field_'. $i)
+    Field\Text::set($form, 'Field '. $i, 'field_'. $i)
         ->setDefaultValue('Value '. $i);
 }
 
@@ -42,6 +44,10 @@ $form->link('field_1', 'field_2', function()
 
 $form->getField('field_10')->setDisabled();
 
-$f = $form->flush(true);
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
 
-echo '<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>' . $f;
+//below is code to show the form
+
+echo 'Test for disabling fields through links or directly at field level.<hr>';
+echo $form_html;

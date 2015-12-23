@@ -24,20 +24,22 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
 $form = new FormHandler();
 
-\FormHandler\Field\File::set($form, 'Upload file', 'upload_file')
+Field\File::set($form, 'Upload file', 'upload_file')
     ->setDropZoneEnabled(true, 'Drop your custom file here');
 
-\FormHandler\Field\Text::set($form, 'Text field', 'some_other_field')
+Field\Text::set($form, 'Text field', 'some_other_field')
     ->setValidator(FH_STRING);
 
 $form->_setJS('FormHandler.registerHandlerUploaded(\'upload_file\', function(){ alert(\'File uploaded\'); });', false, true);
 
-\FormHandler\Button\Submit::set($form, 'Submit 1');
+Button\Submit::set($form, 'Submit 1');
 
 $form->onCorrect(function($data)
 {
@@ -54,10 +56,9 @@ $form->onCorrect(function($data)
     return true;
 });
 
-$f = $form->flush();
+$form_html = $form->flush();
 echo '<!DOCTYPE html>'
 . '<html><head>'
-    . '<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>'
     . '<style>'
     . '.FH_dropzone span.upload'
     . '{'
@@ -77,5 +78,6 @@ echo '<!DOCTYPE html>'
     . '}'
     . '</style>'
     . '</head><body>'
-    . $f 
+    . 'Test for upload field<hr>'
+    . $form_html
     .'</body></html>';

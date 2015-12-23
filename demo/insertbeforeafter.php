@@ -24,6 +24,8 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
@@ -31,21 +33,27 @@ $form = new FormHandler();
 
 for($i = 1; $i <= 15; $i++)
 {
-    \FormHandler\Field\Text::set($form, 'Field '. $i, 'field_'. $i);
+    Field\Text::set($form, 'Field '. $i, 'field_'. $i);
 }
 
-\FormHandler\Field\Text::set($form, 'Insert before 5', 'before_five')
+Field\Text::set($form, 'Insert before 5', 'before_five')
     ->insertBefore('field_5');
 
-\FormHandler\Field\Text::set($form, 'Insert after 6', 'after_six')
+Field\Text::set($form, 'Insert after 6', 'after_six')
     ->insertAfter('field_6');
 
-\FormHandler\Field\Text::set($form, 'Move before 1', 'before_1');
+Field\Text::set($form, 'Move before 1', 'before_1');
 
 $form->moveFieldBefore('field_1', 'before_1');
 
-\FormHandler\Field\Text::set($form, 'Move after 15', 'after_15');
+Field\Text::set($form, 'Move after 15', 'after_15');
 
 $form->moveFieldAfter('field_15', 'after_15');
 
-$form->flush();
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
+
+//below is code to show the form
+
+echo 'Test for moving fields after definition<hr>';
+echo $form_html;

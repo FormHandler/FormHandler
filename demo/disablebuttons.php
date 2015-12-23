@@ -24,6 +24,8 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 \FormHandler\Configuration::set('default_disable_submit_btn', true);
@@ -32,20 +34,25 @@ $form = new FormHandler();
 
 for($i = 1; $i <= 15; $i++)
 {
-    \FormHandler\Field\Text::set($form, 'Field '. $i, 'field_'. $i)
+    Field\Text::set($form, 'Field '. $i, 'field_'. $i)
         ->setDefaultValue('Value '. $i);
 }
 
-\FormHandler\Button\Submit::set($form, 'Submit 1')
+Button\Submit::set($form, 'Submit 1')
     ->onClick(function()
     {
         echo 'Submit 1 clicked';
     });
-\FormHandler\Button\Submit::set($form, 'Submit 2')
+Button\Submit::set($form, 'Submit 2')
     ->onClick(function()
     {
         echo 'Submit 2 clicked';
     });
 
-$f = $form->flush(true);
-echo '<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>' . $f;
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
+
+//below is code to show the form
+
+echo 'Test for disabled buttons on submit<hr>';
+echo $form_html;

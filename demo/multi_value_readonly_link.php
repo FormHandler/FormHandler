@@ -24,6 +24,8 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
@@ -33,15 +35,21 @@ echo '<hr>';
 
 $form = new FormHandler();
 
-\FormHandler\Field\Text::set($form, 'Single value', 'field1')
+Field\Text::set($form, 'Single value', 'field1')
     ->setViewMode()
     ->setValue('VALUE')
     ->setViewModeLink('startofurl?value={$value}&extra=1');
 
-\FormHandler\Field\Select::set($form, 'Multi value', 'field2')
+Field\Select::set($form, 'Multi value', 'field2')
     ->setViewMode()
     ->setValue(array(1,2))
     ->setOptions(array(1 => 'Value 1', 2 => 'Value 2', 3 => 'Value 3'))
     ->setViewModeLink('startofurl?value={$value}&extra=1');
 
-$form->flush();
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
+
+//below is code to show the form
+
+echo 'Test for view mode links with one or multiple values set<hr>';
+echo $form_html;

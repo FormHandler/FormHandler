@@ -24,26 +24,30 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
 $form = new FormHandler();
 
 $form->addLine('<br>Button with custom confirmation handler', true);
-\FormHandler\Button\Button::set($form, 'Click me!', 'btn_4')
+Button\Button::set($form, 'Click me!', 'btn_4')
     ->setConfirmation('Do you really want to click this button?')
     ->setConfirmationDescription('And some extra description')
     ->setExtra('onclick="alert(\'Custom handler successfully executed\')"');
 
 $form->addHTML('<div id="testResult"></div>');
 
-$var = $form->flush(true);
 
-echo 'Test for custom button confirmation handler';
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
 
-echo '<hr><script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>';
+//below is code to show the form
 
-echo '<script>
+echo 'Test for custom button confirmation handler<hr>
+'. $form_html .'
+<script>
     $(document).ready(function()
     {
         var div = $("#testResult"),
@@ -89,5 +93,3 @@ echo '<script>
         }(window.FormHandler = window.FormHandler || {}, $));
     });
 </script>';
-
-echo $var;

@@ -24,20 +24,22 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
 $form = new FormHandler();
 
-\FormHandler\Field\Select::set($form, 'Multi value 1', 'watch1')
+Field\Select::set($form, 'Multi value 1', 'watch1')
     ->setOptions(array(1 => 'Value 1', 2 => 'Value 2', 3 => 'Value 3'));
 
-\FormHandler\Field\Select::set($form, 'Multi value 2', 'watch2')
+Field\Select::set($form, 'Multi value 2', 'watch2')
     ->setOptions(array(1 => 'Value 1', 2 => 'Value 2', 3 => 'Value 3'));
 
 for($i = 1; $i <= 20; $i++)
 {
-    \FormHandler\Field\Text::set($form, 'Field '. $i, 'field_'. $i)
+    Field\Text::set($form, 'Field '. $i, 'field_'. $i)
         ->setValue('Value ' . $i)
         ->setAppearanceCondition(array('watch1','watch2'), function($value)
         {
@@ -45,10 +47,10 @@ for($i = 1; $i <= 20; $i++)
         });
 }
 
-$f = $form->flush(true);
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
 
-echo '<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>' . $f;
+//below is code to show the form
 
-echo '<hr>';
-
-echo 'Test for grouping multi appearance. Setting multi value 2 on value 2 should display all fields, with one ajax request';
+echo 'Test for grouping multi appearance. Setting multi value 2 on value 2 should display all fields, with one ajax request<hr>';
+echo $form_html;

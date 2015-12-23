@@ -24,6 +24,8 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
@@ -37,11 +39,17 @@ $status_list = array(
 
 foreach($status_list as $k => $v)
 {
-    \FormHandler\Field\Select::set($form, $v, sha1($v))
+    Field\Select::set($form, $v, sha1($v))
         ->setDefaultValue(array($k, 'in_process'))
         ->setOptions($status_list)
         ->setMultiple(true)
         ->setSize(3);
 }
 
-echo $form->flush();
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
+
+//below is code to show the form
+
+echo 'Test for selecting multiple values<hr>';
+echo $form_html;

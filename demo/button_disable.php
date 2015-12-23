@@ -24,28 +24,30 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
 $form = new FormHandler();
 
-\FormHandler\Button\Button::set($form, 'Disable Button')
+Button\Button::set($form, 'Disable Button')
     ->setDisabled();
 
-\FormHandler\Button\Button::set($form, 'Disable and enable Button')
+Button\Button::set($form, 'Disable and enable Button')
     ->setDisabled()
     ->setDisabled(false);
 
-\FormHandler\Button\Cancel::set($form, 'Disable CancelButton')
+Button\Cancel::set($form, 'Disable CancelButton')
     ->setDisabled();
 
-\FormHandler\Button\Reset::set($form, 'Disable ResetButton')
+Button\Reset::set($form, 'Disable ResetButton')
     ->setDisabled();
 
-$var = $form->flush(true);
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
 
-echo 'Test for button confirmation';
+//below is code to show the form
 
-echo '<hr><script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>';
-
-echo $var;
+echo 'Test for button confirmation<hr>';
+echo $form_html;

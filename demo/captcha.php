@@ -45,10 +45,10 @@ $form->onCorrect(function($data)
 
 Button\Submit::set($form);
 
-$var = $form->flush(true);
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
 
-echo 'Test captcha field';
+//below is code to show the form
 
-echo '<hr><script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>';
-
-echo $var;
+echo 'Test captcha field<hr>';
+echo $form_html;

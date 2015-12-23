@@ -24,25 +24,27 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
 $form = new FormHandler();
 
 $form->addLine('Button with confirmation on click', true);
-\FormHandler\Button\Submit::set($form, 'Button 1', 'btn_1');
-\FormHandler\Button\Submit::set($form, 'Button 2', 'btn_2');
-\FormHandler\Button\Submit::set($form, 'Button 3', 'btn_3');
+Button\Submit::set($form, 'Button 1', 'btn_1');
+Button\Submit::set($form, 'Button 2', 'btn_2');
+Button\Submit::set($form, 'Button 3', 'btn_3');
 
 $form->onCorrect(function($data, FormHandler $form)
 {
     return 'Button "'. $form->getButtonClicked() . '" clicked';
 });
 
-$var = $form->flush(true);
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
 
-echo 'Test for reading out which button has been click in the onCorrect';
+//below is code to show the form
 
-echo '<hr><script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>';
-
-echo $var;
+echo 'Test for reading out which button has been click in the onCorrect<hr>';
+echo $form_html;

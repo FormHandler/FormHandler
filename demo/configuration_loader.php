@@ -21,5 +21,6 @@
 
 require_once '..' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Configuration.php';
 
+echo 'Framework default configuration<hr>';
 echo '<pre>';
 var_dump(\FormHandler\Configuration::getAll());

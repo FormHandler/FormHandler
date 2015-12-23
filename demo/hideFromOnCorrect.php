@@ -24,6 +24,8 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
@@ -31,7 +33,7 @@ $form = new FormHandler();
 
 for($i = 1; $i <= 15; $i++)
 {
-    \FormHandler\Field\Text::set($form, 'Field '. $i, 'field_'. $i)
+    Field\Text::set($form, 'Field '. $i, 'field_'. $i)
         ->setValue('Value ' . $i);
 }
 
@@ -48,6 +50,12 @@ $form->onCorrect(function($data)
     exit;
 });
 
-\FormHandler\Button\Submit::set($form, 'Press submit to see if the oncorrect data works');
+Button\Submit::set($form, 'Press submit to see if the oncorrect data works');
 
-$form->flush();
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
+
+//below is code to show the form
+
+echo 'Test for hiding fields from the onCorrect function<hr>';
+echo $form_html;

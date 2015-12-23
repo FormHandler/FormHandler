@@ -24,31 +24,36 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
 $form = new FormHandler();
 
-\FormHandler\Field\CheckBox::set($form, '', 'inherit')
+Field\CheckBox::set($form, '', 'inherit')
     ->setOptions(array(
         1 => 'Normal option',
         2 => 'Force value',
         3 => 'Normal option 2',
-        4 => 'Default value option',
+        4 => 'Set by default value option',
     ))
     ->setValue(1)
     ->setValue(2, true, true)
     ->setValue(3, false, true)
     ->setDefaultValue(4);
 
-\FormHandler\Button\Submit::set($form, 'Submit');
+Button\Submit::set($form, 'Submit');
 
-$form->onCorrect(function(){ return false; });
+$form->onCorrect(function()
+{ 
+    return false;
+});
 
-$var = $form->flush(true);
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
 
-echo 'Test for forcing values on checkboxes';
+//below is code to show the form
 
-echo '<hr><script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>';
-
-echo $var;
+echo 'Test for forcing values on checkboxes<hr>';
+echo $form_html;

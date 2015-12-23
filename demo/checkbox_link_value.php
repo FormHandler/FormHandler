@@ -24,22 +24,24 @@
 include '../src/Loader.php';
 
 use \FormHandler\FormHandler;
+use \FormHandler\Field as Field;
+use \FormHandler\Button as Button;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
 $form = new FormHandler();
 
-\FormHandler\Field\CheckBox::set($form, '', 'inherit')
+Field\CheckBox::set($form, '', 'inherit')
     ->setOptions(array(1 => 'Inherit from parent, integer value'));
 
-\FormHandler\Field\CheckBox::set($form, '', 'inherit1')
+Field\CheckBox::set($form, '', 'inherit1')
     ->setOptions(array(1 => 'Linked to above'));
 
-\FormHandler\Field\CheckBox::set($form, '', 'inherit3')
+Field\CheckBox::set($form, '', 'inherit3')
     ->setOptions(array('1' => 'Linked to first checkbox, string value'))
     ->setDisabled();
 
-\FormHandler\Field\CheckBox::set($form, 'Multi values<br>', 'inherit4')
+Field\CheckBox::set($form, 'Multi values<br>', 'inherit4')
     ->setOptions(array(
         1 => 'Value 1',
         2 => 'Value 2',
@@ -47,12 +49,12 @@ $form = new FormHandler();
     ))
     ->setValue(2, true, true);
 
-\FormHandler\Field\Text::set($form, 'Linked to first checkbox', 'inherit2');
+Field\Text::set($form, 'Linked to first checkbox', 'inherit2');
 
 $link = function($v)
 {
     $value = !empty($v);
-    return FormHandler::returnDynamic(array($value), null, null, null, 'checkbox');
+    return \FormHandler\FormHandler::returnDynamic(array($value), null, null, null, 'checkbox');
 };
 
 $form->link('inherit', 'inherit1', $link);
@@ -61,13 +63,13 @@ $form->link('inherit', 'inherit4', $link);
 
 $form->link('inherit', 'inherit2', function($v)
 {
-    return FormHandler::returnDynamic(json_encode($v), null, null, null, 'text');
+    return \FormHandler\FormHandler::returnDynamic(json_encode($v), null, null, null, 'text');
 });
 
-$var = $form->flush(true);
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
 
-echo 'Test for linking checkboxes';
+//below is code to show the form
 
-echo '<hr><script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>';
-
-echo $var;
+echo 'Test for linking checkboxes<hr>';
+echo $form_html;

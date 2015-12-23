@@ -46,10 +46,11 @@ Button\Button::set($form, 'Click me!', 'btn_3')
     ->setConfirmationDescription('And some extra description')
     ->setExtra('onclick="alert(\'This alert should be displayed after confirmation is success\');"');
 
-$var = $form->flush(true);
 
-echo 'Test for button confirmation';
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
 
-echo '<hr><script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>';
+//below is code to show the form
 
-echo $var;
+echo 'Test for button confirmation<hr>';
+echo $form_html;

@@ -223,6 +223,14 @@ class FormHandler
         $this->setLanguage();
 
         //set forms javascript
+        static $jquery = false;
+
+        if($jquery === false
+            && Configuration::get('include_jquery') == true)
+        {
+            $jquery = true;
+            $this->_setJS('//code.jquery.com/jquery-1.11.1.min.js', true);
+        }
         $this->_setJS(\FormHandler\Configuration::get('fhtml_dir') . "js/main.js", true);
     }
 

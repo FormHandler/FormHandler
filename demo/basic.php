@@ -50,9 +50,10 @@ $form->onCorrect(function($data)
     return "Hello " . $data['name'] . ", you are " . $data['age'] . " years old!";
 });
 
-//display the form
-$var = $form->flush();
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
 
-echo 'Basic FormHandler demo<hr><script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>';
+//below is code to show the form
 
-echo $var;
+echo 'Basic FormHandler demo<hr>';
+echo $form_html;
