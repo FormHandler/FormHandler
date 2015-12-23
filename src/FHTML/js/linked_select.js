@@ -248,7 +248,8 @@
 
         //check if current value is available in field options. Select first value if not.
         if($field.is('select')
-            && $('#' + $field.attr('id') + ' option[value=' + value + ']').length  === 0)
+            && (value === ''
+                || $('#' + $field.attr('id') + ' option[value=' + value + ']').length  === 0))
         {
             value = $('#' + $field.attr('id') + ' option').val();
         }

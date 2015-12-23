@@ -95,7 +95,7 @@ class Select extends \FormHandler\Field\Field
             return array();
         }
 
-        if($value === '')
+        if($this->multiple === false && $value === '')
         {
             $options = $this->getOptions();
 
@@ -235,16 +235,16 @@ class Select extends \FormHandler\Field\Field
      *
      * Set if multiple items can be selected or not
      *
-     * @param boolean|null $bMultiple
+     * @param boolean $multiple
      * @return \FormHandler\Field\Select
      * @author Teye Heimans
      * @author Marien den Besten
      */
-    public function setMultiple($bMultiple)
+    public function setMultiple($multiple)
     {
-        if(!is_null($bMultiple))
+        if(!is_null($multiple))
         {
-            $this->multiple = $bMultiple;
+            $this->multiple = (bool) $multiple;
         }
         return $this;
     }
