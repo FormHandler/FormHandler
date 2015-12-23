@@ -60,11 +60,21 @@ $form->onCorrect(function($data)
 {
     return "Hello " . $data['name'] . ", you are " . $data['age'] . " years old!";
 });
+
+//process all form results, needs to be done before any output has been done
+$form_html = $form->flush();
+
+//below is code to show the form
+
+echo 'Basic FormHandler demo<hr>';
+echo $form_html;
 ```
 
 ### Documentation
 
-An extended version for FormHandler version 4 is currently not available due to continues development. 
+An extended version for FormHandler version 4 is currently not available due to continues development.
+
+Please have a look at the files located in the 'demo' folder to see (new) features in action
 
 ### License
 

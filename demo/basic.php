@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  *
- * @author Ruben de Vos
+ * @author Marien den Besten
  */
 
 include '../src/Loader.php';
