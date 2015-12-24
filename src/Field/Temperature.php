@@ -37,6 +37,9 @@ use \FormHandler\FormHandler;
  */
 class Temperature extends \FormHandler\Field\Field
 {
+    const UNIT_CELSIUS = 'celsius';
+    const UNIT_FAHRENHEIT = 'fahrenheit';
+    
     private $temperature;
     private $unit;
     private $empty;
@@ -44,8 +47,8 @@ class Temperature extends \FormHandler\Field\Field
     private $allow_empty = false;
     private $value_set = false;
     private $units = array(
-        'celsius' => 'Celsius',
-        'fahrenheit' => 'Fahrenheit'
+        self::UNIT_CELSIUS => 'Celsius',
+        self::UNIT_FAHRENHEIT => 'Fahrenheit'
     );
 
     /**
@@ -223,7 +226,9 @@ class Temperature extends \FormHandler\Field\Field
             && method_exists($value, 'getTemperature')
             && method_exists($value, 'getUnit'))
         {
-            $unit = $value->getUnit() != 'fahrenheit' ? 'celsius' : 'fahrenheit';
+            $unit = $value->getUnit() != 'fahrenheit' || $value->getUnit() != 0 
+                ? self::UNIT_CELSIUS 
+                : self::UNIT_FAHRENHEIT;
             parent::setValue(array($value->getTemperature(), $unit), $forced);
             $this->temperature->setValue($value->getTemperature(), $forced);
             $this->unit->setValue($unit, $forced);
@@ -292,10 +297,11 @@ class Temperature extends \FormHandler\Field\Field
     public function setUnit($unit)
     {
         //translate buggy definitions
-        $unit = ($unit === 'celcius') ? 'celsius' : $unit;
+        $unit = ($unit === 'celcius') ? self::UNIT_CELSIUS : $unit;
 
+        //skip preference when posted
         if(array_key_exists($unit,$this->units)
-            && !$this->form_object->isPosted()) //skip preference when posted
+            && !$this->form_object->isPosted()) 
         {
             $current = $this->unit->getValue();
             $this->unit->setValue($unit);
@@ -329,11 +335,11 @@ class Temperature extends \FormHandler\Field\Field
      */
     private function convert($value,$from,$to)
     {
-        if($from == 'fahrenheit')
+        if($from == self::UNIT_FAHRENHEIT)
         {
             return round(($value - 32) / 1.8,1);
         }
-        if($from == 'celsius' || $from == 'celcius')
+        if($from == self::UNIT_CELSIUS)
         {
             return round(($value * 1.8) + 32,1);
         }
