@@ -25,6 +25,7 @@
 namespace FormHandler\Field;
 
 use \FormHandler\FormHandler;
+use \FormHandler\Utils;
 
 /**
  * class Length
@@ -318,7 +319,11 @@ class Length extends \FormHandler\Field\Number
 
         //set precision
         $round = (is_null($round)) ? 50 : $round;
-        return self::remove_bc_trailing_zeros(bcmul($from_measure, $this->conversion_table[$from_unit][$to_unit], $round));
+        return Utils::removeBcTrailingZeros(bcmul(
+            $from_measure,
+            $this->conversion_table[$from_unit][$to_unit],
+            $round
+        ));
     }
 
     /**

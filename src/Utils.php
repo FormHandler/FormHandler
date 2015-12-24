@@ -40,4 +40,18 @@ class Utils
         $flags = (!is_null($flags)) ? $flags : ENT_COMPAT | ENT_IGNORE;
         return @htmlentities($string, $flags, $charset);
     }
+
+    /**
+     * Use this function to remove trailing zeros received from the bc functions
+     *
+     * @author Marien den Besten
+     * @param string $input
+     * @return string
+     */
+    static public function removeBcTrailingZeros($input)
+    {
+        $patterns = array('/[\.][0]+$/','/([\.][0-9]*[1-9])([0]*)$/');
+        $replaces = array('','$1');
+        return preg_replace($patterns,$replaces,$input);
+    }
 }
