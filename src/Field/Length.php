@@ -297,13 +297,13 @@ class Length extends \FormHandler\Field\Number
      * Convert between formats
      *
      * @author Marien den Besten
-     * @param integer $value
-     * @param string $from
-     * @param string $to
+     * @param integer $from_measure
+     * @param string $from_unit
+     * @param string $to_unit
      * @param integer $round
      * @return type
      */
-    private function convert($value, $from, $to, $round = null)
+    private function convert($from_measure, $from_unit, $to_unit, $round = null)
     {
         if($to_unit == $from_unit)
         {
