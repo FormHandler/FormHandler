@@ -24,6 +24,8 @@
 
 namespace FormHandler\Field;
 
+use \FormHandler\FormHandler;
+
 /**
  * class Percentage
  *
