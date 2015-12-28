@@ -11,7 +11,7 @@ class LanguageTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        include __DIR__ . '/../../src/loader.php';
+        include '/../../src/loader.php';
         Language::reset();
     }
 
