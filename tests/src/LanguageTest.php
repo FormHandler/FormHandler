@@ -11,15 +11,7 @@ class LanguageTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        include '/../../src/loader.php';
         Language::reset();
-    }
-
-    /**
-     */
-    protected function tearDown()
-    {
-
     }
 
     /**
