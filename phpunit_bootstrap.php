@@ -1,4 +1,2 @@
 <?php
-define('DEV', true);
-
-require_once '/src/index.php';
+require_once '/src/Loader.php';
