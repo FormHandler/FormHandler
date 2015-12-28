@@ -7,7 +7,7 @@
  * @package FormHandler
  */
 
-$fh_lang = array(
+return array(
     1 => 'Styczen',
     2 => 'Luty',
     3 => 'Marzec',

@@ -7,7 +7,7 @@
  * @author Harun Pekdemir
  */
 
-$fh_lang = array(
+return array(
     1 => 'Ocak',
     2 => 'Subat',
     3 => 'Mart',

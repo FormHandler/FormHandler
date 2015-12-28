@@ -8,7 +8,7 @@
  */
 
 // Thanks for translating
-$fh_lang = array(
+return array(
     1 => 'Leden',
     2 => 'Únor',
     3 => 'Březen',

@@ -99,7 +99,7 @@ class Password extends \FormHandler\Field\Text
         // if the fields doesn't match
         if($this->getValue() != $object->getValue())
         {
-            $this->setErrorMessage($this->form_object->_text(15));
+            $this->setErrorMessage(\FormHandler\Language::get(15));
             $this->setErrorState(true);
             return;
         }
@@ -107,7 +107,7 @@ class Password extends \FormHandler\Field\Text
         // when there is no value
         if($this->getValue() == '' && !$this->form_object->edit)
         {
-            $this->setErrorMessage($this->form_object->_text(16));
+            $this->setErrorMessage(\FormHandler\Language::get(16));
             $this->setErrorState(true);
             return;
         }
@@ -122,7 +122,7 @@ class Password extends \FormHandler\Field\Text
         if(strlen($this->getValue()) < \FormHandler\Configuration::get('min_password_length'))
         {
             $this->setErrorMessage(sprintf(
-                $this->form_object->_text(17),
+                \FormHandler\Language::get(17),
                 \FormHandler\Configuration::get('min_password_length')
             ));
             $this->setErrorState(true);
@@ -131,7 +131,7 @@ class Password extends \FormHandler\Field\Text
         // is it an valif password ?
         elseif(!$validator->IsPassword($this->getValue()))
         {
-            $this->setErrorMessage($this->form_object->_text(18));
+            $this->setErrorMessage(\FormHandler\Language::get(18));
             $this->setErrorState(true);
             return;
         }

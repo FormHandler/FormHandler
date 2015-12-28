@@ -8,7 +8,7 @@
  * @since 20/07/2005 (update by Javi)
  */
 
-$fh_lang = array(
+return array(
     1 => 'Enero',
     2 => 'Febrero',
     3 => 'Marzo',

@@ -116,9 +116,6 @@ class FormHandler
     private $focus;
     private $focusBuffer;
     private $bufferViewmode;
-    private $languageArray;
-    private static $languageExclusionArray = array();
-    private $languageActive;
     private $extra;
     private $pageCounter;
     private $pageCurrent;
@@ -220,7 +217,20 @@ class FormHandler
         $this->pageCurrent = isset($_POST[$this->name . '_page']) ? $_POST[$this->name . '_page'] : 1;
 
         // set the language...
-        $this->setLanguage();
+        if(Configuration::get('auto_detect_language') == true
+            && isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+        {
+            $language = Language::detect($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+
+            if(!is_null($language))
+            {
+                Language::load($language);
+            }
+        }
+        elseif(Language::exists(Configuration::get('default_language')))
+        {
+            Language::load(Configuration::get('default_language'));
+        }
 
         //set forms javascript
         static $jquery = false;
@@ -666,22 +676,6 @@ class FormHandler
     }
 
     /**
-     * FormHandler::setErrorMessage()
-     *
-     * @return FormHandler
-     * @deprecated
-     */
-    public function setErrorMessage($field,$message)
-    {
-        $fld = $this->getField($field);
-        if(!is_null($fld))
-        {
-            $fld->setErrorMessage($message);
-        }
-        return $this;
-    }
-
-    /**
      * FormHandler::newPage()
      *
      * Put the following fields on a new page
@@ -757,109 +751,6 @@ class FormHandler
 
             // save the tab indexes
             $this->tabIndexes = $this->tabIndexes + $tabs;
-        }
-        return $this;
-    }
-
-    /**
-     * FormHandler::setLanguage()
-     *
-     * Set the language we should use for error messages etc.
-     * If no language is given, try to get the language defined by the visitors browser.
-     *
-     * @param string $language The language we should use
-     * @return FormHandler
-     * @author Teye Heimans
-     */
-    public function setLanguage($language = null)
-    {
-        // if nog language is given, try to get it from the visitors browser if wanted
-        if(is_null($language))
-        {
-            // auto detect language ?
-            $isset = false;
-            if(Configuration::get('auto_detect_language') == true)
-            {
-                // get all accepted languages by the browser
-                $lang = array();
-                if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
-                {
-                    foreach(explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']) as $sValue)
-                    {
-                        if(strpos($sValue, ';') !== false)
-                        {
-                            list($sValue, ) = explode(';', $sValue);
-                        }
-                        if(strpos($sValue, '-') !== false)
-                        {
-                            list($sValue, ) = explode('-', $sValue);
-                        }
-                        $lang[] = $sValue;
-                    }
-                }
-
-                // set the language which formhandler supports
-                foreach($lang as $l)
-                {
-                    // check if the language file exists
-                    if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . strtolower($l) . '.php'))
-                    {
-                        // set the language
-                        $this->setLanguage($l);
-                        $isset = true;
-                        break;
-                    }
-                }
-            }
-
-            // no language is set yet.. set the default configured language
-            if(!$isset
-                && !is_null(Configuration::get('default_language')))
-            {
-                return $this->setLanguage(Configuration::get('default_language'));
-            }
-            
-            //we default to hardcoded english
-            return $this->setLanguage('en');
-
-        }
-
-        // make sure that the language is set in lower case
-        $language = strtolower($language);
-
-        // check if the language does not contain any slashes or dots
-        if(preg_match('/\.|\/|\\\/', $language))
-        {
-            if($language != Configuration::get('default_language'))
-            {
-                $this->setLanguage(Configuration::get('default_language'));
-            }
-            return $this;
-        }
-
-        // check if the file exists
-        if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . $language . '.php'))
-        {
-            // include the language file
-            include __DIR__ . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . $language . '.php';
-
-            // load the array from the text file
-            $this->languageArray = $fh_lang;
-
-            // save the language
-            $this->languageActive = $language;
-        }
-        elseif($language != Configuration::get('default_language'))
-        {
-            $this->setLanguage(Configuration::get('default_language'));
-        }
-        // language file does not exists
-        else
-        {
-            trigger_error(
-                'Unknown language: ' . $language . '. Can not find ' .
-                'file ./language/' . $language . '.php!', E_USER_ERROR
-            );
         }
         return $this;
     }
@@ -1580,19 +1471,6 @@ class FormHandler
     }
 
     /**
-     * FormHandler::getLanguage()
-     *
-     * Return the language used for the form
-     *
-     * @return string: the language
-     * @author Teye Heimans
-     */
-    public function getLanguage()
-    {
-        return $this->languageActive;
-    }
-
-    /**
      * FormHandler::fieldExists()
      *
      * Check if the field exists in the form
@@ -1716,7 +1594,7 @@ class FormHandler
         // password when he wants to change it
         if(isset($this->edit) && $this->edit && $setEditMsg)
         {
-            $this->getField($field1)->setPre($this->_text(25));
+            $this->getField($field1)->setPre(\FormHandler\Language::get(25));
         }
 
         // is the form posted and this page is posted in case of mulitple page form.
@@ -2411,62 +2289,6 @@ class FormHandler
     }
 
     /**
-     * FormHandler::_text()
-     *
-     * Return the given text in the correct language
-     *
-     * @param integer $index the index of the text in the textfile
-     * @return string the text in the correct language
-     * @author Teye Heimans
-     */
-    public function _text($index)
-    {
-        // is a language set?
-        if(!is_array($this->languageArray))
-        {
-            trigger_error('No language file set!', E_USER_ERROR);
-            return false;
-        }
-
-        $languageList = self::$languageExclusionArray + $this->languageArray;
-
-        // does the index exists in the language file ?
-        if(!array_key_exists($index, $languageList))
-        {
-            trigger_error('Unknown index ' . $index . ' to get language string!', E_USER_NOTICE);
-            return '';
-        }
-
-        // return the language string
-        return $languageList[$index];
-    }
-
-    /**
-     * Add an exclusion to the language array
-     *
-     * @param integer $index
-     * @param string $string
-     */
-    public static function languageExclusionSet($index, $string)
-    {
-        self::$languageExclusionArray[(int) $index] = (string) $string;
-    }
-
-    /**
-     * Extend or update the FormHandler language list
-     *
-     * @param integer $index
-     * @param string $string
-     */
-    public static function languageExclusionUnset($index)
-    {
-        if(array_key_exists((int) $index, self::$languageExclusionArray))
-        {
-            unset(self::$languageExclusionArray[(int) $index]);
-        }
-    }
-
-    /**
      * FormHandler::registerField()
      *
      * Register a field or button at FormHandler
@@ -2664,7 +2486,7 @@ class FormHandler
 
         // escape the values from dangerous characters
         $title = is_null($title)
-            ? $field_title . ' - ' . $this->_text(41)
+            ? $field_title . ' - ' . \FormHandler\Language::get(41)
             : \FormHandler\Utils::html($title, ENT_NOQUOTES | ENT_IGNORE);
 
         return str_replace(

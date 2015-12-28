@@ -70,7 +70,7 @@ class TextArea extends \FormHandler\Field\Field
                 if($length > $max_length)
                 {
                     return sprintf(
-                        $form->_text(40),
+                        \FormHandler\Language::get(40),
                         $max_length,
                         $length,
                         abs($length - $max_length)
@@ -169,7 +169,7 @@ class TextArea extends \FormHandler\Field\Field
         if(!is_null($this->max_length) && $this->max_length > 0)
         {
             // the message
-            $message = $this->form_object->_text(36);
+            $message = \FormHandler\Language::get(36);
 
             // set the event
             $this->extra .= sprintf(

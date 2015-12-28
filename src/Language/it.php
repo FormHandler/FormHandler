@@ -7,7 +7,7 @@
  * @author ??
  */
 
-$fh_lang = array(
+return array(
     1 => 'Gennaio',
     2 => 'Febbraio',
     3 => 'Marzo',

@@ -96,7 +96,7 @@ class Text extends \FormHandler\Field\Field
     {
         if(strlen($this->getValue()) > $iLength)
         {
-            $this->error = $this->form_object->_text(14);
+            $this->error = \FormHandler\Language::get(14);
             return false;
         }
         return true;
@@ -114,7 +114,7 @@ class Text extends \FormHandler\Field\Field
     {
         if(strlen($this->getValue()) < $iLength)
         {
-            $this->error = $this->form_object->_text(14);
+            $this->error = \FormHandler\Language::get(14);
             return false;
         }
         return true;

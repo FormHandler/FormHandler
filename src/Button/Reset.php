@@ -50,6 +50,6 @@ class Reset extends \FormHandler\Button\Button
     {
         return parent::__construct($form, $name)
             ->setType(self::TYPE_RESET)
-            ->setCaption($form->_text(27));
+            ->setCaption(\FormHandler\Language::get(27));
     }
 }

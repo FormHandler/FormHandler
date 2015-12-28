@@ -455,7 +455,7 @@ class Field
         if($is_valid !== true && $is_valid !== 1)
         {
             //a validator can trigger custom error messages
-            $message = is_string($is_valid) ? $is_valid : $this->form_object->_text(14);
+            $message = is_string($is_valid) ? $is_valid : \FormHandler\Language::get(14);
             $this->setErrorMessage($message);
         }
 
@@ -610,7 +610,7 @@ class Field
         {
             if($this->error === false)
             {
-                $this->error = $this->form_object->_text(14);
+                $this->error = \FormHandler\Language::get(14);
             }
 
             if(strlen($this->error) > 0)

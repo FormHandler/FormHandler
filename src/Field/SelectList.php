@@ -79,8 +79,8 @@ class SelectList extends \FormHandler\Field\Field
             ->setOptions($options)
             ->useArrayKeyAsValue(\FormHandler\Configuration::get('default_usearraykey'))
             ->setSize(\FormHandler\Configuration::get('default_listfield_size'))
-            ->setOffTitle($form->_text(29))
-            ->setOnTitle($form->_text(30))
+            ->setOffTitle(\FormHandler\Language::get(29))
+            ->setOnTitle(\FormHandler\Language::get(30))
             ->setFocusName($name . '_ListOn');
     }
 
@@ -248,8 +248,8 @@ class SelectList extends \FormHandler\Field\Field
                 $this->field_on->getField(),
                 $this->field_off->getField(),
                 $this->name,
-                sprintf($this->form_object->_text(34), \FormHandler\Utils::html(strip_tags($this->field_off_title))),
-                sprintf($this->form_object->_text(34), \FormHandler\Utils::html(strip_tags($this->field_on_title)))),
+                sprintf(\FormHandler\Language::get(34), \FormHandler\Utils::html(strip_tags($this->field_off_title))),
+                sprintf(\FormHandler\Language::get(34), \FormHandler\Utils::html(strip_tags($this->field_on_title)))),
                 $mask
             ) .
             (isset($this->extra_after) ? $this->extra_after : '');

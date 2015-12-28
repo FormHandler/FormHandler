@@ -81,7 +81,7 @@ class Cancel extends \FormHandler\Button\Button
 
         if(is_null($this->caption))
         {
-            $this->caption = $this->form->_text(28);
+            $this->caption = \FormHandler\Language::get(28);
         }
 
         return parent::getButton();

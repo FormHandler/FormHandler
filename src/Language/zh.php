@@ -9,7 +9,7 @@
  * @author ??
  */
 
-$fh_lang = array(
+return array(
     1 => '一月',
     2 => '二月',
     3 => '三月',

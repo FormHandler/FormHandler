@@ -108,7 +108,7 @@ class FileBasic extends \FormHandler\Field\Field
                 || trim($file['name']) == ''))
         {
             //no file uploaded
-            $this->setErrorMessage($this->form_object->_text(22));
+            $this->setErrorMessage(\FormHandler\Language::get(22));
             $this->setErrorState(true);
         }
         return $this;

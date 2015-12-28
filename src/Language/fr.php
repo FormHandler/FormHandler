@@ -9,7 +9,7 @@
  * @version 1.1.3
  */
 
-$fh_lang = array(
+return array(
     1 => 'Janvier',
     2 => 'Février',
     3 => 'Mars',

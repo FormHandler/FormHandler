@@ -25,6 +25,6 @@ class Submit extends \FormHandler\Button\Button
     {
         return parent::__construct($form, $name)
             ->setType(self::TYPE_SUBMIT)
-            ->setCaption($form->_text(26));
+            ->setCaption(\FormHandler\Language::get(26));
     }
 }
