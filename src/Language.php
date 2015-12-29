@@ -43,12 +43,9 @@ class Language
         $dir = __DIR__ . DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR;
 
         //detect incorrect characters
-        if(preg_match('/\.|\/|\\\/', $language))
-        {
-            return false;
-        }
-
-        return file_exists($dir . $language . '.php');
+        return (preg_match('/\.|\/|\\\/', $language))
+            ? false
+            : file_exists($dir . $language . '.php');
     }
 
     /**
@@ -63,7 +60,7 @@ class Language
 
     /**
      * Load language based upon iso
-     * 
+     *
      * @param string $language
      * @return boolean
      */
@@ -170,7 +167,7 @@ class Language
 
     /**
      * Get language item
-     * 
+     *
      * @param integer $index
      * @return string
      */
