@@ -75,13 +75,13 @@ class Captcha extends \FormHandler\Field\Text
             ->setSize(\FormHandler\Configuration::get('captcha_length'))
             ->setWidth(\FormHandler\Configuration::get('captcha_width'))
             ->setMaxlength(0)
-            ->setValidator(function($value)
+            ->setValidator(new \FormHandler\Validator\FunctionCallable(function($value)
             {
                 require(__DIR__ . '/../FHTML/securimage/securimage.php');
                 $img = new \Securimage();
                 $valid = $img->check($value);
                 return ($valid == true);
-            });
+            }));
     }
 
     public function getWidth()

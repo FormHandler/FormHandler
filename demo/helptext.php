@@ -26,6 +26,7 @@ include '../src/Loader.php';
 use \FormHandler\FormHandler;
 use \FormHandler\Field as Field;
 use \FormHandler\Button as Button;
+use \FormHandler\Validator as Validator;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
@@ -33,11 +34,13 @@ use \FormHandler\Button as Button;
 $form = new FormHandler();
 
 //some fields.. (see manual for examples)
-Field\Text::set($form, 'Name', 'name', FH_STRING)
+Field\Text::set($form, 'Name', 'name')
+    ->setValidator(new Validator\String())
     ->setMaxlength(40)
     ->setHelp('Help text', 'Help title');
 
-Field\Number::set($form, 'Age', 'age', FH_INTEGER)
+Field\Number::set($form, 'Age', 'age')
+    ->setValidator(new Validator\Integer())
     ->setMin(1)
     ->setMax(110)
     ->setStep(1)

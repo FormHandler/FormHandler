@@ -163,6 +163,28 @@ class Length extends \FormHandler\Field\Number
     }
 
     /**
+     * Set if field is required
+     * 
+     * @param boolean $required
+     * @return static
+     */
+    public function setRequired($required)
+    {
+        $this->length->setRequired($required);
+        return $this;
+    }
+
+    /**
+     * Get if required
+     * 
+     * @return boolean
+     */
+    public function getRequired()
+    {
+        return $this->length->getRequired();
+    }
+
+    /**
      * Get if the field is in error state
      *
      * @return boolean

@@ -42,12 +42,11 @@ class Hidden extends \FormHandler\Field\Field
      *
      * @param FormHandler $form
      * @param string $name
-     * @param callable $validator
      * @return \FormHandler\Field\Hidden
      */
-    static function set(FormHandler $form, $name, $validator = null, $foo = null)
+    static function set(FormHandler $form, $name, $foo = null)
     {
-        return parent::set($form, '__HIDDEN__', $name, $validator);
+        return parent::set($form, '__HIDDEN__', $name);
     }
 
     /**
@@ -62,6 +61,16 @@ class Hidden extends \FormHandler\Field\Field
     {
         return parent::__construct($form, $name)
             ->setFocusName(null);
+    }
+
+    /**
+     * This field is never required by user input
+     * 
+     * @return boolean
+     */
+    public function getRequired()
+    {
+        return false;
     }
 
     /**

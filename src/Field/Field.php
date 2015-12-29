@@ -59,8 +59,9 @@ class Field
     private $options;
     private $use_array_key_as_value;
     private $appearance_conditions = array();
-    private $jsSelectorValue;
+    private $js_selector_value;
     protected $disabled = false;
+    private $required;
 
     /**
      * Register the field with FormHandler
@@ -68,21 +69,15 @@ class Field
      * @param FormHandler $form
      * @param string $title
      * @param string $name
-     * @param mixed $validator
      * @return static Instance of
      * @author Marien den Besten
      */
-    static function set(FormHandler $form, $title, $name, $validator = null)
+    static function set(FormHandler $form, $title, $name)
     {
         $class = get_called_class();
 
         //create the field
         $fld = new $class($form, $name);
-
-        if(!is_null($validator))
-        {
-            $fld->setValidator($validator);
-        }
 
         //register the field
         $form->registerField($name, $fld, $title)
@@ -109,7 +104,8 @@ class Field
         $this->name = $name;
         $this->setFocusName($name)
             ->setJsSelectorValue('#' . $form->getFormName() . ' input[name="' . $name . '"]')
-            ->useArrayKeyAsValue(\FormHandler\Configuration::get('default_usearraykey'));
+            ->useArrayKeyAsValue(\FormHandler\Configuration::get('default_usearraykey'))
+            ->setRequired(\FormHandler\Configuration::get('require_fields') == 1);
 
         // check if there are spaces in the fieldname
         if(strpos($name, ' ') !== false)
@@ -125,6 +121,28 @@ class Field
         {
             $this->value_post = $_POST[$name];
         }
+        return $this;
+    }
+
+    /**
+     * Get if a field is required
+     *
+     * @return boolean
+     */
+    public function getRequired()
+    {
+        return $this->required;
+    }
+
+    /**
+     * Set if field is required
+     * 
+     * @param boolean $required
+     * @return static
+     */
+    public function setRequired($required)
+    {
+        $this->required = (bool) $required;
         return $this;
     }
 
@@ -229,7 +247,7 @@ class Field
      */
     public function getJsSelectorValue()
     {
-        return $this->jsSelectorValue;
+        return $this->js_selector_value;
     }
 
     /**
@@ -243,7 +261,7 @@ class Field
      */
     protected function setJsSelectorValue($jsSelectorValue)
     {
-        $this->jsSelectorValue = $jsSelectorValue;
+        $this->js_selector_value = $jsSelectorValue;
         return $this;
     }
 
@@ -427,39 +445,24 @@ class Field
      */
     public function processValidators()
     {
-        $is_valid = true;
         $value = $this->getValue();
-        $parameters = array((is_string($value) ? trim($value) : $value), $this->form_object, $this->name);
-        $v = new Validator();
 
+        //when field is required, inject the NotEmtpy() validator
+        if($this->getRequired() === true)
+        {
+            $this->setValidator(new Validator\NotEmpty());
+        }
+
+        //process all validators
         foreach($this->validators as $validator)
         {
-            //convert constants to a callable
-            $is_constant = (is_string($validator) && method_exists($v, $validator));
-            $validator = ($is_constant) ? array($v, $validator) : $validator;
-
-            if(!is_callable($validator))
+            if($validator->validate($value) === false)
             {
-                trigger_error('Unknown validator: "' . $validator . '" used in field "' . $this->name . '"');
-            }
-
-            $is_valid = call_user_func_array($validator, $parameters);
-
-            //weak typing is intentional because functions can also non booleans
-            if($is_valid !== true && $is_valid !== 1)
-            {
-                break;
+                $this->setErrorState(true);
+                $this->setErrorMessage($validator->getMessage());
+                return $this;
             }
         }
-
-        if($is_valid !== true && $is_valid !== 1)
-        {
-            //a validator can trigger custom error messages
-            $message = is_string($is_valid) ? $is_valid : \FormHandler\Language::get(14);
-            $this->setErrorMessage($message);
-        }
-
-        $this->setErrorState($is_valid !== true && $is_valid !== 1);
         return $this;
     }
 
@@ -478,32 +481,24 @@ class Field
      * Field::setValidator()
      *
      * Set the validator which is used to validate the value of the field
-     * This can also be an array.
-     * If you want to use a method to validate the value use it like this:
-     * array($obj, 'NameOfTheMethod')
      *
-     * @param string|callable $validator the name of the validator
+     * @param ValidatorInterface $validator Instance of a validator
      * @return static
      * @author Teye Heimans
+     * @author Marien den Besten
      */
-    public function setValidator($validator)
+    public function setValidator($validator = null)
     {
-        //deprecated use of passing multiple validators
-        if(is_string($validator) && strpos($validator, '|') !== false)
-        {
-            $validators = explode('|', $validator);
-            foreach($validators as $one_piece)
-            {
-                if(trim($one_piece) != '')
-                {
-                    $this->setValidator($one_piece);
-                }
-            }
-            return $this;
-        }
-
         if(!is_null($validator))
         {
+            //fix to enable legacy framework to work... :(
+            if(!$validator instanceof Validator\ValidatorInterface)
+            {
+                trigger_error('Argument 1 passed to setValidator() must be an instance of '
+                    . 'ValidatorInterface, '. gettype($validator) . ' given', E_USER_WARNING);
+            }
+
+            $validator->setField($this);
             $this->validators[] = $validator;
         }
         return $this;

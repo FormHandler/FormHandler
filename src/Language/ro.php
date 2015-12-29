@@ -52,4 +52,7 @@ return array(
     42 => 'Astazi',
     43 => "'D','L','M','M','J','V','S'",
     44 => 'Refresh CAPTCHA',
+    45 => 'Given BSN contains invalid characters',
+    46 => 'A valid BSN is 8 or 9 characters long',
+    47 => 'BSN is not valid',
 );

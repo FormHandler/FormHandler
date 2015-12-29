@@ -85,6 +85,9 @@ class File extends \FormHandler\Field\Field
 
         $form->setEncoding(FormHandler::ENCODING_MULTIPART);
 
+        //upload fields are required by default
+        $this->setRequired(true);
+        
         $this->accept = array();
         $this->drop_zone_enabled = false;
         $this->drop_zone_language = array(

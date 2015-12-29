@@ -37,8 +37,6 @@ use \FormHandler\FormHandler;
  */
 class FileBasic extends \FormHandler\Field\Field
 {
-    private $is_required = false;
-
     /**
      * Constructor
      *
@@ -62,19 +60,6 @@ class FileBasic extends \FormHandler\Field\Field
 
         $this->form_object->setEncoding(FormHandler::ENCODING_MULTIPART);
 
-        return $this;
-    }
-
-    /**
-     * Is required
-     *
-     * @param boolean $required
-     * @return \FormHandler\Field\FileBasic
-     * @author Marien den Besten
-     */
-    public function setRequired($required)
-    {
-        $this->is_required = (bool) $required;
         return $this;
     }
 
@@ -103,7 +88,7 @@ class FileBasic extends \FormHandler\Field\Field
         // easy name to work with (this is the $_FILES['xxx'] array )
         $file = $this->value;
 
-        if($this->is_required === true
+        if($this->getRequired() === true
             && (!is_array($file)
                 || trim($file['name']) == ''))
         {

@@ -26,6 +26,7 @@ include '../src/Loader.php';
 use \FormHandler\FormHandler;
 use \FormHandler\Field as Field;
 use \FormHandler\Button as Button;
+use \FormHandler\Validator as Validator;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 
@@ -35,7 +36,7 @@ Field\File::set($form, 'Upload file', 'upload_file')
     ->setDropZoneEnabled(true, 'Drop your custom file here');
 
 Field\Text::set($form, 'Text field', 'some_other_field')
-    ->setValidator(FH_STRING);
+    ->setValidator(new Validator\String());
 
 $form->_setJS('FormHandler.registerHandlerUploaded(\'upload_file\', function(){ alert(\'File uploaded\'); });', false, true);
 

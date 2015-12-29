@@ -26,6 +26,7 @@ include '../src/Loader.php';
 use \FormHandler\FormHandler;
 use \FormHandler\Field as Field;
 use \FormHandler\Button as Button;
+use \FormHandler\Validator as Validator;
 
 \FormHandler\Configuration::set('fhtml_dir', '../src/FHTML/');
 

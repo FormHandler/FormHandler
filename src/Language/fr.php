@@ -54,4 +54,7 @@ return array(
     42 => 'Aujourd\'hui',
     43 => "'S','M','T','W','T','F','S'",
     44 => 'Refresh CAPTCHA',
+    45 => 'Given BSN contains invalid characters',
+    46 => 'A valid BSN is 8 or 9 characters long',
+    47 => 'BSN is not valid',
 );

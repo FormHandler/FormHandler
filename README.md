@@ -39,15 +39,19 @@ require __DIR__ . '/vendor/autoload.php';
 use \FormHandler\FormHandler;
 use \FormHandler\Field as Field;
 use \FormHandler\Button as Button;
+use \FormHandler\Validator as Validator;
 
 //create a new FormHandler object
 $form = new FormHandler();
 
 //some fields.. (see manual for examples)
-Field\Text::set($form, 'Name', 'name', FH_STRING)
+Field\Text::set($form, 'Name', 'name')
+    ->setRequired(true)
     ->setMaxlength(40);
 
-Field\Number::set($form, 'Age', 'age', FH_INTEGER)
+Field\Number::set($form, 'Age', 'age')
+    ->setRequired(true)
+    ->setValidator(new Validator\Integer())
     ->setMin(1)
     ->setMax(110)
     ->setStep(1);

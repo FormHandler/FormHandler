@@ -52,4 +52,7 @@ return array(
     42 => 'Vandaag',
     43 => "'Z','M','D','W','D','V','Z'",
     44 => 'Ververs CAPTCHA',
+    45 => 'Ingevulde BSN bevat niet toegestane tekens',
+    46 => 'Een volledig BSN is 8 of 9 tekens lang',
+    47 => 'BSN is niet correct',
 );
