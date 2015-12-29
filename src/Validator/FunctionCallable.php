@@ -58,4 +58,14 @@ class FunctionCallable extends Validator implements ValidatorInterface
         }
         return $result;
     }
+
+    /**
+     * Get registered callable
+     * 
+     * @return callable
+     */
+    public function getCallable()
+    {
+        return $this->callable;
+    }
 }
