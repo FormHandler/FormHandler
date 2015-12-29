@@ -452,6 +452,12 @@ class Field
         {
             $this->setValidator(new Validator\NotEmpty());
         }
+        //when field is not required and value is empty there is nothing to validate
+        if($this->getRequired() === false
+            && empty($value))
+        {
+            return $this;
+        }
 
         //process all validators
         foreach($this->validators as $validator)
