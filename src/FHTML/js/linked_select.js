@@ -245,7 +245,6 @@
 
             for(i in disabled)
             {
-                console.log(disabled[i]);
                 $('input[name="'+ field_name_clean +'[]"][value="'+disabled[i]+'"]').attr('disabled', true);
             };
         }
