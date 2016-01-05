@@ -124,9 +124,9 @@
             change_value = true;
         }
 
-        if(oFld.length === 1
-            && aOptions !== null
-            && field_type === 'select')
+        if(aOptions !== null
+            && field_type === 'select'
+            && oFld.length === 1)
         {
             change_value = true;
             oFld.find('option').remove().end();
@@ -178,6 +178,38 @@
                 oFld.append(group);
             }
             oFld[0].selectedIndex = 0;
+        }
+        else if(field_type === 'checkbox')
+        {
+            //remove all labels, checkboxes and new lines
+            var parentElement = $('#'+field_name_clean + '_field .form_right'),
+                currentChildren = parentElement.children('*'),
+                len = 0;
+
+            for(var i in aOptions)
+            {
+                var elem = aOptions[i];
+                if(typeof(elem.value) !== "string")
+                {
+                    continue;
+                }
+                len++;
+
+                parentElement.append('<input type="checkbox" name="'+field_name_clean+'[]" id="printer_family_'
+                    + len + '" value="'+ elem.key +'"><label for="'+field_name_clean+'[]" class="noStyle">'
+                    + elem.value + '</label><br>');
+            }
+
+            //only remove all old elements when a new element is set, otherwise keep them hidden to keep field avaialble
+            //for further update
+            if(len !== 0)
+            {
+                currentChildren.remove()
+            }
+
+            oFld = $('input[name="'+ field_name_clean +'[]"]');
+
+            change_value = true;
         }
 
         if(change_value === true)
