@@ -237,6 +237,18 @@
         {
             oFld.attr('disabled',false);
         }
+        else if(field_type === 'checkbox'
+            && typeof disabled === 'object')
+        {
+            //get all fields with the specific id's and disabled them
+            oFld.attr('disabled',false);
+
+            for(i in disabled)
+            {
+                console.log(disabled[i]);
+                $('input[name="'+ field_name_clean +'[]"][value="'+disabled[i]+'"]').attr('disabled', true);
+            };
+        }
 
         $('#'+ field_name_clean +'_field').css('display',(hide_original === true ? 'none' : 'block'));
         if(hide !== null && hide === true)
