@@ -39,7 +39,7 @@ class Temperature extends \FormHandler\Field\Field
 {
     const UNIT_CELSIUS = 'celsius';
     const UNIT_FAHRENHEIT = 'fahrenheit';
-    
+
     private $temperature;
     private $unit;
     private $empty;
@@ -152,7 +152,7 @@ class Temperature extends \FormHandler\Field\Field
      */
     public function setRequired($required)
     {
-        $this->length->setRequired($required);
+        $this->temperature->setRequired($required);
         return $this;
     }
 
@@ -163,7 +163,7 @@ class Temperature extends \FormHandler\Field\Field
      */
     public function getRequired()
     {
-        return $this->length->getRequired();
+        return $this->temperature->getRequired();
     }
 
     /**
@@ -203,7 +203,7 @@ class Temperature extends \FormHandler\Field\Field
      * @param string|array|callable $validator
      * @return \FormHandler\Field\Temperature
      */
-    public function setValidator($validator)
+    public function setValidator($validator = null)
     {
         $this->temperature->setValidator($validator);
         return $this;
@@ -248,8 +248,8 @@ class Temperature extends \FormHandler\Field\Field
             && method_exists($value, 'getTemperature')
             && method_exists($value, 'getUnit'))
         {
-            $unit = $value->getUnit() != 'fahrenheit' || $value->getUnit() != 0 
-                ? self::UNIT_CELSIUS 
+            $unit = $value->getUnit() != 'fahrenheit' || $value->getUnit() != 0
+                ? self::UNIT_CELSIUS
                 : self::UNIT_FAHRENHEIT;
             parent::setValue(array($value->getTemperature(), $unit), $forced);
             $this->temperature->setValue($value->getTemperature(), $forced);
@@ -323,7 +323,7 @@ class Temperature extends \FormHandler\Field\Field
 
         //skip preference when posted
         if(array_key_exists($unit,$this->units)
-            && !$this->form_object->isPosted()) 
+            && !$this->form_object->isPosted())
         {
             $current = $this->unit->getValue();
             $this->unit->setValue($unit);

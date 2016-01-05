@@ -136,7 +136,7 @@ class Field
 
     /**
      * Set if field is required
-     * 
+     *
      * @param boolean $required
      * @return static
      */
@@ -495,6 +495,11 @@ class Field
      */
     public function setValidator($validator = null)
     {
+        if(is_object($validator))
+        {
+            $validator = new \FormHandler\Validator\FunctionCallable($validator);
+        }
+
         if(!is_null($validator))
         {
             //fix to enable legacy framework to work... :(
@@ -502,6 +507,8 @@ class Field
             {
                 trigger_error('Argument 1 passed to setValidator() must be an instance of '
                     . 'ValidatorInterface, '. gettype($validator) . ' given', E_USER_WARNING);
+
+                return $this;
             }
 
             $validator->setField($this);
