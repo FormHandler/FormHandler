@@ -145,7 +145,7 @@ class Length extends \FormHandler\Field\Number
      * @return \FormHandler\Field\Length
      * @author Marien den Besten
      */
-    public function setValidator($validator)
+    public function setValidator($validator = null)
     {
         $this->length->setValidator($validator);
         return $this;
@@ -164,7 +164,7 @@ class Length extends \FormHandler\Field\Number
 
     /**
      * Set if field is required
-     * 
+     *
      * @param boolean $required
      * @return static
      */
@@ -176,7 +176,7 @@ class Length extends \FormHandler\Field\Number
 
     /**
      * Get if required
-     * 
+     *
      * @return boolean
      */
     public function getRequired()
@@ -311,7 +311,7 @@ class Length extends \FormHandler\Field\Number
      */
     public function getValue()
     {
-        return is_null($this->length->getValue()) || trim($this->length->getValue()) == '' 
+        return is_null($this->length->getValue()) || trim($this->length->getValue()) == ''
             ? null
             : array($this->length->getValue(), $this->unit->getValue());
     }
@@ -350,7 +350,7 @@ class Length extends \FormHandler\Field\Number
 
     /**
      * Set disabled
-     * 
+     *
      * @param boolean $bool
      * @return \FormHandler\Field\Field
      */
