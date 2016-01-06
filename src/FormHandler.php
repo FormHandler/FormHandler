@@ -181,6 +181,34 @@ class FormHandler
     }
 
     /**
+     * Helper function to parse old style validators to new style
+     *
+     * @param mixed $validator
+     * @return \name
+     */
+    public static function parseValidator($validator)
+    {
+        if($validator instanceof \FormHandler\Validator\ValidatorInterface)
+        {
+            return $validator;
+        }
+        if(is_string($validator))
+        {
+            $v = new \FormHandler\Validator\Validator();
+            if(method_exists($v, $validator))
+            {
+                //change validator to be callable
+                $validator = array($v, $validator);
+            }
+        }
+        if(is_callable($validator))
+        {
+            return new \FormHandler\Validator\FunctionCallable($validator);
+        }
+        return null;
+    }
+
+    /**
      * Reset object
      *
      * @author Marien den Besten

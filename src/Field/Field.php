@@ -500,6 +500,11 @@ class Field
             //fix to enable legacy framework to work... :(
             if(!$validator instanceof Validator\ValidatorInterface)
             {
+                $validator = FormHandler::parseValidator($validator);
+            }
+            
+            if(!$validator instanceof Validator\ValidatorInterface)
+            {
                 trigger_error('Argument 1 passed to setValidator() must be an instance of '
                     . 'ValidatorInterface, '. gettype($validator) . ' given', E_USER_WARNING);
 
