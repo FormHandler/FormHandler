@@ -195,8 +195,8 @@
                 }
                 len++;
 
-                parentElement.append('<input type="checkbox" name="'+field_name_clean+'[]" id="printer_family_'
-                    + len + '" value="'+ elem.key +'"><label for="printer_family_'+ len + '" class="noStyle">'
+                parentElement.append('<input type="checkbox" name="'+field_name_clean+'[]" id="'+field_name_clean+'_'
+                    + len + '" value="'+ elem.key +'"><label for="'+field_name_clean+'_'+ len + '" class="noStyle">'
                     + elem.value + '</label><br>');
             }
 
