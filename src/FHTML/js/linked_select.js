@@ -183,7 +183,7 @@
         {
             //remove all labels, checkboxes and new lines
             var parentElement = $('#'+field_name_clean + '_field .form_right'),
-                currentChildren = parentElement.children('*'),
+                currentChildren = parentElement.children('*:not(img.icon_help)'),
                 len = 0;
 
             for(var i in aOptions)
@@ -350,6 +350,20 @@
                         '#'+ form_name +' select[name="'+ key +'[]"]'
                     ];
                     var fld = $(names.join(','));
+
+                    //when checkbox and field not found, create dummy which will be overwritten first
+                    //this is a workaround in order to load the field and update the available options
+                    if(data[key]['field_type'] === 'checkbox'
+                        && fld.length === 0)
+                    {
+                        var field_div = $('#'+ form_name +' #' + key + '_field .form_right');
+
+                        if(field_div.length !== 0)
+                        {
+                            field_div.append('<input type="checkbox" name="' + key + '[]">');
+                        }
+                    }
+
                     if(fld.length !== 0)
                     {
                         if(!initial)
