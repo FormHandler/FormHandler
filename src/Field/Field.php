@@ -495,11 +495,6 @@ class Field
      */
     public function setValidator($validator = null)
     {
-        if(is_object($validator))
-        {
-            $validator = new \FormHandler\Validator\FunctionCallable($validator);
-        }
-
         if(!is_null($validator))
         {
             //fix to enable legacy framework to work... :(
