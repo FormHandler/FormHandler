@@ -30,10 +30,11 @@ class Validator
 {
     protected $field;
     private $message;
+    private $required = false;
 
     /**
      * Set field object
-     * 
+     *
      * @param \FormHandler\Field\Field $field
      * @return \FormHandler\Validator\Validator
      */
@@ -76,5 +77,27 @@ class Validator
             $this->message = $message;
         }
         return $this;
+    }
+
+    /**
+     * Set required validator
+     *
+     * @param boolean $required
+     * @return static
+     */
+    public function setRequired($required)
+    {
+        $this->required = (bool) $required;
+        return $this;
+    }
+
+    /**
+     * Get if required validator
+     *
+     * @return boolean
+     */
+    public function getRequired()
+    {
+        return $this->required;
     }
 }

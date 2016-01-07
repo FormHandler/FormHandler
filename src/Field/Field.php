@@ -452,8 +452,13 @@ class Field
         {
             $this->setValidator(new Validator\NotEmpty());
         }
-        //when field is not required and value is empty there is nothing to validate
+
+        //do not validate the field when:
+        // - Fields are not required by default
+        // - No required validators are registered
+        // - Value is empty
         if($this->getRequired() === false
+            && count($this->getValidatorsRequired()) === 0
             && empty($value))
         {
             return $this;
@@ -462,7 +467,7 @@ class Field
         //process all validators
         foreach($this->validators as $validator)
         {
-            if($validator->validate($value) === false)
+            if($validator->validate($value, $this->form_object) === false)
             {
                 $this->setErrorState(true);
                 $this->setErrorMessage($validator->getMessage());
@@ -484,6 +489,18 @@ class Field
     }
 
     /**
+     * Get all required validators
+     *
+     * @return array
+     */
+    public function getValidatorsRequired()
+    {
+        return array_filter($this->validators, function($validator){
+            return $validator->getRequired();
+        });
+    }
+
+    /**
      * Field::setValidator()
      *
      * Set the validator which is used to validate the value of the field
@@ -502,13 +519,19 @@ class Field
             {
                 $validator = FormHandler::parseValidator($validator);
             }
-            
+
             if(!$validator instanceof Validator\ValidatorInterface)
             {
                 trigger_error('Argument 1 passed to setValidator() must be an instance of '
                     . 'ValidatorInterface, '. gettype($validator) . ' given', E_USER_WARNING);
 
                 return $this;
+            }
+
+            //register form object which could be used in callable
+            if($validator instanceof Validator\FunctionCallable)
+            {
+                $validator->setFormObject($this->form_object);
             }
 
             $validator->setField($this);

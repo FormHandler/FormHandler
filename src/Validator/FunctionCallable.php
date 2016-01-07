@@ -29,6 +29,7 @@ namespace FormHandler\Validator;
 class FunctionCallable extends Validator implements ValidatorInterface
 {
     private $callable;
+    private $form_object;
 
     /**
      * Set the callable.
@@ -37,19 +38,28 @@ class FunctionCallable extends Validator implements ValidatorInterface
      * assumed and the string is used as error message.
      *
      * @param callable $callable
+     * @param \FormHandler\FormHandler $form_object
      */
-    public function __construct($callable)
+    public function __construct($callable, \FormHandler\FormHandler $form_object = null)
     {
         if(!is_callable($callable))
         {
             trigger_error('Given variable is not callable', E_USER_WARNING);
         }
+
         $this->callable = $callable;
+        $this->form_object = $form_object;
     }
 
+    /**
+     * Validate the field
+     *
+     * @param mixed $value
+     * @return boolean
+     */
     public function validate($value)
     {
-        $result = call_user_func($this->callable, $value);
+        $result = call_user_func($this->callable, $value, $this->form_object);
 
         if($result !== true && $result !== 1)
         {
@@ -61,11 +71,22 @@ class FunctionCallable extends Validator implements ValidatorInterface
 
     /**
      * Get registered callable
-     * 
+     *
      * @return callable
      */
     public function getCallable()
     {
         return $this->callable;
+    }
+
+    public function getFormObject()
+    {
+        return $this->form_object;
+    }
+
+    public function setFormObject(\FormHandler\FormHandler $form_object)
+    {
+        $this->form_object = $form_object;
+        return $this;
     }
 }
