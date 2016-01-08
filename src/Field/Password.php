@@ -117,7 +117,8 @@ class Password extends \FormHandler\Field\Text
             return;
         }
 
-        $validator = new Validator();
+        $validator = new Validator\Password();
+
         // is the password not to short ?
         if(strlen($this->getValue()) < \FormHandler\Configuration::get('min_password_length'))
         {
@@ -129,7 +130,7 @@ class Password extends \FormHandler\Field\Text
             return;
         }
         // is it an valif password ?
-        elseif(!$validator->IsPassword($this->getValue()))
+        elseif(!$validator->validate($this->getValue()))
         {
             $this->setErrorMessage(\FormHandler\Language::get(18));
             $this->setErrorState(true);
