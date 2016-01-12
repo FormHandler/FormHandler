@@ -40,7 +40,7 @@ class Captcha extends \FormHandler\Field\Text
     private $image;
     private $width;
     private $height;
-    
+
     /**
      * Constructor
      *
@@ -61,12 +61,12 @@ class Captcha extends \FormHandler\Field\Text
         }
 
         $bCaptcha = false;
-        
-        if(session_status() == PHP_SESSION_NONE)
+
+        if(\session_status() == PHP_SESSION_NONE)
         {
             trigger_error("Please make sure you have an active session", E_USER_WARNING);
         }
-        
+
         $this->image = new \FormHandler\Button\Image($form, $name .'_image');
         $this->image->setExtra('onclick="return false;" style="cursor:default;"');
 
@@ -126,11 +126,11 @@ class Captcha extends \FormHandler\Field\Text
             // get the view value..
             return '';
         }
-        
-        $session_id = session_id();
+
+        $session_id = \session_id();
 
         $url = \FormHandler\Configuration::get('fhtml_dir') .'securimage/securimage_show.php';
-        $url .=  '?sid=' . md5(uniqid(time())). '&session_id=' . $session_id 
+        $url .=  '?sid=' . md5(uniqid(time())). '&session_id=' . $session_id
             . '&width=' . $this->width . '&height=' . $this->height . '&length=' . $this->getSize();
 
         $this->image->setImage($url);
@@ -141,7 +141,7 @@ class Captcha extends \FormHandler\Field\Text
         $refresh = '<a id="captcha_refresh" href="' . $current_url
             . '" onclick="document.getElementById(\'' . $this->getName() . '_image\').src=\'' . $url . '\'; return false;">'
             . $refresh_text . '</a>';
-        
+
         return $this->image->getButton() . "<br>" . $refresh . "<br>" . parent::getField();
     }
 }
