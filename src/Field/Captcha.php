@@ -78,10 +78,12 @@ class Captcha extends \FormHandler\Field\Text
             ->setValidator(new \FormHandler\Validator\FunctionCallable(function($value)
             {
                 require(__DIR__ . '/../FHTML/securimage/securimage.php');
+
                 $img = new \Securimage();
                 $valid = $img->check($value);
                 return ($valid == true);
-            }));
+            }))
+            ->setRequired(true);
     }
 
     public function getWidth()
@@ -129,7 +131,13 @@ class Captcha extends \FormHandler\Field\Text
 
         $session_id = \session_id();
 
-        $url = \FormHandler\Configuration::get('fhtml_dir') .'securimage/securimage_show.php';
+        //get url from configuration
+        $configured_url = \FormHandler\Configuration::get('securimage_url');
+
+        $url = (is_null($configured_url))
+            ? \FormHandler\Configuration::get('fhtml_dir') .'securimage/securimage_show.php'
+            : $configured_url;
+
         $url .=  '?sid=' . md5(uniqid(time())). '&session_id=' . $session_id
             . '&width=' . $this->width . '&height=' . $this->height . '&length=' . $this->getSize();
 
