@@ -62,7 +62,7 @@ class Captcha extends \FormHandler\Field\Text
 
         $bCaptcha = false;
 
-        if(\session_status() == PHP_SESSION_NONE)
+        if(!isset($_SESSION))
         {
             trigger_error("Please make sure you have an active session", E_USER_WARNING);
         }
