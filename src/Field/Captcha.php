@@ -146,7 +146,7 @@ class Captcha extends \FormHandler\Field\Text
         $refresh_text = \FormHandler\Language::get(44);
         $current_url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-        $refresh = '<a id="captcha_refresh" href="' . $current_url
+        $refresh = '<a id="captcha_refresh" href="//' . $current_url
             . '" onclick="document.getElementById(\'' . $this->getName() . '_image\').src=\'' . $url . '\'; return false;">'
             . $refresh_text . '</a>';
 
