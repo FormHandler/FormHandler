@@ -77,7 +77,7 @@ class Captcha extends \FormHandler\Field\Text
             ->setMaxlength(0)
             ->setValidator(new \FormHandler\Validator\FunctionCallable(function($value)
             {
-                require(__DIR__ . '/../FHTML/securimage/securimage.php');
+                require_once(__DIR__ . '/../FHTML/securimage/securimage.php');
 
                 $img = new \Securimage();
                 $valid = $img->check($value);
