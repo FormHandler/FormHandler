@@ -98,9 +98,9 @@ class Temperature extends \FormHandler\Field\Field
         $form->_setJS(''
             . "$('#". $name ."_empty_1').on('change',function()\n"
             . "{\n"
-            . " var state = !!$(this).attr('checked');\n"
-            . " $('#". $name ."_temperature').attr('disabled',state);\n"
-            . " $('#". $name ."_unit').attr('disabled',state);\n"
+            . " var state = !!$(this).prop('checked');\n"
+            . " $('#". $name ."_temperature').prop('disabled',state);\n"
+            . " $('#". $name ."_unit').prop('disabled',state);\n"
             . "});\n"
             . "$('#". $name ."_unit').on('change',function()\n"
             . "{\n"
