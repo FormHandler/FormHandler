@@ -246,7 +246,7 @@ class Number extends \FormHandler\Field\Field
      * Get if the field is in error state
      *
      * @return boolean
-     * @author Marien den Beste©n
+     * @author Marien den Besten
      */
     public function getErrorState()
     {
