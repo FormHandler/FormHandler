@@ -35,5 +35,5 @@ $field->setEmptyText('FAIL');
 $html = $form->flush();
 
 
-echo 'Test for nubmer field with option to set unknown<hr>';
+echo 'Test for number field with option to set unknown<hr>';
 echo $html;
