@@ -45,6 +45,7 @@ class Temperature extends \FormHandler\Field\Field
     private $empty;
     private $preferred_unit;
     private $allow_empty = false;
+    private $allow_empty_text;
     private $value_set = false;
     private $units = array(
         self::UNIT_CELSIUS => 'Celsius',
@@ -61,8 +62,9 @@ class Temperature extends \FormHandler\Field\Field
      */
     public function __construct(FormHandler $form, $name)
     {
+        $this->allow_empty_text = 'Value unknown';
         $this->empty = new \FormHandler\Field\CheckBox($form, $name .'_empty');
-        $this->empty->setOptions(array(1 => 'Value unknown'));
+        $this->empty->setOptions(array(1 => $this->allow_empty_text));
 
         $empty = $this->empty->getValue();
         $this->value = !empty($empty) ? null : $this->value;
@@ -130,6 +132,31 @@ class Temperature extends \FormHandler\Field\Field
             $this->setValue(0);
         }
         return $this;
+    }
+
+    /**
+     * Set empty text
+     *
+     * @param string $text
+     * @return static
+     */
+    public function setEmptyText($text)
+    {
+        if(is_string($text) && trim($text) != '')
+        {
+            $this->allow_empty_text = $text;
+            $this->empty->setOptions(array(1 => $this->allow_empty_text));
+        }
+    }
+
+    /**
+     * Get empty text
+     *
+     * @return string
+     */
+    public function getEmptyText()
+    {
+        return $this->allow_empty_text;
     }
 
     /**
