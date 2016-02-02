@@ -187,7 +187,7 @@ class Number extends \FormHandler\Field\Field
     public function _getViewValue()
     {
         return (is_null($this->getValue()))
-            ? '-'
+            ? '<em>'.$this->getEmptyText().'</em>'
             : $this->getValue();
     }
 
