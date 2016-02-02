@@ -97,6 +97,8 @@ class Number extends \FormHandler\Field\Field
             $this->allow_empty_text = $text;
             $this->empty->setOptions(array(1 => '<em>'. $this->allow_empty_text .'</em>'));
         }
+
+        return $this;
     }
 
     /**
