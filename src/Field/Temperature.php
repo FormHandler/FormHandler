@@ -403,7 +403,7 @@ class Temperature extends \FormHandler\Field\Field
     public function _getViewValue()
     {
         return (is_null($this->getValue()))
-            ? '-'
+            ? ($this->allow_empty ? '<em>'. $this->allow_empty_text .'</em>' : '-')
             : $this->temperature->getValue() .'&deg; '. $this->units[$this->unit->getValue()];
     }
 
