@@ -26,11 +26,13 @@ include '../src/Loader.php';
 $form = new FormHandler\FormHandler();
 
 $field = FormHandler\Field\Percentage::set($form, 'Number', 'length')
+    ->setValidator(new \FormHandler\Validator\Integer())
+    ->setRequired(true)
     ->allowEmpty(true);
 
-$field->setValue(null);
-
 $field->setEmptyText('FAIL');
+
+\FormHandler\Button\Submit::set($form);
 
 $html = $form->flush();
 

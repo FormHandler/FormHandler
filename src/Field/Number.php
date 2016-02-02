@@ -46,7 +46,7 @@ class Number extends \FormHandler\Field\Field
     {
         $this->allow_empty_text = 'Value unknown';
         $this->empty = new \FormHandler\Field\CheckBox($form, $name .'_empty');
-        $this->empty->setOptions(array(1 => $this->allow_empty_text));
+        $this->empty->setOptions(array(1 => '<em>'. $this->allow_empty_text .'</em>'));
 
         $empty = $this->empty->getValue();
         $this->value = !empty($empty) ? null : $this->value;
@@ -95,7 +95,7 @@ class Number extends \FormHandler\Field\Field
         if(is_string($text) && trim($text) != '')
         {
             $this->allow_empty_text = $text;
-            $this->empty->setOptions(array(1 => $this->allow_empty_text));
+            $this->empty->setOptions(array(1 => '<em>'. $this->allow_empty_text .'</em>'));
         }
     }
 
@@ -240,5 +240,24 @@ class Number extends \FormHandler\Field\Field
     {
         $this->empty->setDisabled($bool);
         return parent::setDisabled($bool);
+    }
+
+    /**
+     * Get if the field is in error state
+     *
+     * @return boolean
+     * @author Marien den Beste©n
+     */
+    public function getErrorState()
+    {
+        $empty_value = $this->empty->getValue();
+
+        if($this->allow_empty === true
+            && !empty($empty_value))
+        {
+            return false;
+        }
+
+        return parent::getErrorState();
     }
 }
