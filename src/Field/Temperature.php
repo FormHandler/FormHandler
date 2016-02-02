@@ -147,6 +147,7 @@ class Temperature extends \FormHandler\Field\Field
             $this->allow_empty_text = $text;
             $this->empty->setOptions(array(1 => $this->allow_empty_text));
         }
+        return $this;
     }
 
     /**
