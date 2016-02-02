@@ -50,12 +50,12 @@ class Percentage extends Number
         return parent::__construct($form, $name)
             ->setMin(0)
             ->setExtra('class="percentage-field"')
-            ->setValidator(_FH_FLOAT);
+            ->setValidator(new \FormHandler\Validator\Float());
     }
-    
+
     /**
      * Set value
-     * 
+     *
      * @param integer $value
      * @return Percentage
      */
