@@ -85,7 +85,7 @@ class Percentage extends Number
         if($this->getViewMode())
         {
             // get the view value..
-            return $this->_getViewValue() .'%';
+            return $this->_getViewValue() . is_null($this->value()) ? '' : '%';
         }
 
         //formhandler can not handle objects yet
