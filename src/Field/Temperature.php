@@ -98,18 +98,23 @@ class Temperature extends \FormHandler\Field\Field
             ->setFocusName($name .'_temperature');
 
         $form->_setJS(''
+            . "var doConversion = true;\n"
             . "$('#". $name ."_empty_1').on('change',function()\n"
             . "{\n"
+            . " doConversion = false;\n"
             . " var state = !!$(this).prop('checked');\n"
             . " $('#". $name ."_temperature').prop('disabled',state).trigger('change');\n"
             . " $('#". $name ."_unit').prop('disabled',state).trigger('change');\n"
             . "});\n"
             . "$('#". $name ."_unit').on('change',function()\n"
             . "{\n"
+            . "if(doConversion === true){\n"
             . " var val = $(this).val(),\n"
             . "     temp = $('#". $name ."_temperature').val();\n"
             . " if(val == 'celsius') $('#". $name ."_temperature').val(Math.round(((temp - 32) / 1.8)*10)/10);\n"
             . " if(val == 'fahrenheit') $('#". $name ."_temperature').val(Math.round(((temp * 1.8) + 32)*10)/10);\n"
+            . "}\n"
+            . "doConversion = true;\n"
             . "});\n",false,false);
 
         return $this;
