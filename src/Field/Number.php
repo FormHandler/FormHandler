@@ -56,8 +56,8 @@ class Number extends \FormHandler\Field\Field
         $form->_setJS("$(document).ready(function(){\n"
             . "$('#". $name ."_empty_1').on('change',function()\n"
             . "{\n"
-            . " var state = !!$(this).prop('checked');console.log(state);\n"
-            . " $('#". $name ."').prop('disabled',state);\n"
+            . " var state = !!$(this).prop('checked');\n"
+            . " $('#". $name ."').prop('disabled',state).trigger('change');\n"
             . "});\n"
             . "});"
         );
