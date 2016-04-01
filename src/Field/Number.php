@@ -111,6 +111,16 @@ class Number extends \FormHandler\Field\Field
         return $this->allow_empty_text;
     }
 
+    /**
+     * Get empty allowed
+     *
+     * @return string
+     */
+    public function getEmptyAllowed()
+    {
+        return $this->allow_empty;
+    }
+
     public function setValue($value, $forced = false)
     {
         $this->empty->setValue(0, $forced);
