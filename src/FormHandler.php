@@ -1874,6 +1874,10 @@ class FormHandler
                     }
 
                     $return[$field_to] = $result;
+
+                    //align to-be-returned field changes in current object to make sure that other callables will
+                    //use the new field data
+                    $this->updateField($field_to, $result);
                 }
             }
 
@@ -2039,6 +2043,53 @@ class FormHandler
             }
         }
         return $form;
+    }
+
+    /**
+     * Update field settings in current form object so other callable can make use of the new data
+     *
+     * @param string $fieldName The name of the field
+     * @param array $fieldData The data to update
+     * @return boolean False when field is not found (HTML field '#') or data is not an array
+     */
+    private function updateField($fieldName, $fieldData)
+    {
+        //try to find the field
+        if(substr($fieldName, 0, 1) == '#'
+            || !$this->fieldExists($fieldName)
+            || !is_array($fieldData))
+        {
+            return false;
+        }
+
+        $field = $this->getField($fieldName);
+
+        //walk through list and do no update null values
+        foreach($fieldData as $option => $value)
+        {
+            if(is_null($value))
+            {
+                continue;
+            }
+
+            switch($option)
+            {
+                case 'new_options':
+                    $field->setOptions($value);
+                    break;
+                case 'hide':
+                    $this->fieldHide($fieldName, $value);
+                    break;
+                case 'disabled':
+                    $field->setDisabled($value);
+                    break;
+                case 'value':
+                    $field->setValue($value);
+                    break;
+            }
+        }
+
+        return true;
     }
 
     /**
