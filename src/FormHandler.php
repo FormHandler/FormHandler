@@ -2051,10 +2051,12 @@ class FormHandler
      * @param string $fieldName The name of the field
      * @param array $fieldData The data to update
      * @return boolean False when field is not found (HTML field '#') or data is not an array
+     *
+     * @author Ruben de Vos <ruben@color-base.com>
      */
     private function updateField($fieldName, $fieldData)
     {
-        //try to find the field
+        //skip HTML fields defined with an '#' and validate field
         if(substr($fieldName, 0, 1) == '#'
             || !$this->fieldExists($fieldName)
             || !is_array($fieldData))
@@ -2062,19 +2064,22 @@ class FormHandler
             return false;
         }
 
+        //get the field object for later use
         $field = $this->getField($fieldName);
 
         //walk through list and do no update null values
         foreach($fieldData as $option => $value)
         {
+            //a null value indicates that the value should not be changed
             if(is_null($value))
             {
                 continue;
             }
 
+            //switch option and update field or form object accordingly
             switch($option)
             {
-                case 'new_options':
+                case 'options':
                     $field->setOptions($value);
                     break;
                 case 'hide':
