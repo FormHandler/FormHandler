@@ -1861,6 +1861,10 @@ class FormHandler
                         );
                     }
 
+                    $options = array_key_exists('options', $result)
+                        ? $result['options']
+                        : null;
+
                     if(array_key_exists('options', $result))
                     {
                         unset($result['options']);
@@ -1877,6 +1881,10 @@ class FormHandler
 
                     //align to-be-returned field changes in current object to make sure that other callables will
                     //use the new field data
+                    if(!is_null($options))
+                    {
+                        $result['options'] = $options;
+                    }
                     $this->updateField($field_to, $result);
                 }
             }
