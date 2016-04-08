@@ -1827,7 +1827,11 @@ class FormHandler
                         $extra = array();
                         foreach($link['extra'] as $fld_to)
                         {
-                            $extra[$fld_to] = $filter;
+                            if($fld_to == $field_from)
+                            {
+                                $extra[$fld_to] = $filter;
+                            }
+
                             if(!array_key_exists($fld_to, $_POST))
                             {
                                 continue;
