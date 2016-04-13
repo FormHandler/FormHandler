@@ -289,12 +289,28 @@
             value = value + '';
         }
 
-        //check if current value is available in field options. Select first value if not.
+        //make sure that value (or all values in case of multiple selectfield) are available in element options
         if($field.is('select')
-            && (value === ''
-                || $('#' + $field.attr('id') + ' option[value=' + value + ']').length  === 0))
+            && ($field.prop('multiple') === false || value.length === 1)
+            && (value === '' || $('#' + $field.attr('id') + ' option[value=' + value + ']').length  === 0))
         {
             value = $('#' + $field.attr('id') + ' option').val();
+        }
+        else if($field.is('select, multiple')
+                && value.length > 1)
+        {
+            var valueFound = [];
+            $(value).each(function(key, optionValue)
+            {
+                if($('#' + $field.attr('id') + ' option[value=' + optionValue + ']').length  !== 0)
+                {
+                    valueFound.push(optionValue);
+                }
+            });
+
+            value = (valueFound.length === 0)
+                ? $('#' + $field.attr('id') + ' option').val()
+                : valueFound;
         }
 
         if($field.is(':checkbox'))
