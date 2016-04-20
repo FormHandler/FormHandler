@@ -87,7 +87,7 @@ class File extends \FormHandler\Field\Field
 
         //upload fields are required by default
         $this->setRequired(true);
-        
+
         $this->accept = array();
         $this->drop_zone_enabled = false;
         $this->drop_zone_language = array(
@@ -246,7 +246,7 @@ class File extends \FormHandler\Field\Field
 
     /**
      * Set the caption for the file button
-     * 
+     *
      * @param string $caption
      * @return \FormHandler\Field\File
      * @author Marien den Besten
@@ -380,12 +380,14 @@ class File extends \FormHandler\Field\Field
      * Write a token to current open downloads
      *
      * @author Marien den Besten
+     * @author Ruben de Vos
      */
     private function writeOpenUploads($status)
     {
         $status_file = $this->getTempDir() . 'FormHandlerUploads.json';
 
-        if(!is_writable($status_file))
+        if(!file_exists($status_file)
+            && (!file_exists($this->getTempDir()) || !is_writable($this->getTempDir())))
         {
             trigger_error('Unable to write upload to TEMP directory, please adjust TEMP directory configuration');
         }
