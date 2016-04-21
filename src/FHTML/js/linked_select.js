@@ -297,6 +297,7 @@
             value = $('#' + $field.attr('id') + ' option').val();
         }
         else if($field.is('select, multiple')
+                && value.typeof === Array
                 && value.length > 1)
         {
             var valueFound = [];
