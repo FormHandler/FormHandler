@@ -1809,88 +1809,66 @@ class FormHandler
             $field_from = $_POST['field_from'];
             $return = array();
 
-            $filter = $_POST['filter'];
-            if(substr($filter, 0, 11) == '__FH_JSON__')
-            {
-                $filter = json_decode(substr($filter, 11), true);
-            }
-
             foreach($fields as $field_to)
             {
-                if(array_key_exists($field_from . '_' . $field_to, $this->fieldLinks))
+                try
                 {
-                    $link = $this->fieldLinks[$field_from . '_' . $field_to];
-                    $extra = false;
-
-                    if(is_array($link['extra']))
-                    {
-                        $extra = array();
-                        foreach($link['extra'] as $fld_to)
-                        {
-                            if($fld_to == $field_from)
-                            {
-                                $extra[$fld_to] = $filter;
-                            }
-
-                            if(!array_key_exists($fld_to, $_POST))
-                            {
-                                continue;
-                            }
-
-                            $v = $_POST[$fld_to];
-                            if(substr($v, 0, 11) == '__FH_JSON__')
-                            {
-                                $v = json_decode(substr($v, 11), true);
-                            }
-                            $extra[$fld_to] = $v;
-                        }
-                    }
-
-                    $result = call_user_func_array(
-                        $link['handler'],
-                        array(
-                            $filter,
-                            $this,
-                            $_POST['field_from'],
-                            $extra,
-                            (isset($_POST['initial'])),
-                            $field_to
-                        )
-                    );
-
-                    if(!is_array($result))
-                    {
-                        trigger_error(
-                            'Linked function does not return a correct format: ' . $_POST['field_from'], E_USER_WARNING
-                        );
-                    }
-
-                    $options = array_key_exists('options', $result)
-                        ? $result['options']
-                        : null;
-
-                    if(array_key_exists('options', $result))
-                    {
-                        unset($result['options']);
-                    }
-
-                    $field = $this->getField($field_to);
-
-                    if(!is_null($field))
-                    {
-                        $result['selector_field_to'] = $field->getJsSelectorValue();
-                    }
-
-                    $return[$field_to] = $result;
-
-                    //align to-be-returned field changes in current object to make sure that other callables will
-                    //use the new field data
-                    if(!is_null($options))
-                    {
-                        $result['options'] = $options;
-                    }
-                    $this->updateField($field_to, $result);
+                    list($link, $filter, $extra) = $this->getLinkData($field_from, $field_to);
                 }
+                catch(Exception $e)
+                {
+                    //link not found
+                    continue;
+                }
+
+                //update from field with posted value to make it usable in callable
+                $this->getField($field_from)
+                    ->setValue($filter);
+
+                $result = call_user_func_array(
+                    $link['handler'],
+                    array(
+                        $filter,
+                        $this,
+                        $_POST['field_from'],
+                        $extra,
+                        (isset($_POST['initial'])),
+                        $field_to
+                    )
+                );
+
+                if(!is_array($result))
+                {
+                    trigger_error(
+                        'Linked function does not return a correct format: ' . $_POST['field_from'], E_USER_WARNING
+                    );
+                }
+
+                $options = array_key_exists('options', $result)
+                    ? $result['options']
+                    : null;
+
+                if(array_key_exists('options', $result))
+                {
+                    unset($result['options']);
+                }
+
+                $field = $this->getField($field_to);
+
+                if(!is_null($field))
+                {
+                    $result['selector_field_to'] = $field->getJsSelectorValue();
+                }
+
+                $return[$field_to] = $result;
+
+                //align to-be-returned field changes in current object to make sure that other callables will
+                //use the new field data
+                if(!is_null($options))
+                {
+                    $result['options'] = $options;
+                }
+                $this->updateField($field_to, $result);
             }
 
             self::returnAjaxResponse($return);
@@ -2167,38 +2145,25 @@ class FormHandler
 
         foreach($this->attachSelect[$field_from] as $field_to)
         {
-            $find = $field_from . '_' . $field_to;
-            if(!array_key_exists($find, $this->fieldLinks))
+            try
             {
+                list($link, $value, $extra) = $this->getLinkData($field_from, $field_to);
+            }
+            catch(Exception $e)
+            {
+                //link not found
                 return;
             }
-            $link = $this->fieldLinks[$find];
 
-            $extra = array();
-            if(is_array($link['extra']))
-            {
-                //remove from field from the extra array when exists
-                if(in_array($field_from, $link['extra']))
-                {
-                    $key = array_search($field_from, $link['extra']);
-                    unset($link['extra'][$key]);
-                }
-
-                //get values for linked fields
-                foreach($link['extra'] as $field)
-                {
-                    if($this->fieldExists($field))
-                    {
-                        $extra[$field] = $this->getValue($field);
-                    }
-                }
-            }
+            //update from field with new value
+            $this->getField($field_from)
+                ->setValue($value);
 
             //call value handler
             $result = call_user_func_array(
                 $link['handler'],
                 array(
-                    $this->getValue($link['from']),
+                    $value,
                     $this,
                     $field_from,
                     $extra,
@@ -2212,37 +2177,87 @@ class FormHandler
                 trigger_error('Linked function does not return a correct format: ' . $field_from, E_USER_WARNING);
             }
 
-            //when handler gives result
-            //we are not able to assign the results to html buffers
-            if(is_array($result) && substr($field_to, 0, 1) != '#')
-            {
-                $to = $this->getField($link['to']);
-                //set options if available
-                if(array_key_exists('options', $result)
-                    && !is_null($to)
-                    && method_exists($to, 'setOptions'))
-                {
-                    $to->setOptions($result['options']);
-                }
+            //update field values
+            $this->updateField($field_to, $result);
 
-                if(array_key_exists('value', $result))
-                {
-                    $to->setValue($result['value']);
-                }
-
-                if(array_key_exists('hide', $result) && $result['hide'] === true)
-                {
-                    $this->fieldHide($link['to']);
-                }
-
-                if(array_key_exists('disabled', $result))
-                {
-                    $to->setDisabled($result['disabled']);
-                }
-            }
             $this->callProvider($field_to);
         }
     }
+
+    /**
+     * Get link data based on defined fields
+     *
+     * @param string $fieldFrom
+     * @param string $fieldTo
+     * @return array Link array, value, extra array
+     * @throws Exception Throws exception when link not found
+     */
+    private function getLinkData($fieldFrom, $fieldTo)
+    {
+        //validate link
+        if(!array_key_exists($fieldFrom . '_' . $fieldTo, $this->fieldLinks))
+        {
+            throw new Exception('Link not found for fields '. $fieldFrom .' => '. $fieldTo);
+        }
+
+        //get link details
+        $link = $this->fieldLinks[$fieldFrom . '_' . $fieldTo];
+
+        //get value from form
+        $value = $this->getValue($fieldFrom);
+
+        //get posted value if available
+        if(isset($_POST['filter']))
+        {
+            $value = $_POST['filter'];
+            if(substr($value, 0, 11) == '__FH_JSON__')
+            {
+                $value = json_decode(substr($value, 11), true);
+            }
+        }
+
+        //process all extra fields
+        $extra = array();
+        if(is_array($link['extra']))
+        {
+            //remove from field from the extra array when exists
+            if(in_array($fieldFrom, $link['extra']))
+            {
+                $key = array_search($fieldFrom, $link['extra']);
+                unset($link['extra'][$key]);
+            }
+
+            //get values for linked fields
+            foreach($link['extra'] as $field)
+            {
+                //first get value from current form instance
+                if($this->fieldExists($field))
+                {
+                    $extra[$field] = $this->getValue($field);
+                }
+
+                //get posted value when available
+                if(array_key_exists($field, $_POST))
+                {
+                    $post_value = $_POST[$field];
+                    if(substr($post_value, 0, 11) == '__FH_JSON__')
+                    {
+                        $post_value = json_decode(substr($post_value, 11), true);
+                    }
+                    $extra[$field] = $post_value;
+                }
+            }
+        }
+
+        return array(
+            $link,
+            $value,
+            $extra
+        );
+
+    }
+
+
 
     /**
      * Visually hide a field
