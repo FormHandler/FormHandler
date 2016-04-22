@@ -2205,11 +2205,13 @@ class FormHandler
 
         //get value from form
         $value = $this->getValue($fieldFrom);
-
         //get posted value if available
-        if(isset($_POST['filter']))
+        if(isset($_POST['field_from'])
+            && $_POST['field_from'] == $fieldFrom
+            && isset($_POST['filter']))
         {
             $value = $_POST['filter'];
+
             if(substr($value, 0, 11) == '__FH_JSON__')
             {
                 $value = json_decode(substr($value, 11), true);
