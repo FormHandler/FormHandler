@@ -247,7 +247,7 @@ class Length extends \FormHandler\Field\Number
         }
         elseif(is_numeric($value))
         {
-            $unit = key($this->units);
+            $unit = key($this->unit->getOptions());
 
             $this->length->setValue($value, $forced);
             $this->unit->setValue($unit, $forced);
@@ -282,24 +282,28 @@ class Length extends \FormHandler\Field\Number
      */
     public function setUnit($unit)
     {
-        if(array_key_exists($unit, $this->units) && !$this->form_object->isPosted()) //skip preference when posted
+        //skip preference when posted
+        if(!array_key_exists($unit, $this->unit->getOptions())
+            || $this->form_object->isPosted())
         {
-            $current = $this->unit->getValue();
+            return $this;
+        }
+
+        $current = $this->unit->getValue();
+        $this->unit->setValue($unit);
+        $this->preferred_unit = $unit;
+
+        if(is_null($this->length->getValue()) || $current == $unit)
+        {
+            return $this;
+        }
+
+        if($this->value_set && $this->length->getValue() != '')
+        {
+            $value = $this->convert($this->length->getValue(), $current, $unit, 2);
+
+            $this->length->setValue($value);
             $this->unit->setValue($unit);
-            $this->preferred_unit = $unit;
-
-            if(is_null($this->length->getValue()) || $current == $unit)
-            {
-                return $this;
-            }
-
-            if($this->value_set && $this->length->getValue() != '')
-            {
-                $value = $this->convert($this->length->getValue(), $current, $unit, 2);
-
-                $this->length->setValue($value);
-                $this->unit->setValue($unit);
-            }
         }
         return $this;
     }
@@ -377,5 +381,44 @@ class Length extends \FormHandler\Field\Number
         }
 
         return $this->length->getField() . ' ' . $this->unit->getField();
+    }
+
+    /**
+     * Update the list of available units
+     *
+     * @param array $list A list of units, use \FormHandler\Field\Length::
+     * @return \FormHandler\Field\Length
+     */
+    public function setUnitAvailable($list)
+    {
+        //validate unit list
+        $list = is_array($list)
+            ? array_intersect_key($this->units, array_fill_keys($list, 'foo'))
+            : array();
+
+        if(empty($list))
+        {
+            return $this;
+        }
+
+        //update unit options
+        $this->unit->setOptions($list);
+
+        //update current unit if removed from list
+        if(!array_key_exists($this->unit->getValue(), $list))
+        {
+            $this->setUnit(key($list));
+        }
+        return $this;
+    }
+
+    /**
+     * Reset the unit list to default
+     *
+     * @return static
+     */
+    public function resetUnitAvailable()
+    {
+        return $this->setUnitAvailable(array_keys($this->units));
     }
 }
