@@ -138,6 +138,16 @@ class Temperature extends \FormHandler\Field\Field
         }
         return $this;
     }
+    
+    /**
+     * Get empty allowed
+     *
+     * @return string
+     */
+    public function getEmptyAllowed()
+    {
+        return $this->allow_empty;
+    }
 
     /**
      * Set empty text
