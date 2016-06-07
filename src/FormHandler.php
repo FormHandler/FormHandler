@@ -1811,15 +1811,13 @@ class FormHandler
 
             foreach($fields as $field_to)
             {
-                try
+                $linkData = $this->getLinkData($field_from, $field_to);
+                if($linkData === false)
                 {
-                    list($link, $filter, $extra) = $this->getLinkData($field_from, $field_to);
-                }
-                catch(Exception $e)
-                {
-                    //link not found
                     continue;
                 }
+
+                list($link, $filter, $extra) = $linkData;
 
                 //update from field with posted value to make it usable in callable
                 $this->getField($field_from)
@@ -2145,15 +2143,12 @@ class FormHandler
 
         foreach($this->attachSelect[$field_from] as $field_to)
         {
-            try
+            $linkData = $this->getLinkData($field_from, $field_to);
+            if($linkData === false)
             {
-                list($link, $value, $extra) = $this->getLinkData($field_from, $field_to);
+                continue;
             }
-            catch(Exception $e)
-            {
-                //link not found
-                return;
-            }
+            list($link, $value, $extra) = $linkData;
 
             //update from field with new value
             $this->getField($field_from)
@@ -2197,7 +2192,7 @@ class FormHandler
         //validate link
         if(!array_key_exists($fieldFrom . '_' . $fieldTo, $this->fieldLinks))
         {
-            throw new Exception('Link not found for fields '. $fieldFrom .' => '. $fieldTo);
+            return false;
         }
 
         //get link details
