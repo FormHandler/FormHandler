@@ -40,6 +40,7 @@ class Select extends \FormHandler\Field\Field
     protected $size;
     private $multiple;
     private $options_classes;
+    private $disable_options;
 
     /**
      * Constructor
@@ -182,8 +183,12 @@ class Select extends \FormHandler\Field\Field
             }
             else
             {
+                $disable = is_array($this->disable_options) && in_array($iKey, $this->disable_options)
+                    ? 'disabled="disabled"'
+                    : '';
+
                 $sOptions .= sprintf(
-                    "\t<option %s value=\"%s\" %s>%s</option>\n", $this->options_classes[$iKey],
+                    "\t<option %s value=\"%s\"".$disable." %s>%s</option>\n", $this->options_classes[$iKey],
                     $iKey,
                     (in_array((string) $iKey, $aSelected) ? ' selected="selected"' : ''),
                     str_replace(' ', '&nbsp;', $sValue)
@@ -281,5 +286,19 @@ class Select extends \FormHandler\Field\Field
         return (is_scalar($value) && is_array($options) && array_key_exists($value, $options))
             ? $options[$value]
             : '';
+    }
+
+    public function setDisabled($bool = null)
+    {
+        if(is_array($bool))
+        {
+            $this->disable_options = $bool;
+        }
+        else
+        {
+            $this->disable_options = null;
+            parent::setDisabled($bool);
+        }
+        return $this;
     }
 }
