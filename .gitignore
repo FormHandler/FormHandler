@@ -1,0 +1,5 @@
+vendor/
+docs/
+/.buildpath
+/.DS_Store
+/.project
