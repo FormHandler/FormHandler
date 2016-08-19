@@ -73,32 +73,94 @@ use FormHandler\Validator;
  */
 class Form extends Field\Element
 {
+    /**
+     * The action of the Form (location where the form is sent to).
+     * When the action is empty, it will be posted to itsself (default)
+     * @var string
+     */
     protected $action;
 
+    /**
+     * The target window where the form should posted to
+     * @var string
+     */
     protected $target;
 
+    /**
+     * The name of the form.
+     * @var string
+     */
     protected $name;
 
+    /**
+     * The method how the form is submitted. Can either be POST or GET
+     * @var string
+     */
     protected $method = self::METHOD_POST;
 
-    protected $enctype;
+    /**
+     * The encoding type of the form. Use one of the ENCTYPE_* constants.
+     * @var string
+     */
+    protected $enctype = self::ENCTYPE_URLENCODED;
 
+    /**
+     * Specifies the character encodings that are to be used for the form submission
+     * @var string
+     */
     protected $accept_charset;
 
+    /**
+     * Not supported in HTML5.
+     * Specifies a comma-separated list of file types that the server accepts
+     * (that can be submitted through the file upload)
+     *
+     * @var string
+     * @deprecated
+     */
     protected $accept;
 
-    protected $fields = array();
+    /**
+     * List of all fields in this form
+     * @var array
+     */
+    protected $fields = [];
 
+    /**
+     * An formatter which will be used to format the fields.
+     * @var Formatter\AbstractFormatter
+     */
     protected $formatter;
 
+    /**
+     * An encoding filter which will be used to filter the data
+     * @var Encoding\InterfaceEncodingFilter
+     */
     protected $encodingFilter;
 
+    /**
+     * Remember if this form was submitted or not. When this is null, we did not check
+     * yet if the form was submitted, and we will parse the complete request and store the result here.
+     * @var boolean
+     */
     protected $submitted = null;
 
+    /**
+     * The default formatter which will be used for all FromHandler instances.
+     * @var Formatter\AbstractFormatter
+     */
     protected static $defaultFormatter = null;
 
+    /**
+     * The default encoding filter which will be used for all FormHandler instancens.
+     * @var Encoding\InterfaceEncodingFilter
+     */
     protected static $defaultEncodingFilter = null;
 
+    /**
+     * Out default settings for our csrf protection which will be used for all FormHandler instances.
+     * @var boolean
+     */
     protected static $defaultCsrfProtectionEnabled = null;
 
     /**
@@ -112,10 +174,19 @@ class Form extends Field\Element
 
     const METHOD_POST = 'post';
 
+    /**
+     * No characters are encoded. This value is required when you are using forms that have a file upload control
+     */
     const ENCTYPE_MULTIPART = 'multipart/form-data';
 
+    /**
+     * Spaces are converted to "+" symbols, but no special characters are encoded
+     */
     const ENCTYPE_PLAIN = 'text/plain';
 
+    /**
+     * Default. All characters are encoded before sent (spaces are converted to "+" symbols, and special characters are converted to ASCII HEX values)
+     */
     const ENCTYPE_URLENCODED = 'application/x-www-form-urlencoded';
 
     /**

@@ -28,3 +28,10 @@ if [ "$2" == "fix" ] ;
 then
 	./vendor/bin/phpcbf --standard=PSR2 --colors --tab-width=4 --encoding=utf-8 $1	
 fi
+
+
+echo "##############################"
+echo "#      Run PHPUnit Tests     #"
+echo "##############################"
+echo ""
+./vendor/phpunit/phpunit/phpunit --verbose -c phpunit.xml --coverage-html coverage

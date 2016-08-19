@@ -139,10 +139,10 @@ class FloatValidator extends AbstractValidator
         // check if the value is not to high.
         if ($this->max !== null) {
             if (((function_exists('bcsub') && floatval(bcsub(
-                            $this->max,
-                            $value,
-                            4
-                        )) < 0) || $value > $this->max) && ((string)$this->max) != ((string)$value)
+                $this->max,
+                $value,
+                4
+            )) < 0) || $value > $this->max) && ((string)$this->max) != ((string)$value)
             ) {
                 return true;
             }

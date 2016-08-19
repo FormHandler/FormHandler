@@ -433,7 +433,10 @@ class Form extends Field\Element
             $this->submitted = true;
 
             // first check if the request method is the same..
-            if ($this->getMethod() == Form::METHOD_GET && $_SERVER['REQUEST_METHOD'] != 'GET') {
+            if (empty($_SERVER['REQUEST_METHOD'])) {
+                $this->submitted = false;
+                $reason = 'No request method is known (should be GET or POST)';
+            } elseif ($this->getMethod() == Form::METHOD_GET && $_SERVER['REQUEST_METHOD'] != 'GET') {
                 $reason = 'Request method is incorrect (should be GET).';
                 $this->submitted = false;
             } elseif ($this->getMethod() == Form::METHOD_POST && $_SERVER['REQUEST_METHOD'] != 'POST') {

@@ -168,8 +168,8 @@ class CheckBox extends AbstractFormField
     protected function setCheckedBasedOnValue()
     {
         $value = $this->form->getFieldValue($this->name);
-
         if (is_array($value)) {
+            // is this ever used?
             $this->setChecked(in_array($this->getValue(), $value));
         } else {
             $this->setChecked($this->getValue() == $value);

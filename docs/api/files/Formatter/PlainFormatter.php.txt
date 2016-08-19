@@ -93,7 +93,10 @@ class PlainFormatter extends AbstractFormatter
             }
         }
 
-        $label = $element->getLabel();
+        $label = "";
+        if( $element instanceof Field\CheckBox || $element instanceof Field\RadioButton ) {
+            $label = $element->getLabel();
+        }
         if (! empty($label) && $element->getId() == "") {
             $element->setId("field-" . uniqid(get_class($element)));
         }

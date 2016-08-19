@@ -89,10 +89,10 @@ class IsOptionValidator extends AbstractValidator
             $value = (array)$value;
         }
 
+        // check if the selected options exist
         if (!$this->checkIfOptionsExists($value, $options)) {
             return false;
         }
-
 
         return true;
     }
@@ -135,7 +135,6 @@ class IsOptionValidator extends AbstractValidator
 
         return true;
     }
-
 
     /**
      * Set if this field is required or not.

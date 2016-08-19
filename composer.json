@@ -1,11 +1,29 @@
 {
-	"require-dev": {
-		"phpmd/phpmd": "@stable",
-		"sebastian/phpcpd": "*",
-		"squizlabs/php_codesniffer": "2.*",
-		"phpdocumentor/phpdocumentor": "2.*"
-	},
-	"autoload": {
-        "psr-4": {"": "src/"}
+  "name": "teyeheimans/FormHandler",
+  "description": "Easy to use object which allows you to create and process forms",
+  "keywords": ["forms", "form", "textfield", "formhandler", "form handler"],
+  "homepage": "https://www.formhandler.net/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Teye Heimans",
+      "role": "Founder"
     }
+  ],
+  "support": "info@formhandler.net",
+  "require-dev": {
+    "phpmd/phpmd": "@stable",
+    "sebastian/phpcpd": "*",
+    "squizlabs/php_codesniffer": "2.*",
+    "phpdocumentor/phpdocumentor": "2.*",
+    "phpunit/phpunit": "5.5.*"
+  },
+  "require": {
+    "neitanod/forceutf8": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  }
 }
