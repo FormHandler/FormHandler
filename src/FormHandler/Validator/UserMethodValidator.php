@@ -20,7 +20,7 @@ class UserMethodValidator extends AbstractValidator
     /**
      * Create a new "user method" validator
      *
-     * @param array|Closure $methodName
+     * @param array|\Closure $methodName
      */
     public function __construct($methodName)
     {

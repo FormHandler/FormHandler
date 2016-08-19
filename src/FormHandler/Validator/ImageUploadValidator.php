@@ -11,21 +11,52 @@ namespace FormHandler\Validator;
  */
 class ImageUploadValidator extends UploadValidator
 {
-
+    /**
+     * Only allow files with this X aspect ratio
+     * @var float
+     */
     protected $allow_aspect_ratio_x;
 
+    /**
+     * Only allow files with this Y aspect ratio
+     * @var float
+     */
     protected $allow_aspect_ratio_y;
 
+    /**
+     * Deny files with this X aspect ratio
+     * @var float
+     */
     protected $deny_aspect_ratio_x;
 
+    /**
+     * Deny files with this Y aspect ratio
+     * @var float
+     */
     protected $deny_aspect_ratio_y;
 
+    /**
+     * Set the minimum required width of the image.
+     * @var float
+     */
     protected $minimum_width;
 
+    /**
+     * Set the minimum required height of the image.
+     * @var float
+     */
     protected $minimum_height;
 
+    /**
+     * Set the maximum width of the image.
+     * @var float
+     */
     protected $maximum_width;
 
+    /**
+     * Set the maximum height of the image.
+     * @var float
+     */
     protected $maximum_height;
 
     /**
@@ -62,22 +93,26 @@ class ImageUploadValidator extends UploadValidator
      * Set the aspect ratio.
      * By setting these,
      * only images with this aspect ratio can be uploaded.
+     * @param int $x
+     * @param int $y
      */
     public function setAllowAspectRatio($x, $y)
     {
-        $this->allow_aspect_ratio_x = (int) $x;
-        $this->allow_aspect_ratio_y = (int) $y;
+        $this->allow_aspect_ratio_x = (int)$x;
+        $this->allow_aspect_ratio_y = (int)$y;
     }
 
     /**
      * Set the "denied" aspect ratio.
      * By setting these,
      * images with this aspect ratio are denied for uploading.
+     * @param $x
+     * @param $y
      */
     public function setDenyAspectRatio($x, $y)
     {
-        $this->deny_aspect_ratio_x = (int) $x;
-        $this->deny_aspect_ratio_y = (int) $y;
+        $this->deny_aspect_ratio_x = (int)$x;
+        $this->deny_aspect_ratio_y = (int)$y;
     }
 
     /**
@@ -90,13 +125,13 @@ class ImageUploadValidator extends UploadValidator
         /**
          * First, check if the upload is valid or not
          */
-        if (! parent::isValid()) {
+        if (!parent::isValid()) {
             return false;
         }
 
         $value = $this->field->getValue();
 
-        if (! $value || ! isset($value['error']) || $value['error'] == UPLOAD_ERR_NO_FILE) {
+        if (!$value || !isset($value['error']) || $value['error'] == UPLOAD_ERR_NO_FILE) {
             // If here, and nothing is uploaded, than the field is also not required.
             // Just validate the field as valid
             return true;
@@ -107,11 +142,41 @@ class ImageUploadValidator extends UploadValidator
         // check if it's an image, and get it's size
         $size = @getimagesize($value['tmp_name']);
         if ($size === false) {
-            $this->setErrorMessage(dgettext('d2frame', 'It seems that the uploaded file is not an image. Please upload a valid image file.'));
+            $this->setErrorMessage(dgettext(
+                'formhandler',
+                'It seems that the uploaded file is not an image. Please upload a valid image file.'
+            ));
             return false;
         }
         list ($width, $height) = $size;
 
+        /**
+         * Validate the aspect ratio.
+         */
+        if (!$this->validateAspectRatio($width, $height)) {
+            return false;
+        }
+
+
+        /**
+         * Validate the proportions
+         */
+        if (!$this->validateSize($width, $height)) {
+            return false;
+        }
+
+        // if here, everything is ok!
+        return true;
+    }
+
+    /**
+     * Validate the aspect ratio. If the size is invalid, we will also push an error message with setErrorMessage.
+     * @param $width
+     * @param $height
+     * @return bool
+     */
+    protected function validateAspectRatio($width, $height)
+    {
         /**
          * Allow aspect ratio given?
          */
@@ -121,7 +186,14 @@ class ImageUploadValidator extends UploadValidator
             $y = $height / $gcd;
 
             if ($x != $this->allow_aspect_ratio_x || $y != $this->allow_aspect_ratio_y) {
-                $this->setErrorMessage(sprintf(dgettext('d2frame', 'The aspect ratio of the uploaded file (%s) is not the same as the required aspect ratio (%s).'), $x . ':' . $y, $this->allow_aspect_ratio_x . ':' . $this->allow_aspect_ratio_y));
+                $this->setErrorMessage(sprintf(
+                    dgettext(
+                        'formhandler',
+                        'The aspect ratio of the uploaded file (%s) is not the same as the required aspect ratio (%s).'
+                    ),
+                    $x . ':' . $y,
+                    $this->allow_aspect_ratio_x . ':' . $this->allow_aspect_ratio_y
+                ));
                 return false;
             }
         }
@@ -135,42 +207,81 @@ class ImageUploadValidator extends UploadValidator
             $y = $height / $gcd;
 
             if ($x == $this->deny_aspect_ratio_x && $y == $this->deny_aspect_ratio_y) {
-                $this->setErrorMessage(sprintf(dgettext('d2frame', 'The aspect ratio of the uploaded file (%s) is not allowed.'), $x . ':' . $y));
+                $this->setErrorMessage(sprintf(dgettext(
+                    'formhandler',
+                    'The aspect ratio of the uploaded file (%s) is not allowed.'
+                ), $x . ':' . $y));
                 return false;
             }
         }
 
-        /**
-         * Validate the proportions
-         */
+        return true;
+    }
 
+    /**
+     * Validate the size. If the size is invalid, we will also push an error message with setErrorMessage.
+     * @param int $width
+     * @param int $height
+     * @return bool
+     */
+    protected function validateSize($width, $height)
+    {
         if ($this->maximum_height && $height > $this->maximum_height) {
-            $this->setErrorMessage(sprintf(dgettext('d2frame', 'The height of the uploaded image (%spx) is larger than the maximum allowed height (%spx)'), $height, $this->maximum_height));
+            $this->setErrorMessage(sprintf(
+                dgettext(
+                    'formhandler',
+                    'The height of the uploaded image (%spx) is larger than the maximum allowed height (%spx)'
+                ),
+                $height,
+                $this->maximum_height
+            ));
             return false;
         }
 
         if ($this->maximum_width && $width > $this->maximum_width) {
-            $this->setErrorMessage(sprintf(dgettext('d2frame', 'The width of the uploaded image (%spx) is larger than the maximum allowed width (%spx)'), $width, $this->maximum_width));
+            $this->setErrorMessage(sprintf(
+                dgettext(
+                    'formhandler',
+                    'The width of the uploaded image (%spx) is larger than the maximum allowed width (%spx)'
+                ),
+                $width,
+                $this->maximum_width
+            ));
             return false;
         }
 
         if ($this->minimum_height && $height < $this->minimum_height) {
-            $this->setErrorMessage(sprintf(dgettext('d2frame', 'The height of the uploaded image (%spx) is smaller than the minimum allowed height (%spx)'), $height, $this->minimum_height));
+            $this->setErrorMessage(sprintf(
+                dgettext(
+                    'formhandler',
+                    'The height of the uploaded image (%spx) is smaller than the minimum allowed height (%spx)'
+                ),
+                $height,
+                $this->minimum_height
+            ));
             return false;
         }
 
         if ($this->minimum_width && $width < $this->minimum_width) {
-            $this->setErrorMessage(sprintf(dgettext('d2frame', 'The width of the uploaded image (%spx) is smaller than the minimum allowed width (%spx)'), $width, $this->minimum_width));
+            $this->setErrorMessage(sprintf(
+                dgettext(
+                    'formhandler',
+                    'The width of the uploaded image (%spx) is smaller than the minimum allowed width (%spx)'
+                ),
+                $width,
+                $this->minimum_width
+            ));
             return false;
         }
 
-        // if here, everything is ok!
         return true;
     }
 
     /**
      * Calculate the greatest common divisor
      *
+     * @param $a
+     * @param $b
      * @return int
      */
     protected function gcd($a, $b)

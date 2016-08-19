@@ -2,6 +2,7 @@
 namespace FormHandler\Validator;
 
 /**
+ * This Validator checks if the form has a valid CSRF token.
  */
 class CsrfValidator extends AbstractValidator
 {
@@ -11,14 +12,12 @@ class CsrfValidator extends AbstractValidator
     /**
      * Create a new CSRF validator
      *
-     * @param string $regex
-     * @param boolean $required
      * @param string $message
      */
     public function __construct($message = null)
     {
         if ($message === null) {
-            $message = dgettext('d2frame', 'This form has expired, please try again.');
+            $message = dgettext('formhandler', 'This form has expired, please try again.');
         }
 
         $this->setErrorMessage($message);
@@ -45,7 +44,9 @@ class CsrfValidator extends AbstractValidator
         }
 
         // Check if we have any tokens to clean.
-        if (! array_key_exists('csrftokens', $_SESSION) || (is_array($_SESSION['csrftokens']) && count($_SESSION['csrftokens']) === 0)) {
+        if (! array_key_exists('csrftokens', $_SESSION) ||
+            (is_array($_SESSION['csrftokens']) &&
+                count($_SESSION['csrftokens']) === 0)) {
             return; // No tokens to clean.
         }
 
@@ -53,7 +54,8 @@ class CsrfValidator extends AbstractValidator
         if (! is_array($_SESSION['csrftokens'])) {
             // $_SESSION['csrftokens'] is not an array! Reset/initialize $_SESSION['csrftokens'].
             $_SESSION['csrftokens'] = array();
-            // It makes no sense to continue here, as we just cleaned the entire CSRF token basket. Return, because we are done here.
+            // It makes no sense to continue here, as we just cleaned the entire CSRF token basket.
+            // Return, because we are done here.
             return;
         }
 

@@ -1,6 +1,8 @@
 <?php
 namespace FormHandler\Field;
 
+use FormHandler\Form;
+
 /**
  */
 class PassField extends AbstractFormField
@@ -131,7 +133,7 @@ class PassField extends AbstractFormField
      * Set the value for placeholder
      *
      * @param string $value
-     * @return TextField
+     * @return PassField
      */
     public function setPlaceholder($value)
     {

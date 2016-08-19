@@ -1,6 +1,9 @@
 <?php
 namespace FormHandler\Validator;
 
+use FormHandler\Field\AbstractFormField;
+use FormHandler\Field\UploadField;
+
 /**
  * Upload validator, will validate an uploaded file.
  *
@@ -10,19 +13,46 @@ namespace FormHandler\Validator;
  */
 class UploadValidator extends AbstractValidator
 {
-
+    /**
+     * Is this field required or not?
+     * @var bool
+     */
     protected $required = true;
 
-    protected $allowedExtensions;
+    /**
+     * A list of allowed extensions (without leading dot!)
+     * @var array
+     */
+    protected $allowedExtensions = [];
 
-    protected $allowedMimeTypes;
+    /**
+     * A list of allowed mime types
+     * @var array
+     */
+    protected $allowedMimeTypes = [];
 
-    protected $deniedExtensions;
+    /**
+     * A list of denied extensions (without leading dot!)
+     * @var array
+     */
+    protected $deniedExtensions = [];
 
-    protected $deniedMimeTypes;
+    /**
+     * A list of denied mime types
+     * @var array
+     */
+    protected $deniedMimeTypes = [];
 
+    /**
+     * The max filesize in bytes;
+     * @var int
+     */
     protected $maxFilesize;
 
+    /**
+     * The minimum filesize in bytes
+     * @var int
+     */
     protected $minFilesize;
 
     /**
@@ -43,107 +73,33 @@ class UploadValidator extends AbstractValidator
      * Set the field which should be validated.
      *
      * @param AbstractFormField $field
+     * @return static
+     * @throws \Exception
      */
     public function setField(AbstractFormField $field)
     {
-        if (! ($field instanceof UploadField)) {
-            throw new Exception('The validator "' . get_class($this) . '" only works on upload fields!');
+        if (!($field instanceof UploadField)) {
+            throw new \Exception('The validator "' . get_class($this) . '" only works on upload fields!');
         }
 
         $this->field = $field;
-    }
-
-    /**
-     * Add javascript validation for this field.
-     *
-     * @param
-     *            AbstractFormField &$field
-     * @return string
-     */
-    public function addJavascriptValidation(AbstractFormField &$field)
-    {
-        static $addedJavascriptFunction = false;
-
-        $script = '';
-        if (! $addedJavascriptFunction) {
-            $script .= 'function d2UploadValidator( field, whitelist, blacklist ) {' . PHP_EOL;
-            $script .= '    var value = $(field).val();' . PHP_EOL;
-            $script .= '    if( !$(field).hasClass("required")) {' . PHP_EOL;
-            $script .= '        // the field is not required. Skip the validation if the field is empty.' . PHP_EOL;
-            $script .= '        if( $.trim( value ) == "" ) { ' . PHP_EOL;
-            $script .= '            $(field).removeClass("invalid");' . PHP_EOL;
-            $script .= '            return true;' . PHP_EOL;
-            $script .= '        }' . PHP_EOL;
-            $script .= '    }' . PHP_EOL;
-            $script .= '    var i = value.lastIndexOf(".");' . PHP_EOL;
-            $script .= '    var ext = "";' . PHP_EOL;
-            $script .= '    if( i != -1 ) {' . PHP_EOL;
-            $script .= '        ext = $(field).val().substring( i + 1 );' . PHP_EOL;
-            $script .= '    }' . PHP_EOL;
-            $script .= '    if( whitelist != null && $.isArray( whitelist) ) {' . PHP_EOL;
-            $script .= '        if( ext == "" || $.inArray( ext, whitelist ) == -1 ) {' . PHP_EOL;
-            $script .= '            $(field).addClass("invalid");' . PHP_EOL;
-            $script .= '            return false;' . PHP_EOL;
-            $script .= '        }' . PHP_EOL;
-            $script .= '    }' . PHP_EOL;
-            $script .= '    if( blacklist != null && $.isArray( blacklist) && ext != "" ) {' . PHP_EOL;
-            $script .= '        if( $.inArray( ext, blacklist ) != -1 ) {' . PHP_EOL;
-            $script .= '            $(field).addClass("invalid");' . PHP_EOL;
-            $script .= '            return false;' . PHP_EOL;
-            $script .= '        }' . PHP_EOL;
-            $script .= '    }' . PHP_EOL;
-            $script .= '    $(field).removeClass("invalid");' . PHP_EOL;
-            $script .= '    return true;' . PHP_EOL;
-            $script .= '}' . PHP_EOL;
-
-            $addedJavascriptFunction = true;
-        }
-
-        if ($this->required) {
-            $field->addClass('required');
-        }
-
-        $form = $field->getForm();
-        if (! $form->getId()) {
-            $form->setId(uniqid(get_class($form)));
-        }
-
-        if (! $field->getId()) {
-            $field->setId(uniqid(get_class($field)));
-        }
-
-        $script .= '$(document).ready( function() {' . PHP_EOL;
-        if (! ($field instanceof HiddenField)) {
-            $script .= '    $("#' . $field->getId() . '").blur(function() {' . PHP_EOL;
-            $script .= '       d2UploadValidator( $("#' . $field->getId() . '"), ' . str_replace('"', "'", json_encode($this->allowedExtensions) . ', ' . json_encode($this->deniedExtensions)) . ' );' . PHP_EOL;
-            $script .= '    });' . PHP_EOL;
-        }
-        $script .= '    $("form#' . $form->getId() . '").bind( "validate", function( event ) {' . PHP_EOL;
-        $script .= '        if( !d2UploadValidator( $("#' . $field->getId() . '"), ' . str_replace('"', "'", json_encode($this->allowedExtensions) . ', ' . json_encode($this->deniedExtensions)) . ' )) {' . PHP_EOL;
-        $script .= '            return false;' . PHP_EOL;
-        $script .= '        } else {' . PHP_EOL;
-        $script .= '            return event.result;' . PHP_EOL;
-        $script .= '        }' . PHP_EOL;
-        $script .= '    });' . PHP_EOL;
-        $script .= '});' . PHP_EOL;
-
-        return $script;
+        return $this;
     }
 
     /**
      * Check if the given field is valid or not.
      *
-     * @return boolean
+     * @return bool
      */
     public function isValid()
     {
         $value = $this->field->getValue();
 
         // no file uploaded?
-        if (! $value || ! isset($value['error']) || $value['error'] == UPLOAD_ERR_NO_FILE) {
-            $this->setErrorMessage(dgettext('d2frame', 'You have to upload a file.'));
+        if (!$value || !isset($value['error']) || $value['error'] == UPLOAD_ERR_NO_FILE) {
+            $this->setErrorMessage(dgettext('formhandler', 'You have to upload a file.'));
             // required ?
-            return ! $this->required;
+            return !$this->required;
         }
 
         // check the uploaded file
@@ -153,21 +109,33 @@ class UploadValidator extends AbstractValidator
 
             case UPLOAD_ERR_FORM_SIZE:
             case UPLOAD_ERR_INI_SIZE:
-                $this->setErrorMessage(dgettext('d2frame', 'The uploaded file exceeds the maximum allowed upload file size.'));
+                $this->setErrorMessage(dgettext(
+                    'formhandler',
+                    'The uploaded file exceeds the maximum allowed upload file size.'
+                ));
                 return false;
 
             case UPLOAD_ERR_PARTIAL:
-                $this->setErrorMessage(dgettext('d2frame', 'The file was not completly uploaded. Please try again.'));
+                $this->setErrorMessage(dgettext(
+                    'formhandler',
+                    'The file was not completly uploaded. Please try again.'
+                ));
                 return false;
 
             case UPLOAD_ERR_NO_TMP_DIR:
             case UPLOAD_ERR_CANT_WRITE:
-                $this->setErrorMessage(dgettext('d2frame', 'Failed to save the uploaded file to disk. Please try again.'));
+                $this->setErrorMessage(dgettext(
+                    'formhandler',
+                    'Failed to save the uploaded file to disk. Please try again.'
+                ));
                 return false;
 
             case UPLOAD_ERR_EXTENSION:
             default:
-                $this->setErrorMessage(dgettext('d2frame', 'Failed to upload this file due to an error. Please try again.'));
+                $this->setErrorMessage(dgettext(
+                    'formhandler',
+                    'Failed to upload this file due to an error. Please try again.'
+                ));
                 return false;
         }
 
@@ -177,18 +145,21 @@ class UploadValidator extends AbstractValidator
          */
 
         // retrieve the extension
-        if (! $this->isExtensionAllowed($value['name'])) {
-            $this->setErrorMessage(dgettext('d2frame', 'The uploaded file extension is not allowed.'));
+        if (!$this->isExtensionAllowed($value['name'])) {
+            $this->setErrorMessage(dgettext('formhandler', 'The uploaded file extension is not allowed.'));
             return false;
         }
 
-        if (! $this->isMimetypeAllowed($value['tmp_name'], $value['type'])) {
-            $this->setErrorMessage(dgettext('d2frame', 'The uploaded file type is not allowed.'));
+        if (!$this->isMimetypeAllowed($value['tmp_name'], $value['type'])) {
+            $this->setErrorMessage(dgettext('formhandler', 'The uploaded file type is not allowed.'));
             return false;
         }
 
-        if (! $this->isSizeAllowed(filesize($value['tmp_name']))) {
-            $this->setErrorMessage(dgettext('d2frame', 'The uploaded file exceeds the maximum allowed upload file size.'));
+        if (!$this->isSizeAllowed(filesize($value['tmp_name']))) {
+            $this->setErrorMessage(dgettext(
+                'formhandler',
+                'The uploaded file exceeds the maximum allowed upload file size.'
+            ));
             return false;
         }
 
@@ -197,12 +168,12 @@ class UploadValidator extends AbstractValidator
     }
 
     /**
-     * Check if the given file extension is allowed.
+     * Check if the extension  of the given filename is allowed.
      *
      * @param string $filename
      * @return boolean
      */
-    protected function isExtensionAllowed(string $filename)
+    protected function isExtensionAllowed($filename)
     {
         // retrieve the extension
         $pos = strrpos($filename, '.');
@@ -214,15 +185,15 @@ class UploadValidator extends AbstractValidator
         // if we have an extension, validate it agains the black and white lists
         if ($extension) {
             // not in whitelist?
-            if (is_array($this->allowedExtensions) && sizeof($this->allowedExtensions) > 0 && ! in_array($extension, $this->allowedExtensions)) {
+            if (sizeof($this->allowedExtensions) > 0 && !in_array($extension, $this->allowedExtensions)) {
                 return false;
             }
 
             // in blacklist ?
-            if (is_array($this->deniedExtensions) && sizeof($this->deniedExtensions) && in_array($extension, $this->deniedExtensions)) {
+            if (sizeof($this->deniedExtensions) && in_array($extension, $this->deniedExtensions)) {
                 return false;
             }
-        } elseif (is_array($this->allowedExtensions) && sizeof($this->allowedExtensions) > 0) {
+        } elseif (sizeof($this->allowedExtensions) > 0) {
             // no extension given, thus not in the whitelist!
             return false;
         }
@@ -230,7 +201,16 @@ class UploadValidator extends AbstractValidator
         return true;
     }
 
-    protected function isMimetypeAllowed(string $filename, $default = "")
+    /**
+     * Check if the mime type of the given file is allowed.
+     *
+     * If we cannot fetch the mime type of the given filename, the $default will be used.
+     *
+     * @param string $filename
+     * @param string $default
+     * @return bool
+     */
+    protected function isMimetypeAllowed($filename, $default = "")
     {
         /**
          * Try to retrieve the mime type of the file
@@ -250,16 +230,21 @@ class UploadValidator extends AbstractValidator
         }
 
         // validate the mime type agains the white and blacklists
-        if (is_array($this->allowedMimeTypes) && sizeof($this->allowedMimeTypes) > 0 && ! in_array($mimetype, $this->allowedMimeTypes)) {
+        if (sizeof($this->allowedMimeTypes) > 0 && !in_array($mimetype, $this->allowedMimeTypes)) {
             return false;
         }
-        if (is_array($this->deniedMimeTypes) && sizeof($this->deniedMimeTypes) > 0 && in_array($mimetype, $this->deniedMimeTypes)) {
+        if (sizeof($this->deniedMimeTypes) > 0 && in_array($mimetype, $this->deniedMimeTypes)) {
             return false;
         }
 
         return true;
     }
 
+    /**
+     * Check if the size (in bytes) of the uploaded file is valid.
+     * @param int $size
+     * @return bool
+     */
     protected function isSizeAllowed($size)
     {
         // validate the upload file size
@@ -276,17 +261,17 @@ class UploadValidator extends AbstractValidator
     /**
      * Set if this field is required or not.
      *
-     * @param boolean $required
+     * @param bool $required
      */
     public function setRequired($required)
     {
-        $this->required = (bool) $required;
+        $this->required = (bool)$required;
     }
 
     /**
      * Get if this field is required or not.
      *
-     * @return boolean
+     * @return bool
      */
     public function getRequired()
     {
@@ -298,22 +283,21 @@ class UploadValidator extends AbstractValidator
      * Set to null to skip the
      * min filesize check. The filesize needs to be a positive integer
      *
-     * @param
-     *            $filesize
+     * @param int $filesize
+     * @throws \Exception
      */
     public function setMinFilesize($filesize)
     {
-        if ($filesize < 0) {
-            throw new Exception('The minimal filesize cannot be a negative integer!');
+        if ($filesize < 0 && $filesize !== null) {
+            throw new \Exception('The minimal filesize cannot be a negative integer!');
         }
 
         $this->minFilesize = $filesize;
     }
 
     /**
-     * Return the min filesize.
-     * Returns null if
-     * no minimum is set.
+     * Return the min filesize in bytes.
+     * Returns null if no minimum is set.
      *
      * @return integer
      */
@@ -324,11 +308,9 @@ class UploadValidator extends AbstractValidator
 
     /**
      * Set the max filesize in bytes.
-     * Set to null to skip the
-     * max filesize check.
+     * Set to null to skip the max filesize check.
      *
-     * @param
-     *            $filesize
+     * @param int $filesize
      */
     public function setMaxFilesize($filesize)
     {
@@ -338,7 +320,7 @@ class UploadValidator extends AbstractValidator
     /**
      * Return the max filesize.
      *
-     * @return integer
+     * @return int
      */
     public function getMaxFilesize()
     {
@@ -347,23 +329,22 @@ class UploadValidator extends AbstractValidator
 
     /**
      * Set the mime type or types which are allowed for uploading.
-     * This can either be an array, or null to disable the mime type checking.
      *
      * @param array $types
+     * @throws \Exception
      */
     public function setAllowedMimeTypes($types)
     {
-        if (! is_array($types) && $types !== null) {
-            throw new Exception("You can only set an array as allowed mime types, or pass 'null' to disable the allowed mime types");
+        if (!is_array($types)) {
+            throw new \Exception("You can only set an array as allowed mime types");
         }
         $this->allowedMimeTypes = $types;
     }
 
     /**
      * Get the allowed mime types.
-     * If no mime type check is given, null is returned
      *
-     * @return array|null
+     * @return array
      */
     public function getAllowedMimeTypes()
     {
@@ -377,7 +358,7 @@ class UploadValidator extends AbstractValidator
      */
     public function addAllowedMimeType($type)
     {
-        if (! is_array($this->allowedMimeTypes)) {
+        if (!is_array($this->allowedMimeTypes)) {
             $this->allowedMimeTypes = array();
         }
 
@@ -408,28 +389,22 @@ class UploadValidator extends AbstractValidator
      * The extensions should be in an array. The extension should NOT contain a dot (.) in front of it.
      * Example:
      *
-     * <code>
+     * ```php
      * $validator -> setAllowedExtensions( array('pdf', 'txt', 'zip', 'jpg' ) );
-     * </code>
-     *
-     * If you set 'null' as value, this check will be disabled.
+     * ```
      *
      * @param array $extensions
      */
-    public function setAllowedExtensions($extensions)
+    public function setAllowedExtensions(array $extensions)
     {
-        if (! is_array($extensions) && $extensions !== null) {
-            throw new Exception("You can only set an array as allowed extensions, or pass 'null' to disable the allowed extensions check.");
-        }
         $this->allowedExtensions = $extensions;
     }
 
     /**
      * Get all allowed extensions.
-     * Returns an array with all extensions in it (without leading dot "."),
-     * or null if none are set.
+     * Returns an array with all extensions in it (without leading dot ".")
      *
-     * @return array|null
+     * @return array
      */
     public function getAllowedExtensions()
     {
@@ -441,17 +416,14 @@ class UploadValidator extends AbstractValidator
      * Pass the extension without a leading dot ".".
      * Example:
      *
-     * <code>
+     * ```php
      * $validator -> addAllowedExtension("pdf");
      * $validator -> addAllowedExtension("jpg");
-     * </code>
+     * ```
+     * @param string $extension
      */
     public function addAllowedExtension($extension)
     {
-        if (! is_array($this->allowedExtensions)) {
-            $this->allowedExtensions = array();
-        }
-
         $this->allowedExtensions[] = $extension;
     }
 
@@ -476,23 +448,22 @@ class UploadValidator extends AbstractValidator
 
     /**
      * Set the mime type or types which are denied for uploading.
-     * This can either be an array, or null to disable the mime type checking.
      *
      * @param array $types
+     * @throws \Exception
      */
     public function setDeniedMimeTypes($types)
     {
-        if (! is_array($types) && $types !== null) {
-            throw new Exception("You can only set an array as denied mime types, or pass 'null' to disable the denial by mime types");
+        if (!is_array($types)) {
+            throw new \Exception("You can only set an array as denied mime types");
         }
         $this->deniedMimeTypes = $types;
     }
 
     /**
-     * Get the denied mime types.
-     * If no mime type check is given, null is returned
+     * Get the denied mime types, or an empty array if none
      *
-     * @return array|null
+     * @return array
      */
     public function getDeniedMimeTypes()
     {
@@ -506,7 +477,7 @@ class UploadValidator extends AbstractValidator
      */
     public function addDeniedMimeType($type)
     {
-        if (! is_array($this->deniedMimeTypes)) {
+        if (!is_array($this->deniedMimeTypes)) {
             $this->deniedMimeTypes = array();
         }
 
@@ -541,24 +512,18 @@ class UploadValidator extends AbstractValidator
      * $validator -> setDeniedExtensions( array( 'exe', 'php', 'sh' ) );
      * </code>
      *
-     * If you set 'null' as value, this check will be disabled.
-     *
      * @param array $extensions
      */
-    public function setDeniedExtensions($extensions)
+    public function setDeniedExtensions(array $extensions)
     {
-        if (! is_array($types) && $types !== null) {
-            throw new Exception("You can only set an array as denied extensions, or pass 'null' to disable the denial of extensions");
-        }
         $this->deniedExtensions = $extensions;
     }
 
     /**
      * Get all denied extensions.
-     * Returns an array with all extensions in it (without leading dot "."),
-     * or null if none are set.
+     * Returns an array with all extensions in it (without leading dot ".")
      *
-     * @return array|null
+     * @return array
      */
     public function getDeniedExtensions()
     {
@@ -574,13 +539,10 @@ class UploadValidator extends AbstractValidator
      * $validator -> addDeniedExtension("pdf");
      * $validator -> addDeniedExtension("jpg");
      * </code>
+     * @param string $extension
      */
     public function addDeniedExtension($extension)
     {
-        if (! is_array($this->deniedExtensions)) {
-            $this->deniedExtensions = array();
-        }
-
         $this->deniedExtensions[] = $extension;
     }
 
@@ -592,12 +554,11 @@ class UploadValidator extends AbstractValidator
      */
     public function removeDeniedExtension($extension)
     {
-        if (is_array($this->deniedExtensions)) {
-            $key = array_search($extension, $this->deniedExtensions);
-            if ($key !== false) {
-                unlink($this->deniedExtensions[$key]);
-                return true;
-            }
+
+        $key = array_search($extension, $this->deniedExtensions);
+        if ($key !== false) {
+            unlink($this->deniedExtensions[$key]);
+            return true;
         }
 
         return false;

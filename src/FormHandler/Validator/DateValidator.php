@@ -6,24 +6,29 @@ namespace FormHandler\Validator;
  */
 class DateValidator extends AbstractValidator
 {
-
+    /**
+     * Check if this field should be required or not
+     *
+     * @var bool
+     */
     protected $required;
 
     /**
      * Var to remember if the value was valid or not
      *
-     * @var boolean
+     * @var bool
      */
     protected $valid = null;
 
     /**
-     *
-     * @param string $functionName
+     * Create a new Date validator. We will check if the date can be parsed by strtotime.
+     * @param bool $required
+     * @param null $message
      */
     public function __construct($required = true, $message = null)
     {
         if ($message === null) {
-            $message = dgettext('d2frame', 'This value is incorrect.');
+            $message = dgettext('formhandler', 'This value is incorrect.');
         }
 
         $this->setRequired($required);
@@ -31,7 +36,7 @@ class DateValidator extends AbstractValidator
     }
 
     /**
-     * Check if the given field is valid or not.
+     * Check if the given field is valid or not. The date should be parsable by strtotime.
      *
      * @return boolean
      */
@@ -40,7 +45,6 @@ class DateValidator extends AbstractValidator
         $value = $this->field->getValue();
 
         if ($this->valid === null) {
-
             if ($value == '' && $this->required == false) {
                 $this->valid = true;
                 return $this->valid;
@@ -48,7 +52,10 @@ class DateValidator extends AbstractValidator
 
             $parsed_date = date_parse($value);
 
-            if ($parsed_date['warning_count'] == 0 && $parsed_date['error_count'] == 0 && isset($parsed_date['year']) && isset($parsed_date['month'])) {
+            if ($parsed_date['warning_count'] == 0 &&
+                $parsed_date['error_count'] == 0 &&
+                isset($parsed_date['year']) &&
+                isset($parsed_date['month'])) {
                 $this->valid = true;
                 return $this->valid;
             }

@@ -1,20 +1,48 @@
 <?php
 namespace FormHandler\Field;
 
+use FormHandler\Form;
+
 /**
  */
 class TextArea extends AbstractFormField
 {
-
+    /**
+     *
+     * The number of cols (columns) of this textarea
+     * @var int
+     */
     protected $cols;
 
+    /**
+     * The number of rows in this textarea
+     * @var int
+     */
     protected $rows;
 
-    protected $readonly;
+    /**
+     * Is this field readonly?
+     * @var bool
+     */
+    protected $readonly = false;
 
+    /**
+     * The value of this field
+     * @var string
+     */
     protected $value;
 
+    /**
+     * The placeholder for this field when it does not have a value.
+     * @var string
+     */
     protected $placeholder;
+
+    /**
+     * The max length of the field
+     * @var int
+     */
+    protected $maxlength;
 
     public function __construct(Form &$form, $name, $cols = 40, $rows = 7)
     {
@@ -43,6 +71,7 @@ class TextArea extends AbstractFormField
      * Specifies the visible width of a text-area
      *
      * @param int $cols
+     * @return $this
      */
     public function setCols($cols)
     {
@@ -54,6 +83,7 @@ class TextArea extends AbstractFormField
      * Specifies the visible number of rows in a text-area
      *
      * @param int $rows
+     * @return $this
      */
     public function setRows($rows)
     {
@@ -85,7 +115,7 @@ class TextArea extends AbstractFormField
      * Set the max length of this field and return the TextField reference
      *
      * @param int $maxlength
-     * @return TextField
+     * @return TextArea
      */
     public function setMaxlength($maxlength)
     {
@@ -107,7 +137,7 @@ class TextArea extends AbstractFormField
      * Set if this field is readonly and return the TextField reference
      *
      * @param bool $readonly
-     * @return TextField
+     * @return TextArea
      */
     public function setReadonly($readonly)
     {
@@ -129,7 +159,7 @@ class TextArea extends AbstractFormField
      * Set the value for this field and return the TextField reference
      *
      * @param string $value
-     * @return TextField
+     * @return TextArea
      */
     public function setValue($value)
     {
@@ -151,7 +181,7 @@ class TextArea extends AbstractFormField
      * Set the value for placeholder
      *
      * @param string $value
-     * @return TextField
+     * @return TextArea
      */
     public function setPlaceholder($value)
     {

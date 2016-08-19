@@ -18,12 +18,13 @@ class Ipv4Validator extends AbstractValidator
 
     /**
      *
-     * @param string $functionName
+     * @param bool $required
+     * @param null $message
      */
     public function __construct($required = true, $message = null)
     {
         if ($message === null) {
-            $message = dgettext('d2frame', 'This value is incorrect.');
+            $message = dgettext('formhandler', 'This value is incorrect.');
         }
 
         $this->setRequired($required);
@@ -40,7 +41,6 @@ class Ipv4Validator extends AbstractValidator
         $value = $this->field->getValue();
 
         if ($this->valid === null) {
-
             if ($value == '' && $this->required == false) {
                 $this->valid = true;
                 return $this->valid;

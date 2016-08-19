@@ -25,7 +25,7 @@ class SelectFieldValidator extends AbstractValidator
     public function __construct($min = null, $max = null, $required = true, $message = null)
     {
         if ($message === null) {
-            $message = dgettext('d2frame', 'This value is incorrect.');
+            $message = dgettext('formhandler', 'This value is incorrect.');
         }
 
         $this->setMax($max);
@@ -43,19 +43,9 @@ class SelectFieldValidator extends AbstractValidator
     {
         $value = $this->field->getValue();
 
-        // ArrayObject? Get normal array
-        if ($value instanceof ArrayObject) {
-            $value = $value->getArrayCopy();
-        }
-        // We got an object? Strange.. return false
-        if (is_object($value)) {
-            return false;
-        }
         // Convert value to array if needed
         if (! is_array($value)) {
-            $value = array(
-                $value
-            );
+            $value = (array)$value;
         }
 
         $value = array_filter($value);
@@ -63,11 +53,10 @@ class SelectFieldValidator extends AbstractValidator
         // required but not given
         if ($this->required && empty($value)) {
             return false;
-        }  // if the field is not required and the value is empty, then it's also valid
-else
-            if (! $this->required && empty($value)) {
-                return true;
-            }
+        } // if the field is not required and the value is empty, then it's also valid
+        elseif (! $this->required && empty($value)) {
+            return true;
+        }
 
         $count = count($value);
 

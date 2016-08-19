@@ -1,6 +1,8 @@
 <?php
 namespace FormHandler\Validator;
 
+use FormHandler\Field;
+
 /**
  * This validator will check if the value of the submitted select field
  * do exists in the options of that field
@@ -8,20 +10,29 @@ namespace FormHandler\Validator;
 class IsOptionValidator extends AbstractValidator
 {
 
+    /**
+     * The field to validate
+     *
+     * @var Field\SelectField;
+     */
+    protected $field;
+
+    /**
+     * Should this field be required?
+     * @var bool
+     */
     protected $required = true;
 
     /**
      * Create a IsExistingOptionValidator
      *
-     * @param boolean $required
-     *            (optional)
-     * @param string $message
-     *            (optional)
+     * @param boolean $required (optional)
+     * @param string $message (optional)
      */
     public function __construct($required = true, $message = null)
     {
         if ($message === null) {
-            $message = dgettext('d2frame', 'This value is incorrect.');
+            $message = dgettext('formhandler', 'This value is incorrect.');
         }
 
         $this->setRequired($required);
@@ -31,12 +42,13 @@ class IsOptionValidator extends AbstractValidator
     /**
      * Set the field which should be validated.
      *
-     * @param AbstractFormField $field
+     * @param Field\AbstractFormField $field
+     * @throws \Exception
      */
-    public function setField(AbstractFormField $field)
+    public function setField(Field\AbstractFormField $field)
     {
-        if (! ($field instanceof SelectField)) {
-            throw new Exception('The validator "' . get_class($this) . '" only works on select fields!');
+        if (!($field instanceof Field\SelectField)) {
+            throw new \Exception('The validator "' . get_class($this) . '" only works on select fields!');
         }
 
         $this->field = $field;
@@ -60,50 +72,62 @@ class IsOptionValidator extends AbstractValidator
         // required but not given
         if ($this->required && $value == null) {
             return false;
-        }  // if the field is not required and the value is empty, then it's also valid
-else
-            if (! $this->required && $value == "") {
-                return true;
-            }
+        } // if the field is not required and the value is empty, then it's also valid
+        elseif (!$this->required && $value == "") {
+            return true;
+        }
 
         // check if multiple values are returned and if this is allowed.
-        if (is_array($value) && ! $this->field->isMultiple()) {
+        if (is_array($value) && !$this->field->isMultiple()) {
             return false;
         }
 
         // check if the submitted value(s) are in the options value's
         $options = $this->field->getOptions();
 
-        if (! is_array($value)) {
-            $value = array(
-                $value
-            );
+        if (!is_array($value)) {
+            $value = (array)$value;
         }
 
-        foreach ($value as $selected) {
+        // check if the selected options exist
+        if (!$this->checkIfOptionsExists($value, $options)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if the given value(s) exists in the options of the selectfield.
+     * @param array $values
+     * @param array $options
+     * @return bool
+     */
+    protected function checkIfOptionsExists(array $values, array $options)
+    {
+        foreach ($values as $selected) {
             $found = false;
 
             // walk all options
             foreach ($options as $option) {
-                if ($option instanceof Option) {
+                if ($option instanceof Field\Option) {
                     if ($option->getValue() == $selected) {
                         $found = true;
                         break;
                     }
-                } else
-                    if ($option instanceof Optgroup) {
-                        $options2 = $option->getOptions();
-                        foreach ($options2 as $option) {
-                            if ($option->getValue() == $selected) {
-                                $found = true;
-                                break 2;
-                            }
+                } elseif ($option instanceof Field\Optgroup) {
+                    $options2 = $option->getOptions();
+                    foreach ($options2 as $option2) {
+                        if ($option2->getValue() == $selected) {
+                            $found = true;
+                            break 2;
                         }
                     }
+                }
             }
 
             // if not found, then error!
-            if (! $found) {
+            if (!$found) {
                 // troubles? Then you want to probably log something here
                 return false;
             }
@@ -119,7 +143,7 @@ else
      */
     public function setRequired($required)
     {
-        $this->required = (bool) $required;
+        $this->required = (bool)$required;
     }
 
     /**

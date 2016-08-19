@@ -1,13 +1,23 @@
 <?php
 namespace FormHandler\Encoding;
 
+use FormHandler\Form;
+
+/**
+ * This class implements an UTF-8 filter which makes sure that the
+ * given content is valid utf-8. Note however that we only allow 3-byte
+ * sequence characters, not 4-byte characters. These are not allowed in MySQL's
+ * UTF-8 fields. If you want this, you could create a new filter ;-)
+ */
 class Utf8EncodingFilter implements InterfaceEncodingFilter
 {
 
     /**
      * Initialisation of this encoder.
      * This is requested when the encoding filter is first set in the Form object.
-     * Here you could some changes in the Form object, like set the "accept-charset"
+     * Here you could make some changes in the Form object, like set the "accept-charset"
+     *
+     * @param Form $form
      */
     public function init(Form &$form)
     {
@@ -22,24 +32,6 @@ class Utf8EncodingFilter implements InterfaceEncodingFilter
      */
     public function filter($value)
     {
-        if (is_array($value)) {
-            foreach ($value as $x => $y) {
-                $value[$x] = $this->filter($y);
-            }
-
-            return $value;
-        } else
-            if ($value instanceof ArrayObject) {
-                foreach ($value as $x => $y) {
-                    $value->offsetSet($x, $this->filter($y));
-                }
-
-                return $value;
-            } else
-                if (is_object($value)) {
-                    return $value;
-                }
-
         // If we have iconv, use that! It's faster!
         if (function_exists('iconv')) {
             // This should filter out invalid sequences.
@@ -53,7 +45,7 @@ class Utf8EncodingFilter implements InterfaceEncodingFilter
         } else {
             // no iconv or multi-byte function support, just use our own function
             // If this is not valid UTF8, filter it
-            if (! $this->isUtf8($value)) {
+            if (!$this->isUtf8($value)) {
                 // It's not valud, UTF-8, we can assume it's a different encoding.
                 // We will assume that it was Latin-1 (ISO 8859-1) because it's the most common.
                 $value = utf8_encode($value);
@@ -62,7 +54,7 @@ class Utf8EncodingFilter implements InterfaceEncodingFilter
 
         // MySQL 5.4 and lower do not allow 4 byte sequences. Filter these out as well.
         // @see http://dev.mysql.com/doc/refman/5.5/en/charset-unicode-utf8mb4.html
-        for ($pos = strlen($value) - 1; $pos >= 0; $pos --) {
+        for ($pos = strlen($value) - 1; $pos >= 0; $pos--) {
             $char = substr($value, $pos, 1);
             if (ord($char) > 0xEF) {
                 $value = substr($value, 0, $pos) . substr($value, $pos + 4);
@@ -100,20 +92,20 @@ class Utf8EncodingFilter implements InterfaceEncodingFilter
     public function isUtf8($str)
     {
         $mState = 0; // Cached expected number of octets after the current octet
-                     // until the beginning of the next UTF8 character sequence
+        // until the beginning of the next UTF8 character sequence
         $mUcs4 = 0; // Cached Unicode character
         $mBytes = 1; // Cached expected number of octets in the current sequence
 
         $len = strlen($str);
 
-        for ($i = 0; $i < $len; $i ++) {
+        for ($i = 0; $i < $len; $i++) {
             $in = \ord($str{$i});
 
             if ($mState == 0) {
                 // When mState is zero we expect either a US-ASCII character or a multi-octet sequence.
-                if (0 == (0x80 & ($in)))
+                if (0 == (0x80 & ($in))) {
                     $mBytes = 1; // US-ASCII, pass straight through
-                elseif (0xC0 == (0xE0 & ($in))) {
+                } elseif (0xC0 == (0xE0 & ($in))) {
                     // First octet of 2 octet sequence
                     $mUcs4 = ($in);
                     $mUcs4 = ($mUcs4 & 0x1F) << 6;
@@ -169,16 +161,20 @@ class Utf8EncodingFilter implements InterfaceEncodingFilter
                      * mUcs4 now contains the final
                      * Unicode codepoint to be output
                      */
-                    if (0 == -- $mState) {
+                    if (0 == --$mState) {
                         /*
                          * Check for illegal sequences and codepoints.
                          */
                         // From Unicode 3.1, non-shortest form is illegal
-                        if (((2 == $mBytes) && ($mUcs4 < 0x0080)) || ((3 == $mBytes) && ($mUcs4 < 0x0800)) || ((4 == $mBytes) && ($mUcs4 < 0x10000)) || (4 < $mBytes) ||
-                        // From Unicode 3.2, surrogate characters are illegal
-                        (($mUcs4 & 0xFFFFF800) == 0xD800) ||
-                        // Codepoints outside the Unicode range are illegal
-                        ($mUcs4 > 0x10FFFF)) {
+                        if (((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
+                            ((3 == $mBytes) && ($mUcs4 < 0x0800)) ||
+                            ((4 == $mBytes) && ($mUcs4 < 0x10000)) ||
+                            (4 < $mBytes) ||
+                            // From Unicode 3.2, surrogate characters are illegal
+                            (($mUcs4 & 0xFFFFF800) == 0xD800) ||
+                            // Codepoints outside the Unicode range are illegal
+                            ($mUcs4 > 0x10FFFF)
+                        ) {
                             return false;
                         }
 
@@ -218,7 +214,7 @@ class Utf8EncodingFilter implements InterfaceEncodingFilter
      *            UTF-8 string to check
      * @return boolean TRUE if string is valid UTF-8
      */
-    function isUtf8Compliant($str)
+    public function isUtf8Compliant($str)
     {
         if (empty($str)) {
             return true;

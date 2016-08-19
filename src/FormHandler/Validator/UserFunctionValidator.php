@@ -20,11 +20,12 @@ class UserFunctionValidator extends AbstractValidator
      * Create a new "user function" validator
      *
      * @param string $functionName
+     * @throws \Exception
      */
     public function __construct($functionName)
     {
         if (! function_exists($functionName)) {
-            throw new Exception('Error, function with the name "' . $functionName . '" does not exists!');
+            throw new \Exception('Error, function with the name "' . $functionName . '" does not exists!');
         }
 
         $this->userFunction = $functionName;

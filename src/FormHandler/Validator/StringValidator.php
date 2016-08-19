@@ -25,7 +25,7 @@ class StringValidator extends AbstractValidator
     public function __construct($minLength = 0, $maxLength = 0, $required = true, $message = null)
     {
         if ($message === null) {
-            $message = dgettext('d2frame', 'This value is incorrect.');
+            $message = dgettext('formhandler', 'This value is incorrect.');
         }
 
         $this->setMaxLength($maxLength);
@@ -35,96 +35,25 @@ class StringValidator extends AbstractValidator
     }
 
     /**
-     * Add javascript validation for this field.
-     *
-     * @param
-     *            AbstractFormField &$field
-     * @return string
-     */
-    public function addJavascriptValidation(AbstractFormField &$field)
-    {
-        static $addedJavascriptFunction = false;
-
-        $script = '';
-        if (! $addedJavascriptFunction) {
-            $script .= 'function d2StringValidator( field, minLength, maxLength ) {' . PHP_EOL;
-            $script .= '    var value = $(field).val();' . PHP_EOL;
-            $script .= '    if( !$(field).hasClass("required")) {' . PHP_EOL;
-            $script .= '        // the field is not required. Skip the validation if the field is empty.' . PHP_EOL;
-            $script .= '        if( $.trim( value ) == "" ) { ' . PHP_EOL;
-            $script .= '            $(field).removeClass("invalid");' . PHP_EOL;
-            $script .= '            return true;' . PHP_EOL;
-            $script .= '        }' . PHP_EOL;
-            $script .= '    }' . PHP_EOL;
-            $script .= '    // shorter then min length?' . PHP_EOL;
-            $script .= '    if( value.length < minLength) {' . PHP_EOL;
-            $script .= '        $(field).addClass("invalid");' . PHP_EOL;
-            $script .= '        return false;' . PHP_EOL;
-            $script .= '    }' . PHP_EOL;
-            $script .= '    // check if value too long' . PHP_EOL;
-            $script .= '    if( maxLength != 0 && value.length > maxLength ) {' . PHP_EOL;
-            $script .= '        $(field).addClass("invalid");' . PHP_EOL;
-            $script .= '        return false;' . PHP_EOL;
-            $script .= '    }' . PHP_EOL;
-            $script .= '    $(field).removeClass("invalid");' . PHP_EOL;
-            $script .= '    return true;' . PHP_EOL;
-            $script .= '}' . PHP_EOL;
-
-            $addedJavascriptFunction = true;
-        }
-
-        if ($this->required) {
-            $field->addClass('required');
-        }
-
-        $form = $field->getForm();
-        if (! $form->getId()) {
-            $form->setId(uniqid(get_class($form)));
-        }
-
-        if (! $field->getId()) {
-            $field->setId(uniqid(get_class($field)));
-        }
-
-        $script .= '$(document).ready( function() {' . PHP_EOL;
-        if (! ($field instanceof HiddenField)) {
-            $script .= '    $("#' . $field->getId() . '").blur(function() {' . PHP_EOL;
-            $script .= '       d2StringValidator( $("#' . $field->getId() . '"), ' . ((int) $this->getMinLength()) . ', ' . ((int) $this->getMaxLength()) . ' );' . PHP_EOL;
-            $script .= '    });' . PHP_EOL;
-        }
-        $script .= '    $("form#' . $form->getId() . '").bind( "validate", function( event ) {' . PHP_EOL;
-        $script .= '        if( !d2StringValidator( $("#' . $field->getId() . '"), ' . ((int) $this->getMinLength()) . ', ' . ((int) $this->getMaxLength()) . ' )) {' . PHP_EOL;
-        $script .= '            return false;' . PHP_EOL;
-        $script .= '        } else {' . PHP_EOL;
-        $script .= '            return event.result;' . PHP_EOL;
-        $script .= '        }' . PHP_EOL;
-        $script .= '    });' . PHP_EOL;
-        $script .= '});' . PHP_EOL;
-
-        return $script;
-    }
-
-    /**
      * Check if the given field is valid or not.
-     *
-     * @return boolean
+     * @return bool
+     * @throws \Exception
      */
     public function isValid()
     {
         $value = $this->field->getValue();
 
         if (is_array($value) || is_object($value)) {
-            throw new Exception("This validator only works on scalar types!");
+            throw new \Exception("This validator only works on scalar types!");
         }
 
         // required but not given
         if ($this->required && $value == null) {
             return false;
-        }  // if the field is not required and the value is empty, then it's also valid
-else
-            if (! $this->required && $value == "") {
-                return true;
-            }
+        } // if the field is not required and the value is empty, then it's also valid
+        elseif (! $this->required && $value == "") {
+            return true;
+        }
 
         $len = strlen($value);
 

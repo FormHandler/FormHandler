@@ -7,18 +7,43 @@ namespace FormHandler\Validator;
 class FloatValidator extends AbstractValidator
 {
 
+    /**
+     * We allow a number which has a point as decimal separator
+     */
     const DECIMAL_POINT = 1;
 
+    /**
+     * We allow a number which has a comma as decimal separator
+     */
     const DECIMAL_COMMA = 2;
 
+    /**
+     * We allow a number which has a point or a comma as decimal separator
+     */
     const DECIMAL_POINT_OR_COMMA = 3;
 
+    /**
+     * The minimum value which is allowed
+     * @var float
+     */
     protected $min = null;
 
+    /**
+     * The maximum value which is allowed
+     * @var float
+     */
     protected $max = null;
 
+    /**
+     * Set if this field is required or not.
+     * @var bool
+     */
     protected $required = true;
 
+    /**
+     * Set the type of decimal point which is allowed. Default a dot (.). Use one of the DECIMAL_* constants
+     * @var int
+     */
     protected $decimal_point = self::DECIMAL_POINT;
 
     /**
@@ -30,11 +55,17 @@ class FloatValidator extends AbstractValidator
      * @param float $max
      * @param boolean $required
      * @param string $message
+     * @param int $decimal_point
      */
-    public function __construct($min = null, $max = null, $required = true, $message = null, $decimal_point = self::DECIMAL_POINT)
-    {
+    public function __construct(
+        $min = null,
+        $max = null,
+        $required = true,
+        $message = null,
+        $decimal_point = self::DECIMAL_POINT
+    ) {
         if ($message === null) {
-            $message = dgettext('d2frame', 'This value is incorrect.');
+            $message = dgettext('formhandler', 'This value is incorrect.');
         }
 
         $this->setMax($max);
@@ -46,122 +77,77 @@ class FloatValidator extends AbstractValidator
 
     /**
      * Check if the given field is valid or not.
-     *
-     * @return boolean
+     * @return bool
+     * @throws \Exception
      */
     public function isValid()
     {
         $value = $this->field->getValue();
 
         if (is_array($value) || is_object($value)) {
-            throw new Exception("This validator only works on scalar types!");
+            throw new \Exception("This validator only works on scalar types!");
         }
 
         // required but not given.
         if ($this->required && $value === null) {
             return false;
-        }  // if the field is not required and the value is empty, then it's also valid
-else
-            if (! $this->required && $value === '') {
-                return true;
-            }
+        } // if the field is not required and the value is empty, then it's also valid
+        elseif (!$this->required && $value === '') {
+            return true;
+        }
 
         // check if the field contains a valid number value.
-        if (! preg_match($this->getRegex(), $value)) {
+        if (!preg_match($this->getRegex(), $value)) {
             return false;
         }
 
         // check if the value is not to low.
-        if ($this->min !== null) {
-            if ((function_exists('bcsub') && floatval(bcsub($this->min, $value, 4)) > 0) || $value < $this->min) {
-                return false;
-            }
+        if ($this->isValueTooLow($value)) {
+            return false;
         }
 
         // check if the value is not to high.
-        if ($this->max !== null) {
-            if (((function_exists('bcsub') && floatval(bcsub($this->max, $value, 4)) < 0) || $value > $this->max) && ((string) $this->max) != ((string) $value)) {
-                return false;
-            }
+        if ($this->isValueTooHigh($value)) {
+            return false;
         }
 
         return true;
     }
 
     /**
-     * Add javascript validation for this field.
-     *
-     * @param
-     *            AbstractFormField &$field
-     * @return string
+     * Check if the given value is too low.
+     * @param $value
+     * @return bool
      */
-    public function addJavascriptValidation(AbstractFormField &$field)
+    protected function isValueTooLow($value)
     {
-        static $addedJavascriptFunction = false;
-
-        $script = '';
-        if (! $addedJavascriptFunction) {
-            $script .= 'function d2FloatValidator( field, min, max ) {' . PHP_EOL;
-            $script .= '    if( !$(field).hasClass("required")) {' . PHP_EOL;
-            $script .= '        // the field is not required. Skip the validation if the field is empty.' . PHP_EOL;
-            $script .= '        if( $.trim($(field).val()) == "" ) { ' . PHP_EOL;
-            $script .= '            $(field).removeClass("invalid");' . PHP_EOL;
-            $script .= '            return true;' . PHP_EOL;
-            $script .= '        }' . PHP_EOL;
-            $script .= '    }' . PHP_EOL;
-            $script .= '    // check if the value is a number (possible signed)' . PHP_EOL;
-            $script .= '    if( !' . $this->getRegex() . '.test( $(field).val() )) {' . PHP_EOL;
-            $script .= '        $(field).addClass("invalid");' . PHP_EOL;
-            $script .= '        return false;' . PHP_EOL;
-            $script .= '    }' . PHP_EOL;
-            $script .= '    var value = $(field).val() * 1; // make numeric' . PHP_EOL;
-            $script .= '    // check the min value' . PHP_EOL;
-            $script .= '    if( min !== null && value < min ) {' . PHP_EOL;
-            $script .= '        $(field).addClass("invalid");' . PHP_EOL;
-            $script .= '        return false;' . PHP_EOL;
-            $script .= '    }' . PHP_EOL;
-            $script .= '    // check the max value' . PHP_EOL;
-            $script .= '    if( max !== null && value > max ) {' . PHP_EOL;
-            $script .= '        $(field).addClass("invalid");' . PHP_EOL;
-            $script .= '        return false;' . PHP_EOL;
-            $script .= '    }' . PHP_EOL;
-            $script .= '    // if here, the field is valid' . PHP_EOL;
-            $script .= '    $(field).removeClass("invalid");' . PHP_EOL;
-            $script .= '    return true;' . PHP_EOL;
-            $script .= '}' . PHP_EOL;
-
-            $addedJavascriptFunction = true;
+        if ($this->min !== null) {
+            if ((function_exists('bcsub') && floatval(bcsub($this->min, $value, 4)) > 0) || $value < $this->min) {
+                return true;
+            }
         }
+        return false;
+    }
 
-        if ($this->required) {
-            $field->addClass('required');
+    /**
+     * Check if the given value is too high
+     * @param $value
+     * @return bool
+     */
+    protected function isValueTooHigh($value)
+    {
+        // check if the value is not to high.
+        if ($this->max !== null) {
+            if (((function_exists('bcsub') && floatval(bcsub(
+                            $this->max,
+                            $value,
+                            4
+                        )) < 0) || $value > $this->max) && ((string)$this->max) != ((string)$value)
+            ) {
+                return true;
+            }
         }
-
-        $form = $field->getForm();
-        if (! $form->getId()) {
-            $form->setId(uniqid(get_class($form)));
-        }
-
-        if (! $field->getId()) {
-            $field->setId(uniqid(get_class($field)));
-        }
-
-        $script .= '$(document).ready( function() {' . PHP_EOL;
-        if (! ($field instanceof HiddenField)) {
-            $script .= '    $("#' . $field->getId() . '").blur(function() {' . PHP_EOL;
-            $script .= '       d2FloatValidator( $("#' . $field->getId() . '"), ' . ($this->getMin() === null ? 'null' : $this->getMin()) . ', ' . ($this->getMax() === null ? 'null' : $this->getMax()) . ');' . PHP_EOL;
-            $script .= '    });' . PHP_EOL;
-        }
-        $script .= '    $("form#' . $form->getId() . '").bind( "validate", function( event ) {' . PHP_EOL;
-        $script .= '        if( !d2FloatValidator( $("#' . $field->getId() . '"), ' . ($this->getMin() === null ? 'null' : $this->getMin()) . ', ' . ($this->getMax() === null ? 'null' : $this->getMax()) . ')) {' . PHP_EOL;
-        $script .= '            return false;' . PHP_EOL;
-        $script .= '        } else {' . PHP_EOL;
-        $script .= '            return event.result;' . PHP_EOL;
-        $script .= '        }' . PHP_EOL;
-        $script .= '    });' . PHP_EOL;
-        $script .= '});' . PHP_EOL;
-
-        return $script;
+        return false;
     }
 
     /**
@@ -230,7 +216,7 @@ else
      */
     public function setRequired($required)
     {
-        $this->required = (bool) $required;
+        $this->required = (bool)$required;
     }
 
     /**

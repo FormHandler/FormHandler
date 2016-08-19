@@ -2,6 +2,8 @@
 
 namespace FormHandler\Field;
 
+use FormHandler\Form;
+
 class TextField extends AbstractFormField
 {
     protected $maxlength;
@@ -65,6 +67,7 @@ class TextField extends AbstractFormField
     /**
      * Set the value for type. In HTML5 new types are allowed, for example "number", "email", etc.
      * Default is still "text".
+     * @param $value
      * @return TextField
      */
     public function setType($value)

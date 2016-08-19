@@ -1,6 +1,8 @@
 <?php
 namespace FormHandler\Field;
 
+use FormHandler\Form;
+
 /**
  */
 class HiddenField extends AbstractFormField
@@ -35,7 +37,7 @@ class HiddenField extends AbstractFormField
      * Set the value for this field and return the TextField reference
      *
      * @param string $value
-     * @return TextField
+     * @return HiddenField
      */
     public function setValue($value)
     {

@@ -1,6 +1,8 @@
 <?php
 namespace FormHandler\Field;
 
+use FormHandler\Form;
+
 /**
  */
 class SubmitButton extends Element
@@ -38,7 +40,7 @@ class SubmitButton extends Element
      * Set if this field is disabled and return the TextField reference
      *
      * @param bool $disabled
-     * @return TextField
+     * @return SubmitButton
      */
     public function setDisabled($disabled)
     {
@@ -60,7 +62,7 @@ class SubmitButton extends Element
      * Set the name of the field and return the TextField reference
      *
      * @param string $name
-     * @return TextField
+     * @return SubmitButton
      */
     public function setName($name)
     {
@@ -82,7 +84,7 @@ class SubmitButton extends Element
      * Set the size of the field and return the TextField reference
      *
      * @param int $size
-     * @return TextField
+     * @return SubmitButton
      */
     public function setSize($size)
     {
@@ -104,7 +106,7 @@ class SubmitButton extends Element
      * Set the value for this field and return the TextField reference
      *
      * @param string $value
-     * @return TextField
+     * @return SubmitButton
      */
     public function setValue($value)
     {

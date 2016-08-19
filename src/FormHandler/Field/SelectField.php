@@ -11,20 +11,33 @@ use FormHandler;
  */
 class SelectField extends AbstractFormField
 {
+    /**
+     * Set if we can select multiple values in this selectfield, or just one
+     * @var boolean
+     */
+    protected $multiple = false;
 
-    protected $multiple;
-
+    /**
+     * The size (number of options) which are displayed. By default this is 1.
+     *
+     * In most of the cases this is only used when $multple is set to true.
+     * @var int
+     */
     protected $size;
 
-    // used to remember the current value
+    /**
+     * This is used to remember the current value.
+     * This can be a string or an array, depending on the $multple setting.
+     * @var mixed
+     */
     protected $value;
 
     /**
      * The options of this selectfield
      *
-     * @var ArrayObject
+     * @var array
      */
-    protected $options;
+    protected $options = [];
 
     /**
      * Create a new SelectField
@@ -41,7 +54,7 @@ class SelectField extends AbstractFormField
             $this->setName($name);
         }
 
-        $this->options = new ArrayObject();
+        $this->options = [];
     }
 
     /**
@@ -61,10 +74,10 @@ class SelectField extends AbstractFormField
     /**
      * Set the options of this selectfield
      *
-     * @param ArrayObject $options
+     * @param array $options
      * @return SelectField
      */
-    public function setOptions(ArrayObject $options)
+    public function setOptions(array $options)
     {
         $this->options = $options;
 
@@ -81,16 +94,16 @@ class SelectField extends AbstractFormField
      * @param boolean $useArrayKeyAsValue
      * @return SelectField
      */
-    public function setOptionsAsArray($options, $useArrayKeyAsValue = true)
+    public function setOptionsAsArray(array $options, $useArrayKeyAsValue = true)
     {
-        $this->options = new ArrayObject();
+        $this->options = [];
 
         foreach ($options as $value => $label) {
             $option = new Option();
             $option->setLabel($label);
             $option->setValue($useArrayKeyAsValue ? $value : $label);
 
-            $this->options->append($option);
+            $this->options[] = $option;
         }
 
         // this will auto select the options based on this fields value
@@ -102,24 +115,22 @@ class SelectField extends AbstractFormField
     /**
      * Add options with an assoc array
      *
-     * @param array|ArrayObject $options
+     * @param array $options
      * @param boolean $useArrayKeyAsValue
      * @return SelectField
      */
-    public function addOptionsAsArray($options, $useArrayKeyAsValue = true)
+    public function addOptionsAsArray(array $options, $useArrayKeyAsValue = true)
     {
         if (! $this->options) {
-            $this->options = new ArrayObject();
+            $this->options = [];
         }
 
-        if (is_array($options) || $options instanceof ArrayAccess) {
-            foreach ($options as $value => $label) {
-                $option = new Option();
-                $option->setLabel($label);
-                $option->setValue($useArrayKeyAsValue ? $value : $label);
+        foreach ($options as $value => $label) {
+            $option = new Option();
+            $option->setLabel($label);
+            $option->setValue($useArrayKeyAsValue ? $value : $label);
 
-                $this->options->append($option);
-            }
+            $this->options[] = $option;
         }
 
         // this will auto select the options based on this fields value
@@ -137,9 +148,9 @@ class SelectField extends AbstractFormField
     public function addOption(Option $option)
     {
         if (! $this->options) {
-            $this->options = new ArrayObject();
+            $this->options = [];
         }
-        $this->options->append($option);
+        $this->options[] = $option;
 
         // this will auto select the options based on this fields value
         $this->selectOptionsFromValue();
@@ -155,7 +166,7 @@ class SelectField extends AbstractFormField
      */
     public function addOptgroup(Optgroup $optgroup)
     {
-        $this->options->append($optgroup);
+        $this->options[] = $optgroup;
 
         // this will auto select the options based on this fields value
         $this->selectOptionsFromValue();
@@ -166,13 +177,13 @@ class SelectField extends AbstractFormField
     /**
      * Add more options to this selectfield
      *
-     * @param ArrayObject $options
+     * @param array $options
      * @return SelectField
      */
-    public function addOptions(ArrayObject $options)
+    public function addOptions(array $options)
     {
         foreach ($options as $option) {
-            $this->options->append($option);
+            $this->options[] = $option;
         }
         // this will auto select the options based on this fields value
         $this->selectOptionsFromValue();
@@ -181,9 +192,10 @@ class SelectField extends AbstractFormField
     }
 
     /**
-     * Return the options which are located in this selectfield
+     * Return the options which are located in this selectfield.
+     * This can either be an Option or an Optgroup object.
      *
-     * @return ArrayObject
+     * @return array
      */
     public function getOptions()
     {
@@ -198,7 +210,7 @@ class SelectField extends AbstractFormField
      */
     public function setMultiple($multiple)
     {
-        $this->multiple = $multiple;
+        $this->multiple = (bool) $multiple;
         return $this;
     }
 
@@ -244,10 +256,6 @@ class SelectField extends AbstractFormField
      */
     public function setValue($value)
     {
-        if ($value instanceof ArrayObject) {
-            $value = $value->getArrayCopy();
-        }
-
         $this->value = $value;
 
         // this will auto select the options based on this fields value
@@ -297,46 +305,48 @@ class SelectField extends AbstractFormField
     }
 
     /**
-     * Return the selected option
+     * Return the selected option(s)
      *
-     * @return ArrayObject|Option
+     * @param $value
+     * @return mixed
      */
     public function getOptionByValue($value)
     {
-        $selected = new ArrayObject();
+        $selected = [];
 
         // walk all options
         foreach ($this->options as $option) {
             if ($option instanceof Option) {
                 if ($option->getValue() == $value) {
-                    $selected->append($option);
+                    $selected[] = $option;
                 }
             } elseif ($option instanceof Optgroup) {
                 $options = $option->getOptions();
                 foreach ($options as $option2) {
                     if ($option2->getValue() == $value) {
-                        $selected->append($option2);
+                        $selected[] = $option2;
                     }
                 }
             }
         }
 
-        if ($selected->count() > 0) {
+        $count = sizeof($selected) ;
+        if ($count > 0) {
             if ($this->isMultiple()) {
                 return $selected;
             } else {
                 // return last selected item as value
-                return $selected->offsetGet($selected->count() - 1);
+                return $selected[$count - 1];
             }
         }
 
-        return null;
+        return $this->isMultiple() ? [] : "";
     }
 
     /**
      * Remove option by value
      *
-     * @return void
+     * @param $value
      */
     public function removeOptionByValue($value)
     {
@@ -344,24 +354,26 @@ class SelectField extends AbstractFormField
         $options = $this->options;
 
         // Empty options;
-        $this->options = new ArrayObject();
+        $this->options = [];
 
         foreach ($options as $option) {
             if ($option instanceof Option) {
                 if ($option->getValue() != $value) {
-                    $this->options->append($option);
+                    $this->options[] = $option;
                 }
             } elseif ($option instanceof Optgroup) {
-                $subOptions = new ArrayObject();
+                $subOptions = [];
                 $options2 = $option->getOptions();
                 foreach ($options2 as $option2) {
                     if ($option2->getValue() != $value) {
-                        $subOptions->append($option2);
+                        $subOptions[] = $option2;
                     }
                 }
 
-                if ($subOptions->count()) {
-                    $this->options->append($subOptions);
+                $option -> setOptions($subOptions);
+
+                if (sizeof($subOptions) > 0) {
+                    $this->options[] = $option;
                 }
             }
         }

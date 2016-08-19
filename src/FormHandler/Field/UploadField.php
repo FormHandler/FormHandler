@@ -1,8 +1,10 @@
 <?php
 namespace FormHandler\Field;
 
+use FormHandler\Form;
+
 /**
- * With this class you can handle an UploadField.
+ * With this class you can create an UploadField.
  *
  * When you add this to a form, the form's enctype will be set to multipart/form-data automatically.
  * Also, a hidden field called MAX_FILE_SIZE is added to the form object to let the browser
@@ -13,22 +15,22 @@ namespace FormHandler\Field;
  *
  * After uploading, the getValue() method returns an array like this:
  *
- * <code>
+ * ```
  * Array
  * (
- * [name] => Map3.xlsx
- * [type] => application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
- * [tmp_name] => C:\Windows\Temp\php7675.tmp
- * [error] => 0
- * [size] => 11784
+ *     [name] => Map3.xlsx
+ *     [type] => application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+ *     [tmp_name] => C:\Windows\Temp\php7675.tmp
+ *     [error] => 0
+ *     [size] => 11784
  * )
- * </code>
+ * ```
  *
  * You can enable multiple upload files like this:
- * <code>
+ * ```php
  * $form -> uploadField('file')
- * -> setMultiple( true );
- * </code>
+ *       -> setMultiple( true );
+ * ```
  *
  * When setting an uploadfield to allow multiple file uploads, it's name will automatically be changed to
  * include two square brackets. So the name of the field in the example above will become "file[]".
@@ -36,46 +38,46 @@ namespace FormHandler\Field;
  * After submitting a form with an uploadfield accepting multiple files, you will receive a result
  * from the getValue() method like this:
  *
- * <code>
+ * ```
  * Array
  * (
- * [name] => Array
- * (
- * [0] => Map3.xlsx
- * [1] => payments-AT.xml
- * [2] => status.xml
- * )
+ *     [name] => Array
+ *     (
+ *         [0] => Map3.xlsx
+ *         [1] => payments-AT.xml
+ *         [2] => status.xml
+ *     )
  *
- * [type] => Array
- * (
- * [0] => application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
- * [1] => text/xml
- * [2] => text/xml
- * )
+ *     [type] => Array
+ *     (
+ *         [0] => application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+ *         [1] => text/xml
+ *         [2] => text/xml
+ *     )
  *
- * [tmp_name] => Array
- * (
- * [0] => C:\Windows\Temp\phpA65C.tmp
- * [1] => C:\Windows\Temp\phpA66D.tmp
- * [2] => C:\Windows\Temp\phpA66E.tmp
- * )
+ *     [tmp_name] => Array
+ *     (
+ *         [0] => C:\Windows\Temp\phpA65C.tmp
+ *         [1] => C:\Windows\Temp\phpA66D.tmp
+ *         [2] => C:\Windows\Temp\phpA66E.tmp
+ *     )
  *
- * [error] => Array
- * (
- * [0] => 0
- * [1] => 0
- * [2] => 0
- * )
+ *     [error] => Array
+ *     (
+ *         [0] => 0
+ *         [1] => 0
+ *         [2] => 0
+ *     )
  *
- * [size] => Array
- * (
- * [0] => 11784
- * [1] => 17934
- * [2] => 9968
- * )
+ *     [size] => Array
+ *     (
+ *         [0] => 11784
+ *         [1] => 17934
+ *         [2] => 9968
+ *     )
  *
  * )
- * </code>
+ * ```
  *
  * After uploading a file, you can use the UploadHelper {@see form/helpers/UploadHelper.php} for the
  * most common actions (like moving a uploaded file, do some image mutations, etc).
@@ -136,6 +138,7 @@ class UploadField extends AbstractFormField
      * Example: text/html, image/jpeg, audio/mpeg, video/quicktime, text/css, and text/javascript
      *
      * @param string $mimeType
+     * @return $this
      */
     public function setAccept($mimeType)
     {
@@ -157,7 +160,7 @@ class UploadField extends AbstractFormField
      * Set the size of the field and return the TextField reference
      *
      * @param int $size
-     * @return TextField
+     * @return UploadField
      */
     public function setSize($size)
     {
@@ -179,6 +182,7 @@ class UploadField extends AbstractFormField
      * allow multiple files to be uploaded by 1 uploadfield?
      * Set the value for multiple
      *
+     * @param $value
      * @return UploadField
      */
     public function setMultiple($value)
@@ -202,7 +206,7 @@ class UploadField extends AbstractFormField
      * Set the value for this field and return the TextField reference
      *
      * @param string $value
-     * @return TextField
+     * @return UploadField
      */
     public function setValue($value)
     {

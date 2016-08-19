@@ -1,6 +1,8 @@
 <?php
 namespace FormHandler\Validator;
 
+use FormHandler\Field\AbstractFormField;
+
 /**
  */
 abstract class AbstractValidator
@@ -25,7 +27,7 @@ abstract class AbstractValidator
      *
      * @return boolean
      */
-    public abstract function isValid();
+    abstract public function isValid();
 
     /**
      * Set the error message which should be displayed if the field is invalid
@@ -46,19 +48,6 @@ abstract class AbstractValidator
     {
         return $this->error;
     }
-
-    /**
-     * Add javascript validation for this field.
-     *
-     * This method is called just before the field is rendered.
-     * Here you can add some javascript to the fields html.
-     * This method should return some valid javascript (surround it with valid <script> tags!).
-     *
-     * @param AbstractFormField $field
-     * @return string Javascript which is needed for this field validation or null if none.
-     */
-    public function addJavascriptValidation(AbstractFormField &$field)
-    {}
 
     /**
      * Set the field which should be validated.

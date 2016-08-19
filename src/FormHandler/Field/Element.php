@@ -59,7 +59,7 @@ class Element
      * @param int $index
      * @return self
      */
-    public function setTabindex(int $index)
+    public function setTabindex($index)
     {
         $this->tabindex = $index;
         return $this;
@@ -81,7 +81,7 @@ class Element
      * @param string $key
      * @return self
      */
-    public function setAccesskey(string $key)
+    public function setAccesskey($key)
     {
         $this->accesskey = $key;
         return $this;
@@ -103,7 +103,7 @@ class Element
      * @param string $style
      * @return string
      */
-    public function setStyle(string $style)
+    public function setStyle($style)
     {
         $this->style = $style;
         return $this;
@@ -115,7 +115,7 @@ class Element
      * @param string $style
      * @return self
      */
-    public function addStyle(string $style)
+    public function addStyle($style)
     {
         $this->style .= $style;
         return $this;
@@ -149,7 +149,7 @@ class Element
      * @param string $class
      * @return self
      */
-    public function addClass(string $class)
+    public function addClass($class)
     {
         if (empty($this->class)) {
             $this->class = trim($class);
@@ -166,7 +166,7 @@ class Element
      * @param string $class
      * @return self
      */
-    public function setClass(string $class)
+    public function setClass($class)
     {
         $this->class = $class;
         return $this;
@@ -178,7 +178,7 @@ class Element
      * @param string $title
      * @return self
      */
-    public function setTitle(string $title)
+    public function setTitle($title)
     {
         $this->title = $title;
         return $this;
@@ -248,8 +248,10 @@ class Element
             $str .= ' accesskey="' . $this->accesskey . '"';
         }
 
-        foreach ($this->attributes as $name => $value) {
-            $str .= ' ' . $name . '="' . $value . '"';
+        if (isset($this -> attributes)) {
+            foreach ($this->attributes as $name => $value) {
+                $str .= ' ' . $name . '="' . $value . '"';
+            }
         }
 
         return $str;

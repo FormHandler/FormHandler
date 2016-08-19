@@ -1,6 +1,8 @@
 <?php
 namespace FormHandler\Field;
 
+use FormHandler\Form;
+
 /**
  * Create a checkbox.
  *
@@ -32,6 +34,7 @@ class CheckBox extends AbstractFormField
     /**
      * Set the name of this field
      *
+     * @param string $name
      * @return CheckBox
      */
     public function setName($name)

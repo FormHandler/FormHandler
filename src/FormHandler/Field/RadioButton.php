@@ -1,6 +1,8 @@
 <?php
 namespace FormHandler\Field;
 
+use FormHandler\Form;
+
 /**
  * Radio button class.
  */
@@ -31,7 +33,7 @@ class RadioButton extends AbstractFormField
      * Set the name
      *
      * @param string $name
-     * @return HiddenField
+     * @return RadioButton
      */
     public function setName($name)
     {
@@ -44,7 +46,7 @@ class RadioButton extends AbstractFormField
      * Specifies that an input element should be preselected when the page loads
      *
      * @param bool $checked
-     * @return CheckBox
+     * @return RadioButton
      */
     public function setChecked($checked)
     {
@@ -60,7 +62,7 @@ class RadioButton extends AbstractFormField
      * The Formatter class will generate the label for us!
      *
      * @param string $label
-     * @return CheckBox
+     * @return RadioButton
      */
     public function setLabel($label)
     {
@@ -92,7 +94,7 @@ class RadioButton extends AbstractFormField
      * Set the value for this field and return the CheckBox reference
      *
      * @param string $value
-     * @return CheckBox
+     * @return RadioButton
      */
     public function setValue($value)
     {

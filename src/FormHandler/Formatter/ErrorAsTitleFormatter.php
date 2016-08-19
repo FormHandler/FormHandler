@@ -1,6 +1,10 @@
 <?php
 namespace FormHandler\Formatter;
 
+use FormHandler\Form;
+use FormHandler\Field\Element;
+use FormHandler\Field\AbstractFormField;
+
 /**
  * ErrorAsTitleFormatter class.
  *
@@ -23,6 +27,7 @@ class ErrorAsTitleFormatter extends PlainFormatter
      * Format the element and return it's new layout
      *
      * @param Element $element
+     * @return string
      */
     public function format(Element $element)
     {
@@ -41,18 +46,16 @@ class ErrorAsTitleFormatter extends PlainFormatter
 
         if (method_exists($this, $className)) {
             $html = $this->$className($element);
-        }  // if form field
-else
-            if ($element instanceof AbstractFormField) {
-                $html = $this->formField($element);
-            }  // in case that the form class was overwritten...
-else
-                if ($element instanceof Form && method_exists($this, 'form')) {
-                    $html = $this->form($element);
-                }  // a "normal" element, like a submitbutton or such
-else {
+        } // if form field
+        elseif ($element instanceof AbstractFormField) {
+            $html = $this->formField($element);
+        } // in case that the form class was overwritten...
+        elseif ($element instanceof Form && method_exists($this, 'form')) {
+            $html = $this->form($element);
+        } // a "normal" element, like a submitbutton or such
+        else {
                     $html = $element->render();
-                }
+        }
 
         return $html;
     }

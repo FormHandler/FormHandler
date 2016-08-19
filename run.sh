@@ -16,7 +16,7 @@ echo "##############################"
 echo "#      PHP Mess Detector     #"
 echo "##############################"
 echo ""
-php vendor/phpmd/phpmd/src/bin/phpmd $1 text codesize,unusedcode,naming
+php vendor/phpmd/phpmd/src/bin/phpmd $1 text ./phpmd.xml
 
 echo "##############################"
 echo "#      PHP Code Sniffer      #"

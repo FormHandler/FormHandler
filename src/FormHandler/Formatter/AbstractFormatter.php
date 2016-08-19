@@ -1,6 +1,9 @@
 <?php
 namespace FormHandler\Formatter;
 
+use FormHandler\Form;
+use FormHandler\Field\Element;
+
 /**
  * Formatter class.
  *
@@ -21,7 +24,7 @@ namespace FormHandler\Formatter;
  * so you can influence the way how your elements are rendered.
  *
  * For each element the format() method is requested. It's a good practice to make
- * a difference how form fields are rendered (error checking) and non-form fields.
+ * a difference how form fields are rendered (error checking) and non-form fields, like buttons.
  *
  * You can distinguish these by checking if an element is an instance of the
  * AbstractFormField class. If so, it's a form field.
@@ -40,6 +43,7 @@ abstract class AbstractFormatter
 
     /**
      * Set the form where this formatter is working on
+     * @param Form $form
      */
     public function setForm(Form $form)
     {
@@ -51,7 +55,7 @@ abstract class AbstractFormatter
      */
     public function getForm()
     {
-        return $form;
+        return $this -> form;
     }
 
     /**
@@ -60,43 +64,5 @@ abstract class AbstractFormatter
      * @param Element $element
      * @return string The HTML of the element
      */
-    public abstract function format(Element $element);
-
-    /**
-     * Return the needed javascript.
-     *
-     * This method will walk all fields and retrieve the javascript
-     * needed for the client side validation of the fields. It will
-     * return null if no javascript is needed.
-     *
-     * @return string
-     */
-    public function getJavascript()
-    {
-        if (! $this->form) {
-            return null;
-        }
-
-        $javascript = null;
-
-        // try to add javascript validation for certain elements
-        $fields = $this->form->getFields();
-        foreach ($fields as $field)
-            if ($field instanceof AbstractFormField) {
-                $validators = $field->getValidators();
-                if ($validators) {
-                    foreach ($validators as $validator)
-                        if ($validator instanceof AbstractValidator) {
-                            $javascript .= $validator->addJavascriptValidation($field);
-                        }
-                }
-            }
-
-        $this->form->setAttribute('onsubmit', '');
-        if ($javascript) {
-            $javascript = '<script type="text/javascript">' . PHP_EOL . '//<![CDATA[' . PHP_EOL . $javascript . '$(document).ready( function() {' . PHP_EOL . '    $("#' . $this->form->getId() . '").submit(function(){' . PHP_EOL . '        var event = jQuery.Event("validate");' . PHP_EOL . '        $(this).trigger(event);' . PHP_EOL . '        //console.debug(event.result);' . PHP_EOL . '        return !( event.result === false );' . PHP_EOL . '    });' . PHP_EOL . '});' . PHP_EOL . '//]]>' . PHP_EOL . '</script>' . PHP_EOL;
-        }
-
-        return $javascript;
-    }
+    abstract public function format(Element $element);
 }

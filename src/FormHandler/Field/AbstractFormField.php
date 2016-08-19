@@ -1,6 +1,11 @@
 <?php
 namespace FormHandler\Field;
 
+use FormHandler\Form;
+use FormHandler\Validator\AbstractValidator;
+use FormHandler\Validator\UserFunctionValidator;
+use FormHandler\Validator\UserMethodValidator;
+
 /**
  * Base class for all form fields.
  *
@@ -9,7 +14,6 @@ namespace FormHandler\Field;
  */
 abstract class AbstractFormField extends Element
 {
-
     /**
      * List of all validators for this Form Field.
      *
@@ -24,18 +28,46 @@ abstract class AbstractFormField extends Element
      */
     protected $name;
 
+    /**
+     * The Form object
+     * @var Form
+     */
     protected $form;
 
-    protected $disabled;
+    /**
+     * Check if this field is disabled or not.
+     * @var bool
+     */
+    protected $disabled = false;
 
-    protected $errors = array();
+    /**
+     * A list of error messages
+     * @var array
+     */
+    protected $errors = [];
 
+    /**
+     * Remember if this field is valid or not.
+     * @var bool
+     */
     protected $valid = null;
 
-    protected $helpText;
+    /**
+     * A container for setting some help text, if used by the formatter.
+     * @var string
+     */
+    protected $helpText = "";
 
+    /**
+     * Return the value of this field.
+     * @return mixed
+     */
     abstract public function getValue();
 
+    /**
+     * Set the value for this field
+     * @param mixed $value
+     */
     abstract public function setValue($value);
 
     /**
@@ -112,11 +144,9 @@ abstract class AbstractFormField extends Element
 
             if (sizeof($this->validators) > 0) {
                 foreach ($this->validators as $validator) {
-                    if ($validator instanceof AbstractValidator) {
-                        if (! $validator->isValid()) {
-                            $this->errors[] = $validator->getErrorMessage();
-                            $this->valid = false;
-                        }
+                    if (! $validator->isValid()) {
+                        $this->errors[] = $validator->getErrorMessage();
+                        $this->valid = false;
                     }
                 }
             }
@@ -144,31 +174,37 @@ abstract class AbstractFormField extends Element
      * The return value works the same as a function; true if valid, false or string with error message otherwise.
      *
      * Example:
-     * <code>
-     * function myValidator( AbstractFormField $field )
+     * ```php
+     * function myValidator( FormHandler\Field\AbstractFormField $field )
      * {
-     * // check the field
-     * if( $field -> getValue() == 'test' )
-     * {
-     * return true; // field is valid
+     *     // check the field
+     *     if( $field -> getValue() == 'test' ) {
+     *         return true; // field is valid
+     *     } else {
+     *        // the error message which will be used
+     *        return 'The value is incorrect!';
+     *     }
      * }
-     * else
-     * {
-     * // the error message which will be used
-     * return 'The value is incorrect!';
-     * }
-     * }
-     * </code>
+     * ```
      *
-     * @param
-     *            $validator
+     * Or with a closure:
+     * ```php
+     * $field -> addValidator( function( FormHandler\Field\AbstractFormField &$field ) {
+     *     // Here we return either true or false.
+     *     // In case of false, the default "invalid" error message is shown.
+     *     return $field -> getValue() == 'agree';
+     * });
+     * ```
+     *
+     * @param mixed $validator
      * @return AbstractFormField
+     * @throws \Exception
      */
     public function addValidator($validator)
     {
         if (is_string($validator)) {
             $validator = new UserFunctionValidator($validator);
-        } elseif (is_array($validator) || $validator instanceof Closure) {
+        } elseif (is_array($validator) || $validator instanceof \Closure) {
             $validator = new UserMethodValidator($validator);
         } elseif ($validator instanceof AbstractValidator) {
             // clone it, because the same validator could be used on an other field,
@@ -177,7 +213,7 @@ abstract class AbstractFormField extends Element
         }
 
         if (! ($validator instanceof AbstractValidator)) {
-            throw new Exception('Only validators of types "AbstractValidator" are allowed!');
+            throw new \Exception('Only validators of types "AbstractValidator" are allowed!');
         }
 
         $validator->setField($this);

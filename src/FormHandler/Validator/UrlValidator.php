@@ -2,6 +2,10 @@
 namespace FormHandler\Validator;
 
 /**
+ * This validator checks if the value of the given field is a valid URL.
+ *
+ * You can check for specific url schemes (http, https, ftp, etc).
+ *
  */
 class UrlValidator extends AbstractValidator
 {
@@ -13,10 +17,7 @@ class UrlValidator extends AbstractValidator
      *
      * @var array
      */
-    protected $allowed_schemes = array(
-        'http',
-        'https'
-    );
+    protected $allowed_schemes = ['http', 'https'];
 
     /**
      * Determines whether this field is required.
@@ -44,11 +45,13 @@ class UrlValidator extends AbstractValidator
      *
      * @param boolean $required
      * @param string $message
+     * @param null $maxLength
+     * @param bool $skipTldCheck
      */
     public function __construct($required = true, $message = null, $maxLength = null, $skipTldCheck = false)
     {
         if ($message === null) {
-            $message = dgettext('d2frame', 'URL is invalid.');
+            $message = dgettext('formhandler', 'URL is invalid.');
         }
 
         $this->setRequired($required);
@@ -117,13 +120,12 @@ class UrlValidator extends AbstractValidator
      * Set the value for allowed_schemes
      *
      * @param array $value
-     * @return void
-     * @throws Exception
+     * @throws \Exception
      */
     public function setAllowedSchemes($value)
     {
         if (! is_array($value)) {
-            throw new Exception('Tried to set allowed schemes to a value that was not an array.');
+            throw new \Exception('Tried to set allowed schemes to a value that was not an array.');
         }
         $this->allowed_schemes = $value;
     }
@@ -165,7 +167,7 @@ class UrlValidator extends AbstractValidator
     /**
      * Set the maximum length of this field.
      *
-     * @param boolean $required
+     * @param $length
      */
     public function setMaxLength($length)
     {

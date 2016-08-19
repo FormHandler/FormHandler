@@ -222,7 +222,7 @@ class Optgroup extends Element
 
         $str .= '>';
 
-        if ($this->options && $this->options->count() > 0) {
+        if ($this->options && sizeof($this->options) > 0) {
             foreach ($this->options as $option) {
                 $str .= $option->render();
             }
