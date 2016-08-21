@@ -1,8 +1,8 @@
 {
   "name": "teyeheimans/FormHandler",
+  "type": "library",
   "description": "Easy to use object which allows you to create and process forms",
   "keywords": ["forms", "form", "textfield", "formhandler", "form handler"],
-  "homepage": "https://www.formhandler.net/",
   "license": "MIT",
   "authors": [
     {
@@ -10,7 +10,6 @@
       "role": "Founder"
     }
   ],
-  "support": "info@formhandler.net",
   "require-dev": {
     "phpmd/phpmd": "@stable",
     "sebastian/phpcpd": "*",
