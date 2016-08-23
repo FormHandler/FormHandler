@@ -15,7 +15,10 @@
     "sebastian/phpcpd": "*",
     "squizlabs/php_codesniffer": "2.*",
     "phpdocumentor/phpdocumentor": "2.*",
-    "phpunit/phpunit": "5.5.*"
+    "phpunit/phpunit": "5.5.*",
+    "phploc/phploc": "*",
+    "pdepend/pdepend" : "2.2.4",
+    "mayflower/php-codebrowser": "~1.1"
   },
   "require": {
     "neitanod/forceutf8": "dev-master"

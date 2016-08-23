@@ -53,9 +53,6 @@ class Optgroup extends Element
      */
     public function addOption(Option $option)
     {
-        if (! $this->options) {
-            $this->options = [];
-        }
         $this->options[] = $option;
         return $this;
     }
@@ -68,9 +65,6 @@ class Optgroup extends Element
      */
     public function addOptions(array $options)
     {
-        if (! $this->options) {
-            $this->options = [];
-        }
         foreach ($options as $option) {
             $this->options[] = $option;
         }
@@ -108,10 +102,6 @@ class Optgroup extends Element
      */
     public function addOptionsAsArray(array $options, $useArrayKeyAsValue = true)
     {
-        if (! $this->options) {
-            $this->options = [];
-        }
-
         foreach ($options as $value => $label) {
             $option = new Option();
             $option->setLabel($label);

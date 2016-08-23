@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>
+            Mayflower Code Browser - Source Code
+        </title>
+        <link rel="stylesheet" type="text/css" href="js/jquery.sidebar/css/codebrowser/sidebar.css" />
+        <link rel="stylesheet" type="text/css" href="css/global.css" />
+        <link rel="stylesheet" type="text/css" href="css/cruisecontrol.css" />
+        <link rel="stylesheet" type="text/css" href="css/review.css" />
+
+        <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.sidebar/jquery-ui-1.7.2.custom.min.js"></script>
+        <script type="text/javascript" src="js/jquery.sidebar/jquery.sidebar.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/lib/jquery.hoverIntent.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/lib/jquery.bgiframe.min.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/jquery.cluetip.min.js"></script>
+
+        <script type="text/javascript" src="js/review.js"></script>
+    </head>
+    <body class="codebrowser">
+        <div class="header">
+            <a href="./index.html">Go back to index</a> |
+            <a href="https://github.com/Mayflower/PHP_CodeBrowser">PHP CodeBrowser</a>
+        </div>
+        <hr/>
+        <div id="review">
+            <div class="filepath">
+                Encoding/InterfaceEncodingFilter.php            </div>
+
+            <ol class="code"><li id="line_1" class="odd"><span class="lineNumber">&nbsp;1&nbsp;</span><span>
+</span><span class="default">&lt;?php</span><a name="line_1"></a></li><li id="line_2" class="even"><span class="lineNumber">&nbsp;2&nbsp;</span><span class="keyword">namespace&nbsp;</span><span class="default">FormHandler</span><span class="keyword">\</span><span class="default">Encoding</span><span class="keyword">;</span><a name="line_2"></a></li><li id="line_3" class="odd"><span class="lineNumber">&nbsp;3&nbsp;</span><a name="line_3"></a></li><li id="line_4" class="even"><span class="lineNumber">&nbsp;4&nbsp;</span><span class="keyword">use&nbsp;</span><span class="default">FormHandler</span><span class="keyword">\</span><span class="default">Form</span><span class="keyword">;</span><a name="line_4"></a></li><li id="line_5" class="odd"><span class="lineNumber">&nbsp;5&nbsp;</span><a name="line_5"></a></li><li id="line_6" class="even"><span class="lineNumber">&nbsp;6&nbsp;</span><span class="comment">/**</span><a name="line_6"></a></li><li id="line_7" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 84 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Checkstyle"><span class="lineNumber">&nbsp;7&nbsp;</span><span class="comment">&nbsp;*&nbsp;An&nbsp;object&nbsp;which&nbsp;implements&nbsp;this&nbsp;interface&nbsp;should&nbsp;make&nbsp;sure&nbsp;that&nbsp;the&nbsp;given&nbsp;content</span><a name="line_7"></a></li><li id="line_8" class="even"><span class="lineNumber">&nbsp;8&nbsp;</span><span class="comment">&nbsp;*&nbsp;is&nbsp;valid&nbsp;for&nbsp;their&nbsp;encoding.</span><a name="line_8"></a></li><li id="line_9" class="odd"><span class="lineNumber">&nbsp;9&nbsp;</span><span class="comment">&nbsp;*</span><a name="line_9"></a></li><li id="line_10" class="even"><span class="lineNumber">10&nbsp;</span><span class="comment">&nbsp;*&nbsp;So&nbsp;you&nbsp;could&nbsp;write&nbsp;an&nbsp;Encoding&nbsp;filter&nbsp;which&nbsp;only&nbsp;allows&nbsp;valid&nbsp;ISO&nbsp;8859-1</span><a name="line_10"></a></li><li id="line_11" class="odd"><span class="lineNumber">11&nbsp;</span><span class="comment">&nbsp;*/</span><a name="line_11"></a></li><li id="line_12" class="even"><span class="lineNumber">12&nbsp;</span><span class="keyword">interface&nbsp;</span><span class="default">InterfaceEncodingFilter</span><a name="line_12"></a></li><li id="line_13" class="odd"><span class="lineNumber">13&nbsp;</span><span class="keyword">{</span><a name="line_13"></a></li><li id="line_14" class="even"><span class="lineNumber">14&nbsp;</span><a name="line_14"></a></li><li id="line_15" class="odd"><span class="lineNumber">15&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_15"></a></li><li id="line_16" class="even"><span class="lineNumber">16&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Initialisation&nbsp;of&nbsp;this&nbsp;encoder.</span><a name="line_16"></a></li><li id="line_17" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 82 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Checkstyle"><span class="lineNumber">17&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;This&nbsp;is&nbsp;requested&nbsp;when&nbsp;the&nbsp;encoding&nbsp;filter&nbsp;is&nbsp;first&nbsp;set&nbsp;in&nbsp;the&nbsp;Form&nbsp;object.</span><a name="line_17"></a></li><li id="line_18" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 89 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Checkstyle"><span class="lineNumber">18&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Here&nbsp;you&nbsp;could&nbsp;make&nbsp;some&nbsp;changes&nbsp;in&nbsp;the&nbsp;Form&nbsp;object,&nbsp;like&nbsp;set&nbsp;the&nbsp;"accept-charset"</span><a name="line_18"></a></li><li id="line_19" class="odd"><span class="lineNumber">19&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span><a name="line_19"></a></li><li id="line_20" class="even"><span class="lineNumber">20&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;Form&nbsp;$form</span><a name="line_20"></a></li><li id="line_21" class="odd"><span class="lineNumber">21&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_21"></a></li><li id="line_22" class="even"><span class="lineNumber">22&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public&nbsp;function&nbsp;</span><span class="default">init</span><span class="keyword">(</span><span class="default">Form&nbsp;</span><span class="keyword">&amp;</span><span class="default">$form</span><span class="keyword">);</span><a name="line_22"></a></li><li id="line_23" class="odd"><span class="lineNumber">23&nbsp;</span><a name="line_23"></a></li><li id="line_24" class="even"><span class="lineNumber">24&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_24"></a></li><li id="line_25" class="odd"><span class="lineNumber">25&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Filter&nbsp;the&nbsp;given&nbsp;value&nbsp;and&nbsp;make&nbsp;sure&nbsp;that&nbsp;it&nbsp;is&nbsp;a&nbsp;valid&nbsp;encoded&nbsp;string.</span><a name="line_25"></a></li><li id="line_26" class="even"><span class="lineNumber">26&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span><a name="line_26"></a></li><li id="line_27" class="odd"><span class="lineNumber">27&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;string&nbsp;$value</span><a name="line_27"></a></li><li id="line_28" class="even"><span class="lineNumber">28&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;string</span><a name="line_28"></a></li><li id="line_29" class="odd"><span class="lineNumber">29&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_29"></a></li><li id="line_30" class="even"><span class="lineNumber">30&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public&nbsp;function&nbsp;</span><span class="default">filter</span><span class="keyword">(</span><span class="default">$value</span><span class="keyword">);</span><a name="line_30"></a></li><li id="line_31" class="odd"><span class="lineNumber">31&nbsp;</span><span class="keyword">}</span><span>
+</span><a name="line_31"></a></li></ol>
+            
+            <div id="sidebar">
+                <table cellpadding="3">
+                    <thead>
+                        <tr>
+                            <th width="40px" align="center">
+                                <strong>start</strong>
+                            </th>
+                            <th width="40px" align="center">
+                                <strong>end</strong>
+                            </th>
+                            <th>
+                                <strong>comment</strong>
+                            </th>
+                            <th width="120px">
+                                <strong>type of error</strong>
+                            </th>
+                            <th width="60px">
+                                <strong>severity</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_7" onclick="switchLine('line_7')">
+                                7</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_7" onclick="switchLine('line_7'); new Effect.Highlight('line_7-7', {duration: 1.5}); return false">
+                                7</a>
+                            </td>
+                            <td>
+                                <a href="#line_7" onclick="switchLine('line_7'); new Effect.Highlight('line_7-7', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 84 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_17" onclick="switchLine('line_17')">
+                                17</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_17" onclick="switchLine('line_17'); new Effect.Highlight('line_17-17', {duration: 1.5}); return false">
+                                17</a>
+                            </td>
+                            <td>
+                                <a href="#line_17" onclick="switchLine('line_17'); new Effect.Highlight('line_17-17', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 82 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_18" onclick="switchLine('line_18')">
+                                18</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_18" onclick="switchLine('line_18'); new Effect.Highlight('line_18-18', {duration: 1.5}); return false">
+                                18</a>
+                            </td>
+                            <td>
+                                <a href="#line_18" onclick="switchLine('line_18'); new Effect.Highlight('line_18-18', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 89 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                                            </tbody>
+                </table>
+            </div>
+            <script type="text/javascript" language="javascript">
+                $(initReview);
+            </script>
+                    </div>
+    </body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>
+            Mayflower Code Browser - Source Code
+        </title>
+        <link rel="stylesheet" type="text/css" href="js/jquery.sidebar/css/codebrowser/sidebar.css" />
+        <link rel="stylesheet" type="text/css" href="css/global.css" />
+        <link rel="stylesheet" type="text/css" href="css/cruisecontrol.css" />
+        <link rel="stylesheet" type="text/css" href="css/review.css" />
+
+        <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.sidebar/jquery-ui-1.7.2.custom.min.js"></script>
+        <script type="text/javascript" src="js/jquery.sidebar/jquery.sidebar.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/lib/jquery.hoverIntent.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/lib/jquery.bgiframe.min.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/jquery.cluetip.min.js"></script>
+
+        <script type="text/javascript" src="js/review.js"></script>
+    </head>
+    <body class="codebrowser">
+        <div class="header">
+            <a href="./index.html">Go back to index</a> |
+            <a href="https://github.com/Mayflower/PHP_CodeBrowser">PHP CodeBrowser</a>
+        </div>
+        <hr/>
+        <div id="review">
+            <div class="filepath">
+                Formatter/AbstractFormatter.php            </div>
+
+            <ol class="code"><li id="line_1" class="odd"><span class="lineNumber">&nbsp;1&nbsp;</span><span>
+</span><span class="default">&lt;?php</span><a name="line_1"></a></li><li id="line_2" class="even"><span class="lineNumber">&nbsp;2&nbsp;</span><span class="keyword">namespace&nbsp;</span><span class="default">FormHandler</span><span class="keyword">\</span><span class="default">Formatter</span><span class="keyword">;</span><a name="line_2"></a></li><li id="line_3" class="odd"><span class="lineNumber">&nbsp;3&nbsp;</span><a name="line_3"></a></li><li id="line_4" class="even"><span class="lineNumber">&nbsp;4&nbsp;</span><span class="keyword">use&nbsp;</span><span class="default">FormHandler</span><span class="keyword">\</span><span class="default">Form</span><span class="keyword">;</span><a name="line_4"></a></li><li id="line_5" class="odd"><span class="lineNumber">&nbsp;5&nbsp;</span><span class="keyword">use&nbsp;</span><span class="default">FormHandler</span><span class="keyword">\</span><span class="default">Field</span><span class="keyword">\</span><span class="default">Element</span><span class="keyword">;</span><a name="line_5"></a></li><li id="line_6" class="even"><span class="lineNumber">&nbsp;6&nbsp;</span><a name="line_6"></a></li><li id="line_7" class="odd"><span class="lineNumber">&nbsp;7&nbsp;</span><span class="comment">/**</span><a name="line_7"></a></li><li id="line_8" class="even"><span class="lineNumber">&nbsp;8&nbsp;</span><span class="comment">&nbsp;*&nbsp;Formatter&nbsp;class.</span><a name="line_8"></a></li><li id="line_9" class="odd"><span class="lineNumber">&nbsp;9&nbsp;</span><span class="comment">&nbsp;*</span><a name="line_9"></a></li><li id="line_10" class="even"><span class="lineNumber">10&nbsp;</span><span class="comment">&nbsp;*&nbsp;This&nbsp;class&nbsp;is&nbsp;responsible&nbsp;for&nbsp;they&nbsp;way&nbsp;how&nbsp;elements&nbsp;are&nbsp;rendered,</span><a name="line_10"></a></li><li id="line_11" class="odd"><span class="lineNumber">11&nbsp;</span><span class="comment">&nbsp;*&nbsp;and&nbsp;in&nbsp;specific&nbsp;their&nbsp;"extra"&nbsp;display&nbsp;items,&nbsp;like&nbsp;&lt;label&gt;&nbsp;tags,&nbsp;error</span><a name="line_11"></a></li><li id="line_12" class="even"><span class="lineNumber">12&nbsp;</span><span class="comment">&nbsp;*&nbsp;messages,&nbsp;etc.</span><a name="line_12"></a></li><li id="line_13" class="odd"><span class="lineNumber">13&nbsp;</span><span class="comment">&nbsp;*</span><a name="line_13"></a></li><li id="line_14" class="even"><span class="lineNumber">14&nbsp;</span><span class="comment">&nbsp;*&nbsp;Each&nbsp;Element&nbsp;has&nbsp;it's&nbsp;own&nbsp;render()&nbsp;method,&nbsp;which&nbsp;will&nbsp;generate&nbsp;the</span><a name="line_14"></a></li><li id="line_15" class="odd"><span class="lineNumber">15&nbsp;</span><span class="comment">&nbsp;*&nbsp;html&nbsp;for&nbsp;that&nbsp;specific&nbsp;element.&nbsp;However,&nbsp;extra&nbsp;tags&nbsp;needed&nbsp;for&nbsp;the&nbsp;display</span><a name="line_15"></a></li><li id="line_16" class="even"><span class="lineNumber">16&nbsp;</span><span class="comment">&nbsp;*&nbsp;are&nbsp;not&nbsp;included&nbsp;by&nbsp;default,&nbsp;because&nbsp;this&nbsp;would&nbsp;force&nbsp;a&nbsp;specific</span><a name="line_16"></a></li><li id="line_17" class="odd"><span class="lineNumber">17&nbsp;</span><span class="comment">&nbsp;*&nbsp;way&nbsp;the&nbsp;html&nbsp;is&nbsp;rendered.</span><a name="line_17"></a></li><li id="line_18" class="even"><span class="lineNumber">18&nbsp;</span><span class="comment">&nbsp;*</span><a name="line_18"></a></li><li id="line_19" class="odd"><span class="lineNumber">19&nbsp;</span><span class="comment">&nbsp;*&nbsp;For&nbsp;example,&nbsp;a&nbsp;checkbox&nbsp;will&nbsp;render&nbsp;only:</span><a name="line_19"></a></li><li id="line_20" class="even"><span class="lineNumber">20&nbsp;</span><span class="comment">&nbsp;*&nbsp;&lt;input&nbsp;type="checkbox"&nbsp;name="foo"&nbsp;value="bar"&nbsp;/&gt;</span><a name="line_20"></a></li><li id="line_21" class="odd"><span class="lineNumber">21&nbsp;</span><span class="comment">&nbsp;*</span><a name="line_21"></a></li><li id="line_22" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 85 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Checkstyle"><span class="lineNumber">22&nbsp;</span><span class="comment">&nbsp;*&nbsp;There&nbsp;is&nbsp;no&nbsp;&lt;label&gt;&nbsp;tag&nbsp;rendered.&nbsp;Also,&nbsp;when&nbsp;this&nbsp;field&nbsp;would&nbsp;be&nbsp;invalid,&nbsp;there&nbsp;is</span><a name="line_22"></a></li><li id="line_23" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 86 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Checkstyle"><span class="lineNumber">23&nbsp;</span><span class="comment">&nbsp;*&nbsp;no&nbsp;error&nbsp;message&nbsp;rendered.&nbsp;All&nbsp;these&nbsp;extra&nbsp;layout&nbsp;"add-ons"&nbsp;are&nbsp;done&nbsp;in&nbsp;this&nbsp;class,</span><a name="line_23"></a></li><li id="line_24" class="even"><span class="lineNumber">24&nbsp;</span><span class="comment">&nbsp;*&nbsp;so&nbsp;you&nbsp;can&nbsp;influence&nbsp;the&nbsp;way&nbsp;how&nbsp;your&nbsp;elements&nbsp;are&nbsp;rendered.</span><a name="line_24"></a></li><li id="line_25" class="odd"><span class="lineNumber">25&nbsp;</span><span class="comment">&nbsp;*</span><a name="line_25"></a></li><li id="line_26" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 82 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Checkstyle"><span class="lineNumber">26&nbsp;</span><span class="comment">&nbsp;*&nbsp;For&nbsp;each&nbsp;element&nbsp;the&nbsp;format()&nbsp;method&nbsp;is&nbsp;requested.&nbsp;It's&nbsp;a&nbsp;good&nbsp;practice&nbsp;to&nbsp;make</span><a name="line_26"></a></li><li id="line_27" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 96 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Checkstyle"><span class="lineNumber">27&nbsp;</span><span class="comment">&nbsp;*&nbsp;a&nbsp;difference&nbsp;how&nbsp;form&nbsp;fields&nbsp;are&nbsp;rendered&nbsp;(error&nbsp;checking)&nbsp;and&nbsp;non-form&nbsp;fields,&nbsp;like&nbsp;buttons.</span><a name="line_27"></a></li><li id="line_28" class="even"><span class="lineNumber">28&nbsp;</span><span class="comment">&nbsp;*</span><a name="line_28"></a></li><li id="line_29" class="odd"><span class="lineNumber">29&nbsp;</span><span class="comment">&nbsp;*&nbsp;You&nbsp;can&nbsp;distinguish&nbsp;these&nbsp;by&nbsp;checking&nbsp;if&nbsp;an&nbsp;element&nbsp;is&nbsp;an&nbsp;instance&nbsp;of&nbsp;the</span><a name="line_29"></a></li><li id="line_30" class="even"><span class="lineNumber">30&nbsp;</span><span class="comment">&nbsp;*&nbsp;AbstractFormField&nbsp;class.&nbsp;If&nbsp;so,&nbsp;it's&nbsp;a&nbsp;form&nbsp;field.</span><a name="line_30"></a></li><li id="line_31" class="odd"><span class="lineNumber">31&nbsp;</span><span class="comment">&nbsp;*</span><a name="line_31"></a></li><li id="line_32" class="even"><span class="lineNumber">32&nbsp;</span><span class="comment">&nbsp;*&nbsp;See&nbsp;the&nbsp;{@see&nbsp;PlainFormatter}&nbsp;class&nbsp;for&nbsp;a&nbsp;basic&nbsp;example&nbsp;of&nbsp;a&nbsp;formatter.</span><a name="line_32"></a></li><li id="line_33" class="odd"><span class="lineNumber">33&nbsp;</span><span class="comment">&nbsp;*/</span><a name="line_33"></a></li><li id="line_34" class="even"><span class="lineNumber">34&nbsp;</span><span class="keyword">abstract&nbsp;class&nbsp;</span><span class="default">AbstractFormatter</span><a name="line_34"></a></li><li id="line_35" class="odd"><span class="lineNumber">35&nbsp;</span><span class="keyword">{</span><a name="line_35"></a></li><li id="line_36" class="even"><span class="lineNumber">36&nbsp;</span><a name="line_36"></a></li><li id="line_37" class="odd"><span class="lineNumber">37&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_37"></a></li><li id="line_38" class="even"><span class="lineNumber">38&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;The&nbsp;form&nbsp;which&nbsp;needs&nbsp;to&nbsp;be&nbsp;formatted</span><a name="line_38"></a></li><li id="line_39" class="odd"><span class="lineNumber">39&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span><a name="line_39"></a></li><li id="line_40" class="even"><span class="lineNumber">40&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@var&nbsp;Form</span><a name="line_40"></a></li><li id="line_41" class="odd"><span class="lineNumber">41&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_41"></a></li><li id="line_42" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Protected member variable &amp;quot;form&amp;quot; must contain a leading underscore&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Checkstyle"><span class="lineNumber">42&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">protected&nbsp;</span><span class="default">$form</span><span class="keyword">;</span><a name="line_42"></a></li><li id="line_43" class="odd"><span class="lineNumber">43&nbsp;</span><a name="line_43"></a></li><li id="line_44" class="even"><span class="lineNumber">44&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_44"></a></li><li id="line_45" class="odd"><span class="lineNumber">45&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Set&nbsp;the&nbsp;form&nbsp;where&nbsp;this&nbsp;formatter&nbsp;is&nbsp;working&nbsp;on</span><a name="line_45"></a></li><li id="line_46" class="even"><span class="lineNumber">46&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;Form&nbsp;$form</span><a name="line_46"></a></li><li id="line_47" class="odd"><span class="lineNumber">47&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_47"></a></li><li id="line_48" class="even"><span class="lineNumber">48&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public&nbsp;function&nbsp;</span><span class="default">setForm</span><span class="keyword">(</span><span class="default">Form&nbsp;$form</span><span class="keyword">)</span><a name="line_48"></a></li><li id="line_49" class="odd"><span class="lineNumber">49&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;{</span><a name="line_49"></a></li><li id="line_50" class="even"><span class="lineNumber">50&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">form&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">$form</span><span class="keyword">;</span><a name="line_50"></a></li><li id="line_51" class="odd"><span class="lineNumber">51&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_51"></a></li><li id="line_52" class="even"><span class="lineNumber">52&nbsp;</span><a name="line_52"></a></li><li id="line_53" class="odd"><span class="lineNumber">53&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_53"></a></li><li id="line_54" class="even"><span class="lineNumber">54&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Get&nbsp;the&nbsp;form&nbsp;where&nbsp;this&nbsp;formatter&nbsp;is&nbsp;working&nbsp;on</span><a name="line_54"></a></li><li id="line_55" class="odd"><span class="lineNumber">55&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_55"></a></li><li id="line_56" class="even"><span class="lineNumber">56&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public&nbsp;function&nbsp;</span><span class="default">getForm</span><span class="keyword">()</span><a name="line_56"></a></li><li id="line_57" class="odd"><span class="lineNumber">57&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;{</span><a name="line_57"></a></li><li id="line_58" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">58&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span class="default">$this&nbsp;</span><span class="keyword">-&gt;&nbsp;</span><span class="default">form</span><span class="keyword">;</span><a name="line_58"></a></li><li id="line_59" class="odd"><span class="lineNumber">59&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_59"></a></li><li id="line_60" class="even"><span class="lineNumber">60&nbsp;</span><a name="line_60"></a></li><li id="line_61" class="odd"><span class="lineNumber">61&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_61"></a></li><li id="line_62" class="even"><span class="lineNumber">62&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Format&nbsp;this&nbsp;specific&nbsp;element</span><a name="line_62"></a></li><li id="line_63" class="odd"><span class="lineNumber">63&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span><a name="line_63"></a></li><li id="line_64" class="even"><span class="lineNumber">64&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;Element&nbsp;$element</span><a name="line_64"></a></li><li id="line_65" class="odd"><span class="lineNumber">65&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;string&nbsp;The&nbsp;HTML&nbsp;of&nbsp;the&nbsp;element</span><a name="line_65"></a></li><li id="line_66" class="even"><span class="lineNumber">66&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_66"></a></li><li id="line_67" class="odd"><span class="lineNumber">67&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">abstract&nbsp;public&nbsp;function&nbsp;</span><span class="default">format</span><span class="keyword">(</span><span class="default">Element&nbsp;$element</span><span class="keyword">);</span><a name="line_67"></a></li><li id="line_68" class="even"><span class="lineNumber">68&nbsp;</span><span class="keyword">}</span><span>
+</span><a name="line_68"></a></li></ol>
+            
+            <div id="sidebar">
+                <table cellpadding="3">
+                    <thead>
+                        <tr>
+                            <th width="40px" align="center">
+                                <strong>start</strong>
+                            </th>
+                            <th width="40px" align="center">
+                                <strong>end</strong>
+                            </th>
+                            <th>
+                                <strong>comment</strong>
+                            </th>
+                            <th width="120px">
+                                <strong>type of error</strong>
+                            </th>
+                            <th width="60px">
+                                <strong>severity</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_22" onclick="switchLine('line_22')">
+                                22</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_22" onclick="switchLine('line_22'); new Effect.Highlight('line_22-22', {duration: 1.5}); return false">
+                                22</a>
+                            </td>
+                            <td>
+                                <a href="#line_22" onclick="switchLine('line_22'); new Effect.Highlight('line_22-22', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 85 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_23" onclick="switchLine('line_23')">
+                                23</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_23" onclick="switchLine('line_23'); new Effect.Highlight('line_23-23', {duration: 1.5}); return false">
+                                23</a>
+                            </td>
+                            <td>
+                                <a href="#line_23" onclick="switchLine('line_23'); new Effect.Highlight('line_23-23', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 86 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_26" onclick="switchLine('line_26')">
+                                26</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_26" onclick="switchLine('line_26'); new Effect.Highlight('line_26-26', {duration: 1.5}); return false">
+                                26</a>
+                            </td>
+                            <td>
+                                <a href="#line_26" onclick="switchLine('line_26'); new Effect.Highlight('line_26-26', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 82 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_27" onclick="switchLine('line_27')">
+                                27</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_27" onclick="switchLine('line_27'); new Effect.Highlight('line_27-27', {duration: 1.5}); return false">
+                                27</a>
+                            </td>
+                            <td>
+                                <a href="#line_27" onclick="switchLine('line_27'); new Effect.Highlight('line_27-27', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 96 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_42" onclick="switchLine('line_42')">
+                                42</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_42" onclick="switchLine('line_42'); new Effect.Highlight('line_42-42', {duration: 1.5}); return false">
+                                42</a>
+                            </td>
+                            <td>
+                                <a href="#line_42" onclick="switchLine('line_42'); new Effect.Highlight('line_42-42', {duration: 1.5}); return false">
+                                Protected member variable &quot;form&quot; must contain a leading underscore</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                error                            </td>
+                        </tr>
+                        
+                        <tr class="Coverage">
+                            <td align="center">
+                                <a href="#line_58" onclick="switchLine('line_58')">
+                                58</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_58" onclick="switchLine('line_58'); new Effect.Highlight('line_58-58', {duration: 1.5}); return false">
+                                58</a>
+                            </td>
+                            <td>
+                                <a href="#line_58" onclick="switchLine('line_58'); new Effect.Highlight('line_58-58', {duration: 1.5}); return false">
+                                Not covered</a>
+                            </td>
+                            <td>
+                                Coverage                            </td>
+                            <td>
+                                Notice                            </td>
+                        </tr>
+                                            </tbody>
+                </table>
+            </div>
+            <script type="text/javascript" language="javascript">
+                $(initReview);
+            </script>
+                    </div>
+    </body>
+</html>

@@ -10,13 +10,31 @@ use FormHandler\Form;
  */
 class CheckBox extends AbstractFormField
 {
-
+    /**
+     * Is this field checked or not.
+     * @var bool
+     */
     protected $checked;
 
+    /**
+     * The value of this field.
+     * @var string
+     */
     protected $value;
 
+    /**
+     * The label of this field
+     * NOTE: This value is only used if it's also used by the Formatter!
+     * @var string
+     */
     protected $label;
 
+    /**
+     * CheckBox constructor.
+     * @param Form $form
+     * @param string $name
+     * @param string $value
+     */
     public function __construct(Form &$form, $name = '', $value = '1')
     {
         $this->form = $form;

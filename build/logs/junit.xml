@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="formhandler" tests="6" assertions="34" failures="0" errors="0" time="0.160338">
+    <testsuite name="CheckboxTest" file="/Users/teye/git/FormHandler/tests/CheckboxTest.php" tests="4" assertions="11" failures="0" errors="0" time="0.022345">
+      <testcase name="testCheckbox" class="CheckboxTest" file="/Users/teye/git/FormHandler/tests/CheckboxTest.php" line="7" assertions="7" time="0.008619"/>
+      <testcase name="testSubmittedCheckbox" class="CheckboxTest" file="/Users/teye/git/FormHandler/tests/CheckboxTest.php" line="30" assertions="2" time="0.006340"/>
+      <testcase name="testArrayOfCheckboxes" class="CheckboxTest" file="/Users/teye/git/FormHandler/tests/CheckboxTest.php" line="47" assertions="1" time="0.003596"/>
+      <testcase name="testRender" class="CheckboxTest" file="/Users/teye/git/FormHandler/tests/CheckboxTest.php" line="65" assertions="1" time="0.003790"/>
+    </testsuite>
+    <testsuite name="OptgroupTest" file="/Users/teye/git/FormHandler/tests/OptgroupTest.php" tests="1" assertions="17" failures="0" errors="0" time="0.123910">
+      <testcase name="testOptgroup" class="OptgroupTest" file="/Users/teye/git/FormHandler/tests/OptgroupTest.php" line="11" assertions="17" time="0.123910"/>
+    </testsuite>
+    <testsuite name="Utf8EncodingTest" file="/Users/teye/git/FormHandler/tests/Utf8EncodingTest.php" tests="1" assertions="6" failures="0" errors="0" time="0.014083">
+      <testcase name="testUtf8EncodingFilter" class="Utf8EncodingTest" file="/Users/teye/git/FormHandler/tests/Utf8EncodingTest.php" line="7" assertions="6" time="0.014083"/>
+    </testsuite>
+  </testsuite>
+</testsuites>

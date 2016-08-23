@@ -1,0 +1,1151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>
+            Mayflower Code Browser - Source Code
+        </title>
+        <link rel="stylesheet" type="text/css" href="js/jquery.sidebar/css/codebrowser/sidebar.css" />
+        <link rel="stylesheet" type="text/css" href="css/global.css" />
+        <link rel="stylesheet" type="text/css" href="css/cruisecontrol.css" />
+        <link rel="stylesheet" type="text/css" href="css/review.css" />
+
+        <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.sidebar/jquery-ui-1.7.2.custom.min.js"></script>
+        <script type="text/javascript" src="js/jquery.sidebar/jquery.sidebar.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/lib/jquery.hoverIntent.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/lib/jquery.bgiframe.min.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/jquery.cluetip.min.js"></script>
+
+        <script type="text/javascript" src="js/review.js"></script>
+    </head>
+    <body class="codebrowser">
+        <div class="header">
+            <a href="./index.html">Go back to index</a> |
+            <a href="https://github.com/Mayflower/PHP_CodeBrowser">PHP CodeBrowser</a>
+        </div>
+        <hr/>
+        <div id="review">
+            <div class="filepath">
+                Validator/CsrfValidator.php            </div>
+
+            <ol class="code"><li id="line_1" class="odd"><span class="lineNumber">&nbsp;&nbsp;1&nbsp;</span><span>
+</span><span class="default">&lt;?php</span><a name="line_1"></a></li><li id="line_2" class="even"><span class="lineNumber">&nbsp;&nbsp;2&nbsp;</span><span class="keyword">namespace&nbsp;</span><span class="default">FormHandler</span><span class="keyword">\</span><span class="default">Validator</span><span class="keyword">;</span><a name="line_2"></a></li><li id="line_3" class="odd"><span class="lineNumber">&nbsp;&nbsp;3&nbsp;</span><a name="line_3"></a></li><li id="line_4" class="even"><span class="lineNumber">&nbsp;&nbsp;4&nbsp;</span><span class="comment">/**</span><a name="line_4"></a></li><li id="line_5" class="odd"><span class="lineNumber">&nbsp;&nbsp;5&nbsp;</span><span class="comment">&nbsp;*&nbsp;This&nbsp;Validator&nbsp;checks&nbsp;if&nbsp;the&nbsp;form&nbsp;has&nbsp;a&nbsp;valid&nbsp;CSRF&nbsp;token.</span><a name="line_5"></a></li><li id="line_6" class="even"><span class="lineNumber">&nbsp;&nbsp;6&nbsp;</span><span class="comment">&nbsp;*/</span><a name="line_6"></a></li><li id="line_7" class="odd"><span class="lineNumber">&nbsp;&nbsp;7&nbsp;</span><span class="keyword">class&nbsp;</span><span class="default">CsrfValidator&nbsp;</span><span class="keyword">extends&nbsp;</span><span class="default">AbstractValidator</span><a name="line_7"></a></li><li id="line_8" class="even"><span class="lineNumber">&nbsp;&nbsp;8&nbsp;</span><span class="keyword">{</span><a name="line_8"></a></li><li id="line_9" class="odd"><span class="lineNumber">&nbsp;&nbsp;9&nbsp;</span><a name="line_9"></a></li><li id="line_10" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Protected member variable &amp;quot;validated&amp;quot; must contain a leading underscore&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Checkstyle"><span class="lineNumber">&nbsp;10&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;</span><span class="default">$validated&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">null</span><span class="keyword">;</span><a name="line_10"></a></li><li id="line_11" class="odd"><span class="lineNumber">&nbsp;11&nbsp;</span><a name="line_11"></a></li><li id="line_12" class="even"><span class="lineNumber">&nbsp;12&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_12"></a></li><li id="line_13" class="odd"><span class="lineNumber">&nbsp;13&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Create&nbsp;a&nbsp;new&nbsp;CSRF&nbsp;validator</span><a name="line_13"></a></li><li id="line_14" class="even"><span class="lineNumber">&nbsp;14&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span><a name="line_14"></a></li><li id="line_15" class="odd"><span class="lineNumber">&nbsp;15&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;string&nbsp;$message</span><a name="line_15"></a></li><li id="line_16" class="even"><span class="lineNumber">&nbsp;16&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_16"></a></li><li id="line_17" class="odd"><span class="lineNumber">&nbsp;17&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public&nbsp;function&nbsp;</span><span class="default">__construct</span><span class="keyword">(</span><span class="default">$message&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">null</span><span class="keyword">)</span><a name="line_17"></a></li><li id="line_18" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;18&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;{</span><a name="line_18"></a></li><li id="line_19" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;19&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(</span><span class="default">$message&nbsp;</span><span class="keyword">===&nbsp;</span><span class="default">null</span><span class="keyword">)&nbsp;{</span><a name="line_19"></a></li><li id="line_20" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 91 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues moreErrors"><span class="lineNumber">&nbsp;20&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$message&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">dgettext</span><span class="keyword">(</span><span class="string">'formhandler'</span><span class="keyword">,&nbsp;</span><span class="string">'This&nbsp;form&nbsp;has&nbsp;expired,&nbsp;please&nbsp;try&nbsp;again.'</span><span class="keyword">);</span><a name="line_20"></a></li><li id="line_21" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;21&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_21"></a></li><li id="line_22" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;22&nbsp;</span><a name="line_22"></a></li><li id="line_23" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;23&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">setErrorMessage</span><span class="keyword">(</span><span class="default">$message</span><span class="keyword">);</span><a name="line_23"></a></li><li id="line_24" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;24&nbsp;</span><a name="line_24"></a></li><li id="line_25" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;25&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;some&nbsp;housekeeping&nbsp;of&nbsp;the&nbsp;tokens...</span><a name="line_25"></a></li><li id="line_26" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;26&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">cleanupCsrfTokens</span><span class="keyword">();</span><a name="line_26"></a></li><li id="line_27" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;27&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_27"></a></li><li id="line_28" class="even"><span class="lineNumber">&nbsp;28&nbsp;</span><a name="line_28"></a></li><li id="line_29" class="odd"><span class="lineNumber">&nbsp;29&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_29"></a></li><li id="line_30" class="even"><span class="lineNumber">&nbsp;30&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Function&nbsp;to&nbsp;handle&nbsp;the&nbsp;cleanup&nbsp;of&nbsp;old/stale&nbsp;CSRF&nbsp;tokens.</span><a name="line_30"></a></li><li id="line_31" class="odd"><span class="lineNumber">&nbsp;31&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span><a name="line_31"></a></li><li id="line_32" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 87 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Checkstyle"><span class="lineNumber">&nbsp;32&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;We&nbsp;use&nbsp;the&nbsp;global&nbsp;expiration&nbsp;time&nbsp;defined&nbsp;in&nbsp;the&nbsp;constant&nbsp;CSRFTOKEN_EXPIRE&nbsp;here,</span><a name="line_32"></a></li><li id="line_33" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 85 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Checkstyle"><span class="lineNumber">&nbsp;33&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;unless&nbsp;this&nbsp;constant&nbsp;is&nbsp;not&nbsp;defined.&nbsp;In&nbsp;this&nbsp;case,&nbsp;we&nbsp;fall&nbsp;back&nbsp;on&nbsp;the&nbsp;default</span><a name="line_33"></a></li><li id="line_34" class="even"><span class="lineNumber">&nbsp;34&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;value&nbsp;of&nbsp;3600&nbsp;seconds.</span><a name="line_34"></a></li><li id="line_35" class="odd"><span class="lineNumber">&nbsp;35&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_35"></a></li><li id="line_36" class="even"><span class="lineNumber">&nbsp;36&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">protected&nbsp;function&nbsp;</span><span class="default">cleanupCsrfTokens</span><span class="keyword">()</span><a name="line_36"></a></li><li id="line_37" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;37&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;{</span><a name="line_37"></a></li><li id="line_38" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;38&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;Determine&nbsp;the&nbsp;expiration&nbsp;of&nbsp;the&nbsp;CSRF&nbsp;tokens.</span><a name="line_38"></a></li><li id="line_39" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;39&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">if&nbsp;(</span><span class="default">defined</span><span class="keyword">(</span><span class="string">'CSRFTOKEN_EXPIRE'</span><span class="keyword">))&nbsp;{</span><a name="line_39"></a></li><li id="line_40" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;40&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$expiry&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">intval</span><span class="keyword">(</span><span class="default">CSRFTOKEN_EXPIRE</span><span class="keyword">);</span><a name="line_40"></a></li><li id="line_41" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;41&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else&nbsp;{</span><a name="line_41"></a></li><li id="line_42" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 89 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues moreErrors"><span class="lineNumber">&nbsp;42&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;We&nbsp;fall&nbsp;back&nbsp;on&nbsp;3600&nbsp;seconds&nbsp;if&nbsp;there&nbsp;is&nbsp;no&nbsp;default&nbsp;expiration&nbsp;time&nbsp;known.</span><a name="line_42"></a></li><li id="line_43" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;43&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$expiry&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">3600</span><span class="keyword">;</span><a name="line_43"></a></li><li id="line_44" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;44&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_44"></a></li><li id="line_45" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;45&nbsp;</span><a name="line_45"></a></li><li id="line_46" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;46&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;Check&nbsp;if&nbsp;we&nbsp;have&nbsp;any&nbsp;tokens&nbsp;to&nbsp;clean.</span><a name="line_46"></a></li><li id="line_47" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;47&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">if&nbsp;(!&nbsp;</span><span class="default">array_key_exists</span><span class="keyword">(</span><span class="string">'csrftokens'</span><span class="keyword">,&nbsp;</span><span class="default">$_SESSION</span><span class="keyword">)&nbsp;||</span><a name="line_47"></a></li><li id="line_48" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;48&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(</span><span class="default">is_array</span><span class="keyword">(</span><span class="default">$_SESSION</span><span class="keyword">[</span><span class="string">'csrftokens'</span><span class="keyword">])&nbsp;&amp;&amp;</span><a name="line_48"></a></li><li id="line_49" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;49&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">count</span><span class="keyword">(</span><span class="default">$_SESSION</span><span class="keyword">[</span><span class="string">'csrftokens'</span><span class="keyword">])&nbsp;===&nbsp;</span><span class="default">0</span><span class="keyword">))&nbsp;{</span><a name="line_49"></a></li><li id="line_50" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;50&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;&nbsp;</span><span class="comment">//&nbsp;No&nbsp;tokens&nbsp;to&nbsp;clean.</span><a name="line_50"></a></li><li id="line_51" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;51&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span><a name="line_51"></a></li><li id="line_52" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;52&nbsp;</span><a name="line_52"></a></li><li id="line_53" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;53&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;Make&nbsp;sure&nbsp;$_SESSION['csrftokens']&nbsp;is&nbsp;an&nbsp;array.</span><a name="line_53"></a></li><li id="line_54" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;54&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">if&nbsp;(!&nbsp;</span><span class="default">is_array</span><span class="keyword">(</span><span class="default">$_SESSION</span><span class="keyword">[</span><span class="string">'csrftokens'</span><span class="keyword">]))&nbsp;{</span><a name="line_54"></a></li><li id="line_55" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 97 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues moreErrors"><span class="lineNumber">&nbsp;55&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;$_SESSION['csrftokens']&nbsp;is&nbsp;not&nbsp;an&nbsp;array!&nbsp;Reset/initialize&nbsp;$_SESSION['csrftokens'].</span><a name="line_55"></a></li><li id="line_56" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;56&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$_SESSION</span><span class="keyword">[</span><span class="string">'csrftokens'</span><span class="keyword">]&nbsp;=&nbsp;array();</span><a name="line_56"></a></li><li id="line_57" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 99 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues moreErrors"><span class="lineNumber">&nbsp;57&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;It&nbsp;makes&nbsp;no&nbsp;sense&nbsp;to&nbsp;continue&nbsp;here,&nbsp;as&nbsp;we&nbsp;just&nbsp;cleaned&nbsp;the&nbsp;entire&nbsp;CSRF&nbsp;token&nbsp;basket.</span><a name="line_57"></a></li><li id="line_58" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;58&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;Return,&nbsp;because&nbsp;we&nbsp;are&nbsp;done&nbsp;here.</span><a name="line_58"></a></li><li id="line_59" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;59&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return;</span><a name="line_59"></a></li><li id="line_60" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;60&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_60"></a></li><li id="line_61" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;61&nbsp;</span><a name="line_61"></a></li><li id="line_62" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;62&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;Walk&nbsp;through&nbsp;all&nbsp;the&nbsp;tokens.</span><a name="line_62"></a></li><li id="line_63" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;63&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">foreach&nbsp;(</span><span class="default">$_SESSION</span><span class="keyword">[</span><span class="string">'csrftokens'</span><span class="keyword">]&nbsp;as&nbsp;</span><span class="default">$key&nbsp;</span><span class="keyword">=&gt;&nbsp;</span><span class="default">$token</span><span class="keyword">)&nbsp;{</span><a name="line_63"></a></li><li id="line_64" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 88 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues moreErrors"><span class="lineNumber">&nbsp;64&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;all&nbsp;tokens&nbsp;are&nbsp;dot-separated&nbsp;with&nbsp;a&nbsp;timestamp&nbsp;and&nbsp;the&nbsp;actual&nbsp;random&nbsp;token</span><a name="line_64"></a></li><li id="line_65" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 92 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues moreErrors"><span class="lineNumber">&nbsp;65&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;we&nbsp;start&nbsp;throwing&nbsp;away&nbsp;tokens&nbsp;here&nbsp;which&nbsp;either&nbsp;do&nbsp;not&nbsp;match&nbsp;this&nbsp;formatting,</span><a name="line_65"></a></li><li id="line_66" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 89 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues moreErrors"><span class="lineNumber">&nbsp;66&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;or&nbsp;have&nbsp;been&nbsp;generated&nbsp;longer&nbsp;than&nbsp;the&nbsp;expiration&nbsp;time&nbsp;we&nbsp;just&nbsp;determined.</span><a name="line_66"></a></li><li id="line_67" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;67&nbsp;</span><a name="line_67"></a></li><li id="line_68" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Variable &amp;quot;exploded_token&amp;quot; is not in valid camel caps format&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues moreErrors"><span class="lineNumber">&nbsp;68&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$exploded_token&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">explode</span><span class="keyword">(</span><span class="string">'.'</span><span class="keyword">,&nbsp;</span><span class="default">$token</span><span class="keyword">,&nbsp;</span><span class="default">1</span><span class="keyword">);</span><a name="line_68"></a></li><li id="line_69" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;69&nbsp;</span><a name="line_69"></a></li><li id="line_70" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;70&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;check&nbsp;if&nbsp;the&nbsp;token&nbsp;has&nbsp;a&nbsp;valid&nbsp;formatting&nbsp;(includes&nbsp;a&nbsp;timestamp)</span><a name="line_70"></a></li><li id="line_71" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Variable &amp;quot;exploded_token&amp;quot; is not in valid camel caps format&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Variable &amp;quot;exploded_token&amp;quot; is not in valid camel caps format&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 81 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues moreErrors"><span class="lineNumber">&nbsp;71&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">if&nbsp;(</span><span class="default">count</span><span class="keyword">(</span><span class="default">$exploded_token</span><span class="keyword">)&nbsp;!==&nbsp;</span><span class="default">2&nbsp;</span><span class="keyword">&amp;&amp;&nbsp;</span><span class="default">is_numeric</span><span class="keyword">(</span><span class="default">$exploded_token</span><span class="keyword">[</span><span class="default">0</span><span class="keyword">]))&nbsp;{</span><a name="line_71"></a></li><li id="line_72" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 83 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues moreErrors"><span class="lineNumber">&nbsp;72&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;Can't&nbsp;parse&nbsp;this&nbsp;token.&nbsp;This&nbsp;should&nbsp;not&nbsp;happen...&nbsp;get&nbsp;rid&nbsp;of&nbsp;it!</span><a name="line_72"></a></li><li id="line_73" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;73&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">unset(</span><span class="default">$_SESSION</span><span class="keyword">[</span><span class="string">'csrftokens'</span><span class="keyword">][</span><span class="default">$key</span><span class="keyword">]);</span><a name="line_73"></a></li><li id="line_74" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;74&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;</span><a name="line_74"></a></li><li id="line_75" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;75&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_75"></a></li><li id="line_76" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;76&nbsp;</span><a name="line_76"></a></li><li id="line_77" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;77&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;check&nbsp;if&nbsp;the&nbsp;token&nbsp;is&nbsp;expired.</span><a name="line_77"></a></li><li id="line_78" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Variable &amp;quot;exploded_token&amp;quot; is not in valid camel caps format&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues moreErrors"><span class="lineNumber">&nbsp;78&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">if&nbsp;(</span><span class="default">$exploded_token</span><span class="keyword">[</span><span class="default">0</span><span class="keyword">]&nbsp;&lt;&nbsp;(</span><span class="default">time</span><span class="keyword">()&nbsp;-&nbsp;</span><span class="default">$expiry</span><span class="keyword">))&nbsp;{</span><a name="line_78"></a></li><li id="line_79" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;79&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;Expired&nbsp;token&nbsp;found.&nbsp;Get&nbsp;rid&nbsp;of&nbsp;it!</span><a name="line_79"></a></li><li id="line_80" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;80&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">unset(</span><span class="default">$_SESSION</span><span class="keyword">[</span><span class="string">'csrftokens'</span><span class="keyword">][</span><span class="default">$key</span><span class="keyword">]);</span><a name="line_80"></a></li><li id="line_81" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;81&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;</span><a name="line_81"></a></li><li id="line_82" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;82&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_82"></a></li><li id="line_83" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;83&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_83"></a></li><li id="line_84" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;84&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_84"></a></li><li id="line_85" class="odd"><span class="lineNumber">&nbsp;85&nbsp;</span><a name="line_85"></a></li><li id="line_86" class="even"><span class="lineNumber">&nbsp;86&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_86"></a></li><li id="line_87" class="odd"><span class="lineNumber">&nbsp;87&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Generate&nbsp;a&nbsp;session&nbsp;token&nbsp;and&nbsp;store&nbsp;it&nbsp;in&nbsp;the&nbsp;"token-basket".</span><a name="line_87"></a></li><li id="line_88" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 90 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Checkstyle"><span class="lineNumber">&nbsp;88&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;We&nbsp;return&nbsp;the&nbsp;generated&nbsp;token&nbsp;here,&nbsp;which&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;set&nbsp;the&nbsp;hidden&nbsp;form&nbsp;field.</span><a name="line_88"></a></li><li id="line_89" class="odd"><span class="lineNumber">&nbsp;89&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span><a name="line_89"></a></li><li id="line_90" class="even"><span class="lineNumber">&nbsp;90&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;string</span><a name="line_90"></a></li><li id="line_91" class="odd"><span class="lineNumber">&nbsp;91&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_91"></a></li><li id="line_92" class="even"><span class="lineNumber">&nbsp;92&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public&nbsp;static&nbsp;function&nbsp;</span><span class="default">generateToken</span><span class="keyword">()</span><a name="line_92"></a></li><li id="line_93" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;93&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;{</span><a name="line_93"></a></li><li id="line_94" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;94&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;Generate&nbsp;the&nbsp;token&nbsp;based&nbsp;on&nbsp;the&nbsp;current&nbsp;time,&nbsp;plus&nbsp;a&nbsp;random&nbsp;string.</span><a name="line_94"></a></li><li id="line_95" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;95&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$token&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">time</span><span class="keyword">()&nbsp;.&nbsp;</span><span class="string">'.'</span><span class="keyword">;</span><a name="line_95"></a></li><li id="line_96" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;96&nbsp;</span><a name="line_96"></a></li><li id="line_97" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">&nbsp;97&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;Start&nbsp;with&nbsp;an&nbsp;empty&nbsp;string.</span><a name="line_97"></a></li><li id="line_98" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">&nbsp;98&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$length&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">32</span><span class="keyword">;</span><a name="line_98"></a></li><li id="line_99" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 90 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues moreErrors"><span class="lineNumber">&nbsp;99&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$characterset&nbsp;</span><span class="keyword">=&nbsp;</span><span class="string">'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890'</span><span class="keyword">;</span><a name="line_99"></a></li><li id="line_100" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">100&nbsp;</span><a name="line_100"></a></li><li id="line_101" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 88 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues moreErrors"><span class="lineNumber">101&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;For&nbsp;the&nbsp;desired&nbsp;length,&nbsp;keep&nbsp;adding&nbsp;random&nbsp;characters&nbsp;from&nbsp;the&nbsp;character&nbsp;set.</span><a name="line_101"></a></li><li id="line_102" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">102&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">for&nbsp;(</span><span class="default">$i&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">0</span><span class="keyword">;&nbsp;</span><span class="default">$i&nbsp;</span><span class="keyword">&lt;&nbsp;</span><span class="default">$length</span><span class="keyword">;&nbsp;</span><span class="default">$i&nbsp;</span><span class="keyword">++)&nbsp;{</span><a name="line_102"></a></li><li id="line_103" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">103&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$token&nbsp;</span><span class="keyword">.=&nbsp;</span><span class="default">$characterset</span><span class="keyword">[</span><span class="default">mt_rand</span><span class="keyword">(</span><span class="default">0</span><span class="keyword">,&nbsp;</span><span class="default">strlen</span><span class="keyword">(</span><span class="default">$characterset</span><span class="keyword">)&nbsp;-&nbsp;</span><span class="default">1</span><span class="keyword">)];</span><a name="line_103"></a></li><li id="line_104" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">104&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_104"></a></li><li id="line_105" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">105&nbsp;</span><a name="line_105"></a></li><li id="line_106" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 110 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues moreErrors"><span class="lineNumber">106&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;Add&nbsp;the&nbsp;token&nbsp;to&nbsp;the&nbsp;"token-basket",&nbsp;a&nbsp;place&nbsp;in&nbsp;which&nbsp;we&nbsp;store&nbsp;all&nbsp;the&nbsp;currently&nbsp;valid&nbsp;CSRF&nbsp;tokens.</span><a name="line_106"></a></li><li id="line_107" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">107&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$_SESSION</span><span class="keyword">[</span><span class="string">'csrftokens'</span><span class="keyword">][]&nbsp;=&nbsp;</span><span class="default">$token</span><span class="keyword">;</span><a name="line_107"></a></li><li id="line_108" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">108&nbsp;</span><a name="line_108"></a></li><li id="line_109" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">109&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span class="default">$token</span><span class="keyword">;</span><a name="line_109"></a></li><li id="line_110" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">110&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_110"></a></li><li id="line_111" class="odd"><span class="lineNumber">111&nbsp;</span><a name="line_111"></a></li><li id="line_112" class="even"><span class="lineNumber">112&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_112"></a></li><li id="line_113" class="odd"><span class="lineNumber">113&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Check&nbsp;if&nbsp;the&nbsp;given&nbsp;field&nbsp;is&nbsp;valid&nbsp;or&nbsp;not.</span><a name="line_113"></a></li><li id="line_114" class="even"><span class="lineNumber">114&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span><a name="line_114"></a></li><li id="line_115" class="odd"><span class="lineNumber">115&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;boolean</span><a name="line_115"></a></li><li id="line_116" class="even"><span class="lineNumber">116&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_116"></a></li><li id="line_117" class="odd"><span class="lineNumber">117&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public&nbsp;function&nbsp;</span><span class="default">isValid</span><span class="keyword">()</span><a name="line_117"></a></li><li id="line_118" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">118&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;{</span><a name="line_118"></a></li><li id="line_119" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">119&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;if&nbsp;this&nbsp;token&nbsp;was&nbsp;not&nbsp;validated&nbsp;before...</span><a name="line_119"></a></li><li id="line_120" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">120&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">if&nbsp;(</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">validated&nbsp;</span><span class="keyword">===&nbsp;</span><span class="default">null</span><span class="keyword">)&nbsp;{</span><a name="line_120"></a></li><li id="line_121" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">121&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;get&nbsp;the&nbsp;token&nbsp;value</span><a name="line_121"></a></li><li id="line_122" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">122&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$token&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">field</span><span class="keyword">-&gt;</span><span class="default">getValue</span><span class="keyword">();</span><a name="line_122"></a></li><li id="line_123" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">123&nbsp;</span><a name="line_123"></a></li><li id="line_124" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">124&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!&nbsp;empty(</span><span class="default">$_SESSION</span><span class="keyword">)&nbsp;&amp;&amp;&nbsp;!&nbsp;empty(</span><span class="default">$_SESSION</span><span class="keyword">[</span><span class="string">'csrftokens'</span><span class="keyword">]))&nbsp;{</span><a name="line_124"></a></li><li id="line_125" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Line exceeds 80 characters; contains 84 characters&lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues moreErrors"><span class="lineNumber">125&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;if&nbsp;the&nbsp;token&nbsp;is&nbsp;in&nbsp;the&nbsp;list&nbsp;of&nbsp;valid&nbsp;tokens,&nbsp;this&nbsp;field&nbsp;is&nbsp;valid!</span><a name="line_125"></a></li><li id="line_126" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">126&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$key&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">array_search</span><span class="keyword">(</span><span class="default">$token</span><span class="keyword">,&nbsp;</span><span class="default">$_SESSION</span><span class="keyword">[</span><span class="string">'csrftokens'</span><span class="keyword">]);</span><a name="line_126"></a></li><li id="line_127" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">127&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(</span><span class="default">$key&nbsp;</span><span class="keyword">!==&nbsp;</span><span class="default">false</span><span class="keyword">)&nbsp;{</span><a name="line_127"></a></li><li id="line_128" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">128&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">//&nbsp;invalidate&nbsp;the&nbsp;token&nbsp;as&nbsp;it&nbsp;has&nbsp;already&nbsp;been&nbsp;used.</span><a name="line_128"></a></li><li id="line_129" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">129&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">unset(</span><span class="default">$_SESSION</span><span class="keyword">[</span><span class="string">'csrftokens'</span><span class="keyword">][</span><span class="default">$key</span><span class="keyword">]);</span><a name="line_129"></a></li><li id="line_130" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">130&nbsp;</span><a name="line_130"></a></li><li id="line_131" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">131&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">field</span><span class="keyword">-&gt;</span><span class="default">setValue</span><span class="keyword">(</span><span class="default">self</span><span class="keyword">::</span><span class="default">generateToken</span><span class="keyword">());</span><a name="line_131"></a></li><li id="line_132" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">132&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">validated&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">true</span><span class="keyword">;</span><a name="line_132"></a></li><li id="line_133" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">133&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else&nbsp;{</span><a name="line_133"></a></li><li id="line_134" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">134&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">validated&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">false</span><span class="keyword">;</span><a name="line_134"></a></li><li id="line_135" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">135&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_135"></a></li><li id="line_136" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">136&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else&nbsp;{</span><a name="line_136"></a></li><li id="line_137" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">137&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">validated&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">false</span><span class="keyword">;</span><a name="line_137"></a></li><li id="line_138" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">138&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_138"></a></li><li id="line_139" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">139&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_139"></a></li><li id="line_140" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">140&nbsp;</span><a name="line_140"></a></li><li id="line_141" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">141&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">validated</span><span class="keyword">;</span><a name="line_141"></a></li><li id="line_142" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">142&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_142"></a></li><li id="line_143" class="odd"><span class="lineNumber">143&nbsp;</span><span class="keyword">}</span><span>
+</span><a name="line_143"></a></li></ol>
+            
+            <div id="sidebar">
+                <table cellpadding="3">
+                    <thead>
+                        <tr>
+                            <th width="40px" align="center">
+                                <strong>start</strong>
+                            </th>
+                            <th width="40px" align="center">
+                                <strong>end</strong>
+                            </th>
+                            <th>
+                                <strong>comment</strong>
+                            </th>
+                            <th width="120px">
+                                <strong>type of error</strong>
+                            </th>
+                            <th width="60px">
+                                <strong>severity</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_10" onclick="switchLine('line_10')">
+                                10</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_10" onclick="switchLine('line_10'); new Effect.Highlight('line_10-10', {duration: 1.5}); return false">
+                                10</a>
+                            </td>
+                            <td>
+                                <a href="#line_10" onclick="switchLine('line_10'); new Effect.Highlight('line_10-10', {duration: 1.5}); return false">
+                                Protected member variable &quot;validated&quot; must contain a leading underscore</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                error                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_20" onclick="switchLine('line_20')">
+                                20</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_20" onclick="switchLine('line_20'); new Effect.Highlight('line_20-20', {duration: 1.5}); return false">
+                                20</a>
+                            </td>
+                            <td>
+                                <a href="#line_20" onclick="switchLine('line_20'); new Effect.Highlight('line_20-20', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 91 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_32" onclick="switchLine('line_32')">
+                                32</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_32" onclick="switchLine('line_32'); new Effect.Highlight('line_32-32', {duration: 1.5}); return false">
+                                32</a>
+                            </td>
+                            <td>
+                                <a href="#line_32" onclick="switchLine('line_32'); new Effect.Highlight('line_32-32', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 87 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_33" onclick="switchLine('line_33')">
+                                33</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_33" onclick="switchLine('line_33'); new Effect.Highlight('line_33-33', {duration: 1.5}); return false">
+                                33</a>
+                            </td>
+                            <td>
+                                <a href="#line_33" onclick="switchLine('line_33'); new Effect.Highlight('line_33-33', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 85 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_42" onclick="switchLine('line_42')">
+                                42</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_42" onclick="switchLine('line_42'); new Effect.Highlight('line_42-42', {duration: 1.5}); return false">
+                                42</a>
+                            </td>
+                            <td>
+                                <a href="#line_42" onclick="switchLine('line_42'); new Effect.Highlight('line_42-42', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 89 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_55" onclick="switchLine('line_55')">
+                                55</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_55" onclick="switchLine('line_55'); new Effect.Highlight('line_55-55', {duration: 1.5}); return false">
+                                55</a>
+                            </td>
+                            <td>
+                                <a href="#line_55" onclick="switchLine('line_55'); new Effect.Highlight('line_55-55', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 97 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_57" onclick="switchLine('line_57')">
+                                57</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_57" onclick="switchLine('line_57'); new Effect.Highlight('line_57-57', {duration: 1.5}); return false">
+                                57</a>
+                            </td>
+                            <td>
+                                <a href="#line_57" onclick="switchLine('line_57'); new Effect.Highlight('line_57-57', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 99 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_64" onclick="switchLine('line_64')">
+                                64</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_64" onclick="switchLine('line_64'); new Effect.Highlight('line_64-64', {duration: 1.5}); return false">
+                                64</a>
+                            </td>
+                            <td>
+                                <a href="#line_64" onclick="switchLine('line_64'); new Effect.Highlight('line_64-64', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 88 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_65" onclick="switchLine('line_65')">
+                                65</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_65" onclick="switchLine('line_65'); new Effect.Highlight('line_65-65', {duration: 1.5}); return false">
+                                65</a>
+                            </td>
+                            <td>
+                                <a href="#line_65" onclick="switchLine('line_65'); new Effect.Highlight('line_65-65', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 92 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_66" onclick="switchLine('line_66')">
+                                66</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_66" onclick="switchLine('line_66'); new Effect.Highlight('line_66-66', {duration: 1.5}); return false">
+                                66</a>
+                            </td>
+                            <td>
+                                <a href="#line_66" onclick="switchLine('line_66'); new Effect.Highlight('line_66-66', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 89 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_68" onclick="switchLine('line_68')">
+                                68</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_68" onclick="switchLine('line_68'); new Effect.Highlight('line_68-68', {duration: 1.5}); return false">
+                                68</a>
+                            </td>
+                            <td>
+                                <a href="#line_68" onclick="switchLine('line_68'); new Effect.Highlight('line_68-68', {duration: 1.5}); return false">
+                                Variable &quot;exploded_token&quot; is not in valid camel caps format</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                error                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_71" onclick="switchLine('line_71')">
+                                71</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_71" onclick="switchLine('line_71'); new Effect.Highlight('line_71-71', {duration: 1.5}); return false">
+                                71</a>
+                            </td>
+                            <td>
+                                <a href="#line_71" onclick="switchLine('line_71'); new Effect.Highlight('line_71-71', {duration: 1.5}); return false">
+                                Variable &quot;exploded_token&quot; is not in valid camel caps format</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                error                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_71" onclick="switchLine('line_71')">
+                                71</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_71" onclick="switchLine('line_71'); new Effect.Highlight('line_71-71', {duration: 1.5}); return false">
+                                71</a>
+                            </td>
+                            <td>
+                                <a href="#line_71" onclick="switchLine('line_71'); new Effect.Highlight('line_71-71', {duration: 1.5}); return false">
+                                Variable &quot;exploded_token&quot; is not in valid camel caps format</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                error                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_71" onclick="switchLine('line_71')">
+                                71</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_71" onclick="switchLine('line_71'); new Effect.Highlight('line_71-71', {duration: 1.5}); return false">
+                                71</a>
+                            </td>
+                            <td>
+                                <a href="#line_71" onclick="switchLine('line_71'); new Effect.Highlight('line_71-71', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 81 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_72" onclick="switchLine('line_72')">
+                                72</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_72" onclick="switchLine('line_72'); new Effect.Highlight('line_72-72', {duration: 1.5}); return false">
+                                72</a>
+                            </td>
+                            <td>
+                                <a href="#line_72" onclick="switchLine('line_72'); new Effect.Highlight('line_72-72', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 83 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_78" onclick="switchLine('line_78')">
+                                78</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_78" onclick="switchLine('line_78'); new Effect.Highlight('line_78-78', {duration: 1.5}); return false">
+                                78</a>
+                            </td>
+                            <td>
+                                <a href="#line_78" onclick="switchLine('line_78'); new Effect.Highlight('line_78-78', {duration: 1.5}); return false">
+                                Variable &quot;exploded_token&quot; is not in valid camel caps format</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                error                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_88" onclick="switchLine('line_88')">
+                                88</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_88" onclick="switchLine('line_88'); new Effect.Highlight('line_88-88', {duration: 1.5}); return false">
+                                88</a>
+                            </td>
+                            <td>
+                                <a href="#line_88" onclick="switchLine('line_88'); new Effect.Highlight('line_88-88', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 90 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_99" onclick="switchLine('line_99')">
+                                99</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_99" onclick="switchLine('line_99'); new Effect.Highlight('line_99-99', {duration: 1.5}); return false">
+                                99</a>
+                            </td>
+                            <td>
+                                <a href="#line_99" onclick="switchLine('line_99'); new Effect.Highlight('line_99-99', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 90 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_101" onclick="switchLine('line_101')">
+                                101</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_101" onclick="switchLine('line_101'); new Effect.Highlight('line_101-101', {duration: 1.5}); return false">
+                                101</a>
+                            </td>
+                            <td>
+                                <a href="#line_101" onclick="switchLine('line_101'); new Effect.Highlight('line_101-101', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 88 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_106" onclick="switchLine('line_106')">
+                                106</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_106" onclick="switchLine('line_106'); new Effect.Highlight('line_106-106', {duration: 1.5}); return false">
+                                106</a>
+                            </td>
+                            <td>
+                                <a href="#line_106" onclick="switchLine('line_106'); new Effect.Highlight('line_106-106', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 110 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_125" onclick="switchLine('line_125')">
+                                125</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_125" onclick="switchLine('line_125'); new Effect.Highlight('line_125-125', {duration: 1.5}); return false">
+                                125</a>
+                            </td>
+                            <td>
+                                <a href="#line_125" onclick="switchLine('line_125'); new Effect.Highlight('line_125-125', {duration: 1.5}); return false">
+                                Line exceeds 80 characters; contains 84 characters</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                warning                            </td>
+                        </tr>
+                        
+                        <tr class="Coverage">
+                            <td align="center">
+                                <a href="#line_18" onclick="switchLine('line_18')">
+                                18</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_27" onclick="switchLine('line_18'); new Effect.Highlight('line_18-27', {duration: 1.5}); return false">
+                                27</a>
+                            </td>
+                            <td>
+                                <a href="#line_18" onclick="switchLine('line_18'); new Effect.Highlight('line_18-27', {duration: 1.5}); return false">
+                                Not covered</a>
+                            </td>
+                            <td>
+                                Coverage                            </td>
+                            <td>
+                                Notice                            </td>
+                        </tr>
+                        
+                        <tr class="Coverage">
+                            <td align="center">
+                                <a href="#line_37" onclick="switchLine('line_37')">
+                                37</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_84" onclick="switchLine('line_37'); new Effect.Highlight('line_37-84', {duration: 1.5}); return false">
+                                84</a>
+                            </td>
+                            <td>
+                                <a href="#line_37" onclick="switchLine('line_37'); new Effect.Highlight('line_37-84', {duration: 1.5}); return false">
+                                Not covered</a>
+                            </td>
+                            <td>
+                                Coverage                            </td>
+                            <td>
+                                Notice                            </td>
+                        </tr>
+                        
+                        <tr class="Coverage">
+                            <td align="center">
+                                <a href="#line_93" onclick="switchLine('line_93')">
+                                93</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_110" onclick="switchLine('line_93'); new Effect.Highlight('line_93-110', {duration: 1.5}); return false">
+                                110</a>
+                            </td>
+                            <td>
+                                <a href="#line_93" onclick="switchLine('line_93'); new Effect.Highlight('line_93-110', {duration: 1.5}); return false">
+                                Not covered</a>
+                            </td>
+                            <td>
+                                Coverage                            </td>
+                            <td>
+                                Notice                            </td>
+                        </tr>
+                        
+                        <tr class="Coverage">
+                            <td align="center">
+                                <a href="#line_118" onclick="switchLine('line_118')">
+                                118</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_142" onclick="switchLine('line_118'); new Effect.Highlight('line_118-142', {duration: 1.5}); return false">
+                                142</a>
+                            </td>
+                            <td>
+                                <a href="#line_118" onclick="switchLine('line_118'); new Effect.Highlight('line_118-142', {duration: 1.5}); return false">
+                                Not covered</a>
+                            </td>
+                            <td>
+                                Coverage                            </td>
+                            <td>
+                                Notice                            </td>
+                        </tr>
+                                            </tbody>
+                </table>
+            </div>
+            <script type="text/javascript" language="javascript">
+                $(initReview);
+            </script>
+                    </div>
+    </body>
+</html>

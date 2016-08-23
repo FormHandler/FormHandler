@@ -119,7 +119,7 @@ class RegexValidator extends AbstractValidator
      *
      * @return boolean
      */
-    public function getRequired()
+    public function isRequired()
     {
         return $this->required;
     }

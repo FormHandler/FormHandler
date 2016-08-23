@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>
+            Mayflower Code Browser - Source Code
+        </title>
+        <link rel="stylesheet" type="text/css" href="js/jquery.sidebar/css/codebrowser/sidebar.css" />
+        <link rel="stylesheet" type="text/css" href="css/global.css" />
+        <link rel="stylesheet" type="text/css" href="css/cruisecontrol.css" />
+        <link rel="stylesheet" type="text/css" href="css/review.css" />
+
+        <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.sidebar/jquery-ui-1.7.2.custom.min.js"></script>
+        <script type="text/javascript" src="js/jquery.sidebar/jquery.sidebar.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/lib/jquery.hoverIntent.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/lib/jquery.bgiframe.min.js"></script>
+        <script type="text/javascript" src="js/jquery.cluetip/jquery.cluetip.min.js"></script>
+
+        <script type="text/javascript" src="js/review.js"></script>
+    </head>
+    <body class="codebrowser">
+        <div class="header">
+            <a href="./index.html">Go back to index</a> |
+            <a href="https://github.com/Mayflower/PHP_CodeBrowser">PHP CodeBrowser</a>
+        </div>
+        <hr/>
+        <div id="review">
+            <div class="filepath">
+                Field/HasAttributes.php            </div>
+
+            <ol class="code"><li id="line_1" class="odd"><span class="lineNumber">&nbsp;1&nbsp;</span><span>
+</span><span class="default">&lt;?php</span><a name="line_1"></a></li><li id="line_2" class="even"><span class="lineNumber">&nbsp;2&nbsp;</span><span class="keyword">namespace&nbsp;</span><span class="default">FormHandler</span><span class="keyword">\</span><span class="default">Field</span><span class="keyword">;</span><a name="line_2"></a></li><li id="line_3" class="odd"><span class="lineNumber">&nbsp;3&nbsp;</span><a name="line_3"></a></li><li id="line_4" class="even"><span class="lineNumber">&nbsp;4&nbsp;</span><span class="keyword">trait&nbsp;</span><span class="default">HasAttributes</span><a name="line_4"></a></li><li id="line_5" class="odd"><span class="lineNumber">&nbsp;5&nbsp;</span><span class="keyword">{</span><a name="line_5"></a></li><li id="line_6" class="even"><span class="lineNumber">&nbsp;6&nbsp;</span><a name="line_6"></a></li><li id="line_7" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Checkstyle"&gt;Checkstyle&lt;/div&gt;
+                            &lt;div class="text"&gt;Protected member variable &amp;quot;attributes&amp;quot; must contain a leading underscore&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Checkstyle"><span class="lineNumber">&nbsp;7&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;protected&nbsp;</span><span class="default">$attributes&nbsp;</span><span class="keyword">=&nbsp;array();</span><a name="line_7"></a></li><li id="line_8" class="even"><span class="lineNumber">&nbsp;8&nbsp;</span><a name="line_8"></a></li><li id="line_9" class="odd"><span class="lineNumber">&nbsp;9&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_9"></a></li><li id="line_10" class="even"><span class="lineNumber">10&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Add&nbsp;an&nbsp;attribute.</span><a name="line_10"></a></li><li id="line_11" class="odd"><span class="lineNumber">11&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;If&nbsp;the&nbsp;attribute&nbsp;exist,&nbsp;the&nbsp;value&nbsp;will&nbsp;be&nbsp;merged&nbsp;with&nbsp;the&nbsp;existing&nbsp;value</span><a name="line_11"></a></li><li id="line_12" class="even"><span class="lineNumber">12&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;(concatting&nbsp;the&nbsp;value).</span><a name="line_12"></a></li><li id="line_13" class="odd"><span class="lineNumber">13&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Note:&nbsp;No&nbsp;extra&nbsp;space&nbsp;is&nbsp;added!</span><a name="line_13"></a></li><li id="line_14" class="even"><span class="lineNumber">14&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span><a name="line_14"></a></li><li id="line_15" class="odd"><span class="lineNumber">15&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;string&nbsp;$name</span><a name="line_15"></a></li><li id="line_16" class="even"><span class="lineNumber">16&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;string&nbsp;$value</span><a name="line_16"></a></li><li id="line_17" class="odd"><span class="lineNumber">17&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;self</span><a name="line_17"></a></li><li id="line_18" class="even"><span class="lineNumber">18&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_18"></a></li><li id="line_19" class="odd"><span class="lineNumber">19&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public&nbsp;function&nbsp;</span><span class="default">addAttribute</span><span class="keyword">(</span><span class="default">$name</span><span class="keyword">,&nbsp;</span><span class="default">$value&nbsp;</span><span class="keyword">=&nbsp;</span><span class="string">""</span><span class="keyword">)</span><a name="line_19"></a></li><li id="line_20" class="even"><span class="lineNumber">20&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;{</span><a name="line_20"></a></li><li id="line_21" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">21&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$org&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">getAttribute</span><span class="keyword">(</span><span class="default">$name</span><span class="keyword">);</span><a name="line_21"></a></li><li id="line_22" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">22&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(</span><span class="default">$org</span><span class="keyword">)&nbsp;{</span><a name="line_22"></a></li><li id="line_23" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">23&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$value&nbsp;</span><span class="keyword">=&nbsp;</span><span class="default">trim</span><span class="keyword">(</span><span class="default">$org&nbsp;</span><span class="keyword">.&nbsp;</span><span class="default">$value</span><span class="keyword">);</span><a name="line_23"></a></li><li id="line_24" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">24&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_24"></a></li><li id="line_25" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">25&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">attributes</span><span class="keyword">[</span><span class="default">$name</span><span class="keyword">]&nbsp;=&nbsp;</span><span class="default">$value</span><span class="keyword">;</span><a name="line_25"></a></li><li id="line_26" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">26&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span class="default">$this</span><span class="keyword">;</span><a name="line_26"></a></li><li id="line_27" class="odd"><span class="lineNumber">27&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_27"></a></li><li id="line_28" class="even"><span class="lineNumber">28&nbsp;</span><a name="line_28"></a></li><li id="line_29" class="odd"><span class="lineNumber">29&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_29"></a></li><li id="line_30" class="even"><span class="lineNumber">30&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Set&nbsp;an&nbsp;attribute.</span><a name="line_30"></a></li><li id="line_31" class="odd"><span class="lineNumber">31&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;If&nbsp;the&nbsp;attribute&nbsp;exists,&nbsp;it&nbsp;will&nbsp;be&nbsp;overwritten</span><a name="line_31"></a></li><li id="line_32" class="even"><span class="lineNumber">32&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span><a name="line_32"></a></li><li id="line_33" class="odd"><span class="lineNumber">33&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;string&nbsp;$name</span><a name="line_33"></a></li><li id="line_34" class="even"><span class="lineNumber">34&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;string&nbsp;$value</span><a name="line_34"></a></li><li id="line_35" class="odd"><span class="lineNumber">35&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;self</span><a name="line_35"></a></li><li id="line_36" class="even"><span class="lineNumber">36&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_36"></a></li><li id="line_37" class="odd"><span class="lineNumber">37&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public&nbsp;function&nbsp;</span><span class="default">setAttribute</span><span class="keyword">(</span><span class="default">$name</span><span class="keyword">,&nbsp;</span><span class="default">$value&nbsp;</span><span class="keyword">=&nbsp;</span><span class="string">""</span><span class="keyword">)</span><a name="line_37"></a></li><li id="line_38" class="even"><span class="lineNumber">38&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;{</span><a name="line_38"></a></li><li id="line_39" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">39&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">attributes</span><span class="keyword">[</span><span class="default">$name</span><span class="keyword">]&nbsp;=&nbsp;</span><span class="default">$value</span><span class="keyword">;</span><a name="line_39"></a></li><li id="line_40" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">40&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span class="default">$this</span><span class="keyword">;</span><a name="line_40"></a></li><li id="line_41" class="odd"><span class="lineNumber">41&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_41"></a></li><li id="line_42" class="even"><span class="lineNumber">42&nbsp;</span><a name="line_42"></a></li><li id="line_43" class="odd"><span class="lineNumber">43&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span><a name="line_43"></a></li><li id="line_44" class="even"><span class="lineNumber">44&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Get&nbsp;a&nbsp;attribute.</span><a name="line_44"></a></li><li id="line_45" class="odd"><span class="lineNumber">45&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;When&nbsp;the&nbsp;attribute&nbsp;does&nbsp;not&nbsp;exists,&nbsp;we&nbsp;will&nbsp;return&nbsp;an&nbsp;empty&nbsp;array.</span><a name="line_45"></a></li><li id="line_46" class="even"><span class="lineNumber">46&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span><a name="line_46"></a></li><li id="line_47" class="odd"><span class="lineNumber">47&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;string&nbsp;$name</span><a name="line_47"></a></li><li id="line_48" class="even"><span class="lineNumber">48&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;String</span><a name="line_48"></a></li><li id="line_49" class="odd"><span class="lineNumber">49&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><a name="line_49"></a></li><li id="line_50" class="even"><span class="lineNumber">50&nbsp;</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public&nbsp;function&nbsp;</span><span class="default">getAttribute</span><span class="keyword">(</span><span class="default">$name</span><span class="keyword">)</span><a name="line_50"></a></li><li id="line_51" class="odd"><span class="lineNumber">51&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;{</span><a name="line_51"></a></li><li id="line_52" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">52&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(</span><span class="default">array_key_exists</span><span class="keyword">(</span><span class="default">$name</span><span class="keyword">,&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">attributes</span><span class="keyword">))&nbsp;{</span><a name="line_52"></a></li><li id="line_53" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">53&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span class="default">$this</span><span class="keyword">-&gt;</span><span class="default">attributes</span><span class="keyword">[</span><span class="default">$name</span><span class="keyword">];</span><a name="line_53"></a></li><li id="line_54" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">54&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_54"></a></li><li id="line_55" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="odd hasIssues Coverage"><span class="lineNumber">55&nbsp;</span><a name="line_55"></a></li><li id="line_56" title='|
+                        &lt;div class="tooltip"&gt;
+                            &lt;div class="title Coverage"&gt;Coverage&lt;/div&gt;
+                            &lt;div class="text"&gt;Not covered&lt;/div&gt;
+                        &lt;/div&gt;
+                        ' class="even hasIssues Coverage"><span class="lineNumber">56&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span class="string">""</span><span class="keyword">;</span><a name="line_56"></a></li><li id="line_57" class="odd"><span class="lineNumber">57&nbsp;</span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;}</span><a name="line_57"></a></li><li id="line_58" class="even"><span class="lineNumber">58&nbsp;</span><span class="keyword">}</span><span>
+</span><a name="line_58"></a></li></ol>
+            
+            <div id="sidebar">
+                <table cellpadding="3">
+                    <thead>
+                        <tr>
+                            <th width="40px" align="center">
+                                <strong>start</strong>
+                            </th>
+                            <th width="40px" align="center">
+                                <strong>end</strong>
+                            </th>
+                            <th>
+                                <strong>comment</strong>
+                            </th>
+                            <th width="120px">
+                                <strong>type of error</strong>
+                            </th>
+                            <th width="60px">
+                                <strong>severity</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr class="Checkstyle">
+                            <td align="center">
+                                <a href="#line_7" onclick="switchLine('line_7')">
+                                7</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_7" onclick="switchLine('line_7'); new Effect.Highlight('line_7-7', {duration: 1.5}); return false">
+                                7</a>
+                            </td>
+                            <td>
+                                <a href="#line_7" onclick="switchLine('line_7'); new Effect.Highlight('line_7-7', {duration: 1.5}); return false">
+                                Protected member variable &quot;attributes&quot; must contain a leading underscore</a>
+                            </td>
+                            <td>
+                                Checkstyle                            </td>
+                            <td>
+                                error                            </td>
+                        </tr>
+                        
+                        <tr class="Coverage">
+                            <td align="center">
+                                <a href="#line_21" onclick="switchLine('line_21')">
+                                21</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_26" onclick="switchLine('line_21'); new Effect.Highlight('line_21-26', {duration: 1.5}); return false">
+                                26</a>
+                            </td>
+                            <td>
+                                <a href="#line_21" onclick="switchLine('line_21'); new Effect.Highlight('line_21-26', {duration: 1.5}); return false">
+                                Not covered</a>
+                            </td>
+                            <td>
+                                Coverage                            </td>
+                            <td>
+                                Notice                            </td>
+                        </tr>
+                        
+                        <tr class="Coverage">
+                            <td align="center">
+                                <a href="#line_39" onclick="switchLine('line_39')">
+                                39</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_40" onclick="switchLine('line_39'); new Effect.Highlight('line_39-40', {duration: 1.5}); return false">
+                                40</a>
+                            </td>
+                            <td>
+                                <a href="#line_39" onclick="switchLine('line_39'); new Effect.Highlight('line_39-40', {duration: 1.5}); return false">
+                                Not covered</a>
+                            </td>
+                            <td>
+                                Coverage                            </td>
+                            <td>
+                                Notice                            </td>
+                        </tr>
+                        
+                        <tr class="Coverage">
+                            <td align="center">
+                                <a href="#line_52" onclick="switchLine('line_52')">
+                                52</a>
+                            </td>
+                            <td align="center">
+                                <a href="#line_56" onclick="switchLine('line_52'); new Effect.Highlight('line_52-56', {duration: 1.5}); return false">
+                                56</a>
+                            </td>
+                            <td>
+                                <a href="#line_52" onclick="switchLine('line_52'); new Effect.Highlight('line_52-56', {duration: 1.5}); return false">
+                                Not covered</a>
+                            </td>
+                            <td>
+                                Coverage                            </td>
+                            <td>
+                                Notice                            </td>
+                        </tr>
+                                            </tbody>
+                </table>
+            </div>
+            <script type="text/javascript" language="javascript">
+                $(initReview);
+            </script>
+                    </div>
+    </body>
+</html>

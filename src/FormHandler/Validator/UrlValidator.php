@@ -159,7 +159,7 @@ class UrlValidator extends AbstractValidator
      *
      * @return boolean
      */
-    public function getRequired()
+    public function isRequired()
     {
         return $this->required;
     }
@@ -167,7 +167,7 @@ class UrlValidator extends AbstractValidator
     /**
      * Set the maximum length of this field.
      *
-     * @param $length
+     * @param int $length
      */
     public function setMaxLength($length)
     {
@@ -177,7 +177,7 @@ class UrlValidator extends AbstractValidator
     /**
      * Get the maximum length of this field.
      *
-     * @return boolean
+     * @return int
      */
     public function getMaxLength()
     {
@@ -205,7 +205,7 @@ class UrlValidator extends AbstractValidator
      *
      * @return boolean
      */
-    public function getSkipTldCheck()
+    public function isSkipTldCheck()
     {
         return $this->skipTldCheck;
     }

@@ -1,6 +1,7 @@
 <?php
 namespace FormHandler\Encoding;
 
+use ForceUTF8\Encoding;
 use FormHandler\Form;
 
 /**
@@ -32,7 +33,7 @@ class Utf8EncodingFilter implements InterfaceEncodingFilter
      */
     public function filter($value)
     {
-        $value = \ForceUTF8\Encoding::fixUTF8( $value );
+        $value = Encoding::fixUTF8($value);
 
         // MySQL 5.4 and lower do not allow 4 byte sequences. Filter these out as well.
         // @see http://dev.mysql.com/doc/refman/5.5/en/charset-unicode-utf8mb4.html

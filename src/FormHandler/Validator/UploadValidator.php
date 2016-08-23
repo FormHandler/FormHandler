@@ -273,7 +273,7 @@ class UploadValidator extends AbstractValidator
      *
      * @return bool
      */
-    public function getRequired()
+    public function isRequired()
     {
         return $this->required;
     }
