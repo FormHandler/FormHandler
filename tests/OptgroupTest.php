@@ -1,4 +1,7 @@
 <?php
+namespace FormHandler\Tests;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Created by PhpStorm.
@@ -6,7 +9,7 @@
  * Date: 22-08-16
  * Time: 09:36
  */
-class OptgroupTest extends PHPUnit_Framework_TestCase
+class OptgroupTest extends TestCase
 {
     public function testOptgroup()
     {
@@ -70,7 +73,8 @@ class OptgroupTest extends PHPUnit_Framework_TestCase
         $optgroup -> setStyle('color: black');
 
         $this->expectOutputRegex(
-            "/<optgroup label=\"(.*?)\"(.*?)(disabled=\"disabled\")?(id=\"(.*?)\")?(.*?)>(<option value=\"(.*?)\">(.*?)<\/option>)*<\/optgroup>/i",
+            "/<optgroup label=\"(.*?)\"(.*?)(disabled=\"disabled\")?(id=\"(.*?)\")?(.*?)>".
+            "(<option value=\"(.*?)\">(.*?)<\/option>)*<\/optgroup>/i",
             'Check input html tag'
         );
         echo $optgroup;

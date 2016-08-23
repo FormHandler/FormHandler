@@ -17,7 +17,7 @@ class UrlValidator extends AbstractValidator
      *
      * @var array
      */
-    protected $allowed_schemes = ['http', 'https'];
+    protected $allowedSchemes = ['http', 'https'];
 
     /**
      * Determines whether this field is required.
@@ -71,18 +71,14 @@ class UrlValidator extends AbstractValidator
     public function isValid()
     {
         // these schemes are allowed
-        $allowed_schemes = $this->getAllowedSchemes();
+        $allowedSchemes = $this->getAllowedSchemes();
 
         // get the field value
         $url = $this->field->getValue();
 
-        // check if we are a required value
-        if (! $url && $this->required) {
-            // Required but not set.
+
+        if (!$this->isRequiredAndNotEmpty($url)) {
             return false;
-        } elseif (! $url && ! $this->required) {
-            // Not set and not required, valid!
-            return true;
         }
 
         if ($this->getMaxLength() && strlen($url) > $this->getMaxLength()) {
@@ -91,17 +87,17 @@ class UrlValidator extends AbstractValidator
         }
 
         // do simple validation
-        if (! filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED | FILTER_FLAG_SCHEME_REQUIRED)) {
+        if (!filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED | FILTER_FLAG_SCHEME_REQUIRED)) {
             return false;
         }
 
         // check if we have a tld
-        if (! $this->getSkipTldCheck() && ! preg_match('#\.[a-z]{2,}$#', parse_url($url, PHP_URL_HOST))) {
+        if (!$this->isSkipTldCheck() && !preg_match('#\.[a-z]{2,}$#', parse_url($url, PHP_URL_HOST))) {
             return false;
         }
 
         // further validation is required.
-        if (in_array(parse_url($url, PHP_URL_SCHEME), $allowed_schemes)) {
+        if (in_array(parse_url($url, PHP_URL_SCHEME), $allowedSchemes)) {
             return true;
         }
 
@@ -109,25 +105,43 @@ class UrlValidator extends AbstractValidator
     }
 
     /**
-     * * Start of getters and setters **
+     * Check if the field is required or not.
+     * If it's required, we expect a valid value. If not, we return false.
+     *
+     * @param $value
+     * @return bool
      */
+    protected function isRequiredAndNotEmpty($value)
+    {
+        // check if we are a required value
+        if (!$value && $this->required) {
+            // Required but not set.
+            return false;
+        } elseif (!$value && !$this->required) {
+            // Not set and not required, valid!
+            return true;
+        }
+
+        return true;
+
+    }
 
     /**
      * Determines which schemes are allowed for this validator.
      * (e.g. http/https/ftp)
      * Must be an array (will throw an exception if not). Defaults to both HTTP and HTTPS.
      *
-     * Set the value for allowed_schemes
+     * Set the value for allowedSchemes
      *
      * @param array $value
      * @throws \Exception
      */
     public function setAllowedSchemes($value)
     {
-        if (! is_array($value)) {
+        if (!is_array($value)) {
             throw new \Exception('Tried to set allowed schemes to a value that was not an array.');
         }
-        $this->allowed_schemes = $value;
+        $this->allowedSchemes = $value;
     }
 
     /**
@@ -135,13 +149,13 @@ class UrlValidator extends AbstractValidator
      * (e.g. http/https/ftp)
      * Must be an array. Defaults to both HTTP and HTTPS.
      *
-     * Get the value for allowed_schemes
+     * Get the value for allowedSchemes
      *
      * @return array
      */
     public function getAllowedSchemes()
     {
-        return $this->allowed_schemes;
+        return $this->allowedSchemes;
     }
 
     /**
@@ -151,7 +165,7 @@ class UrlValidator extends AbstractValidator
      */
     public function setRequired($required)
     {
-        $this->required = (bool) $required;
+        $this->required = (bool)$required;
     }
 
     /**

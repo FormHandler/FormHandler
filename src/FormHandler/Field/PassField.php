@@ -4,18 +4,38 @@ namespace FormHandler\Field;
 use FormHandler\Form;
 
 /**
+ * Create a password input field.
  */
 class PassField extends AbstractFormField
 {
-
+    /**
+     * The max allowed length of the inpit
+     * @var int
+     */
     protected $maxlength;
 
-    protected $readonly;
+    /**
+     * Is this field readonly? By default not (false)
+     * @var bool
+     */
+    protected $readonly = false;
 
+    /**
+     * The size of this field
+     * @var int
+     */
     protected $size;
 
+    /**
+     * The value of this field
+     * @var string
+     */
     protected $value;
 
+    /**
+     * Set the placeholder for this field for when it has no value
+     * @var string
+     */
     protected $placeholder;
 
     public function __construct(Form &$form, $name = '')

@@ -185,7 +185,8 @@ class Form extends Field\Element
     const ENCTYPE_PLAIN = 'text/plain';
 
     /**
-     * Default. All characters are encoded before sent (spaces are converted to "+" symbols, and special characters are converted to ASCII HEX values)
+     * Default. All characters are encoded before sent
+     * (spaces are converted to "+" symbols, and special characters are converted to ASCII HEX values)
      */
     const ENCTYPE_URLENCODED = 'application/x-www-form-urlencoded';
 

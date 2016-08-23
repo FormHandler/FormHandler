@@ -4,31 +4,72 @@ namespace FormHandler\Field;
 
 use FormHandler\Form;
 
+/**
+ * Create a text inpit field.
+ *
+ * Other HTML5 types are also allowed. See the ```TextField::TYPE_*``` constants
+ * @package FormHandler\Field
+ */
 class TextField extends AbstractFormField
 {
+    /**
+     * The max length which is allowed to put into this field.
+     * @var int
+     */
     protected $maxlength;
-    protected $readonly;
+
+    /**
+     * Set if this field is readonly or not.
+     * @var bool
+     */
+    protected $readonly = false ;
+
+    /**
+     * Set the size of this field.
+     * @var int
+     */
     protected $size;
+
+    /**
+     * Set the value for this field.
+     * @var string
+     */
     protected $value;
-    protected $type = 'text';
+
+    /**
+     * The type of the field. Default is text, but HTML5 types
+     * are also allowed. See the ```TextField::TYPE_*``` constants
+     * @var string
+     */
+    protected $type = self::TYPE_TEXT;
+
+    /**
+     * Set the placeholder for this field for when it has no value.
+     * @var string
+     */
     protected $placeholder;
 
     // common used (HTML5) types
-    const TYPE_COLOR     = 'color';
-    const TYPE_DATE     = 'date';
-    const TYPE_DATETIME = 'datetime';
-    const TYPE_DATETIME_LOCAL ='datetime-local';
-    const TYPE_EMAIL    = 'email';
-    const TYPE_MONTH    = 'month';
-    const TYPE_NUMBER    = 'number';
-    const TYPE_RANGE    = 'range';
-    const TYPE_SEARCH    = 'search';
-    const TYPE_TEL        = 'tel';
-    const TYPE_TEXT        = 'text';
-    const TYPE_TIME        = 'time';
-    const TYPE_URL        = 'url';
-    const TYPE_WEEK        = 'week';
+    const TYPE_COLOR            = 'color';
+    const TYPE_DATE             = 'date';
+    const TYPE_DATETIME         = 'datetime';
+    const TYPE_DATETIME_LOCAL   = 'datetime-local';
+    const TYPE_EMAIL            = 'email';
+    const TYPE_MONTH            = 'month';
+    const TYPE_NUMBER           = 'number';
+    const TYPE_RANGE            = 'range';
+    const TYPE_SEARCH           = 'search';
+    const TYPE_TEL              = 'tel';
+    const TYPE_TEXT             = 'text';
+    const TYPE_TIME             = 'time';
+    const TYPE_URL              = 'url';
+    const TYPE_WEEK             = 'week';
 
+    /**
+     * TextField constructor.
+     * @param Form $form
+     * @param string $name
+     */
     public function __construct(Form &$form, $name = '')
     {
         $this -> form = $form;
