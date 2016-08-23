@@ -9,6 +9,7 @@
     <property name="phploc"  value="phploc"/>
     <property name="phpmd"   value="phpmd"/>
     <property name="phpunit" value="phpunit"/>
+    <property name="composer" value="composer"/>
 
     <!-- Use this when the tools are located as PHARs in ${basedir}/build/tools
     <property name="pdepend" value="${basedir}/build/tools/pdepend.phar"/>
@@ -17,6 +18,7 @@
     <property name="phpdox"  value="${basedir}/build/tools/phpdox.phar"/>
     <property name="phploc"  value="${basedir}/build/tools/phploc.phar"/>
     <property name="phpmd"   value="${basedir}/build/tools/phpmd.phar"/>
+    <property name="composer"   value="${basedir}/build/tools/composer.phar"/>
     <property name="phpunit" value="${basedir}/build/tools/phpunit.phar"/> -->
 
     <!-- Use this when the tools are managed by Composer in ${basedir}/vendor/bin
@@ -26,28 +28,30 @@
     <property name="phpdox"  value="${basedir}/vendor/bin/phpdox"/>
     <property name="phploc"  value="${basedir}/vendor/bin/phploc"/>
     <property name="phpmd"   value="${basedir}/vendor/bin/phpmd"/>
+    <property name="composer"   value="${basedir}/vendor/bin/composer"/>
     <property name="phpunit" value="${basedir}/vendor/bin/phpunit"/> -->
 
     <target name="full-build"
-            depends="prepare,static-analysis,phpunit,phpdox,-check-failure"
+            depends="prepare,composer,static-analysis,phpunit,phpdox,-check-failure"
             description="Performs static analysis, runs the tests, and generates project documentation"/>
 
     <target name="full-build-parallel"
-            depends="prepare,static-analysis-parallel,phpunit,phpdox,-check-failure"
+            depends="prepare,composer,static-analysis-parallel,phpunit,phpdox,-check-failure"
             description="Performs static analysis (executing the tools in parallel), runs the tests, and generates project documentation"/>
 
     <target name="quick-build"
-            depends="prepare,lint,phpunit-no-coverage"
+            depends="prepare,composer,lint,phpunit-no-coverage"
             description="Performs a lint check and runs the tests (without generating code coverage reports)"/>
 
     <target name="static-analysis"
-            depends="lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci"
+            depends="lint,composer,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci"
             description="Performs static analysis" />
 
     <!-- Adjust the threadCount attribute's value to the number of CPUs -->
     <target name="static-analysis-parallel"
             description="Performs static analysis (executing the tools in parallel)">
         <parallel threadCount="2">
+            <antcall target="composer"/>
             <sequential>
                 <antcall target="pdepend"/>
                 <antcall target="phpmd-ci"/>
@@ -100,6 +104,15 @@
         </apply>
 
         <property name="lint.done" value="true"/>
+    </target>
+
+    <target name="composer" description="Installing composer dependencies">
+        <exec executable="${composer}" failonerror="true">
+            <arg value="install" />
+            <arg value="--dev" />
+            <arg value="--prefer-dist" />
+            <arg value="--no-progress" />
+        </exec>
     </target>
 
     <target name="phploc"
