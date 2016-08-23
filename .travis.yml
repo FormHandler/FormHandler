@@ -12,4 +12,4 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - phpunit --configuration phpunit.xml
+  - phpunit --configuration build/phpunit.xml
