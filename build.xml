@@ -61,7 +61,7 @@
     </target>
 
     <target name="phploc" description="Measure project size using PHPLOC">
-        <exec executable="${basedir}/vendor/bin/phploc">
+        <exec executable="phploc">
             <!-- exclude tests directory -->
             <arg value="--exclude"/>
             <arg path="${basedir}/tests"/>
