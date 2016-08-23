@@ -608,25 +608,24 @@ class Field
     public function getValue()
     {
         //value's in order of importance
-        $return = '';
         if(isset($this->value_forced))
         {
-            $return = $this->value_forced;
+            return $this->value_forced;
         }
         elseif(isset($this->value_post))
         {
-            $return = $this->value_post;
+            return $this->value_post;
         }
         elseif(isset($this->value))
         {
-            $return = $this->value;
+            return $this->value;
         }
         elseif(isset($this->value_default))
         {
-            $return = $this->value_default;
+            return $this->value_default;
         }
 
-        return Utils::html($return);
+        return '';
     }
 
     /**
