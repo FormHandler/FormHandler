@@ -1,4 +1,4 @@
-<phpdox xmlns="http://phpdox.net/config">
+<phpdox xmlns="http://xml.phpdox.net/config">
     <project name="FormHandler" source="../src" workdir="./api/xml">
         <collector publiconly="false">
             <include mask="*.php" />
