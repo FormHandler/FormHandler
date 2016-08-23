@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="FormHandler" default="full-build">
 
-    <!-- By default, we assume all tools to be on the $PATH -->
+    <!-- By default, we assume all tools to be on the $PATH
     <property name="pdepend" value="pdepend"/>
     <property name="phpcpd"  value="phpcpd"/>
     <property name="phpcs"   value="phpcs"/>
@@ -9,7 +9,7 @@
     <property name="phploc"  value="phploc"/>
     <property name="phpmd"   value="phpmd"/>
     <property name="phpunit" value="phpunit"/>
-    <property name="composer" value="composer"/>
+    <property name="composer" value="composer"/> -->
 
     <!-- Use this when the tools are located as PHARs in ${basedir}/build/tools
     <property name="pdepend" value="${basedir}/build/tools/pdepend.phar"/>
@@ -21,15 +21,15 @@
     <property name="composer"   value="${basedir}/build/tools/composer.phar"/>
     <property name="phpunit" value="${basedir}/build/tools/phpunit.phar"/> -->
 
-    <!-- Use this when the tools are managed by Composer in ${basedir}/vendor/bin
+    <!-- Use this when the tools are managed by Composer in ${basedir}/vendor/bin -->
     <property name="pdepend" value="${basedir}/vendor/bin/pdepend"/>
     <property name="phpcpd"  value="${basedir}/vendor/bin/phpcpd"/>
     <property name="phpcs"   value="${basedir}/vendor/bin/phpcs"/>
     <property name="phpdox"  value="${basedir}/vendor/bin/phpdox"/>
     <property name="phploc"  value="${basedir}/vendor/bin/phploc"/>
     <property name="phpmd"   value="${basedir}/vendor/bin/phpmd"/>
-    <property name="composer"   value="${basedir}/vendor/bin/composer"/>
-    <property name="phpunit" value="${basedir}/vendor/bin/phpunit"/> -->
+    <property name="composer"   value="composer"/> <!-- composer should be installed global -->
+    <property name="phpunit" value="${basedir}/vendor/bin/phpunit"/>
 
     <target name="full-build"
             depends="prepare,composer,static-analysis,phpunit,phpdox,-check-failure"
