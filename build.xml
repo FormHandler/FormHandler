@@ -72,7 +72,7 @@
     </target>
 
     <target name="pdepend" description="Calculate software metrics using PHP_Depend">
-        <exec executable="${basedir}/vendor/bin/pdepend">
+        <exec executable="pdepend">
             <arg value="--ignore=${basedir}/tests,${basedir}/docs"/>
             <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml"/>
             <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg"/>
@@ -83,7 +83,7 @@
 
     <target name="phpmd"
             description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
-        <exec executable="${basedir}/vendor/bin/phpmd">
+        <exec executable="phpmd">
             <arg path="${basedir}/src"/>
             <arg value="text"/>
             <arg value="${basedir}/build/phpmd.xml"/>
@@ -94,7 +94,7 @@
 
     <target name="phpmd-ci"
             description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
-        <exec executable="${basedir}/vendor/bin/phpmd">
+        <exec executable="phpmd">
             <arg path="${basedir}/src"/>
             <arg value="xml"/>
             <arg value="${basedir}/build/phpmd.xml"/>
@@ -107,7 +107,7 @@
 
     <target name="phpcs"
             description="Find coding standard violations with CodeSniffer. Use on command line before committing.">
-        <exec executable="${basedir}/vendor/bin/phpcs">
+        <exec executable="phpcs">
             <arg value="--standard=PSR2"/>
             <arg value="--colors"/>
             <arg value="--encoding=utf-8"/>
@@ -120,7 +120,7 @@
 
     <target name="phpcs-ci"
             description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
-        <exec executable="${basedir}/vendor/bin/phpcs" output="/dev/null">
+        <exec executable="phpcs" output="/dev/null">
             <arg value="--report=checkstyle"/>
             <arg value="--report-file=${basedir}/build/logs/checkstyle.xml"/>
             <arg value="--standard=Zend"/>
@@ -131,7 +131,7 @@
     </target>
 
     <target name="phpcpd" description="Find duplicate code using PHPCPD">
-        <exec executable="${basedir}/vendor/bin/phpcpd">
+        <exec executable="phpcpd">
             <arg value="--log-pmd"/>
             <arg value="${basedir}/build/logs/pmd-cpd.xml"/>
             <arg value="--exclude"/>
@@ -141,18 +141,18 @@
     </target>
 
     <target name="phpdoc" description="Generate API documentation using phpDocumentor 2">
-        <exec dir="${basedir}/src" executable="${basedir}/vendor/bin/phpdoc" failonerror="true">
+        <exec dir="${basedir}/src" executable="phpdoc" failonerror="true">
             <!-- excluded directories need the / at the end, else phpdoc ignores it -->
             <arg line="--title='test title' -d '${basedir}/src' -t '${basedir}/build/api' -i tests/ "/>
         </exec>
     </target>
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
-        <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true"/>
+        <exec executable="phpunit" failonerror="true"/>
     </target>
 
     <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
-        <exec executable="${basedir}/vendor/bin/phpcb">
+        <exec executable="phpcb">
             <arg value="--log"/>
             <arg path="${basedir}/build/logs"/>
             <arg value="--ignore"/>
