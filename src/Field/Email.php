@@ -43,7 +43,7 @@ class Email extends \FormHandler\Field\Text
      */
     public function _getViewValue()
     {
-        $v = $this->getValue();
+        $v = \FormHandler\Utils::html($this->getValue());
 
         if($this->getEnableViewModeLink()
             && trim($v) != '')

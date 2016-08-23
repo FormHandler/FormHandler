@@ -786,7 +786,7 @@ class Field
     public function _getViewValue()
     {
         // get the value for the field
-        $val = $this->getValue();
+        $val = \FormHandler\Utils::html($this->getValue());
 
         // are there multiple options?
         if(!is_null($this->options) && $this->getUseArrayKeyAsValue() === true)
