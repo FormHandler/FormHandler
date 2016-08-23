@@ -942,7 +942,7 @@ class FormHandler
         // is it a value from the $_POST array ?
         elseif(isset($_POST[$field]))
         {
-            $value = $_POST[$field];
+            $value = \FormHandler\Utils::html($_POST[$field]);
         }
 
         return $value;
@@ -1746,7 +1746,7 @@ class FormHandler
             && isset($_POST['form_name'])
             && $_POST['form_name'] == $this->getFormName())
         {
-            $values = json_decode($_POST['values'], true);
+            $values = json_decode(\FormHandler\Utils::html($_POST['values']), true);
 
             if(!is_array($values))
             {
@@ -1828,7 +1828,7 @@ class FormHandler
                     array(
                         $filter,
                         $this,
-                        $_POST['field_from'],
+                        \FormHandler\Utils::html($_POST['field_from']),
                         $extra,
                         (isset($_POST['initial'])),
                         $field_to
@@ -2205,7 +2205,7 @@ class FormHandler
             && $_POST['field_from'] == $fieldFrom
             && isset($_POST['filter']))
         {
-            $value = $_POST['filter'];
+            $value = \FormHandler\Utils::html($_POST['filter']);
 
             if(substr($value, 0, 11) == '__FH_JSON__')
             {
@@ -2236,7 +2236,7 @@ class FormHandler
                 //get posted value when available
                 if(array_key_exists($field, $_POST))
                 {
-                    $post_value = $_POST[$field];
+                    $post_value = \FormHandler\Utils::html($_POST[$field]);
                     if(substr($post_value, 0, 11) == '__FH_JSON__')
                     {
                         $post_value = json_decode(substr($post_value, 11), true);
