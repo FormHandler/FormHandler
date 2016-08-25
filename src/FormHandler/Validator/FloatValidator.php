@@ -44,7 +44,7 @@ class FloatValidator extends AbstractValidator
      * Set the type of decimal point which is allowed. Default a dot (.). Use one of the DECIMAL_* constants
      * @var int
      */
-    protected $decimal_point = self::DECIMAL_POINT;
+    protected $decimalPoint = self::DECIMAL_POINT;
 
     /**
      * Create a new float validator
@@ -55,14 +55,14 @@ class FloatValidator extends AbstractValidator
      * @param float $max
      * @param boolean $required
      * @param string $message
-     * @param int $decimal_point
+     * @param int $decimalPoint
      */
     public function __construct(
         $min = null,
         $max = null,
         $required = true,
         $message = null,
-        $decimal_point = self::DECIMAL_POINT
+        $decimalPoint = self::DECIMAL_POINT
     ) {
         if ($message === null) {
             $message = dgettext('formhandler', 'This value is incorrect.');
@@ -72,7 +72,7 @@ class FloatValidator extends AbstractValidator
         $this->setMin($min);
         $this->setRequired($required);
         $this->setErrorMessage($message);
-        $this->setDecimalPoint($decimal_point);
+        $this->setDecimalPoint($decimalPoint);
     }
 
     /**
@@ -153,27 +153,27 @@ class FloatValidator extends AbstractValidator
     /**
      * Set the decimal point
      *
-     * @param int|string $decimal_point
+     * @param int|string $decimalPoint
      * @return FloatValidator
      */
-    public function setDecimalPoint($decimal_point)
+    public function setDecimalPoint($decimalPoint)
     {
-        switch ($decimal_point) {
+        switch ($decimalPoint) {
             case self::DECIMAL_COMMA:
             case ',':
-                $this->decimal_point = self::DECIMAL_COMMA;
+                $this->decimalPoint = self::DECIMAL_COMMA;
                 break;
 
             case self::DECIMAL_POINT_OR_COMMA:
             case '.,':
             case ',.':
-                $this->decimal_point = self::DECIMAL_POINT_OR_COMMA;
+                $this->decimalPoint = self::DECIMAL_POINT_OR_COMMA;
                 break;
 
             case self::DECIMAL_POINT:
             case '.':
             default:
-                $this->decimal_point = self::DECIMAL_POINT;
+                $this->decimalPoint = self::DECIMAL_POINT;
         }
 
         return $this;
@@ -186,7 +186,7 @@ class FloatValidator extends AbstractValidator
      */
     public function getDecimalPoint()
     {
-        return $this->decimal_point;
+        return $this->decimalPoint;
     }
 
     /**
@@ -196,7 +196,7 @@ class FloatValidator extends AbstractValidator
      */
     public function getRegex()
     {
-        switch ($this->decimal_point) {
+        switch ($this->decimalPoint) {
             case self::DECIMAL_COMMA:
                 return '/^-?\d+(,\d+)?$/';
 

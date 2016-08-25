@@ -9,10 +9,6 @@
         My custom rule set that checks my code...
     </description>
 
-	<!-- Import the entire unused code rule set -->
-	<rule ref="rulesets/unusedcode.xml" />
-
-	<rule ref="rulesets/codesize.xml" />
 	<rule ref="rulesets/unusedcode.xml" />
 	<rule ref="rulesets/naming.xml" />
     <rule ref="rulesets/design.xml" />
@@ -25,4 +21,13 @@
 			<property name="reportLevel" value="15" />
 		</properties>
 	</rule>
+
+	<rule ref="rulesets/codesize.xml/NPathComplexity" />
+	<rule ref="rulesets/codesize.xml/ExcessiveMethodLength" />
+	<rule ref="rulesets/codesize.xml/ExcessiveClassLength" />
+	<rule ref="rulesets/codesize.xml/ExcessiveParameterList" />
+	<rule ref="rulesets/codesize.xml/ExcessivePublicCount" />
+	<rule ref="rulesets/codesize.xml/TooManyFields" />
+	<rule ref="rulesets/codesize.xml/TooManyMethods" />
+	<rule ref="rulesets/codesize.xml/ExcessiveClassComplexity" />
 </ruleset>
