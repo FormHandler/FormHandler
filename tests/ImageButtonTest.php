@@ -20,15 +20,15 @@ class ImageButtonTest extends TestCase
         $this -> assertEquals('submit', $btn -> getName());
         $this -> assertEquals('images/button.png', $btn -> getSrc());
 
-        $this -> assertEquals( $form, $btn -> getForm() );
-        $this -> assertEquals( false, $btn -> isDisabled() );
-        $btn -> setDisabled( true );
-        $this -> assertEquals( true, $btn -> isDisabled() );
+        $this -> assertEquals($form, $btn -> getForm());
+        $this -> assertEquals(false, $btn -> isDisabled());
+        $btn -> setDisabled(true);
+        $this -> assertEquals(true, $btn -> isDisabled());
 
-        $btn -> setSize( 20 );
-        $this -> assertEquals( 20, $btn -> getSize() );
+        $btn -> setSize(20);
+        $this -> assertEquals(20, $btn -> getSize());
         $btn -> setAlt('alt');
-        $this -> assertEquals( 'alt', $btn -> getAlt() );
+        $this -> assertEquals('alt', $btn -> getAlt());
 
 
         $this->expectOutputRegex(

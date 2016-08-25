@@ -20,13 +20,13 @@ class SubmitButtonTest extends TestCase
         $this -> assertEquals('submit', $btn -> getName());
         $this -> assertEquals('Submit Form', $btn -> getValue());
 
-        $this -> assertEquals( $form, $btn -> getForm() );
-        $this -> assertEquals( false, $btn -> isDisabled() );
-        $btn -> setDisabled( true );
-        $this -> assertEquals( true, $btn -> isDisabled() );
+        $this -> assertEquals($form, $btn -> getForm());
+        $this -> assertEquals(false, $btn -> isDisabled());
+        $btn -> setDisabled(true);
+        $this -> assertEquals(true, $btn -> isDisabled());
 
-        $btn -> setSize( 20 );
-        $this -> assertEquals( 20, $btn -> getSize() );
+        $btn -> setSize(20);
+        $this -> assertEquals(20, $btn -> getSize());
 
         $this->expectOutputRegex(
             "/<input type=\"submit\" name=\"(.*?)\" ".

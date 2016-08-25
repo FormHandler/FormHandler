@@ -125,7 +125,7 @@ class SelectFieldTest extends TestCase
         // this optgroup should have 1 Option and it should be selected
         $optgroup = $infield[5];
         $this->assertEquals(1, sizeof($optgroup->getOptions()));
-        $this->assertInstanceOf(Option::class, $optgroup->getOptions()[0] );
+        $this->assertInstanceOf(Option::class, $optgroup->getOptions()[0]);
         $this->assertEquals(true, $optgroup->getOptions()[0]->isSelected());
 
 
@@ -148,45 +148,43 @@ class SelectFieldTest extends TestCase
         $field->setMultiple(true);
         $this->assertEquals([], $field->getValue());
 
-        $option = $field -> getOptionByValue( 5 );
-        $this -> assertInstanceOf( Option::class, $option );
-        $this -> assertEquals( $option -> getLabel(), 'Five');
+        $option = $field -> getOptionByValue(5);
+        $this -> assertInstanceOf(Option::class, $option);
+        $this -> assertEquals($option -> getLabel(), 'Five');
 
-        $this -> assertEquals( null, $field -> getOptionByValue( 92) );
+        $this -> assertEquals(null, $field -> getOptionByValue(92));
 
         // Remove the 'None' option
-        $this -> assertInstanceOf( SelectField::class, $field -> removeOptionByValue( 0 ) );
+        $this -> assertInstanceOf(SelectField::class, $field -> removeOptionByValue(0));
 
         $infield = $field -> getOptions();
 
         // we should now have 5 options left.
-        $this -> assertEquals( 5, sizeof( $infield ) );
-        foreach( $infield as $option )
-        {
-            if( $option instanceof Option )
-            {
-                $this -> assertNotEquals(0, $option -> getValue() );
-                $this -> assertNotEquals('None', $option -> getLabel() );
+        $this -> assertEquals(5, sizeof($infield));
+        foreach ($infield as $option) {
+            if ($option instanceof Option) {
+                $this -> assertNotEquals(0, $option -> getValue());
+                $this -> assertNotEquals('None', $option -> getLabel());
             }
         }
 
         // now remove the option in the optgroup, which should also remove the optgroup itsself
-        $field -> removeOptionByValue( 5 );
+        $field -> removeOptionByValue(5);
 
         // check the disabled field
-        $this -> assertEquals( false, $field -> isDisabled() );
-        $field -> setDisabled( true );
-        $this -> assertEquals( true, $field -> isDisabled() );
+        $this -> assertEquals(false, $field -> isDisabled());
+        $field -> setDisabled(true);
+        $this -> assertEquals(true, $field -> isDisabled());
 
         $infield = $field -> getOptions();
 
         // we should now have 4 options left.
-        $this -> assertEquals( 4, sizeof( $infield ) );
-        $this -> assertContainsOnly( Option::class, $infield );
+        $this -> assertEquals(4, sizeof($infield));
+        $this -> assertContainsOnly(Option::class, $infield);
 
         // add it again
-        $optgroup -> addOption( new Option( 99, 'A lot'));
-        $field -> addOptgroup( $optgroup );
+        $optgroup -> addOption(new Option(99, 'A lot'));
+        $field -> addOptgroup($optgroup);
 
 
         $this->expectOutputRegex(

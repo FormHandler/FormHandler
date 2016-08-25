@@ -34,8 +34,8 @@ class TextAreaTest extends TestCase
         $this -> assertEquals(true, $field -> isDisabled());
         $this -> assertEquals(true, $field -> isReadonly());
 
-        $field -> setMaxlength( 500 );
-        $this -> assertEquals( 500, $field -> getMaxlength() );
+        $field -> setMaxlength(500);
+        $this -> assertEquals(500, $field -> getMaxlength());
 
         $field -> setValue('Piet');
         $this -> assertEquals('Piet', $field -> getValue());
