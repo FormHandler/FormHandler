@@ -50,7 +50,7 @@ class SelectField extends AbstractFormField
         $this->form = $form;
         $this->form->addField($this);
 
-        if (! empty($name)) {
+        if (!empty($name)) {
             $this->setName($name);
         }
 
@@ -121,10 +121,6 @@ class SelectField extends AbstractFormField
      */
     public function addOptionsAsArray(array $options, $useArrayKeyAsValue = true)
     {
-        if (! $this->options) {
-            $this->options = [];
-        }
-
         foreach ($options as $value => $label) {
             $option = new Option();
             $option->setLabel($label);
@@ -147,9 +143,6 @@ class SelectField extends AbstractFormField
      */
     public function addOption(Option $option)
     {
-        if (! $this->options) {
-            $this->options = [];
-        }
         $this->options[] = $option;
 
         // this will auto select the options based on this fields value
@@ -195,7 +188,7 @@ class SelectField extends AbstractFormField
      * Return the options which are located in this selectfield.
      * This can either be an Option or an Optgroup object.
      *
-     * @return array
+     * @return mixed
      */
     public function getOptions()
     {
@@ -210,7 +203,7 @@ class SelectField extends AbstractFormField
      */
     public function setMultiple($multiple)
     {
-        $this->multiple = (bool) $multiple;
+        $this->multiple = (bool)$multiple;
         return $this;
     }
 
@@ -305,48 +298,42 @@ class SelectField extends AbstractFormField
     }
 
     /**
-     * Return the selected option(s)
+     * Return the option which has the given value.
+     * If there are multiple options with the same value, the first will be returned.
      *
      * @param $value
-     * @return mixed
+     * @return Option
      */
     public function getOptionByValue($value)
     {
-        $selected = [];
-
         // walk all options
         foreach ($this->options as $option) {
             if ($option instanceof Option) {
                 if ($option->getValue() == $value) {
-                    $selected[] = $option;
+                    return $option;
                 }
             } elseif ($option instanceof Optgroup) {
                 $options = $option->getOptions();
                 foreach ($options as $option2) {
                     if ($option2->getValue() == $value) {
-                        $selected[] = $option2;
+                        return $option2;
                     }
                 }
             }
         }
 
-        $count = sizeof($selected) ;
-        if ($count > 0) {
-            if ($this->isMultiple()) {
-                return $selected;
-            } else {
-                // return last selected item as value
-                return $selected[$count - 1];
-            }
-        }
-
-        return $this->isMultiple() ? [] : "";
+        return null;
     }
 
     /**
-     * Remove option by value
+     * Remove option by value.
+     *
+     * In case that the option was nested in an Optgroup,
+     * and it was the only option in that optgroup, then the
+     * optgroup is also removed.
      *
      * @param $value
+     * @return SelectField
      */
     public function removeOptionByValue($value)
     {
@@ -370,13 +357,15 @@ class SelectField extends AbstractFormField
                     }
                 }
 
-                $option -> setOptions($subOptions);
+                $option->setOptions($subOptions);
 
                 if (sizeof($subOptions) > 0) {
                     $this->options[] = $option;
                 }
             }
         }
+
+        return $this;
     }
 
     /**
@@ -388,8 +377,8 @@ class SelectField extends AbstractFormField
     {
         $str = '<select';
 
-        if (! empty($this->name)) {
-            $suffix = ($this->isMultiple() && substr($this->name, - 1) != ']' ? "[]" : "");
+        if (!empty($this->name)) {
+            $suffix = ($this->isMultiple() && substr($this->name, -1) != ']' ? "[]" : "");
             $str .= ' name="' . $this->name . $suffix . '"';
         }
 
@@ -397,7 +386,7 @@ class SelectField extends AbstractFormField
             $str .= ' multiple="multiple"';
         }
 
-        if (! empty($this->size)) {
+        if (!empty($this->size)) {
             $str .= ' size="' . $this->size . '"';
         }
 
@@ -409,18 +398,18 @@ class SelectField extends AbstractFormField
         $str .= '>';
 
         $value = is_array($this->value) ? $this->value : array(
-            (string) $this->value
+            (string)$this->value
         );
 
         // walk all options
         foreach ($this->options as $option) {
             // set selected if the value matches
             if ($option instanceof Option) {
-                $option->setSelected(in_array((string) $option->getValue(), $value));
+                $option->setSelected(in_array((string)$option->getValue(), $value));
             } elseif ($option instanceof Optgroup) {
                 $options = $option->getOptions();
                 foreach ($options as $option2) {
-                    $option2->setSelected(in_array((string) $option2->getValue(), $value));
+                    $option2->setSelected(in_array((string)$option2->getValue(), $value));
                 }
             }
 
@@ -437,7 +426,12 @@ class SelectField extends AbstractFormField
      */
     protected function selectOptionsFromValue()
     {
-        if (! $this->options) {
+        if (!$this->options) {
+            return;
+        }
+
+        // there is no current value known. So, just stop.
+        if ($this->value === null) {
             return;
         }
 

@@ -138,11 +138,12 @@ class Option extends Element
      * Set the style
      *
      * @param string $style
-     * @return string|void
+     * @return Element
      */
     public function setStyle($style)
     {
         $this->style = $style;
+        return $this;
     }
 
     /**

@@ -2,6 +2,8 @@
 namespace FormHandler\Tests;
 
 use PHPUnit\Framework\TestCase;
+use FormHandler\Field\Optgroup;
+use FormHandler\Field\Option;
 
 /**
  * Created by PhpStorm.
@@ -15,36 +17,36 @@ class OptgroupTest extends TestCase
     {
         $title = 'How many kids do you have?';
 
-        $optgroup = new \FormHandler\Field\Optgroup($title);
+        $optgroup = new Optgroup($title);
 
         $this->assertEquals($title, $optgroup->getLabel());
 
         $options = [
-            new \FormHandler\Field\Option('1', 'One'),
-            new \FormHandler\Field\Option('2', 'Two'),
-            new \FormHandler\Field\Option('3', 'Three')
+            new Option('1', 'One'),
+            new Option('2', 'Two'),
+            new Option('3', 'Three')
         ];
 
         $alloptions = [
-            new \FormHandler\Field\Option('1', 'One'),
-            new \FormHandler\Field\Option('2', 'Two'),
-            new \FormHandler\Field\Option('3', 'Three'),
-            new \FormHandler\Field\Option('4', 'Four'),
-            new \FormHandler\Field\Option('0', 'None')
+            new Option('1', 'One'),
+            new Option('2', 'Two'),
+            new Option('3', 'Three'),
+            new Option('4', 'Four'),
+            new Option('0', 'None')
         ];
 
         $optgroup->setOptions($options);
         $this->assertEquals($options, $optgroup->getOptions());
         $this->assertCount(3, $optgroup->getOptions());
 
-        $option = new \FormHandler\Field\Option('4', 'Four');
+        $option = new Option('4', 'Four');
         $optgroup->addOption($option);
-        $this->assertContainsOnlyInstancesOf(\FormHandler\Field\Option::class, $optgroup->getOptions());
+        $this->assertContainsOnlyInstancesOf(Option::class, $optgroup->getOptions());
         $this->assertCount(4, $optgroup->getOptions());
 
-        $newoptions = [new \FormHandler\Field\Option('0', 'None')];
+        $newoptions = [new Option('0', 'None')];
         $optgroup->addOptions($newoptions);
-        $this->assertContainsOnlyInstancesOf(\FormHandler\Field\Option::class, $optgroup->getOptions());
+        $this->assertContainsOnlyInstancesOf(Option::class, $optgroup->getOptions());
         $this->assertCount(5, $optgroup->getOptions());
         $this->assertEquals($alloptions, $optgroup->getOptions());
 
@@ -59,7 +61,7 @@ class OptgroupTest extends TestCase
         $this->assertCount(5, $optgroup->getOptions());
         $this->assertEquals($alloptions, $optgroup->getOptions());
 
-        $optgroup = new \FormHandler\Field\Optgroup($title);
+        $optgroup = new Optgroup($title);
         $optgroup->addOption($option);
         $this->assertCount(1, $optgroup->getOptions());
         $this->assertEquals([$option], $optgroup->getOptions());

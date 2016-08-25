@@ -1,7 +1,6 @@
 <?php
 namespace FormHandler\Tests;
 
-use FormHandler\Field\TextField;
 use FormHandler\Form;
 use PHPUnit\Framework\TestCase;
 
@@ -35,12 +34,16 @@ class TextAreaTest extends TestCase
         $this -> assertEquals(true, $field -> isDisabled());
         $this -> assertEquals(true, $field -> isReadonly());
 
+        $field -> setMaxlength( 500 );
+        $this -> assertEquals( 500, $field -> getMaxlength() );
+
         $field -> setValue('Piet');
         $this -> assertEquals('Piet', $field -> getValue());
 
         $this->expectOutputRegex(
             "/<textarea cols=\"(\d+)\" rows=\"(\d+)\" name=\"(.*?)\" ".
-            "disabled=\"disabled\" readonly=\"readonly\" placeholder=\"(.*?)\">(.*?)<\/textarea>/i",
+            "disabled=\"disabled\" maxlength=\"(\d+)\" readonly=\"readonly\" ".
+            "placeholder=\"(.*?)\">(.*?)<\/textarea>/i",
             'Check html tag'
         );
         echo $field;

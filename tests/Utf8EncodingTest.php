@@ -2,14 +2,16 @@
 namespace FormHandler\Tests;
 
 use PHPUnit\Framework\TestCase;
+use \FormHandler\Encoding\Utf8EncodingFilter;
+use \FormHandler\Form;
 
 class Utf8EncodingTest extends TestCase
 {
     public function testUtf8EncodingFilter()
     {
-        $encoding = new \FormHandler\Encoding\Utf8EncodingFilter();
+        $encoding = new Utf8EncodingFilter();
 
-        $form = new \FormHandler\Form();
+        $form = new Form();
         $encoding->init($form);
 
         // expect the form's accepted charset to utf-8

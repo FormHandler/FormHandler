@@ -3,20 +3,22 @@
 namespace FormHandler\Tests;
 
 use PHPUnit\Framework\TestCase;
+use \FormHandler\Form;
+use \FormHandler\Field\CheckBox;
 
 class CheckboxTest extends TestCase
 {
     public function testCheckbox()
     {
 
-        $form = new \FormHandler\Form();
+        $form = new Form();
 
         $obj = $form -> checkBox('test');
         $obj -> setId('test2');
         $obj -> setAccesskey('a');
         $obj -> setLabel('Set your name');
 
-        $this -> assertClassHasAttribute('checked', \FormHandler\Field\CheckBox::class);
+        $this -> assertClassHasAttribute('checked', CheckBox::class);
 
         $this -> assertEquals('test', $obj -> getName());
         $this -> assertEquals('test2', $obj -> getId());
@@ -36,8 +38,8 @@ class CheckboxTest extends TestCase
         $_POST['submitted'] = '1';
         $_POST['hidden'] = '1';
 
-        $form = new \FormHandler\Form('');
-        $form -> setMethod(\FormHandler\Form::METHOD_POST);
+        $form = new Form('');
+        $form -> setMethod(Form::METHOD_POST);
         $form -> hiddenField('hidden') -> setValue('1');
 
         $obj = $form -> checkBox('submitted', '1');
@@ -54,8 +56,8 @@ class CheckboxTest extends TestCase
         $_GET['arr']['1'] = '1';
         $_GET['hidden'] = '1';
 
-        $form = new \FormHandler\Form('');
-        $form -> setMethod(\FormHandler\Form::METHOD_GET);
+        $form = new Form('');
+        $form -> setMethod(Form::METHOD_GET);
         $form -> hiddenField('hidden') -> setValue('1');
 
         $obj1 = $form -> checkBox('arr[]', '1');
@@ -65,7 +67,7 @@ class CheckboxTest extends TestCase
 
     public function testRender()
     {
-        $form = new \FormHandler\Form('');
+        $form = new Form('');
         $obj = $form -> checkBox('test', '1');
         $obj -> setChecked(true);
         $obj -> setDisabled(true);
