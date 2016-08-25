@@ -123,7 +123,6 @@ class UrlValidator extends AbstractValidator
         }
 
         return true;
-
     }
 
     /**
