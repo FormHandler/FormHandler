@@ -91,7 +91,7 @@ class SelectFieldTest extends TestCase
         $this->assertEquals(false, $infield[1]->isSelected());
         $this->assertEquals(false, $infield[2]->isSelected());
         $this->assertEquals(false, $infield[3]->isSelected());
-        $this->assertEquals(true, $infield[4]->isSelected());
+        $this->assertTrue($infield[4]->isSelected());
         $this->assertEquals('None', $infield[4]->getLabel());
 
         // multiple should be false (by default)
@@ -114,10 +114,10 @@ class SelectFieldTest extends TestCase
         $infield = $field->getOptions();
 
         $this->assertEquals(false, $infield[0]->isSelected());
-        $this->assertEquals(true, $infield[1]->isSelected());
+        $this->assertTrue($infield[1]->isSelected());
         $this->assertEquals(false, $infield[2]->isSelected());
         $this->assertEquals(false, $infield[3]->isSelected());
-        $this->assertEquals(true, $infield[4]->isSelected());
+        $this->assertTrue($infield[4]->isSelected());
 
         // 5th element should be an Optgroup
         $this->assertInstanceOf(Optgroup::class, $infield[5]);
@@ -126,7 +126,7 @@ class SelectFieldTest extends TestCase
         $optgroup = $infield[5];
         $this->assertEquals(1, sizeof($optgroup->getOptions()));
         $this->assertInstanceOf(Option::class, $optgroup->getOptions()[0]);
-        $this->assertEquals(true, $optgroup->getOptions()[0]->isSelected());
+        $this->assertTrue($optgroup->getOptions()[0]->isSelected());
 
 
         // sort the results, because it could be different
@@ -172,9 +172,9 @@ class SelectFieldTest extends TestCase
         $field -> removeOptionByValue(5);
 
         // check the disabled field
-        $this -> assertEquals(false, $field -> isDisabled());
+        $this -> assertFalse($field -> isDisabled());
         $field -> setDisabled(true);
-        $this -> assertEquals(true, $field -> isDisabled());
+        $this -> assertTrue($field -> isDisabled());
 
         $infield = $field -> getOptions();
 

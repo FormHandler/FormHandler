@@ -4,22 +4,51 @@ namespace FormHandler\Field;
 use FormHandler\Form;
 
 /**
+ * This class will create an image button
  */
 class ImageButton extends Element
 {
-
+    /**
+     * The form object where this image button is located in.
+     * @var Form
+     */
     protected $form;
 
-    protected $disabled;
+    /**
+     * Is this button disabled?
+     * @var bool
+     */
+    protected $disabled = false;
 
+    /**
+     * The name of the button
+     * @var string
+     */
     protected $name;
 
+    /**
+     * The size of the button
+     * @var int
+     */
     protected $size;
 
+    /**
+     * The source of the image which is displayed in the button
+     * @var string
+     */
     protected $src;
 
+    /**
+     * Alternative text which is shown in the button when the image could not be displayed.
+     * @var string
+     */
     protected $alt;
 
+    /**
+     * ImageButton constructor.
+     * @param Form $form
+     * @param string $src
+     */
     public function __construct(Form &$form, $src = '')
     {
         $this->form = $form;

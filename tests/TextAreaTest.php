@@ -25,14 +25,14 @@ class TextAreaTest extends TestCase
         $field -> setRows(10);
         $this -> assertEquals([10, 10], [$field -> getRows(), $field -> getCols()]);
 
-        $this -> assertEquals(false, $field -> isDisabled());
-        $this -> assertEquals(false, $field -> isReadonly());
+        $this -> assertFalse($field -> isDisabled());
+        $this -> assertFalse($field -> isReadonly());
 
         $field -> setDisabled(true);
         $field -> setReadonly(true);
 
-        $this -> assertEquals(true, $field -> isDisabled());
-        $this -> assertEquals(true, $field -> isReadonly());
+        $this -> assertTrue($field -> isDisabled());
+        $this -> assertTrue($field -> isReadonly());
 
         $field -> setMaxlength(500);
         $this -> assertEquals(500, $field -> getMaxlength());

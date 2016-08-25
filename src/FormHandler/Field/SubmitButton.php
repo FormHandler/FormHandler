@@ -4,20 +4,45 @@ namespace FormHandler\Field;
 use FormHandler\Form;
 
 /**
+ * This class will create a submit button
  */
 class SubmitButton extends Element
 {
-
+    /**
+     * The form object where this submit button is located in
+     * @var Form
+     */
     protected $form;
 
-    protected $disabled;
+    /**
+     * Is this button disabled?
+     * @var bool
+     */
+    protected $disabled = false;
 
+    /**
+     * The name of the button
+     * @var string
+     */
     protected $name;
 
+    /**
+     * The size of the button
+     * @var int
+     */
     protected $size;
 
+    /**
+     * The value of this button (text which is displayed)
+     * @var string
+     */
     protected $value;
 
+    /**
+     * SubmitButton constructor.
+     * @param Form $form
+     * @param string $value
+     */
     public function __construct(Form &$form, $value = '')
     {
         $this->form = $form;
@@ -133,15 +158,15 @@ class SubmitButton extends Element
     {
         $str = '<input type="submit"';
 
-        if (! empty($this->name)) {
+        if (!empty($this->name)) {
             $str .= ' name="' . $this->name . '"';
         }
 
-        if (! empty($this->value)) {
+        if (!empty($this->value)) {
             $str .= ' value="' . htmlspecialchars($this->value) . '"';
         }
 
-        if (! empty($this->size)) {
+        if (!empty($this->size)) {
             $str .= ' size="' . $this->size . '"';
         }
 

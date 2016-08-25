@@ -21,9 +21,9 @@ class SubmitButtonTest extends TestCase
         $this -> assertEquals('Submit Form', $btn -> getValue());
 
         $this -> assertEquals($form, $btn -> getForm());
-        $this -> assertEquals(false, $btn -> isDisabled());
+        $this -> assertFalse($btn -> isDisabled());
         $btn -> setDisabled(true);
-        $this -> assertEquals(true, $btn -> isDisabled());
+        $this -> assertTrue($btn -> isDisabled());
 
         $btn -> setSize(20);
         $this -> assertEquals(20, $btn -> getSize());

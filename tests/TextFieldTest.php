@@ -29,14 +29,14 @@ class TextFieldTest extends TestCase
         $field -> setSize(2);
         $this -> assertEquals(2, $field -> getSize());
 
-        $this -> assertEquals(false, $field -> isDisabled());
-        $this -> assertEquals(false, $field -> isReadonly());
+        $this -> assertFalse($field -> isDisabled());
+        $this -> assertFalse($field -> isReadonly());
 
         $field -> setDisabled(true);
         $field -> setReadonly(true);
 
-        $this -> assertEquals(true, $field -> isDisabled());
-        $this -> assertEquals(true, $field -> isReadonly());
+        $this -> assertTrue($field -> isDisabled());
+        $this -> assertTrue($field -> isReadonly());
 
         $field -> setValue('Piet');
         $this -> assertEquals('Piet', $field -> getValue());

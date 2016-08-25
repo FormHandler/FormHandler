@@ -68,7 +68,7 @@ class OptgroupTest extends TestCase
 
         $this->assertEquals(false, $optgroup->isDisabled());
         $optgroup->setDisabled(true);
-        $this->assertEquals(true, $optgroup->isDisabled());
+        $this->assertTrue($optgroup->isDisabled());
 
         $optgroup -> setId('kids');
         $optgroup -> setClass("className");
