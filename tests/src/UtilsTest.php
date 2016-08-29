@@ -23,4 +23,43 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(Utils::html($input), $check);
         }
     }
+
+    /**
+     * @covers Utils::buildRequestUrl
+     */
+    public function testbuildRequestUrl()
+    {
+        $list = array(
+            'https://test.com/<script>' => 'https://test.com/%3Cscript%3E',
+            'https://test.com/index.php?test=1&2=<script>' => 'https://test.com/index.php?test=1&2=%3Cscript%3E',
+            'https://test.com/<script>alert(\'1\')</script>' => 'https://test.com/%3Cscript%3Ealert%28%271%27%29%3C/script%3E',
+            'https://test.com/<script>alert("1")</script>' => 'https://test.com/%3Cscript%3Ealert%28%221%22%29%3C/script%3E',
+            'https://test.com/test.php?">' => 'https://test.com/test.php?%22%3E=',
+            'https://test.com/test.php?test=1&a=">\'' => 'https://test.com/test.php?test=1&a=%22%3E%27',
+        );
+
+        foreach($list as $input => $check)
+        {
+            $url = parse_url($input);
+
+            $protocol = array_key_exists('scheme', $url)
+                ? $url['scheme']
+                : 'http';
+
+            $host = array_key_exists('host', $url)
+                ? $url['host']
+                : 'localhost';
+
+            if(array_key_exists('path', $url))
+            {
+                $host .= $url['path'];
+            }
+
+            $query = array_key_exists('query', $url)
+                ? '?'.$url['query']
+                : '';
+
+            $this->assertEquals($check, Utils::buildRequestUrl($protocol, $host, $query));
+        }
+    }
 }
