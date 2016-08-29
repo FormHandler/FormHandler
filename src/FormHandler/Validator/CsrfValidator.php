@@ -53,7 +53,7 @@ class CsrfValidator extends AbstractValidator
         // Make sure $_SESSION['csrftokens'] is an array.
         if (! is_array($_SESSION['csrftokens'])) {
             // $_SESSION['csrftokens'] is not an array! Reset/initialize $_SESSION['csrftokens'].
-            $_SESSION['csrftokens'] = array();
+            $_SESSION['csrftokens'] = [];
             // It makes no sense to continue here, as we just cleaned the entire CSRF token basket.
             // Return, because we are done here.
             return;
@@ -111,6 +111,7 @@ class CsrfValidator extends AbstractValidator
 
     /**
      * Check if the given field is valid or not.
+     * NOTE: this will also reset the value of the CSRF field.
      *
      * @return boolean
      */
@@ -128,7 +129,6 @@ class CsrfValidator extends AbstractValidator
                     // invalidate the token as it has already been used.
                     unset($_SESSION['csrftokens'][$key]);
 
-                    $this->field->setValue(self::generateToken());
                     $this->validated = true;
                 } else {
                     $this->validated = false;

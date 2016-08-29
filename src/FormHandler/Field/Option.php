@@ -7,22 +7,59 @@ class Option extends Element
 {
     use HasAttributes;
 
+    /**
+     * The id of this option
+     * @var string
+     */
     protected $id;
 
+    /**
+     * A style string which is applied to this option
+     * @var string
+     */
     protected $style;
 
+    /**
+     * A classname which is applied to this option
+     * @var
+     */
     protected $class;
 
+    /**
+     * The title of this option
+     * @var string
+     */
     protected $title;
 
-    protected $disabled;
+    /**
+     * Is this option disabled?
+     * @var bool
+     */
+    protected $disabled = false;
 
+    /**
+     * The label of this option
+     * @var string
+     */
     protected $label;
 
-    protected $selected;
+    /**
+     * Is this option selected?
+     * @var bool
+     */
+    protected $selected = false;
 
+    /**
+     * The value for this option
+     * @var string
+     */
     protected $value;
 
+    /**
+     * Option constructor.
+     * @param string $value
+     * @param string $label
+     */
     public function __construct($value = null, $label = null)
     {
         if ($value !== null) {

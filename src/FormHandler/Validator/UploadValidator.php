@@ -359,7 +359,7 @@ class UploadValidator extends AbstractValidator
     public function addAllowedMimeType($type)
     {
         if (!is_array($this->allowedMimeTypes)) {
-            $this->allowedMimeTypes = array();
+            $this->allowedMimeTypes = [];
         }
 
         $this->allowedMimeTypes[] = $type;
@@ -478,7 +478,7 @@ class UploadValidator extends AbstractValidator
     public function addDeniedMimeType($type)
     {
         if (!is_array($this->deniedMimeTypes)) {
-            $this->deniedMimeTypes = array();
+            $this->deniedMimeTypes = [];
         }
 
         $this->deniedMimeTypes[] = $type;

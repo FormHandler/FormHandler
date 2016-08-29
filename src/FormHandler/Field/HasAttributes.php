@@ -3,8 +3,7 @@ namespace FormHandler\Field;
 
 trait HasAttributes
 {
-
-    protected $attributes = array();
+    protected $attributes = [];
 
     /**
      * Add an attribute.

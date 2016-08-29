@@ -8,13 +8,31 @@ use FormHandler\Form;
  */
 class RadioButton extends AbstractFormField
 {
+    /**
+     * Is this radiobutton is checked or not
+     * @var bool
+     */
+    protected $checked = false;
 
-    protected $checked;
-
+    /**
+     * The value of this radiobutton when it's selected.
+     * @var string
+     */
     protected $value;
 
+    /**
+     * The label of this radiobutton.
+     * Note: this is only usefull (and used) if the formatter parses it. By default its thus unused!
+     * @var string
+     */
     protected $label;
 
+    /**
+     * RadioButton constructor.
+     * @param Form $form
+     * @param string $name
+     * @param string $value
+     */
     public function __construct(Form &$form, $name = '', $value = null)
     {
         $this->form = $form;
@@ -24,7 +42,7 @@ class RadioButton extends AbstractFormField
             $this->setValue($value);
         }
 
-        if (! empty($name)) {
+        if (!empty($name)) {
             $this->setName($name);
         }
     }
@@ -50,7 +68,7 @@ class RadioButton extends AbstractFormField
      */
     public function setChecked($checked)
     {
-        $this->checked = (bool) $checked;
+        $this->checked = (bool)$checked;
         return $this;
     }
 
@@ -122,7 +140,7 @@ class RadioButton extends AbstractFormField
     {
         $str = '<input type="radio"';
 
-        if (! empty($this->name)) {
+        if (!empty($this->name)) {
             $str .= ' name="' . $this->name . '"';
         }
 

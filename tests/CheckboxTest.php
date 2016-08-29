@@ -52,6 +52,7 @@ class CheckboxTest extends TestCase
     {
         // fake a post request;
         $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_GET = array();
         $_GET['arr']['0'] = '1';
         $_GET['arr']['1'] = '1';
         $_GET['hidden'] = '1';

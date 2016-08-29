@@ -8,6 +8,7 @@ use FormHandler\Encoding\Utf8EncodingFilter;
 use FormHandler\Field\Element;
 use FormHandler\Field;
 use FormHandler\Validator;
+use FormHandler\Validator\CsrfValidator;
 
 /**
  * The Form Object which represents a form and all it's functionality.
@@ -170,6 +171,12 @@ class Form extends Field\Element
      */
     protected $csrfProtection;
 
+    /**
+     * After parsing the submitted values we cache these so that we don't have to analyse them more then once.
+     * @var array
+     */
+    protected static $cache = [];
+
     const METHOD_GET = 'get';
 
     const METHOD_POST = 'post';
@@ -202,11 +209,34 @@ class Form extends Field\Element
     public function __construct($action = '', $csrfprotection = null)
     {
         // store our CSRF state.
-        $this->csrfProtection = $csrfprotection;
+        $this->csrfProtection = $csrfprotection === null ? static::$defaultCsrfProtectionEnabled : $csrfprotection;
 
         $this->action = $action;
         $this->setFormatter(Form::$defaultFormatter ?: new PlainFormatter());
         $this->setEncodingFilter(Form::$defaultEncodingFilter ?: new Utf8EncodingFilter());
+
+        // csrf protection enabled?
+        if ($this->isCsrfProtectionEnabled()) {
+            // Add a hidden 'csrftoken' field.
+            $field = $this->hiddenField('csrftoken');
+            $field->addValidator(new CsrfValidator());
+
+            if (!$field->getValue()) {
+                $field->setValue(CsrfValidator::generateToken());
+            }
+        }
+    }
+
+
+    /**
+     * Clear our cache of the submitted values.
+     * This could be useful when you have changed the submitted values and want to re-analyze them.
+     * @return Form
+     */
+    public function clearCache()
+    {
+        static::$cache = [];
+        return $this;
     }
 
     /**
@@ -277,7 +307,7 @@ class Form extends Field\Element
      *
      * @return bool
      */
-    public static function getDefaultCsrfProtectionEnabled()
+    public static function isDefaultCsrfProtectionEnabled()
     {
         return Form::$defaultCsrfProtectionEnabled;
     }
@@ -308,19 +338,6 @@ class Form extends Field\Element
     }
 
     /**
-     * Should we enable Cross Site Request Forgery protection?
-     * If not given, we will use possible default settings.
-     * If those are not set, we will enable it for POST forms.
-     * Get the value for csrfProtection
-     *
-     * @return bool
-     */
-    public function getCsrfProtection()
-    {
-        return $this->csrfProtection;
-    }
-
-    /**
      * Return's the fields value from the GET or POST array, or null if not found.
      * NOTE: This function should NOT be used for retrieving the value which is set in the field itsself,
      * because this function will only retrieve the value from GET/POST array.
@@ -344,10 +361,8 @@ class Form extends Field\Element
      */
     public function getFieldValue($name)
     {
-        static $cache = array();
-
         // if not yet in the cache, look it up
-        if (!array_key_exists($name, $cache)) {
+        if (!array_key_exists($name, static::$cache)) {
             if ($this->getMethod() == Form::METHOD_GET) {
                 $list = $_GET;
             } elseif ($this->getMethod() == Form::METHOD_POST) {
@@ -358,12 +373,12 @@ class Form extends Field\Element
 
             // look it up directly in the get/post array
             if (array_key_exists($name, $list)) {
-                $cache[$name] = $list[$name];
+                static::$cache[$name] = $list[$name];
             } // check for braces (array names?)
             elseif (preg_match_all('/\[(.*)\]/U', $name, $match, PREG_OFFSET_CAPTURE)) {
                 // Walk all found matches and create a list of names
                 // (could be more, like "field[name1][name2]
-                $names = array();
+                $names = [];
                 foreach ($match[0] as $i => $part) {
                     if ($i == 0) {
                         $names[] = substr($name, 0, $part[1]);
@@ -386,22 +401,22 @@ class Form extends Field\Element
                     }
                 }
 
-                $cache[$name] = $base;
+                static::$cache[$name] = $base;
             } else {
-                $cache[$name] = null;
+                static::$cache[$name] = null;
             }
 
             // do we have a value?
-            if ($cache[$name]) {
+            if (static::$cache[$name]) {
                 // make sure we filter the input
                 if ($this->encodingFilter instanceof InterfaceEncodingFilter) {
                     // filter the input
-                    $cache[$name] = $this->encodingFilter->filter($cache[$name]);
+                    static::$cache[$name] = $this->encodingFilter->filter(static::$cache[$name]);
                 }
             }
         }
 
-        return $cache[$name];
+        return static::$cache[$name];
     }
 
     /**
@@ -584,19 +599,6 @@ class Form extends Field\Element
             }
         }
 
-        // is this form not submitted and we want to enable csrf protection?
-        if ($this->isCsrfProtectionEnabled()) {
-            // if we do not have a csrf-token field yet, add it.
-            if (!$this->getFieldByName('csrftoken')) {
-                // Add a hidden 'csrftoken' field.
-                $field = $this->hiddenField('csrftoken')->addValidator(new Validator\CsrfValidator());
-
-                if (!$this->submitted || !$field->isValid()) {
-                    $field->setValue(Validator\CsrfValidator::generateToken());
-                }
-            }
-        }
-
         return $this->submitted;
     }
 
@@ -710,7 +712,7 @@ class Form extends Field\Element
      */
     public function getErrorMessages()
     {
-        $errors = array();
+        $errors = [];
         foreach ($this->fields as $field) {
             if ($field instanceof Field\AbstractFormField && !$field->isValid()) {
                 $fldErrors = $field->getErrorMessages();
@@ -891,11 +893,11 @@ class Form extends Field\Element
     {
         $enctype = strtolower(trim($enctype));
 
-        if (in_array($enctype, array(
-            'application/x-www-form-urlencoded',
-            'multipart/form-data',
-            'text/plain'
-        ))) {
+        if (in_array($enctype, [
+            self::ENCTYPE_MULTIPART,
+            self::ENCTYPE_PLAIN,
+            self::ENCTYPE_URLENCODED
+        ])) {
             $this->enctype = $enctype;
         }
 
@@ -932,10 +934,10 @@ class Form extends Field\Element
     {
         $method = strtolower($method);
 
-        if (in_array($method, array(
+        if (in_array($method, [
             Form::METHOD_GET,
             Form::METHOD_POST
-        ))) {
+        ])) {
             $this->method = $method;
         }
         return $this;
@@ -1141,10 +1143,11 @@ class Form extends Field\Element
      * CSRF stands for Cross Site Request Forgery.
      *
      * This method returns if we want to use a token to protect ourselfs agains this kind of attacks.
+     * NOTE: This requires that we can make use of sessions. If this is disabled, we will return false!
      *
      * @return boolean
      */
-    protected function isCsrfProtectionEnabled()
+    public function isCsrfProtectionEnabled()
     {
         // is there no session available? Then always disable CSRF protection.
         if (session_id() == '') {

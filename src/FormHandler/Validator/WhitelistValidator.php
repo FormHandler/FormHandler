@@ -6,8 +6,16 @@ namespace FormHandler\Validator;
 class WhitelistValidator extends AbstractValidator
 {
 
-    protected $whitelist = array();
+    /**
+     * Whitelist of strings
+     * @var array
+     */
+    protected $whitelist = [];
 
+    /**
+     * Check if this field is required or not
+     * @var bool
+     */
     protected $required = true;
 
     /**
@@ -47,13 +55,13 @@ class WhitelistValidator extends AbstractValidator
         if ($this->required && $value == null) {
             return false;
         } // if the field is not required and the value is empty, then it's also valid
-        elseif (! $this->required && $value == "") {
+        elseif (!$this->required && $value == "") {
             return true;
         }
 
         // now, walk all chars and check if they are in the whitelist
-        for ($i = 0; $i < strlen($value); $i ++) {
-            if (! in_array($value[$i], $this->whitelist)) {
+        for ($i = 0; $i < strlen($value); $i++) {
+            if (!in_array($value[$i], $this->whitelist)) {
                 // not in the whitelist!
                 return false;
             }
@@ -70,7 +78,7 @@ class WhitelistValidator extends AbstractValidator
      */
     public function setRequired($required)
     {
-        $this->required = (bool) $required;
+        $this->required = (bool)$required;
     }
 
     /**
@@ -97,8 +105,8 @@ class WhitelistValidator extends AbstractValidator
         } elseif ($whitelist instanceof \ArrayObject) {
             $this->whitelist = $whitelist->getArrayCopy();
         } elseif (is_string($whitelist)) {
-            $this->whitelist = array();
-            for ($i = 0; $i < strlen($whitelist); $i ++) {
+            $this->whitelist = [];
+            for ($i = 0; $i < strlen($whitelist); $i++) {
                 $this->whitelist[] = $whitelist[$i];
             }
         } else {
