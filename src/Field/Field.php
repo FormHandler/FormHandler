@@ -786,7 +786,7 @@ class Field
     public function _getViewValue()
     {
         // get the value for the field
-        $val = \FormHandler\Utils::html($this->getValue());
+        $val = $this->getValue();
 
         // are there multiple options?
         if(!is_null($this->options) && $this->getUseArrayKeyAsValue() === true)
@@ -799,14 +799,14 @@ class Field
             {
                 if(array_key_exists($value, $this->options))
                 {
-                    $tmp[$value] = $this->options[$value];
+                    $tmp[$value] = \FormHandler\Utils::html($this->options[$value]);
                 }
             }
             $val = $tmp;
             asort($val);
         }
 
-        $processed = !is_array($val) ? array($val) : $val;
+        $processed = !is_array($val) ? array(\FormHandler\Utils::html($val)) : $val;
 
         $enable_link = false;
         if(is_array($this->view_link))
