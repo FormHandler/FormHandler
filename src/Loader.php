@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * Copyright (C) 2015 FormHandler
  *
  * This library is free software; you can redistribute it and/or
@@ -21,9 +21,9 @@
 
 /**
  * Custom autoloader for FormHandler framework
- * 
+ *
  * Only use this when not using Composer
- *      
+ *
  * @param string $class The fully-qualified class name.
  * @return void
  */

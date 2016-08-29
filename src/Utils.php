@@ -37,7 +37,7 @@ class Utils
      */
     static public function html($string, $flags = null, $charset = 'UTF-8')
     {
-        $flags = (!is_null($flags)) ? $flags : ENT_COMPAT | ENT_IGNORE;
+        $flags = (!is_null($flags)) ? $flags : ENT_COMPAT | ENT_IGNORE | ENT_QUOTES;
         return @htmlentities($string, $flags, $charset);
     }
 

@@ -1,2 +1,2 @@
 <?php
-require_once './src/Loader.php';
+require_once '../src/Loader.php';

@@ -3076,7 +3076,7 @@ class FormHandler
 
                 $new_js .= "{\n";
                 $new_js .= "    FormHandler.load(\n";
-                $new_js .= "        '" . $protocol .'://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . "',\n";
+                $new_js .= "        '" . $protocol .'://'. Utils::html($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . "',\n";
                 $new_js .= "        " . $from_value . ",\n";
                 $new_js .= "        " . json_encode($checked_fields) . ",\n";
                 $new_js .= "        '" . implode('&', $extras) . "',\n";
