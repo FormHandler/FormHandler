@@ -11,5 +11,4 @@ before_script:
     - travis_retry composer --prefer-source --dev install
 
 script:
-  - mkdir -p build/logs
-  - phpunit --configuration build/phpunit.xml
+  - ant full-build
