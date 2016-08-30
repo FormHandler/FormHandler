@@ -110,7 +110,7 @@ class Form extends Field\Element
      * Specifies the character encodings that are to be used for the form submission
      * @var string
      */
-    protected $accept_charset;
+    protected $acceptCharset;
 
     /**
      * Not supported in HTML5.
@@ -1065,7 +1065,7 @@ class Form extends Field\Element
      */
     public function setAcceptCharset($charset)
     {
-        $this->accept_charset = $charset;
+        $this->acceptCharset = $charset;
         return $this;
     }
 
@@ -1076,7 +1076,7 @@ class Form extends Field\Element
      */
     public function getAcceptCharset()
     {
-        return $this->accept_charset;
+        return $this->acceptCharset;
     }
 
     /**
@@ -1096,8 +1096,8 @@ class Form extends Field\Element
             $str .= ' accept="' . $this->accept . '"';
         }
 
-        if (!empty($this->accept_charset)) {
-            $str .= ' accept-charset="' . $this->accept_charset . '"';
+        if (!empty($this->acceptCharset)) {
+            $str .= ' accept-charset="' . $this->acceptCharset . '"';
         }
 
         if (!empty($this->enctype)) {

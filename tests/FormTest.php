@@ -144,14 +144,6 @@ class FormTest extends TestCase
             'Check html tag'
         );
         echo $form;
-
-        $form->setFormatter(null);
-
-        $this->expectOutputRegex(
-            '/^<form action="" name="myForm" accept="text\/plain" accept-charset="utf-8" enctype="application\/x-www-form-urlencoded" method="post" target="_self">$/i',
-            'Check html tag'
-        );
-        echo $form;
     }
 
     /**
