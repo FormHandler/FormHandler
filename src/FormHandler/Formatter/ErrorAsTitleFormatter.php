@@ -54,7 +54,7 @@ class ErrorAsTitleFormatter extends PlainFormatter
             $html = $this->form($element);
         } // a "normal" element, like a submitbutton or such
         else {
-                    $html = $element->render();
+            $html = $element->render();
         }
 
         return $html;

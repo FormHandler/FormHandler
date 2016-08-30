@@ -8,7 +8,6 @@ namespace FormHandler\Field;
  */
 class Element
 {
-
     /**
      * Specifies a shortcut key to activate/focus an element
      *
@@ -220,6 +219,7 @@ class Element
 
     /**
      * Return an string representation for this element
+     * @return string
      */
     public function render()
     {

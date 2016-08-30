@@ -11,7 +11,6 @@ use FormHandler\Field\RadioButton;
  */
 class RadioButtonCheckedValidator extends AbstractValidator
 {
-
     /**
      * Create a IsExistingOptionValidator
      *
@@ -23,6 +22,8 @@ class RadioButtonCheckedValidator extends AbstractValidator
         if ($message === null) {
             $message = dgettext('formhandler', 'You have to select a value!');
         }
+
+        $this -> setRequired( true );
 
         $this->setErrorMessage($message);
     }

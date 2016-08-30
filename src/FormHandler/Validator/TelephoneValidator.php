@@ -2,10 +2,19 @@
 namespace FormHandler\Validator;
 
 /**
+ * This validator allows only characters which are commonly used in phone numbers.
+ * Allowed are:
+ * - numeric charackters
+ * - dash (-)
+ * - space
+ * - plus sign (+)
+ * - parentheses ( and )
+ *
+ * This is probably not the best validtor, because you also want to check the length
+ * of the value, number of digits, etc.
  */
 class TelephoneValidator extends StringValidator
 {
-
     /**
      * Create a new email validator
      *

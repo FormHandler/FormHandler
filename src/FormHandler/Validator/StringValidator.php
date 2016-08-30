@@ -5,20 +5,25 @@ namespace FormHandler\Validator;
  */
 class StringValidator extends AbstractValidator
 {
-
+    /**
+     * Set the minimum allowed length of the string. Allowed is this length or longer.
+     * @var int
+     */
     protected $minLength = 0;
 
+    /**
+     * Set the maximum lenght of the string. Allowed is this value or smaller.
+     * @var int
+     */
     protected $maxLength = 0;
-
-    protected $required = true;
 
     /**
      * Create a new string validator
      *
      * Possible default values can be given directly (all are optional)
      *
-     * @param int $minLength
-     * @param int $maxLength
+     * @param int $minLength Set the minimum allowed length of the string. Allowed is this length or longer.
+     * @param int $maxLength Set the maximum lenght of the string. Allowed is this value or smaller.
      * @param boolean $required
      * @param string $message
      */
@@ -68,26 +73,6 @@ class StringValidator extends AbstractValidator
         }
 
         return true;
-    }
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool) $required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 
     /**

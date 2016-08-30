@@ -74,7 +74,7 @@ abstract class AbstractFormField extends Element
      * Set if this field is valid or not
      *
      * @param boolean $value
-     * @return AbstractFormField
+     * @return self
      */
     public function setValid($value)
     {
@@ -87,7 +87,7 @@ abstract class AbstractFormField extends Element
      *
      * @param string $message
      * @param boolean $setToInvalid
-     * @return AbstractFormField
+     * @return self
      */
     public function addErrorMessage($message, $setToInvalid = true)
     {
@@ -108,7 +108,7 @@ abstract class AbstractFormField extends Element
      * uses it. Otherwise it will be ignored!
      *
      * @param string $text
-     * @return AbstractFormField
+     * @return self
      */
     public function setHelpText($text)
     {
@@ -131,6 +131,18 @@ abstract class AbstractFormField extends Element
     }
 
     /**
+     * Clear abstract cache .
+     * We cache for example the result of the isValid method, so that for a second call, we do not
+     * have to validate the field again. This method clears such caches.
+     * @return self
+     */
+    public function clearCache()
+    {
+        $this->valid = null;
+        return $this;
+    }
+
+    /**
      * Check if this field is valid or not.
      * It will cache it's result.
      * If a new validator is added, it's cached value is reset.
@@ -144,7 +156,7 @@ abstract class AbstractFormField extends Element
 
             if (sizeof($this->validators) > 0) {
                 foreach ($this->validators as $validator) {
-                    if (! $validator->isValid()) {
+                    if (!$validator->isValid()) {
                         $this->errors[] = $validator->getErrorMessage();
                         $this->valid = false;
                     }
@@ -197,7 +209,7 @@ abstract class AbstractFormField extends Element
      * ```
      *
      * @param mixed $validator
-     * @return AbstractFormField
+     * @return self
      * @throws \Exception
      */
     public function addValidator($validator)
@@ -212,13 +224,23 @@ abstract class AbstractFormField extends Element
             $validator = clone $validator;
         }
 
-        if (! ($validator instanceof AbstractValidator)) {
+        if (!($validator instanceof AbstractValidator)) {
             throw new \Exception('Only validators of types "AbstractValidator" are allowed!');
         }
 
         $validator->setField($this);
         $this->validators[] = $validator;
         $this->valid = null; // this will trigger that the validation will be executed again
+        return $this;
+    }
+
+    /**
+     * Remove all validators from this field.
+     * @return self
+     */
+    public function clearValidators()
+    {
+        $this->validators = [];
         return $this;
     }
 
@@ -247,7 +269,7 @@ abstract class AbstractFormField extends Element
      * Set the name of the field and return the TextField reference
      *
      * @param string $name
-     * @return AbstractFormField
+     * @return self
      */
     public function setName($name)
     {
@@ -269,7 +291,7 @@ abstract class AbstractFormField extends Element
      * Set if this field is disabled and return the TextField reference
      *
      * @param bool $disabled
-     * @return AbstractFormField
+     * @return self
      */
     public function setDisabled($disabled)
     {
@@ -292,11 +314,33 @@ abstract class AbstractFormField extends Element
      */
     public function __toString()
     {
-        $formatter = $this->getForm()->getFormatter();
-        if ($formatter) {
-            return $formatter->format($this);
+        $format = $this->getForm()->getFormatter();
+        return $format($this);
+    }
+
+    /**
+     * Check if one of the validators on this field requires that this field should be filled in.
+     * @return bool
+     */
+    public function isRequired()
+    {
+        foreach ($this->validators as $validator) {
+            $validator->isRequired();
+        }
+    }
+
+    /**
+     * Return an string representation for this element
+     * @return string
+     */
+    public function render()
+    {
+        $str = parent::render();
+
+        if ($this->isRequired()) {
+            $str .= " required";
         }
 
-        return $this->render();
+        return $str;
     }
 }

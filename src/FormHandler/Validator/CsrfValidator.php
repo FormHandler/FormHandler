@@ -6,7 +6,6 @@ namespace FormHandler\Validator;
  */
 class CsrfValidator extends AbstractValidator
 {
-
     protected $validated = null;
 
     /**
@@ -19,6 +18,8 @@ class CsrfValidator extends AbstractValidator
         if ($message === null) {
             $message = dgettext('formhandler', 'This form has expired, please try again.');
         }
+
+        $this -> setRequired( true );
 
         $this->setErrorMessage($message);
 

@@ -14,12 +14,6 @@ use FormHandler\Field\UploadField;
 class UploadValidator extends AbstractValidator
 {
     /**
-     * Is this field required or not?
-     * @var bool
-     */
-    protected $required = true;
-
-    /**
      * A list of allowed extensions (without leading dot!)
      * @var array
      */
@@ -256,26 +250,6 @@ class UploadValidator extends AbstractValidator
         }
 
         return true;
-    }
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param bool $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool)$required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return bool
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 
     /**

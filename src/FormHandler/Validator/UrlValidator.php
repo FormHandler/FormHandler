@@ -9,7 +9,6 @@ namespace FormHandler\Validator;
  */
 class UrlValidator extends AbstractValidator
 {
-
     /**
      * Determines which schemes are allowed for this validator.
      * (e.g. http/https/ftp)
@@ -18,13 +17,6 @@ class UrlValidator extends AbstractValidator
      * @var array
      */
     protected $allowedSchemes = ['http', 'https'];
-
-    /**
-     * Determines whether this field is required.
-     *
-     * @var bool
-     */
-    protected $required = true;
 
     /**
      * Max length for the URL
@@ -155,26 +147,6 @@ class UrlValidator extends AbstractValidator
     public function getAllowedSchemes()
     {
         return $this->allowedSchemes;
-    }
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool)$required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 
     /**

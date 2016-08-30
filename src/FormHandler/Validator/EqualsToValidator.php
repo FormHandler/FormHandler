@@ -18,13 +18,6 @@ class EqualsToValidator extends AbstractValidator
     protected $compareValue;
 
     /**
-     * Set if this field should be required or not
-     *
-     * @var bool
-     */
-    protected $required = true;
-
-    /**
      * Set if we should revert the working if this equalsTo validator.
      * So, the value should NOT match to the $compareValue.
      * @var bool
@@ -70,16 +63,6 @@ class EqualsToValidator extends AbstractValidator
     }
 
     /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool) $required;
-    }
-
-    /**
      * Set the "NOT" value.
      * If set to true, the field's value will be set as "correct" if the value DOES NOT match.
      * If set to false (default), the field will be "correct" if the value DOES match.
@@ -101,16 +84,6 @@ class EqualsToValidator extends AbstractValidator
     public function isNot()
     {
         return $this->not;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 
     /**

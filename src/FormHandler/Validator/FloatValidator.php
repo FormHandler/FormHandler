@@ -35,12 +35,6 @@ class FloatValidator extends AbstractValidator
     protected $max = null;
 
     /**
-     * Set if this field is required or not.
-     * @var bool
-     */
-    protected $required = true;
-
-    /**
      * Set the type of decimal point which is allowed. Default a dot (.). Use one of the DECIMAL_* constants
      * @var int
      */
@@ -207,26 +201,6 @@ class FloatValidator extends AbstractValidator
             default:
                 return '/^-?\d+(\.\d+)?$/';
         }
-    }
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool)$required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 
     /**

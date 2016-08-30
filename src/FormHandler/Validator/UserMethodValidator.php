@@ -7,7 +7,10 @@ namespace FormHandler\Validator;
  */
 class UserMethodValidator extends AbstractValidator
 {
-
+    /**
+     * The method / colsure which should be executed to validate the field.
+     * @var array|\Closure
+     */
     protected $userMethod;
 
     /**
@@ -24,6 +27,7 @@ class UserMethodValidator extends AbstractValidator
      */
     public function __construct($methodName)
     {
+        $this->setRequired(false);
         $this->userMethod = $methodName;
     }
 

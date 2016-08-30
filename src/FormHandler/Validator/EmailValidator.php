@@ -7,13 +7,6 @@ namespace FormHandler\Validator;
 class EmailValidator extends AbstractValidator
 {
     /**
-     * Check if this field should be required or not
-     *
-     * @var bool
-     */
-    protected $required = true;
-
-    /**
      * Should we also check if the domain of the email address exists?
      *
      * @var bool
@@ -89,26 +82,6 @@ class EmailValidator extends AbstractValidator
         }
 
         return true;
-    }
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool) $required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 
     /**

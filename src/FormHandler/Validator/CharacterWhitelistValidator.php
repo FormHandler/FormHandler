@@ -2,8 +2,10 @@
 namespace FormHandler\Validator;
 
 /**
+ * Filter this field by checking all characters against a whitelist.
+ * If the value does exists, its considered correct.
  */
-class WhitelistValidator extends AbstractValidator
+class CharacterWhitelistValidator extends AbstractValidator
 {
 
     /**
@@ -11,12 +13,6 @@ class WhitelistValidator extends AbstractValidator
      * @var array
      */
     protected $whitelist = [];
-
-    /**
-     * Check if this field is required or not
-     * @var bool
-     */
-    protected $required = true;
 
     /**
      * Create a new whitelist validator
@@ -69,26 +65,6 @@ class WhitelistValidator extends AbstractValidator
 
         // if here, everything is ok!
         return true;
-    }
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool)$required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 
     /**

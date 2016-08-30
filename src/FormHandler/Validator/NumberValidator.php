@@ -5,20 +5,25 @@ namespace FormHandler\Validator;
  */
 class NumberValidator extends AbstractValidator
 {
-
+    /**
+     * The minimal value of this field. Allowed is this number or higher
+     * @var int
+     */
     protected $min = null;
 
+    /**
+     * The maximum value of this field. Allowed is this number or lower.
+     * @var int
+     */
     protected $max = null;
-
-    protected $required = true;
 
     /**
      * Create a new number validator
      *
      * Possible default values can be given directly (all are optional)
      *
-     * @param int $min
-     * @param int $max
+     * @param int $min The minimum allowed number. So this number or higher are allowed, not lower.
+     * @param int $max The maximum allowed number. So this number or lower are allowed, not higher.
      * @param boolean $required
      * @param string $message
      */
@@ -75,26 +80,6 @@ class NumberValidator extends AbstractValidator
         }
 
         return true;
-    }
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool) $required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 
     /**

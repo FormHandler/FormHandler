@@ -10,7 +10,6 @@ use FormHandler\Field\PassField;
  */
 class SamePasswordValidator extends AbstractValidator
 {
-
     /**
      * The field which should be checked. This can either be an instance of a PassField,
      * or the name of a PassField in the form.
@@ -23,13 +22,16 @@ class SamePasswordValidator extends AbstractValidator
      *
      * @param string|PassField $field2
      * @param string $message
+     * @param bool $required
      * @throws \Exception
      */
-    public function __construct($field2, $message = null)
+    public function __construct($field2, $message = null, $required = true )
     {
         if ($message === null) {
             $message = dgettext('formhandler', 'The given passwords are not the same.');
         }
+
+        $this->setRequired($required);
 
         $this->setErrorMessage($message);
 
@@ -83,6 +85,11 @@ class SamePasswordValidator extends AbstractValidator
      */
     public function isValid()
     {
+        // value should not be empty
+        if( $this -> required && $this->field->getValue() == "" ) {
+            return false;
+        }
+
         // values not the same
         if ($this->field->getValue() != $this->getField2()->getValue()) {
             return false;

@@ -6,9 +6,6 @@ namespace FormHandler\Validator;
  */
 class Ipv4Validator extends AbstractValidator
 {
-
-    protected $required;
-
     /**
      * Var to remember if the value was valid or not
      *
@@ -56,25 +53,5 @@ class Ipv4Validator extends AbstractValidator
         }
 
         return $this->valid;
-    }
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool) $required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 }

@@ -7,13 +7,6 @@ namespace FormHandler\Validator;
 class DateValidator extends AbstractValidator
 {
     /**
-     * Check if this field should be required or not
-     *
-     * @var bool
-     */
-    protected $required;
-
-    /**
      * Var to remember if the value was valid or not
      *
      * @var bool
@@ -65,25 +58,5 @@ class DateValidator extends AbstractValidator
         }
 
         return $this->valid;
-    }
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool) $required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 }

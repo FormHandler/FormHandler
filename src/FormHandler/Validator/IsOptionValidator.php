@@ -9,19 +9,12 @@ use FormHandler\Field;
  */
 class IsOptionValidator extends AbstractValidator
 {
-
     /**
      * The field to validate
      *
      * @var Field\SelectField;
      */
     protected $field;
-
-    /**
-     * Should this field be required?
-     * @var bool
-     */
-    protected $required = true;
 
     /**
      * Create a IsExistingOptionValidator
@@ -134,25 +127,5 @@ class IsOptionValidator extends AbstractValidator
         }
 
         return true;
-    }
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool)$required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 }

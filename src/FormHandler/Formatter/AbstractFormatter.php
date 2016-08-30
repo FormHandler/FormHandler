@@ -33,31 +33,6 @@ use FormHandler\Form;
  */
 abstract class AbstractFormatter
 {
-
-    /**
-     * The form which needs to be formatted
-     *
-     * @var Form
-     */
-    protected $form;
-
-    /**
-     * Set the form where this formatter is working on
-     * @param Form $form
-     */
-    public function setForm(Form $form)
-    {
-        $this->form = $form;
-    }
-
-    /**
-     * Get the form where this formatter is working on
-     */
-    public function getForm()
-    {
-        return $this -> form;
-    }
-
     /**
      * Shorthand to format an element
      * @param Element $element

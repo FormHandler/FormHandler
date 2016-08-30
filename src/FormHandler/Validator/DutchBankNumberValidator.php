@@ -4,15 +4,8 @@ namespace FormHandler\Validator;
 /**
  * This validator checks if the value in the field is a valid dutch bank account number.
  */
-class BankNumberValidator extends AbstractValidator
+class DutchBankNumberValidator extends AbstractValidator
 {
-    /**
-     * Check if this field should be required or not
-     *
-     * @var bool
-     */
-    protected $required = true;
-
     /**
      * Create a new email validator
      *
@@ -70,26 +63,5 @@ class BankNumberValidator extends AbstractValidator
             return true;
         }
         return false;
-    }
-
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool) $required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 }

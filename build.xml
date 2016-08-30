@@ -39,7 +39,7 @@
             description="Performs static analysis, runs the tests, and generates project documentation"/>
 
     <target name="precommit"
-            depends="prepare,composer,phpcbf,phpcs,phpcpd,phpmd"
+            depends="prepare,composer,phpunit,phpcbf,phpcs,phpcpd,phpmd"
             description="Performs precommit checks"/>
 
     <target name="full-build-parallel"

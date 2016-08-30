@@ -6,7 +6,10 @@ namespace FormHandler\Validator;
  */
 class UserFunctionValidator extends AbstractValidator
 {
-
+    /**
+     * The function which should be called (Executed) to validate this field.
+     * @var string
+     */
     protected $userFunction;
 
     /**
@@ -24,7 +27,9 @@ class UserFunctionValidator extends AbstractValidator
      */
     public function __construct($functionName)
     {
-        if (! function_exists($functionName)) {
+        $this->setRequired(false);
+
+        if (!function_exists($functionName)) {
             throw new \Exception('Error, function with the name "' . $functionName . '" does not exists!');
         }
 

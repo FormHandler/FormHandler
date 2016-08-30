@@ -234,7 +234,14 @@ class Form extends Field\Element
         static::$cache = [];
 
         // remove our "remembered" submitted value
-        $this -> submitted = null;
+        $this->submitted = null;
+
+        // remove our "remembered" valid value
+        foreach ($this->fields as $field) {
+            if ($field instanceof Field\AbstractFormField) {
+                $field->clearCache();
+            }
+        }
         return $this;
     }
 
@@ -340,7 +347,7 @@ class Form extends Field\Element
      */
     public function __invoke($name)
     {
-        return $this -> getFieldByName($name);
+        return $this->getFieldByName($name);
     }
 
     /**
@@ -609,7 +616,7 @@ class Form extends Field\Element
             $buttonCount = 0;
             foreach ($this->fields as $field) {
                 if ($field instanceof Field\AbstractFormButton) {
-                    if (!$field -> isDisabled() && $field -> getName()) {
+                    if (!$field->isDisabled() && $field->getName()) {
                         $buttonCount++;
                     }
                 }
@@ -689,15 +696,15 @@ class Form extends Field\Element
 
                 // if here, and the field is still "submitted", then do our final button check
                 if ($this->submitted && $buttonCount > 0 && $buttonsFound == 0) {
-                    $reason = 'We have found '. $buttonCount .' buttons in the form, but we did not found any '.
-                    'of the buttons in the data array ($_GET or $_POST)';
+                    $reason = 'We have found ' . $buttonCount . ' buttons in the form, but we did not found any ' .
+                        'of the buttons in the data array ($_GET or $_POST)';
 
-                    $this -> submitted = false;
+                    $this->submitted = false;
                 }
             }
         } else {
             $reason = 'The form is invalid because of a previous check which failed. We did not re-analyze the ' .
-            'submitted form. If you want this, please call clearCache() first.';
+                'submitted form. If you want this, please call clearCache() first.';
         }
 
         return $this->submitted;
@@ -833,7 +840,6 @@ class Form extends Field\Element
     public function setFormatter(AbstractFormatter $formatter)
     {
         $this->formatter = $formatter;
-        $this->formatter->setForm($this);
         return $this;
     }
 

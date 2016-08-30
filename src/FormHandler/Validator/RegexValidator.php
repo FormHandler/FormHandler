@@ -5,9 +5,6 @@ namespace FormHandler\Validator;
  */
 class RegexValidator extends AbstractValidator
 {
-
-    protected $required = true;
-
     protected $regex;
 
     protected $not;
@@ -102,25 +99,5 @@ class RegexValidator extends AbstractValidator
         $match = preg_match($this->regex, $value);
 
         return $this->not ? ! $match : $match;
-    }
-
-    /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool) $required;
-    }
-
-    /**
-     * Get if this field is required or not.
-     *
-     * @return boolean
-     */
-    public function isRequired()
-    {
-        return $this->required;
     }
 }
