@@ -22,7 +22,7 @@ class TextField extends AbstractFormField
      * Set if this field is readonly or not.
      * @var bool
      */
-    protected $readonly = false ;
+    protected $readonly = false;
 
     /**
      * Set the size of this field.
@@ -50,20 +50,20 @@ class TextField extends AbstractFormField
     protected $placeholder;
 
     // common used (HTML5) types
-    const TYPE_COLOR            = 'color';
-    const TYPE_DATE             = 'date';
-    const TYPE_DATETIME         = 'datetime';
-    const TYPE_DATETIME_LOCAL   = 'datetime-local';
-    const TYPE_EMAIL            = 'email';
-    const TYPE_MONTH            = 'month';
-    const TYPE_NUMBER           = 'number';
-    const TYPE_RANGE            = 'range';
-    const TYPE_SEARCH           = 'search';
-    const TYPE_TEL              = 'tel';
-    const TYPE_TEXT             = 'text';
-    const TYPE_TIME             = 'time';
-    const TYPE_URL              = 'url';
-    const TYPE_WEEK             = 'week';
+    const TYPE_COLOR = 'color';
+    const TYPE_DATE = 'date';
+    const TYPE_DATETIME = 'datetime';
+    const TYPE_DATETIME_LOCAL = 'datetime-local';
+    const TYPE_EMAIL = 'email';
+    const TYPE_MONTH = 'month';
+    const TYPE_NUMBER = 'number';
+    const TYPE_RANGE = 'range';
+    const TYPE_SEARCH = 'search';
+    const TYPE_TEL = 'tel';
+    const TYPE_TEXT = 'text';
+    const TYPE_TIME = 'time';
+    const TYPE_URL = 'url';
+    const TYPE_WEEK = 'week';
 
     /**
      * TextField constructor.
@@ -72,11 +72,11 @@ class TextField extends AbstractFormField
      */
     public function __construct(Form &$form, $name = '')
     {
-        $this -> form = $form;
-        $this -> form -> addField($this);
+        $this->form = $form;
+        $this->form->addField($this);
 
         if (!empty($name)) {
-            $this -> setName($name);
+            $this->setName($name);
         }
     }
 
@@ -88,8 +88,8 @@ class TextField extends AbstractFormField
      */
     public function setName($name)
     {
-        $this -> name = $name;
-        $this -> setValue($this -> form -> getFieldValue($this -> name));
+        $this->name = $name;
+        $this->setValue($this->form->getFieldValue($this->name));
         return $this;
     }
 
@@ -101,7 +101,7 @@ class TextField extends AbstractFormField
      */
     public function setMaxlength($maxlength)
     {
-        $this -> maxlength = (integer)$maxlength;
+        $this->maxlength = (integer)$maxlength;
         return $this;
     }
 
@@ -113,7 +113,7 @@ class TextField extends AbstractFormField
      */
     public function setType($value)
     {
-        $this -> type = $value;
+        $this->type = $value;
         return $this;
     }
 
@@ -123,7 +123,7 @@ class TextField extends AbstractFormField
      */
     public function getType()
     {
-        return $this -> type;
+        return $this->type;
     }
 
 
@@ -134,7 +134,7 @@ class TextField extends AbstractFormField
      */
     public function getMaxlength()
     {
-        return $this -> maxlength;
+        return $this->maxlength;
     }
 
     /**
@@ -145,7 +145,7 @@ class TextField extends AbstractFormField
      */
     public function setReadonly($readonly)
     {
-        $this -> readonly = $readonly;
+        $this->readonly = $readonly;
         return $this;
     }
 
@@ -156,7 +156,7 @@ class TextField extends AbstractFormField
      */
     public function isReadonly()
     {
-        return $this -> readonly;
+        return $this->readonly;
     }
 
     /**
@@ -167,7 +167,7 @@ class TextField extends AbstractFormField
      */
     public function setSize($size)
     {
-        $this -> size = $size;
+        $this->size = $size;
         return $this;
     }
 
@@ -178,7 +178,7 @@ class TextField extends AbstractFormField
      */
     public function getSize()
     {
-        return $this -> size;
+        return $this->size;
     }
 
     /**
@@ -190,7 +190,7 @@ class TextField extends AbstractFormField
     public function setValue($value)
     {
         // trim the value we dont want leading and trailing spaces
-        $this -> value = trim($value);
+        $this->value = trim($value);
         return $this;
     }
 
@@ -201,7 +201,7 @@ class TextField extends AbstractFormField
      */
     public function getValue()
     {
-        return $this -> value;
+        return $this->value;
     }
 
     /**
@@ -211,7 +211,7 @@ class TextField extends AbstractFormField
      */
     public function setPlaceholder($value)
     {
-        $this -> placeholder = $value;
+        $this->placeholder = $value;
         return $this;
     }
 
@@ -221,7 +221,7 @@ class TextField extends AbstractFormField
      */
     public function getPlaceholder()
     {
-        return $this -> placeholder;
+        return $this->placeholder;
     }
 
     /**
@@ -231,34 +231,34 @@ class TextField extends AbstractFormField
      */
     public function render()
     {
-        $str = '<input type="'. $this -> getType().'"';
+        $str = '<input type="' . $this->getType() . '"';
 
-        if (!empty($this -> name)) {
-            $str .= ' name="'. $this -> name .'"';
+        if (!empty($this->name)) {
+            $str .= ' name="' . $this->name . '"';
         }
 
-        if ($this -> value != '') {
-            $str .= ' value="'. htmlspecialchars($this -> value) .'"';
+        if ($this->value != '') {
+            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
         }
 
-        if (!empty($this -> size)) {
-            $str .= ' size="'. $this -> size .'"';
+        if (!empty($this->size)) {
+            $str .= ' size="' . $this->size . '"';
         }
 
-        if ($this -> disabled !== null && $this -> disabled) {
+        if ($this->disabled !== null && $this->disabled) {
             $str .= ' disabled="disabled"';
         }
 
-        if (!empty($this -> maxlength)) {
-            $str .= ' maxlength="'. $this -> maxlength .'"';
+        if (!empty($this->maxlength)) {
+            $str .= ' maxlength="' . $this->maxlength . '"';
         }
 
-        if ($this -> readonly !== null && $this -> readonly) {
+        if ($this->readonly !== null && $this->readonly) {
             $str .= ' readonly="readonly"';
         }
 
-        if ($this -> placeholder) {
-            $str .= ' placeholder="'. htmlspecialchars($this -> placeholder) .'"';
+        if ($this->placeholder) {
+            $str .= ' placeholder="' . htmlentities($this->placeholder, ENT_QUOTES, 'UTF-8') . '"';
         }
 
         $str .= parent::render();

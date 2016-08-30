@@ -44,14 +44,15 @@ class CsrfValidator extends AbstractValidator
         }
 
         // Check if we have any tokens to clean.
-        if (! array_key_exists('csrftokens', $_SESSION) ||
+        if (!isset($_SESSION) || !array_key_exists('csrftokens', $_SESSION) ||
             (is_array($_SESSION['csrftokens']) &&
-                count($_SESSION['csrftokens']) === 0)) {
+                count($_SESSION['csrftokens']) === 0)
+        ) {
             return; // No tokens to clean.
         }
 
         // Make sure $_SESSION['csrftokens'] is an array.
-        if (! is_array($_SESSION['csrftokens'])) {
+        if (!is_array($_SESSION['csrftokens'])) {
             // $_SESSION['csrftokens'] is not an array! Reset/initialize $_SESSION['csrftokens'].
             $_SESSION['csrftokens'] = [];
             // It makes no sense to continue here, as we just cleaned the entire CSRF token basket.
@@ -99,7 +100,7 @@ class CsrfValidator extends AbstractValidator
         $characterset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890';
 
         // For the desired length, keep adding random characters from the character set.
-        for ($i = 0; $i < $length; $i ++) {
+        for ($i = 0; $i < $length; $i++) {
             $token .= $characterset[mt_rand(0, strlen($characterset) - 1)];
         }
 
@@ -122,7 +123,7 @@ class CsrfValidator extends AbstractValidator
             // get the token value
             $token = $this->field->getValue();
 
-            if (! empty($_SESSION) && ! empty($_SESSION['csrftokens'])) {
+            if (!empty($_SESSION) && !empty($_SESSION['csrftokens'])) {
                 // if the token is in the list of valid tokens, this field is valid!
                 $key = array_search($token, $_SESSION['csrftokens']);
                 if ($key !== false) {

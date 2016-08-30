@@ -6,32 +6,8 @@ use FormHandler\Form;
 /**
  * This class will create a submit button
  */
-class SubmitButton extends Element
+class SubmitButton extends AbstractFormButton
 {
-    /**
-     * The form object where this submit button is located in
-     * @var Form
-     */
-    protected $form;
-
-    /**
-     * Is this button disabled?
-     * @var bool
-     */
-    protected $disabled = false;
-
-    /**
-     * The name of the button
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * The size of the button
-     * @var int
-     */
-    protected $size;
-
     /**
      * The value of this button (text which is displayed)
      * @var string
@@ -163,7 +139,7 @@ class SubmitButton extends Element
         }
 
         if (!empty($this->value)) {
-            $str .= ' value="' . htmlspecialchars($this->value) . '"';
+            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
         }
 
         if (!empty($this->size)) {

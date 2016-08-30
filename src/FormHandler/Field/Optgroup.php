@@ -184,25 +184,25 @@ class Optgroup extends Element
      */
     public function render()
     {
-        $str = '<optgroup label="' . htmlspecialchars($this->label) . '"';
+        $str = '<optgroup label="' . htmlentities($this->label, ENT_QUOTES, 'UTF-8') . '"';
 
         if ($this->disabled !== null && $this->disabled) {
             $str .= ' disabled="disabled"';
         }
 
-        if (! empty($this->id)) {
+        if (!empty($this->id)) {
             $str .= ' id="' . $this->id . '"';
         }
 
-        if (! empty($this->title)) {
-            $str .= ' title="' . htmlspecialchars($this->title) . '"';
+        if (!empty($this->title)) {
+            $str .= ' title="' . htmlentities($this->title, ENT_QUOTES, 'UTF-8') . '"';
         }
 
-        if (! empty($this->style)) {
+        if (!empty($this->style)) {
             $str .= ' style="' . $this->style . '"';
         }
 
-        if (! empty($this->class)) {
+        if (!empty($this->class)) {
             $str .= ' class="' . $this->class . '"';
         }
 

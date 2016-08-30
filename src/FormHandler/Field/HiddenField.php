@@ -15,7 +15,7 @@ class HiddenField extends AbstractFormField
         $this->form = $form;
         $this->form->addField($this);
 
-        if (! empty($name)) {
+        if (!empty($name)) {
             $this->setName($name);
         }
     }
@@ -64,12 +64,12 @@ class HiddenField extends AbstractFormField
     {
         $str = '<input type="hidden"';
 
-        if (! empty($this->name)) {
+        if (!empty($this->name)) {
             $str .= ' name="' . $this->name . '"';
         }
 
-        if (! empty($this->value)) {
-            $str .= ' value="' . htmlspecialchars($this->value) . '"';
+        if (!empty($this->value)) {
+            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
         }
 
         if ($this->disabled !== null && $this->disabled) {

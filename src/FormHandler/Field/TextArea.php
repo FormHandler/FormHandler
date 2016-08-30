@@ -75,7 +75,7 @@ class TextArea extends AbstractFormField
      */
     public function setCols($cols)
     {
-        $this->cols = (integer) $cols;
+        $this->cols = (integer)$cols;
         return $this;
     }
 
@@ -87,7 +87,7 @@ class TextArea extends AbstractFormField
      */
     public function setRows($rows)
     {
-        $this->rows = (integer) $rows;
+        $this->rows = (integer)$rows;
         return $this;
     }
 
@@ -119,7 +119,7 @@ class TextArea extends AbstractFormField
      */
     public function setMaxlength($maxlength)
     {
-        $this->maxlength = (integer) $maxlength;
+        $this->maxlength = (integer)$maxlength;
         return $this;
     }
 
@@ -210,7 +210,7 @@ class TextArea extends AbstractFormField
         $str .= ' cols="' . $this->cols . '"';
         $str .= ' rows="' . $this->rows . '"';
 
-        if (! empty($this->name)) {
+        if (!empty($this->name)) {
             $str .= ' name="' . $this->name . '"';
         }
 
@@ -218,7 +218,7 @@ class TextArea extends AbstractFormField
             $str .= ' disabled="disabled"';
         }
 
-        if (! empty($this->maxlength)) {
+        if (!empty($this->maxlength)) {
             $str .= ' maxlength="' . $this->maxlength . '"';
         }
 
@@ -227,14 +227,14 @@ class TextArea extends AbstractFormField
         }
 
         if ($this->placeholder) {
-            $str .= ' placeholder="' . htmlspecialchars($this->placeholder) . '"';
+            $str .= ' placeholder="' . htmlentities($this->placeholder, ENT_QUOTES, 'UTF-8') . '"';
         }
 
         $str .= parent::render();
         $str .= '>';
 
-        if (! empty($this->value)) {
-            $str .= htmlspecialchars($this->value);
+        if (!empty($this->value)) {
+            $str .= htmlentities($this->value, ENT_QUOTES, 'UTF-8');
         }
         $str .= '</textarea>';
 

@@ -1,8 +1,8 @@
 <?php
 namespace FormHandler\Formatter;
 
-use FormHandler\Form;
 use FormHandler\Field\Element;
+use FormHandler\Form;
 
 /**
  * Formatter class.
@@ -56,6 +56,16 @@ abstract class AbstractFormatter
     public function getForm()
     {
         return $this -> form;
+    }
+
+    /**
+     * Shorthand to format an element
+     * @param Element $element
+     * @return string
+     */
+    public function __invoke(Element $element)
+    {
+        return $this -> format($element);
     }
 
     /**

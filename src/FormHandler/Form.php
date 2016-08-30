@@ -1,14 +1,14 @@
 <?php
 namespace FormHandler;
 
-use FormHandler\Formatter\PlainFormatter;
-use FormHandler\Formatter\AbstractFormatter;
 use FormHandler\Encoding\InterfaceEncodingFilter;
 use FormHandler\Encoding\Utf8EncodingFilter;
-use FormHandler\Field\Element;
 use FormHandler\Field;
-use FormHandler\Validator;
+use FormHandler\Field\Element;
+use FormHandler\Formatter\AbstractFormatter;
+use FormHandler\Formatter\PlainFormatter;
 use FormHandler\Validator\CsrfValidator;
+use Herrera\Json\Exception\Exception;
 
 /**
  * The Form Object which represents a form and all it's functionality.
@@ -84,8 +84,9 @@ class Form extends Field\Element
     /**
      * The target window where the form should posted to
      * @var string
+     * @deprecated
      */
-    protected $target;
+    protected $target = '';
 
     /**
      * The name of the form.
@@ -162,7 +163,7 @@ class Form extends Field\Element
      * Out default settings for our csrf protection which will be used for all FormHandler instances.
      * @var boolean
      */
-    protected static $defaultCsrfProtectionEnabled = null;
+    protected static $defaultCsrfProtectionEnabled = true;
 
     /**
      * Should we enable Cross Site Request Forgery protection?
@@ -177,8 +178,14 @@ class Form extends Field\Element
      */
     protected static $cache = [];
 
+    /**
+     * Constant which can be used to set the form's submit method to GET
+     */
     const METHOD_GET = 'get';
 
+    /**
+     * Constant which can be used to set the form's submit method to POST (default)
+     */
     const METHOD_POST = 'post';
 
     /**
@@ -204,27 +211,16 @@ class Form extends Field\Element
      *                                  If left empty, it will submit to the current url (default)
      * @param string $csrfprotection Should we enable Cross Site Request Forgery protection? If not given,
      *                                  we will use default settings. If those are not set,
-     *                                  we will enable it for POST forms.
+     *                                  we will enable it
      */
     public function __construct($action = '', $csrfprotection = null)
     {
         // store our CSRF state.
-        $this->csrfProtection = $csrfprotection === null ? static::$defaultCsrfProtectionEnabled : $csrfprotection;
+        $this->setCsrfProtection($csrfprotection === null ? static::$defaultCsrfProtectionEnabled : $csrfprotection);
 
         $this->action = $action;
         $this->setFormatter(Form::$defaultFormatter ?: new PlainFormatter());
         $this->setEncodingFilter(Form::$defaultEncodingFilter ?: new Utf8EncodingFilter());
-
-        // csrf protection enabled?
-        if ($this->isCsrfProtectionEnabled()) {
-            // Add a hidden 'csrftoken' field.
-            $field = $this->hiddenField('csrftoken');
-            $field->addValidator(new CsrfValidator());
-
-            if (!$field->getValue()) {
-                $field->setValue(CsrfValidator::generateToken());
-            }
-        }
     }
 
 
@@ -236,6 +232,9 @@ class Form extends Field\Element
     public function clearCache()
     {
         static::$cache = [];
+
+        // remove our "remembered" submitted value
+        $this -> submitted = null;
         return $this;
     }
 
@@ -323,6 +322,28 @@ class Form extends Field\Element
     }
 
     /**
+     * This shorthand will do a getFieldByName search and return the field.
+     * This allows you to also search the field like this:
+     * ```php
+     * // create a form
+     * $form = new Form();
+     *
+     * // create a field
+     * $form -> textField('name');
+     *
+     * // get the field:
+     * $field = $form('name');
+     * ```
+     *
+     * @param string $name
+     * @return Field\AbstractFormField
+     */
+    public function __invoke($name)
+    {
+        return $this -> getFieldByName($name);
+    }
+
+    /**
      * Should we enable Cross Site Request Forgery protection?
      * If not given, we will use possible default settings.
      * If those are not set, we will enable it for POST forms.
@@ -334,6 +355,27 @@ class Form extends Field\Element
     public function setCsrfProtection($value)
     {
         $this->csrfProtection = (bool)$value;
+
+        if (!$value) {
+            $this->removeFieldByName('csrftoken');
+        } else {
+            $field = $this->getFieldByName('csrftoken');
+
+            // if the field does not exists yet, lets add it.
+            if ($field === null) {
+                // Add a hidden 'csrftoken' field.
+                $field = $this->hiddenField('csrftoken');
+                $field->addValidator(new CsrfValidator());
+
+                // @todo: fixme. This is wrong because when an post is done without a csrftoken value,
+                // we will generate a new one which is always valid.
+                if (!$field->getValue()) {
+                    $field->setValue(CsrfValidator::generateToken());
+                }
+            }
+        }
+
+
         return $this;
     }
 
@@ -365,10 +407,8 @@ class Form extends Field\Element
         if (!array_key_exists($name, static::$cache)) {
             if ($this->getMethod() == Form::METHOD_GET) {
                 $list = $_GET;
-            } elseif ($this->getMethod() == Form::METHOD_POST) {
-                $list = $_POST;
             } else {
-                return null;
+                $list = $_POST;
             }
 
             // look it up directly in the get/post array
@@ -450,7 +490,9 @@ class Form extends Field\Element
     }
 
     /**
-     * Remove a field from the form by the name of the field
+     * Remove a field from the form by the name of the field.
+     * If there are more then 1 field with the given name, then only the first one will
+     * be removed.
      *
      * @param $name
      * @return Form
@@ -461,6 +503,24 @@ class Form extends Field\Element
             if ($field->getName() == $name) {
                 unset($this->fields[$i]);
                 break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove all fields by the given name.
+     * If there are more then 1 field with the given name, then all will be removed.
+     *
+     * @param $name
+     * @return Form
+     */
+    public function removeAllFieldsByName($name)
+    {
+        foreach ($this->fields as $i => $field) {
+            if ($field->getName() == $name) {
+                unset($this->fields[$i]);
             }
         }
 
@@ -498,6 +558,15 @@ class Form extends Field\Element
     }
 
     /**
+     * Return the form close tag: ```</form>```
+     * @return string
+     */
+    public function close()
+    {
+        return '</form>';
+    }
+
+    /**
      * Return's true if the form is submitted.
      *
      * Checks if all the fields are in the correct array ($_GET or $_POST)
@@ -508,6 +577,7 @@ class Form extends Field\Element
      * This is because when the form is submitted and the checkbox / radio button is not selected,
      * there is no way to check if the form is really submitted. In this case you should add
      * an hidden field, just to check if the form was submitted or not.
+     *
      *
      * @param string $reason
      *            This parameter will be filled with the "reason" why the form is not "submitted"
@@ -533,8 +603,24 @@ class Form extends Field\Element
 
             $list = ($this->getMethod() == Form::METHOD_GET ? $_GET : $_POST);
 
+            // Get our number of buttons in the form.
+            // If there are multiple buttons, then the form should accept submissions which does not include
+            // the button, but then we expect only 1 button (we ignore disabled buttons and buttons without a name)
+            $buttonCount = 0;
+            foreach ($this->fields as $field) {
+                if ($field instanceof Field\AbstractFormButton) {
+                    if (!$field -> isDisabled() && $field -> getName()) {
+                        $buttonCount++;
+                    }
+                }
+            }
+
+
             // if still "true", check the fields
             if ($this->submitted) {
+                // keep track of how many buttons we have found in our form.
+                $buttonsFound = 0;
+
                 foreach ($this->fields as $field) {
                     if ($field instanceof Field\AbstractFormField &&
                         !($field instanceof Field\CheckBox || $field instanceof Field\RadioButton) &&
@@ -560,7 +646,7 @@ class Form extends Field\Element
                             if (sizeof($field->getOptions()) == 0 && !array_key_exists($name, $list)) {
                                 // form can still be submitted.
                                 // An empty select with no options is not included in the POST field
-                            } // of only 1 option can be selected, it should be in the submitted values!
+                            } // If only 1 option can be selected, it should be in the submitted values!
                             elseif (!$field->isMultiple() && !array_key_exists($name, $list)) {
                                 if (!$field->isDisabled()) {
                                     $reason = 'Selectfield "' . $name . '" does not exists in submited data array.';
@@ -573,17 +659,19 @@ class Form extends Field\Element
                                 $this->submitted = false;
                             }
                         }
-                    } // submit button? Then the name => value should exists!
-                    elseif ($field instanceof Field\SubmitButton && $field->getName()) {
+                    } // submit button? Then the name => value should exists! (but only if its the only one)
+                    elseif ($field instanceof Field\SubmitButton && $field->getName() && $buttonCount == 1) {
                         if (!$field->isDisabled()) {
                             if (!array_key_exists($field->getName(), $list)) {
                                 /** @noinspection PhpUndefinedVariableInspection */
                                 $reason = 'Submitbutton "' . $name . '" does not exists in submited data array.';
                                 $this->submitted = false;
+                            } else {
+                                $buttonsFound++;
                             }
                         }
-                    } // image button? Then the name_x and name_y values should exists!
-                    elseif ($field instanceof Field\ImageButton && $field->getName()) {
+                    } // image button? Then the name_x and name_y values should exists!  (but only if its the only one)
+                    elseif ($field instanceof Field\ImageButton && $field->getName() && $buttonCount == 1) {
                         if (!$field->isDisabled()) {
                             if (!array_key_exists($field->getName() . '_x', $list) ||
                                 !array_key_exists($field->getName() . '_y', $list)
@@ -592,11 +680,24 @@ class Form extends Field\Element
                                 $reason = 'Imagebutton "' . $name . '" should submit a _x and _y values,' .
                                     'but they are not in the data array.';
                                 $this->submitted = false;
+                            } else {
+                                $buttonsFound++;
                             }
                         }
                     }
                 }
+
+                // if here, and the field is still "submitted", then do our final button check
+                if ($this->submitted && $buttonCount > 0 && $buttonsFound == 0) {
+                    $reason = 'We have found '. $buttonCount .' buttons in the form, but we did not found any '.
+                    'of the buttons in the data array ($_GET or $_POST)';
+
+                    $this -> submitted = false;
+                }
             }
+        } else {
+            $reason = 'The form is invalid because of a previous check which failed. We did not re-analyze the ' .
+            'submitted form. If you want this, please call clearCache() first.';
         }
 
         return $this->submitted;
@@ -813,6 +914,7 @@ class Form extends Field\Element
      *
      * @param string $target
      * @see http://www.w3schools.com/tags/tag_form.asp
+     * @deprecated
      * @return Form
      */
     public function setTarget($target)
@@ -861,6 +963,7 @@ class Form extends Field\Element
      * and return the Form reference
      *
      * @param string $accept
+     * @deprecated
      * @return Form
      */
     public function setAccept($accept)
@@ -870,8 +973,12 @@ class Form extends Field\Element
     }
 
     /**
-     * Return mime-types of files that can be submitted through a file upload
+     * Return mime-types of files that can be submitted through a file upload.
      *
+     * Specifies a comma-separated list of file types that the server accepts
+     * (that can be submitted through the file upload)
+     *
+     * @deprecated
      * @return string
      */
     public function getAccept()
@@ -888,6 +995,7 @@ class Form extends Field\Element
      *
      * @param string $enctype
      * @return Form
+     * @throws Exception
      */
     public function setEnctype($enctype)
     {
@@ -899,6 +1007,8 @@ class Form extends Field\Element
             self::ENCTYPE_URLENCODED
         ])) {
             $this->enctype = $enctype;
+        } else {
+            throw new Exception('Incorrect enctype given!');
         }
 
         return $this;
@@ -929,6 +1039,7 @@ class Form extends Field\Element
      *
      * @param string $method
      * @return Form
+     * @throws Exception
      */
     public function setMethod($method)
     {
@@ -939,6 +1050,8 @@ class Form extends Field\Element
             Form::METHOD_POST
         ])) {
             $this->method = $method;
+        } else {
+            throw new Exception('Incorrect method value given');
         }
         return $this;
     }
@@ -1127,15 +1240,12 @@ class Form extends Field\Element
 
     /**
      * Return the HTML field formatted
+     * @return string
      */
     public function __toString()
     {
-        $formatter = $this->getFormatter();
-        if ($formatter) {
-            return $formatter->format($this);
-        }
-
-        return $this->render();
+        $format = $this->getFormatter();
+        return $format($this);
     }
 
     /**
@@ -1152,14 +1262,6 @@ class Form extends Field\Element
         // is there no session available? Then always disable CSRF protection.
         if (session_id() == '') {
             return false;
-        }
-
-        if ($this->csrfProtection === null) {
-            $this->csrfProtection = self::$defaultCsrfProtectionEnabled;
-        }
-
-        if ($this->csrfProtection === null) {
-            return $this->getMethod() == Form::METHOD_POST;
         }
 
         return $this->csrfProtection;

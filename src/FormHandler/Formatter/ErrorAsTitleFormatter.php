@@ -1,9 +1,9 @@
 <?php
 namespace FormHandler\Formatter;
 
-use FormHandler\Form;
-use FormHandler\Field\Element;
 use FormHandler\Field\AbstractFormField;
+use FormHandler\Field\Element;
+use FormHandler\Form;
 
 /**
  * ErrorAsTitleFormatter class.

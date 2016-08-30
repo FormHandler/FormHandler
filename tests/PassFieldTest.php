@@ -1,7 +1,6 @@
 <?php
 namespace FormHandler\Tests;
 
-use FormHandler\Field\TextField;
 use FormHandler\Form;
 use PHPUnit\Framework\TestCase;
 

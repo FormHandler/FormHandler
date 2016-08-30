@@ -153,7 +153,7 @@ class RadioButton extends AbstractFormField
         }
 
         if ($this->value !== null) {
-            $str .= ' value="' . htmlspecialchars($this->value) . '"';
+            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
         }
 
         $str .= parent::render();

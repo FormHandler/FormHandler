@@ -284,7 +284,7 @@ class Option extends Element
         $str = '<option';
 
         if ($this->value !== null) {
-            $str .= ' value="' . htmlspecialchars($this->value) . '"';
+            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
         }
 
         if ($this->selected !== null && $this->selected) {
@@ -300,7 +300,7 @@ class Option extends Element
         }
 
         if (! empty($this->title)) {
-            $str .= ' title="' . htmlspecialchars($this->title) . '"';
+            $str .= ' title="' . htmlentities($this->title, ENT_QUOTES, 'UTF-8') . '"';
         }
 
         if (! empty($this->style)) {
@@ -315,7 +315,7 @@ class Option extends Element
             $str .= ' ' . $name . '="' . $value . '"';
         }
 
-        $str .= '>' . htmlspecialchars(! empty($this->label) ? $this->label : $this->value);
+        $str .= '>' . htmlentities(! empty($this->label) ? $this->label : $this->value, ENT_QUOTES, 'UTF-8');
         $str .= '</option>';
 
         return $str;

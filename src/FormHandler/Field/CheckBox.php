@@ -40,11 +40,11 @@ class CheckBox extends AbstractFormField
         $this->form = $form;
         $this->form->addField($this);
 
-        if (! empty($value)) {
+        if (!empty($value)) {
             $this->setValue($value);
         }
 
-        if (! empty($name)) {
+        if (!empty($name)) {
             $this->setName($name);
         }
     }
@@ -143,7 +143,7 @@ class CheckBox extends AbstractFormField
     {
         $str = '<input type="checkbox"';
 
-        if (! empty($this->name)) {
+        if (!empty($this->name)) {
             $str .= ' name="' . $this->name . '"';
 
             /*
@@ -170,8 +170,8 @@ class CheckBox extends AbstractFormField
             $str .= ' disabled="disabled"';
         }
 
-        if (! empty($this->value)) {
-            $str .= ' value="' . htmlspecialchars($this->value) . '"';
+        if (!empty($this->value)) {
+            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
         }
 
         $str .= parent::render();

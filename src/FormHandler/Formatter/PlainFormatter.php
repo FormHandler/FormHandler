@@ -1,8 +1,8 @@
 <?php
 namespace FormHandler\Formatter;
 
-use FormHandler\Form;
 use FormHandler\Field;
+use FormHandler\Form;
 use FormHandler\Validator\UploadValidator;
 
 /**
