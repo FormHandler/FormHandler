@@ -5,11 +5,10 @@ use FormHandler\Field\CheckBox;
 use FormHandler\Field\RadioButton;
 
 /**
- * This validator will check if the given value equals the fields value
+ * This validator will check if the given value equals the fields value.
  */
-class EqualsToValidator extends AbstractValidator
+class EqualsValidator extends AbstractValidator
 {
-
     /**
      * The value where the fields value should match with
      *

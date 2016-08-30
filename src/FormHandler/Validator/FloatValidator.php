@@ -83,7 +83,7 @@ class FloatValidator extends AbstractValidator
         }
 
         // required but not given.
-        if ($this->required && $value === null) {
+        if ($this->required && strval($value) === "") {
             return false;
         } // if the field is not required and the value is empty, then it's also valid
         elseif (!$this->required && $value === '') {

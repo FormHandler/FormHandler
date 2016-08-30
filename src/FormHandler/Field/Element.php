@@ -56,7 +56,7 @@ class Element
      * Set the tab index for this element and return an instance to itsself
      *
      * @param int $index
-     * @return self
+     * @return $this
      */
     public function setTabindex($index)
     {
@@ -78,7 +78,7 @@ class Element
      * Set the access key for this element and return an instance to itsself
      *
      * @param string $key
-     * @return self
+     * @return $this
      */
     public function setAccesskey($key)
     {
@@ -112,7 +112,7 @@ class Element
      * Append a style string to the current value.
      *
      * @param string $style
-     * @return self
+     * @return $this
      */
     public function addStyle($style)
     {
@@ -146,7 +146,7 @@ class Element
      * put a space between the current value and the appended new value.
      *
      * @param string $class
-     * @return self
+     * @return $this
      */
     public function addClass($class)
     {
@@ -163,7 +163,7 @@ class Element
      * Set's the css class and return an instance to itsself
      *
      * @param string $class
-     * @return self
+     * @return $this
      */
     public function setClass($class)
     {
@@ -175,7 +175,7 @@ class Element
      * Set the title and return an instance to itsself
      *
      * @param string $title
-     * @return self
+     * @return $this
      */
     public function setTitle($title)
     {

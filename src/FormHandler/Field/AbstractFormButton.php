@@ -41,7 +41,7 @@ abstract class AbstractFormButton extends Element
      * Set if this field is disabled and return the ImageButton reference
      *
      * @param bool $disabled
-     * @return self
+     * @return $this
      */
     public function setDisabled($disabled)
     {
@@ -63,7 +63,7 @@ abstract class AbstractFormButton extends Element
      * Set the name of the field and return the ImageButton reference
      *
      * @param string $name
-     * @return self
+     * @return $this
      */
     public function setName($name)
     {
@@ -85,7 +85,7 @@ abstract class AbstractFormButton extends Element
      * Set the size of the field and return the ImageButton reference
      *
      * @param int $size
-     * @return self
+     * @return $this
      */
     public function setSize($size)
     {

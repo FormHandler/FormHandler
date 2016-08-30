@@ -13,7 +13,7 @@ trait HasAttributes
      *
      * @param string $name
      * @param string $value
-     * @return self
+     * @return $this
      */
     public function addAttribute($name, $value = "")
     {
@@ -31,7 +31,7 @@ trait HasAttributes
      *
      * @param string $name
      * @param string $value
-     * @return self
+     * @return $this
      */
     public function setAttribute($name, $value = "")
     {

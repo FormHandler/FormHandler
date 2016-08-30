@@ -5,6 +5,7 @@ build/api/
 build/pdepend/
 build/phpdox/
 cache.properties
+docs
 
 .buildpath
 .DS_Store

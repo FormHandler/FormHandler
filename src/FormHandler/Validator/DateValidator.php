@@ -3,16 +3,10 @@ namespace FormHandler\Validator;
 
 /**
  * This validator will validate a field and make sure it is a proper date.
+ * Anything which can be parsed by strtotime will be valid.
  */
 class DateValidator extends AbstractValidator
 {
-    /**
-     * Var to remember if the value was valid or not
-     *
-     * @var bool
-     */
-    protected $valid = null;
-
     /**
      * Create a new Date validator. We will check if the date can be parsed by strtotime.
      * @param bool $required
@@ -37,26 +31,21 @@ class DateValidator extends AbstractValidator
     {
         $value = $this->field->getValue();
 
-        if ($this->valid === null) {
-            if ($value == '' && $this->required == false) {
-                $this->valid = true;
-                return $this->valid;
-            }
-
-            $parsedDate = date_parse($value);
-
-            if ($parsedDate['warning_count'] == 0 &&
-                $parsedDate['error_count'] == 0 &&
-                isset($parsedDate['year']) &&
-                isset($parsedDate['month'])) {
-                $this->valid = true;
-                return $this->valid;
-            }
-
-            $this->valid = false;
-            return $this->valid;
+        // field is empty and its not required. It's thus valid.
+        if ($value == '' && $this->required == false) {
+            return true;
         }
 
-        return $this->valid;
+        $parsedDate = date_parse($value);
+
+        if ($parsedDate['warning_count'] == 0 &&
+            $parsedDate['error_count'] == 0 &&
+            isset($parsedDate['year']) &&
+            isset($parsedDate['month'])
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -48,14 +48,11 @@ class EmailValidator extends AbstractValidator
         if ($this->required && $value == null) {
             return false;
         } // if the field is not required and the value is empty, then it's also valid
-        elseif (! $this->required && $value == "") {
+        elseif (!$this->required && $value == "") {
             return true;
         }
 
-        // if regex fails...
-        // alternative regex (from formhandler)
-        // preg_match("/^[0-9A-Za-z_]([-_.]?[0-9A-Za-z_])*@[0-9A-Za-z][-.0-9A-Za-z]*\\.[a-zA-Z]{2,3}[.]?$/", $value)
-        if (! preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i', $value)) {
+        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 
@@ -64,9 +61,9 @@ class EmailValidator extends AbstractValidator
 
             if (function_exists('getmxrr')) {
                 $tmp = null;
-                if (! getmxrr($host, $tmp)) {
-                    // this will catch dns that are not mx.
-                    if (! checkdnsrr($host, 'ANY')) {
+                if (!getmxrr($host, $tmp)) {
+                    // this will catch dns do not have an mx record.
+                    if (!checkdnsrr($host, 'ANY')) {
                         // invalid!
                         return false;
                     }
@@ -99,6 +96,6 @@ class EmailValidator extends AbstractValidator
      */
     public function setCheckIfDomainExist($value)
     {
-        $this->checkIfDomainExists = (bool) $value;
+        $this->checkIfDomainExists = (bool)$value;
     }
 }

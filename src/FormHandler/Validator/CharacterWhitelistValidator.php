@@ -57,7 +57,7 @@ class CharacterWhitelistValidator extends AbstractValidator
 
         // now, walk all chars and check if they are in the whitelist
         for ($i = 0; $i < strlen($value); $i++) {
-            if (!in_array($value[$i], $this->whitelist)) {
+            if (!in_array(strval($value[$i]), $this->whitelist, true)) {
                 // not in the whitelist!
                 return false;
             }
@@ -77,9 +77,9 @@ class CharacterWhitelistValidator extends AbstractValidator
     public function setWhitelist($whitelist)
     {
         if (is_array($whitelist)) {
-            $this->whitelist = $whitelist;
+            $this->whitelist = array_map('strval', $whitelist);
         } elseif ($whitelist instanceof \ArrayObject) {
-            $this->whitelist = $whitelist->getArrayCopy();
+            $this->whitelist = array_map('strval', $whitelist->getArrayCopy());
         } elseif (is_string($whitelist)) {
             $this->whitelist = [];
             for ($i = 0; $i < strlen($whitelist); $i++) {

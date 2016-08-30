@@ -74,7 +74,7 @@ abstract class AbstractFormField extends Element
      * Set if this field is valid or not
      *
      * @param boolean $value
-     * @return self
+     * @return $this
      */
     public function setValid($value)
     {
@@ -87,7 +87,7 @@ abstract class AbstractFormField extends Element
      *
      * @param string $message
      * @param boolean $setToInvalid
-     * @return self
+     * @return $this
      */
     public function addErrorMessage($message, $setToInvalid = true)
     {
@@ -108,7 +108,7 @@ abstract class AbstractFormField extends Element
      * uses it. Otherwise it will be ignored!
      *
      * @param string $text
-     * @return self
+     * @return $this
      */
     public function setHelpText($text)
     {
@@ -134,7 +134,7 @@ abstract class AbstractFormField extends Element
      * Clear abstract cache .
      * We cache for example the result of the isValid method, so that for a second call, we do not
      * have to validate the field again. This method clears such caches.
-     * @return self
+     * @return $this
      */
     public function clearCache()
     {
@@ -209,7 +209,7 @@ abstract class AbstractFormField extends Element
      * ```
      *
      * @param mixed $validator
-     * @return self
+     * @return $this
      * @throws \Exception
      */
     public function addValidator($validator)
@@ -235,8 +235,24 @@ abstract class AbstractFormField extends Element
     }
 
     /**
+     * Set the validator to the given validator.
+     * *WARNING*: this will overwrite the current validators and only set the given validator.
+     * Most of the times you probably want to use ```addValidator```
+     *
+     * @param mixed $validator
+     * @return $this
+     */
+    public function setValidator($validator)
+    {
+        $this->validators = [];
+        $this->addValidator($validator);
+
+        return $this;
+    }
+
+    /**
      * Remove all validators from this field.
-     * @return self
+     * @return $this
      */
     public function clearValidators()
     {
@@ -269,7 +285,7 @@ abstract class AbstractFormField extends Element
      * Set the name of the field and return the TextField reference
      *
      * @param string $name
-     * @return self
+     * @return $this
      */
     public function setName($name)
     {
@@ -291,7 +307,7 @@ abstract class AbstractFormField extends Element
      * Set if this field is disabled and return the TextField reference
      *
      * @param bool $disabled
-     * @return self
+     * @return $this
      */
     public function setDisabled($disabled)
     {

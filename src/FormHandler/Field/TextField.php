@@ -191,6 +191,10 @@ class TextField extends AbstractFormField
     {
         // trim the value we dont want leading and trailing spaces
         $this->value = trim($value);
+
+        // also clear cache of possible validations if the value is changed.
+        $this -> clearCache();
+
         return $this;
     }
 

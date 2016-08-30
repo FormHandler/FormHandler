@@ -56,7 +56,7 @@ class CharacterBlacklistValidator extends AbstractValidator
 
         // now, walk all chars and check if they are in the blacklist
         for ($i = 0; $i < strlen($value); $i++) {
-            if (!in_array($value[$i], $this->blacklist)) {
+            if (in_array(strval($value[$i]), $this->blacklist, true)) {
                 // not in the blacklist!
                 return false;
             }
@@ -76,9 +76,9 @@ class CharacterBlacklistValidator extends AbstractValidator
     public function setBlacklist($blacklist)
     {
         if (is_array($blacklist)) {
-            $this->blacklist = $blacklist;
+            $this->blacklist = array_map('strval', $blacklist);
         } elseif ($blacklist instanceof \ArrayObject) {
-            $this->blacklist = $blacklist->getArrayCopy();
+            $this->blacklist = array_map('strval', $blacklist->getArrayCopy());
         } elseif (is_string($blacklist)) {
             $this->blacklist = [];
             for ($i = 0; $i < strlen($blacklist); $i++) {
