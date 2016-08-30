@@ -38,6 +38,10 @@
             depends="prepare,composer,static-analysis,phpunit,phpdox,-check-failure"
             description="Performs static analysis, runs the tests, and generates project documentation"/>
 
+    <target name="precommit"
+            depends="prepare,composer,phpcbf,phpcs,phpcpd,phpmd"
+            description="Performs precommit checks"/>
+
     <target name="full-build-parallel"
             depends="prepare,composer,static-analysis-parallel,phpunit,phpdox,-check-failure"
             description="Performs static analysis (executing the tools in parallel), runs the tests, and generates project documentation"/>

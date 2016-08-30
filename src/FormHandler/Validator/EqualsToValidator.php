@@ -98,7 +98,7 @@ class EqualsToValidator extends AbstractValidator
 
      * @return bool
      */
-    public function getNot()
+    public function isNot()
     {
         return $this->not;
     }

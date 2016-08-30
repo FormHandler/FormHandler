@@ -2,6 +2,7 @@
 namespace FormHandler\Field;
 
 /**
+ * This class represents an Option HTML element
  */
 class Option extends Element
 {
@@ -10,6 +11,7 @@ class Option extends Element
     /**
      * The id of this option
      * @var string
+     * @SuppressWarnings(PHPMD)
      */
     protected $id;
 
@@ -257,6 +259,7 @@ class Option extends Element
     /**
      * Set the id of this element and return an instance to itsself
      *
+     * @SuppressWarnings(PHPMD)
      * @param string $id
      * @return Element
      */
@@ -276,7 +279,7 @@ class Option extends Element
 
     /**
      * Return string representation
-     *
+     * @SuppressWarnings(PHPMD)
      * @return string
      */
     public function render()

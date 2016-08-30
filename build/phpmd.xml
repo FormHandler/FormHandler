@@ -9,10 +9,17 @@
         My custom rule set that checks my code...
     </description>
 
-	<rule ref="rulesets/unusedcode.xml" />
+	<!-- We explicitly ignore this rule as we do access $_POST, $_GET, $_SESSION and $_FILES -->
+	<!-- <rule ref="rulesets/controversial.xml/Superglobals" /> -->
+
+	<rule ref="rulesets/controversial.xml/CamelCaseClassName" />
+	<rule ref="rulesets/controversial.xml/CamelCasePropertyName" />
+	<rule ref="rulesets/controversial.xml/CamelCaseMethodName" />
+	<rule ref="rulesets/controversial.xml/CamelCaseParameterName" />
+	<rule ref="rulesets/controversial.xml/CamelCaseVariableName" />
+
 	<rule ref="rulesets/naming.xml" />
     <rule ref="rulesets/design.xml" />
-    <rule ref="rulesets/controversial.xml" />
 
 	<!-- Import the entire cyclomatic complexity rule -->
 	<rule ref="rulesets/codesize.xml/CyclomaticComplexity">

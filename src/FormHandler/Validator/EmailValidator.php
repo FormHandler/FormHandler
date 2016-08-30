@@ -115,7 +115,7 @@ class EmailValidator extends AbstractValidator
      * Return if we should also check if the domain name exists or not.
      * @return bool
      */
-    public function getCheckIfDomainExist()
+    public function isCheckIfDomainExist()
     {
         return $this->checkIfDomainExists;
     }

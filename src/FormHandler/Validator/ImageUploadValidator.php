@@ -82,11 +82,13 @@ class ImageUploadValidator extends UploadValidator
      *
      * @param int $width
      * @param int $height
+     * @return ImageUploadValidator
      */
     public function setMaximumProportions($width = null, $height = null)
     {
         $this->maximumWidth = $width;
         $this->maximumHeight = $height;
+        return $this;
     }
 
     /**
@@ -95,11 +97,15 @@ class ImageUploadValidator extends UploadValidator
      * only images with this aspect ratio can be uploaded.
      * @param int $x
      * @param int $y
+     * @SuppressWarnings(PHPMD)
+     * @return ImageUploadValidator
      */
     public function setAllowAspectRatio($x, $y)
     {
         $this->allowAspectRatioX = (int)$x;
         $this->allowAspectRatioY = (int)$y;
+
+        return $this;
     }
 
     /**
@@ -108,11 +114,15 @@ class ImageUploadValidator extends UploadValidator
      * images with this aspect ratio are denied for uploading.
      * @param $x
      * @param $y
+     * @SuppressWarnings(PHPMD)
+     * @return ImageUploadValidator
      */
     public function setDenyAspectRatio($x, $y)
     {
         $this->denyAspectRatioX = (int)$x;
         $this->denyAspectRatioY = (int)$y;
+
+        return $this;
     }
 
     /**
@@ -174,6 +184,7 @@ class ImageUploadValidator extends UploadValidator
      * @param $width
      * @param $height
      * @return bool
+     * @SuppressWarnings(PHPMD)
      */
     protected function validateAspectRatio($width, $height)
     {
@@ -282,6 +293,7 @@ class ImageUploadValidator extends UploadValidator
      *
      * @param $a
      * @param $b
+     * @SuppressWarnings(PHPMD)
      * @return int
      */
     protected function gcd($a, $b)

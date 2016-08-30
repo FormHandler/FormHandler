@@ -50,12 +50,12 @@ class DateValidator extends AbstractValidator
                 return $this->valid;
             }
 
-            $parsed_date = date_parse($value);
+            $parsedDate = date_parse($value);
 
-            if ($parsed_date['warning_count'] == 0 &&
-                $parsed_date['error_count'] == 0 &&
-                isset($parsed_date['year']) &&
-                isset($parsed_date['month'])) {
+            if ($parsedDate['warning_count'] == 0 &&
+                $parsedDate['error_count'] == 0 &&
+                isset($parsedDate['year']) &&
+                isset($parsedDate['month'])) {
                 $this->valid = true;
                 return $this->valid;
             }
