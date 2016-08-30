@@ -25,7 +25,7 @@ class SamePasswordValidator extends AbstractValidator
      * @param bool $required
      * @throws \Exception
      */
-    public function __construct($field2, $message = null, $required = true )
+    public function __construct($field2, $message = null, $required = true)
     {
         if ($message === null) {
             $message = dgettext('formhandler', 'The given passwords are not the same.');
@@ -86,7 +86,7 @@ class SamePasswordValidator extends AbstractValidator
     public function isValid()
     {
         // value should not be empty
-        if( $this -> required && $this->field->getValue() == "" ) {
+        if ($this -> required && $this->field->getValue() == "") {
             return false;
         }
 

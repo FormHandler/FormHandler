@@ -73,7 +73,7 @@ class SameFieldsValidator extends AbstractValidator
      */
     public function isValid()
     {
-        if( $this -> required && $this->field->getValue() == "" ) {
+        if ($this -> required && $this->field->getValue() == "") {
             return false;
         }
 

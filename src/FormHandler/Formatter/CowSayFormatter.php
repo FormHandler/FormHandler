@@ -15,10 +15,10 @@ class CowSayFormatter extends PlainFormatter
      */
     public function format(Element $element)
     {
-        $html = parent::format( $element );
+        $html = parent::format($element);
 
-        if( $element instanceof AbstractFormField ) {
-            return $this -> cowSay( $html );
+        if ($element instanceof AbstractFormField) {
+            return $this -> cowSay($html);
         }
 
         return $html;
@@ -29,7 +29,7 @@ class CowSayFormatter extends PlainFormatter
      * @param $html
      * @return string
      */
-    public function cowSay( $html )
+    public function cowSay($html)
     {
         return
         '<div id="bubble" >' . $html .'</div>
@@ -40,6 +40,5 @@ class CowSayFormatter extends PlainFormatter
                    ||----w |
                    ||     ||
 	    </pre>';
-
     }
 }

@@ -13,13 +13,13 @@ class FormatterTest extends TestCase
         $formatter = new PlainFormatter();
 
         $form = new Form();
-        $form -> setFormatter( $formatter );
+        $form -> setFormatter($formatter);
 
         $form -> radioButton('test1');
 
         $form -> checkBox('test2');
 
-        $form -> textField('name') -> addValidator( new StringValidator(1, 50, true));
+        $form -> textField('name') -> addValidator(new StringValidator(1, 50, true));
 
 
         echo "\n";

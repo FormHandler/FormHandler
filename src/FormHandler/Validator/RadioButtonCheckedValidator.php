@@ -23,7 +23,7 @@ class RadioButtonCheckedValidator extends AbstractValidator
             $message = dgettext('formhandler', 'You have to select a value!');
         }
 
-        $this -> setRequired( true );
+        $this -> setRequired(true);
 
         $this->setErrorMessage($message);
     }

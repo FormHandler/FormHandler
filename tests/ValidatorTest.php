@@ -29,9 +29,8 @@ class ValidatorTest extends TestCase
         $this->assertTrue($field->isValid(), 'Empty field should be valid when its not required.');
 
         // field should be invalid because it contains non numeric characters
+        $field->clearCache();
         $field->setValue('abc');
         $this->assertFalse($field->isValid());
-
-
     }
 }
