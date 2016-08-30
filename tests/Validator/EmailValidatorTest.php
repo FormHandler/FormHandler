@@ -23,7 +23,6 @@ namespace FormHandler\Validator {
         }
     }
 }
-// @codingStandardsIgnoreEnd
 
 namespace FormHandler\Tests\Validator {
 
@@ -183,3 +182,4 @@ namespace FormHandler\Tests\Validator {
         }
     }
 }
+// @codingStandardsIgnoreEnd
