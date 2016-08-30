@@ -2,21 +2,22 @@
 namespace FormHandler\Tests;
 
 use FormHandler\Form;
-use FormHandler\Validator\DutchBankNumberValidator;
+use FormHandler\Validator\CharacterWhitelistValidator;
 use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
 {
-    function testDutchBankNumberValidator()
+    /**
+     * Test the Whitelist Validator
+     */
+    function testWhitelistValidator()
     {
-
-
         // create a form and the field
         $form = new Form('', false);
-        $field = $form->textField('banknumber');
+        $field = $form->textField('hex');
 
         // create a required validator and add it.
-        $validator = new DutchBankNumberValidator(true);
+        $validator = new CharacterWhitelistValidator('0123456789abcdef'. true);
         $field->addValidator($validator);
         $this->assertCount(1, $field->getValidators());
 
@@ -28,9 +29,20 @@ class ValidatorTest extends TestCase
         $field->addValidator($validator);
         $this->assertTrue($field->isValid(), 'Empty field should be valid when its not required.');
 
-        // field should be invalid because it contains non numeric characters
+        // field should be invalid because it contains other characters
         $field->clearCache();
-        $field->setValue('abc');
-        $this->assertFalse($field->isValid());
+        $field->setValue('g');
+        $this->assertFalse(
+            $field->isValid(),
+            'Field should be invalid because it contains non-whitelisted characters'
+        );
+
+        $field -> setValue('fedcba9876543210ffee91');
+        $this->assertTrue(
+            $field->isValid(),
+            'Field should be valid because it contains only whitelisted characters'
+        );
+
+
     }
 }

@@ -8,9 +8,11 @@ use \FormHandler\Field\CheckBox;
 
 class CheckboxTest extends TestCase
 {
+    /**
+     * Test the checkbox
+     */
     public function testCheckbox()
     {
-
         $form = new Form();
 
         $obj = $form -> checkBox('test');
@@ -31,6 +33,9 @@ class CheckboxTest extends TestCase
         $this -> assertFalse($obj -> isChecked(), 'Check if checkbox is checked (form not submitted).');
     }
 
+    /**
+     * Test the checkbox in a submitted form
+     */
     public function testSubmittedCheckbox()
     {
         // fake a post request;
