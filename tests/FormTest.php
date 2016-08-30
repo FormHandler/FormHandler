@@ -1,4 +1,6 @@
 <?php
+namespace FormHandler\Tests;
+
 use FormHandler\Encoding\Utf8EncodingFilter;
 use FormHandler\Field\AbstractFormField;
 use FormHandler\Field\HiddenField;
@@ -7,7 +9,6 @@ use FormHandler\Field\TextField;
 use FormHandler\Formatter\PlainFormatter;
 use FormHandler\Validator\StringValidator;
 use PHPUnit\Framework\TestCase;
-
 use FormHandler\Form;
 
 /**
@@ -140,7 +141,8 @@ class FormTest extends TestCase
         $this->assertEquals('</form>', $form->close());
 
         $this->expectOutputRegex(
-            '/^<form action="" name="myForm" accept="text\/plain" accept-charset="utf-8" enctype="application\/x-www-form-urlencoded" method="post" target="_self">$/i',
+            '/^<form action="" name="myForm" accept="text\/plain" accept-charset="utf-8" '.
+            'enctype="application\/x-www-form-urlencoded" method="post" target="_self">$/i',
             'Check html tag'
         );
         echo $form;

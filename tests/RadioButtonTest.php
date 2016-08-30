@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RadioButtonTest extends TestCase
 {
-    function testRadioButton()
+    public function testRadioButton()
     {
         $form = new Form();
         $form->clearCache(); // clear cache from other tests
@@ -53,7 +53,7 @@ class RadioButtonTest extends TestCase
         $this->assertTrue($alien->isDisabled());
     }
 
-    function testRadioButtonInSubmittedForm()
+    public function testRadioButtonInSubmittedForm()
     {
         // we fake a form submit
         $_SERVER['REQUEST_METHOD'] = 'POST';
