@@ -13,13 +13,6 @@ class UserFunctionValidator extends AbstractValidator
     protected $userFunction;
 
     /**
-     * Var to remember if the value was valid or not
-     *
-     * @var boolean
-     */
-    protected $valid = null;
-
-    /**
      * Create a new "user function" validator
      *
      * @param string $functionName
@@ -43,20 +36,18 @@ class UserFunctionValidator extends AbstractValidator
      */
     public function isValid()
     {
-        if ($this->valid === null) {
-            $response = call_user_func_array($this->userFunction, array(
-                &$this->field
-            ));
+        $response = call_user_func_array($this->userFunction, array(
+            &$this->field
+        ));
 
-            if ($response === true) {
-                $this->valid = true;
-            } else {
-                if (is_string($response)) {
-                    $this->setErrorMessage($response);
-                }
-                $this->valid = false;
-            }
+        if ($response === true) {
+            return true;
         }
-        return $this->valid;
+
+        if (is_string($response)) {
+            $this->setErrorMessage($response);
+        }
+
+        return false;
     }
 }

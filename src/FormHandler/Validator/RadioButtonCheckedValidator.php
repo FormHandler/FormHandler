@@ -14,8 +14,7 @@ class RadioButtonCheckedValidator extends AbstractValidator
     /**
      * Create a IsExistingOptionValidator
      *
-     * @param string $message
-     *            (optional)
+     * @param string $message (optional)
      */
     public function __construct($message = null)
     {

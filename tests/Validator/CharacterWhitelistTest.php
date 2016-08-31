@@ -30,7 +30,6 @@ class CharacterWhitelistTest extends TestCase
         $this->assertTrue($field->isValid(), 'Empty field should be valid when its not required.');
 
         // field should be invalid because it contains other characters
-        $field->clearCache();
         $field->setValue('g');
         $this->assertFalse(
             $field->isValid(),
@@ -38,7 +37,6 @@ class CharacterWhitelistTest extends TestCase
         );
 
         // now it should be valid
-        $field->clearCache();
         $field->setValue('fedcba9876543210ffee91');
         $this->assertTrue(
             $field->isValid(),
@@ -49,7 +47,6 @@ class CharacterWhitelistTest extends TestCase
         $whitelist = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         $validator->setWhitelist($whitelist);
         $field->setValidator($validator);
-        $field->clearCache();
 
         $this->assertFalse(
             $field->isValid(),
@@ -67,7 +64,6 @@ class CharacterWhitelistTest extends TestCase
 
         $validator->setWhitelist($whitelist);
         $field->setValidator($validator);
-        $field->clearCache();
         $this->assertTrue(
             $field->isValid(),
             'Field should be valid because it contains only whitelisted characters'

@@ -204,6 +204,7 @@ class SelectField extends AbstractFormField
     public function setMultiple($multiple)
     {
         $this->multiple = (bool)$multiple;
+        $this->clearCache();
         return $this;
     }
 
@@ -249,7 +250,7 @@ class SelectField extends AbstractFormField
      */
     public function setValue($value)
     {
-        $this->value = $value;
+        parent::setValue($value);
 
         // this will auto select the options based on this fields value
         $this->selectOptionsFromValue();

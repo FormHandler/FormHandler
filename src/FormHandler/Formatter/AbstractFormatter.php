@@ -3,7 +3,6 @@ namespace FormHandler\Formatter;
 
 use FormHandler\Field\Element;
 
-
 /**
  * Formatter class.
  *

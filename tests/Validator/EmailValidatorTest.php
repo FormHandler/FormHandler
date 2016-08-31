@@ -49,7 +49,6 @@ namespace FormHandler\Tests\Validator {
             $validator = new EmailValidator(false);
 
             $field->setValidator($validator);
-            $field->clearCache();
             $this->assertTrue(
                 $field->isValid(),
                 'Empty field with non-required validator should be valid'
@@ -84,7 +83,6 @@ namespace FormHandler\Tests\Validator {
             ];
 
             foreach ($valid as $value) {
-                $field->clearCache();
                 $field->setValue($value);
                 $this->assertTrue(
                     $field->isValid(),
@@ -114,7 +112,6 @@ namespace FormHandler\Tests\Validator {
             ];
 
             foreach ($invalid as $value) {
-                $field->clearCache();
                 $field->setValue($value);
                 $this->assertFalse(
                     $field->isValid(),
@@ -142,14 +139,12 @@ namespace FormHandler\Tests\Validator {
             $validator->setCheckIfDomainExist(true);
             $field->setValidator($validator);
 
-            $field->clearCache();
             $this->assertFalse(
                 $field->isValid(),
                 'Field should be invalid because host of email address does not exists'
             );
 
             $field->setValue('test@gmail.com');
-            $field->clearCache();
             $this->assertTrue(
                 $field->isValid(),
                 'Field should be valid because host of email address does exists'

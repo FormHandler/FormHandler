@@ -64,13 +64,20 @@ class ImageUploadValidator extends UploadValidator
      * @var array
      */
     protected $messages = [
-        'not_an_image'          => 'It seems that the uploaded file is not an image. Please upload a valid image file.',
-        'aspect_ratio'          => 'The aspect ratio of the uploaded file (%s) is not the same as the required aspect ratio (%s).',
-        'aspect_ratio_denied'   => 'The aspect ratio of the uploaded file (%s) is not allowed.',
-        'size_height_max'       => 'The height of the uploaded image (%spx) is larger than the maximum allowed height (%spx)',
-        'size_height_min'       => 'The height of the uploaded image (%spx) is smaller than the minimum allowed height (%spx)',
-        'size_width_max'        => 'The width of the uploaded image (%spx) is larger than the maximum allowed width (%spx)',
-        'size_width_min'        => 'The width of the uploaded image (%spx) is smaller than the minimum allowed width (%spx)',
+        'not_an_image' =>
+            'It seems that the uploaded file is not an image. Please upload a valid image file.',
+        'aspect_ratio' =>
+            'The aspect ratio of the uploaded file (%s) is not the same as the required aspect ratio (%s).',
+        'aspect_ratio_denied' =>
+            'The aspect ratio of the uploaded file (%s) is not allowed.',
+        'size_height_max' =>
+            'The height of the uploaded image (%spx) is larger than the maximum allowed height (%spx)',
+        'size_height_min' =>
+            'The height of the uploaded image (%spx) is smaller than the minimum allowed height (%spx)',
+        'size_width_max' =>
+            'The width of the uploaded image (%spx) is larger than the maximum allowed width (%spx)',
+        'size_width_min' =>
+            'The width of the uploaded image (%spx) is smaller than the minimum allowed width (%spx)',
     ];
 
     /**
@@ -166,7 +173,7 @@ class ImageUploadValidator extends UploadValidator
         // check if it's an image, and get it's size
         $size = @getimagesize($value['tmp_name']);
         if ($size === false) {
-            $this->setErrorMessage( $this->messages['not_an_image'] );
+            $this->setErrorMessage($this->messages['not_an_image']);
             return false;
         }
         list ($width, $height) = $size;
@@ -227,7 +234,7 @@ class ImageUploadValidator extends UploadValidator
 
             if ($x == $this->denyAspectRatioX && $y == $this->denyAspectRatioY) {
                 $this->setErrorMessage(sprintf(
-                   $this->messages['aspect_ratio_denied'],
+                    $this->messages['aspect_ratio_denied'],
                     $x . ':' . $y
                 ));
                 return false;

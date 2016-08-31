@@ -66,8 +66,9 @@ class RadioButton extends AbstractFormField
      * @param bool $checked
      * @return RadioButton
      */
-    public function setChecked($checked)
+    public function setChecked($checked = true)
     {
+        $this->clearCache();
         $this->checked = (bool)$checked;
         return $this;
     }
@@ -116,19 +117,9 @@ class RadioButton extends AbstractFormField
      */
     public function setValue($value)
     {
-        $this->value = $value;
+        parent::setValue($value);
         $this->setChecked($this->form->getFieldValue($this->name) == $this->getValue());
         return $this;
-    }
-
-    /**
-     * Return the value for this field
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 
     /**

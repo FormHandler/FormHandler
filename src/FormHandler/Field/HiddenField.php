@@ -34,28 +34,6 @@ class HiddenField extends AbstractFormField
     }
 
     /**
-     * Set the value for this field and return the TextField reference
-     *
-     * @param string $value
-     * @return HiddenField
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-        return $this;
-    }
-
-    /**
-     * Return the value for this field
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
      * Return string representation of this field
      *
      * @return string

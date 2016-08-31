@@ -69,8 +69,9 @@ class UrlValidator extends AbstractValidator
         $url = $this->field->getValue();
 
 
-        if (!$this->isRequiredAndNotEmpty($url)) {
-            return false;
+        // not required and empty? Then its valid
+        if ($this->isNotRequiredAndEmpty($url)) {
+            return true;
         }
 
         if ($this->getMaxLength() && strlen($url) > $this->getMaxLength()) {
@@ -98,23 +99,14 @@ class UrlValidator extends AbstractValidator
 
     /**
      * Check if the field is required or not.
-     * If it's required, we expect a valid value. If not, we return false.
+     * If it's not required, and if its empty.
      *
      * @param $value
      * @return bool
      */
-    protected function isRequiredAndNotEmpty($value)
+    protected function isNotRequiredAndEmpty($value)
     {
-        // check if we are a required value
-        if (!$value && $this->required) {
-            // Required but not set.
-            return false;
-        } elseif (!$value && !$this->required) {
-            // Not set and not required, valid!
-            return true;
-        }
-
-        return true;
+        return ( !$this -> required && !$value );
     }
 
     /**

@@ -7,13 +7,6 @@ namespace FormHandler\Validator;
 class Ipv4Validator extends AbstractValidator
 {
     /**
-     * Var to remember if the value was valid or not
-     *
-     * @var boolean
-     */
-    protected $valid = null;
-
-    /**
      *
      * @param bool $required
      * @param null $message
@@ -37,21 +30,14 @@ class Ipv4Validator extends AbstractValidator
     {
         $value = $this->field->getValue();
 
-        if ($this->valid === null) {
-            if ($value == '' && $this->required == false) {
-                $this->valid = true;
-                return $this->valid;
-            }
-
-            if (filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-                $this->valid = true;
-                return $this->valid;
-            }
-
-            $this->valid = false;
-            return $this->valid;
+        if ($value == '' && $this->required == false) {
+            return true;
         }
 
-        return $this->valid;
+        if (filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            return true;
+        }
+
+        return false;
     }
 }

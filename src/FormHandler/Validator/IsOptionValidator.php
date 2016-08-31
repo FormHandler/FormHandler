@@ -1,7 +1,10 @@
 <?php
 namespace FormHandler\Validator;
 
-use FormHandler\Field;
+use FormHandler\Field\AbstractFormField;
+use FormHandler\Field\Optgroup;
+use FormHandler\Field\Option;
+use FormHandler\Field\SelectField;
 
 /**
  * This validator will check if the value of the submitted select field
@@ -12,7 +15,7 @@ class IsOptionValidator extends AbstractValidator
     /**
      * The field to validate
      *
-     * @var Field\SelectField;
+     * @var SelectField;
      */
     protected $field;
 
@@ -35,12 +38,12 @@ class IsOptionValidator extends AbstractValidator
     /**
      * Set the field which should be validated.
      *
-     * @param Field\AbstractFormField $field
+     * @param AbstractFormField $field
      * @throws \Exception
      */
-    public function setField(Field\AbstractFormField $field)
+    public function setField(AbstractFormField $field)
     {
-        if (!($field instanceof Field\SelectField)) {
+        if (!($field instanceof SelectField)) {
             throw new \Exception('The validator "' . get_class($this) . '" only works on select fields!');
         }
 
@@ -56,11 +59,6 @@ class IsOptionValidator extends AbstractValidator
     {
         // get the submitted value
         $value = $this->field->getForm()->getFieldValue($this->field->getName());
-
-        // this would be strange
-        if (is_object($value)) {
-            return false;
-        }
 
         // required but not given
         if ($this->required && $value == null) {
@@ -103,12 +101,12 @@ class IsOptionValidator extends AbstractValidator
 
             // walk all options
             foreach ($options as $option) {
-                if ($option instanceof Field\Option) {
+                if ($option instanceof Option) {
                     if ($option->getValue() == $selected) {
                         $found = true;
                         break;
                     }
-                } elseif ($option instanceof Field\Optgroup) {
+                } elseif ($option instanceof Optgroup) {
                     $options2 = $option->getOptions();
                     foreach ($options2 as $option2) {
                         if ($option2->getValue() == $selected) {

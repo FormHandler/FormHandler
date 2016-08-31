@@ -135,11 +135,16 @@ class UploadHelper
             $dirname = dirname($destination);
             // should we create the destination path if not exists?
             if ($createDestinationIfNotExist) {
-                if (!is_dir($dirname) && !mkdir($dirname,
-                        is_bool($createDestinationIfNotExist) ? 0777 : $createDestinationIfNotExist, true)
+                if (!is_dir($dirname) && !mkdir(
+                    $dirname,
+                    is_bool($createDestinationIfNotExist) ? 0777 : $createDestinationIfNotExist,
+                    true
+                )
                 ) {
                     throw new \Exception(sprintf(
-                        'Failed to create the destination directory "%s"', $dirname));
+                        'Failed to create the destination directory "%s"',
+                        $dirname
+                    ));
                 }
             }
 
@@ -407,14 +412,16 @@ class UploadHelper
         // check if the source exists
         if (!is_file($original) || !($orgSize = getimagesize($original))) {
             throw new \Exception(sprintf(
-                'Could not find or read the original image for merging: %s', $original
+                'Could not find or read the original image for merging: %s',
+                $original
             ));
         }
 
         // check if the stamp exists
         if (!is_file($stamp) || !($stampSize = getimagesize($stamp))) {
             throw new \Exception(sprintf(
-                'Could not find or read the stamp image for merging: %s', $stamp
+                'Could not find or read the stamp image for merging: %s',
+                $stamp
             ));
         }
 

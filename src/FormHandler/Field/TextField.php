@@ -182,33 +182,6 @@ class TextField extends AbstractFormField
     }
 
     /**
-     * Set the value for this field and return the TextField reference
-     *
-     * @param string $value
-     * @return TextField
-     */
-    public function setValue($value)
-    {
-        // trim the value we dont want leading and trailing spaces
-        $this->value = trim($value);
-
-        // also clear cache of possible validations if the value is changed.
-        $this -> clearCache();
-
-        return $this;
-    }
-
-    /**
-     * Return the value for this field
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
      * Set the value for placeholder
      * @param string $value
      * @return TextField

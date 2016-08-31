@@ -29,7 +29,6 @@ class DateValidatorTest extends TestCase
         $validator->setRequired(false);
         $validator->setErrorMessage($errormsg);
 
-        $field->clearCache();
         $field->setValidator($validator);
         $this->assertTrue(
             $field->isValid(),
@@ -50,7 +49,6 @@ class DateValidatorTest extends TestCase
         ];
 
         foreach ($valid as $value) {
-            $field->clearCache();
             $field->setValue($value);
             $this->assertTrue(
                 $field->isValid(),
@@ -60,7 +58,6 @@ class DateValidatorTest extends TestCase
 
         $invalid = ['Hi', 'Bogus'];
         foreach ($invalid as $value) {
-            $field->clearCache();
             $field->setValue($value);
             $this->assertFalse(
                 $field->isValid(),

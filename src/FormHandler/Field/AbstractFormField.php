@@ -59,16 +59,34 @@ abstract class AbstractFormField extends Element
     protected $helpText = "";
 
     /**
-     * Return the value of this field.
-     * @return mixed
+     * Set the value for this field and return the reference of this field
+     *
+     * @param mixed $value
+     * @return $this
      */
-    abstract public function getValue();
+    public function setValue($value)
+    {
+        // trim the value we dont want leading and trailing spaces
+        if (is_string($value)) {
+            $value = trim($value);
+        }
+        $this->value = $value;
+
+        // also clear cache of possible validations if the value is changed.
+        $this -> clearCache();
+
+        return $this;
+    }
 
     /**
-     * Set the value for this field
-     * @param mixed $value
+     * Return the value for this field
+     *
+     * @return mixed
      */
-    abstract public function setValue($value);
+    public function getValue()
+    {
+        return $this->value;
+    }
 
     /**
      * Set if this field is valid or not
@@ -244,6 +262,7 @@ abstract class AbstractFormField extends Element
      */
     public function setValidator($validator)
     {
+        $this -> clearCache();
         $this->validators = [];
         $this->addValidator($validator);
 
@@ -341,7 +360,7 @@ abstract class AbstractFormField extends Element
     public function isRequired()
     {
         foreach ($this->validators as $validator) {
-            if( $validator->isRequired() ) {
+            if ($validator->isRequired()) {
                 return true;
             }
         }

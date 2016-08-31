@@ -29,7 +29,6 @@ class CharacterBlacklistTest extends TestCase
         $this->assertTrue($field->isValid(), 'Empty field should be valid when its not required.');
 
         // field should be invalid because it contains other characters
-        $field->clearCache();
         $field->setValue(':-)');
         $this->assertFalse(
             $field->isValid(),
@@ -37,7 +36,6 @@ class CharacterBlacklistTest extends TestCase
         );
 
         // now it should be valid
-        $field->clearCache();
         $field->setValue('hi, I am happy but I cannot express it with an emoji');
         $this->assertTrue(
             $field->isValid(),
@@ -49,7 +47,6 @@ class CharacterBlacklistTest extends TestCase
         $validator->setBlacklist($whitelist);
         $validator->setErrorMessage('Numbers not allowed');
         $field->setValidator($validator);
-        $field->clearCache();
 
         $this->assertTrue(
             $field->isValid(),
@@ -70,7 +67,6 @@ class CharacterBlacklistTest extends TestCase
         $field->setValidator($validator);
 
 
-        $field->clearCache();
         $this->assertFalse(
             $field->isValid(),
             'Field should be invalid because it contains blacklisted characters'

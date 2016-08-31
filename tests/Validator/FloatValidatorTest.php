@@ -21,7 +21,7 @@ class FloatValidatorTest extends TestCase
         );
 
         $validator->setRequired(false);
-        $field->setValidator($validator)->clearCache();
+        $field->setValidator($validator);
 
         $this->assertTrue(
             $field->isValid(),
@@ -46,21 +46,21 @@ class FloatValidatorTest extends TestCase
             'Value should be valid because its between the given range'
         );
 
-        $field->setValue(52.1)->clearCache();
+        $field->setValue(52.1);
 
         $this->assertFalse(
             $field->isValid(),
             'Value should be invalid because its not between the given range'
         );
 
-        $field->setValue(-2.8)->clearCache();
+        $field->setValue(-2.8);
 
         $this->assertFalse(
             $field->isValid(),
             'Value should be invalid because its not between the given range'
         );
 
-        $field->setValue('-2.4.2.2.8')->clearCache();
+        $field->setValue('-2.4.2.2.8');
 
         $this->assertFalse(
             $field->isValid(),

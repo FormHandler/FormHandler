@@ -209,7 +209,7 @@ class Element
      * @SuppressWarnings(PHPMD)
      *
      * @param string $id
-     * @return Element
+     * @return $this
      */
     public function setId($id)
     {

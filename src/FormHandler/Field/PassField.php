@@ -128,28 +128,6 @@ class PassField extends AbstractFormField
     }
 
     /**
-     * Set the value for this field and return the PassField reference
-     *
-     * @param string $value
-     * @return PassField
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-        return $this;
-    }
-
-    /**
-     * Return the value for this field
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
      * Set the value for placeholder
      *
      * @param string $value

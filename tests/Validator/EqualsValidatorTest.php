@@ -24,7 +24,6 @@ class EqualsValidatorTest extends TestCase
         $validator->setRequired(true);
 
         $field->setValidator($validator);
-        $field->clearCache();
         $this->assertFalse(
             $field->isValid(),
             'Value should be invalid because validator is required and field is empty'
@@ -48,7 +47,6 @@ class EqualsValidatorTest extends TestCase
         );
 
         $field->setValue('NOK');
-        $field->clearCache();
         $this->assertTrue(
             $field->isValid(),
             'Value should be valid because it does NOT equals the value of the validator'
@@ -74,8 +72,8 @@ class EqualsValidatorTest extends TestCase
             'Radiobutton should be invalid because its not checked, thus value does not equals'
         );
 
-        $checkbox -> setChecked(true) -> clearCache();
-        $radiobutton -> setChecked(true) -> clearCache();
+        $checkbox -> setChecked(true);
+        $radiobutton -> setChecked(true);
 
         $this ->assertTrue(
             $checkbox -> isValid(),

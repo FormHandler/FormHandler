@@ -97,6 +97,7 @@ class CheckBox extends AbstractFormField
      */
     public function setChecked($checked)
     {
+        $this->clearCache();
         $this->checked = $checked;
         return $this;
     }
@@ -119,19 +120,9 @@ class CheckBox extends AbstractFormField
      */
     public function setValue($value)
     {
-        $this->value = $value;
+        parent::setValue($value);
         $this->setCheckedBasedOnValue();
         return $this;
-    }
-
-    /**
-     * Return the value for this field
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 
     /**
