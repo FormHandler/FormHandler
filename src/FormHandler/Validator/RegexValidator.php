@@ -24,7 +24,7 @@ class RegexValidator extends AbstractValidator
     public function __construct($regex, $required = true, $message = null, $not = false)
     {
         if ($message === null) {
-            $message = dgettext('formhandler', 'This value is incorrect.');
+            $message = 'This value is incorrect.';
         }
 
         $this->setRegularExpression($regex);

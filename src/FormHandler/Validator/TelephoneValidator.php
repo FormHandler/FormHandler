@@ -13,7 +13,7 @@ namespace FormHandler\Validator;
  * This is probably not the best validtor, because you also want to check the length
  * of the value, number of digits, etc.
  */
-class TelephoneValidator extends StringValidator
+class TelephoneValidator extends AbstractValidator
 {
     /**
      * Create a new email validator
@@ -24,7 +24,7 @@ class TelephoneValidator extends StringValidator
     public function __construct($required = true, $message = null)
     {
         if ($message === null) {
-            $message = dgettext('formhandler', 'Invalid email address.');
+            $message = 'Invalid email address.';
         }
 
         $this->setErrorMessage($message);

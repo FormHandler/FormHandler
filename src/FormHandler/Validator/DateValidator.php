@@ -15,7 +15,7 @@ class DateValidator extends AbstractValidator
     public function __construct($required = true, $message = null)
     {
         if ($message === null) {
-            $message = dgettext('formhandler', 'This value is incorrect.');
+            $message = 'This value is incorrect.';
         }
 
         $this->setRequired($required);

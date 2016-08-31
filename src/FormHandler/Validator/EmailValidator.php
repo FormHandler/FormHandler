@@ -23,7 +23,7 @@ class EmailValidator extends AbstractValidator
     public function __construct($required = true, $message = null, $checkIfDomainExists = false)
     {
         if ($message === null) {
-            $message = dgettext('formhandler', 'Invalid email address.');
+            $message = 'Invalid email address.';
         }
 
         $this->setErrorMessage($message);

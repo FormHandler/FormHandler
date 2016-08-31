@@ -1,5 +1,6 @@
 <?php
 namespace FormHandler\Field;
+use FormHandler\Form;
 
 abstract class AbstractFormButton extends Element
 {

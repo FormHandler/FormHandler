@@ -81,6 +81,9 @@ So, this was our first basic example. Lets see what happens here.
   When the submitted form is invalid, you could just ignore the values. The form will be rendered again,
   which will display the error message to the user about incorrect form fields.
      
+- Finally, in our view we render the HTML. You are self responsible to render the fields where you want. 
+  FormHandler does not mix with the design of your fields, except from some form related HTML tags like ```label```
+  for a radio button.
 
 The `Form` Object
 -----
@@ -134,4 +137,13 @@ You can also render buttons with FormHandler. A button is not used for validatio
 but when you create a button we do expect the button to be present in the submitted form.
 
 If you have created mutiple buttons, then only 1 button needs to be present. If this is not 
-the case, we do not handle the form as submitted. 
+the case, we do not handle the form as submitted.
+ 
+Translations
+------ 
+FormHandler does only contain some default error messages which are shown when a field is incorrect. For each
+```Validator``` you can overwrite this error message with a localized variant of the error message.
+
+Only the ```UploadValidator``` and ```ImageUploadValidator``` contain some more translations, based on the reason
+why a file could not be uploaded. You can overwrite these also. See for more details the documentation for the 
+```UploadValidator``` and ```ImageUploadValidator```.

@@ -43,7 +43,7 @@ class UrlValidator extends AbstractValidator
     public function __construct($required = true, $message = null, $maxLength = null, $skipTldCheck = false)
     {
         if ($message === null) {
-            $message = dgettext('formhandler', 'URL is invalid.');
+            $message = 'URL is invalid.';
         }
 
         $this->setRequired($required);

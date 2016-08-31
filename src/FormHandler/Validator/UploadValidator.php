@@ -50,6 +50,22 @@ class UploadValidator extends AbstractValidator
     protected $minFilesize;
 
     /**
+     * All error messages which can be used
+     * @var array
+     */
+    protected $messages = [
+        'required' => 'You have to upload a file.',
+        'file_too_big' => 'The uploaded file exceeds the maximum allowed upload file size.',
+        'incomplete' => 'The file was not completly uploaded. Please try again.',
+        'cannot_write' => 'Failed to save the uploaded file to disk. Please try again.',
+        'error' => 'Failed to upload this file due to an error. Please try again.',
+        'wrong_extension' => 'The uploaded file extension is not allowed.',
+        'wrong_type' => 'The uploaded file type is not allowed.',
+        'file_larger_then' => 'The uploaded file is larger then the maximum allowed size of %d kb.',
+        'file_smaller_then' => 'The uploaded file is smaller then the minimum allowed size of %d kb.',
+    ];
+
+    /**
      * Create a new upload validator
      *
      * @param boolean $required
@@ -91,7 +107,7 @@ class UploadValidator extends AbstractValidator
 
         // no file uploaded?
         if (!$value || !isset($value['error']) || $value['error'] == UPLOAD_ERR_NO_FILE) {
-            $this->setErrorMessage(dgettext('formhandler', 'You have to upload a file.'));
+            $this->setErrorMessage($this->messages['required']);
             // required ?
             return !$this->required;
         }
@@ -103,33 +119,21 @@ class UploadValidator extends AbstractValidator
 
             case UPLOAD_ERR_FORM_SIZE:
             case UPLOAD_ERR_INI_SIZE:
-                $this->setErrorMessage(dgettext(
-                    'formhandler',
-                    'The uploaded file exceeds the maximum allowed upload file size.'
-                ));
+                $this->setErrorMessage($this->messages['file_too_big']);
                 return false;
 
             case UPLOAD_ERR_PARTIAL:
-                $this->setErrorMessage(dgettext(
-                    'formhandler',
-                    'The file was not completly uploaded. Please try again.'
-                ));
+                $this->setErrorMessage($this->messages['incomplete']);
                 return false;
 
             case UPLOAD_ERR_NO_TMP_DIR:
             case UPLOAD_ERR_CANT_WRITE:
-                $this->setErrorMessage(dgettext(
-                    'formhandler',
-                    'Failed to save the uploaded file to disk. Please try again.'
-                ));
+                $this->setErrorMessage($this->messages['cannot_write']);
                 return false;
 
             case UPLOAD_ERR_EXTENSION:
             default:
-                $this->setErrorMessage(dgettext(
-                    'formhandler',
-                    'Failed to upload this file due to an error. Please try again.'
-                ));
+                $this->setErrorMessage($this->messages['error']);
                 return false;
         }
 
@@ -140,21 +144,23 @@ class UploadValidator extends AbstractValidator
 
         // retrieve the extension
         if (!$this->isExtensionAllowed($value['name'])) {
-            $this->setErrorMessage(dgettext('formhandler', 'The uploaded file extension is not allowed.'));
+            $this->setErrorMessage($this->messages['wrong_extension']);
             return false;
         }
 
         if (!$this->isMimetypeAllowed($value['tmp_name'], $value['type'])) {
-            $this->setErrorMessage(dgettext('formhandler', 'The uploaded file type is not allowed.'));
+            $this->setErrorMessage($this->messages['wrong_type']);
             return false;
         }
 
-        if (!$this->isSizeAllowed(filesize($value['tmp_name']))) {
-            $this->setErrorMessage(dgettext(
-                'formhandler',
-                'The uploaded file exceeds the maximum allowed upload file size.'
-            ));
-            return false;
+        $size = filesize($value['tmp_name']);
+
+        // validate the upload file size
+        if ($this->maxFilesize && $size > $this->maxFilesize) {
+            $this->setErrorMessage(sprintf($this->messages['file_larger_then'], $this->maxFilesize));
+        }
+        if ($this->minFilesize && $size < $this->minFilesize) {
+            $this->setErrorMessage(sprintf($this->messages['file_smaller_then'], $this->minFilesize));
         }
 
         // if here, the extension and the mime type are validated! The file is good!
@@ -224,33 +230,16 @@ class UploadValidator extends AbstractValidator
         }
 
         // validate the mime type agains the white and blacklists
-        if (sizeof($this->allowedMimeTypes) > 0 && !in_array($mimetype, $this->allowedMimeTypes)) {
+        if (sizeof($this->allowedMimeTypes) > 0 && !in_array($mimetype, $this->allowedMimeTypes / 1024)) {
             return false;
         }
-        if (sizeof($this->deniedMimeTypes) > 0 && in_array($mimetype, $this->deniedMimeTypes)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if the size (in bytes) of the uploaded file is valid.
-     * @param int $size
-     * @return bool
-     */
-    protected function isSizeAllowed($size)
-    {
-        // validate the upload file size
-        if ($this->maxFilesize && $size > $this->maxFilesize) {
-            return false;
-        }
-        if ($this->minFilesize && $size < $this->minFilesize) {
+        if (sizeof($this->deniedMimeTypes) > 0 && in_array($mimetype, $this->deniedMimeTypes / 1024)) {
             return false;
         }
 
         return true;
     }
+
 
     /**
      * Set the min filesize in bytes.
@@ -310,7 +299,7 @@ class UploadValidator extends AbstractValidator
     public function setAllowedMimeTypes($types)
     {
         if (!is_array($types)) {
-            throw new \Exception("You can only set an array as allowed mime types");
+            throw new \Exception('You can only set an array as allowed mime types');
         }
         $this->allowedMimeTypes = $types;
     }
@@ -429,7 +418,7 @@ class UploadValidator extends AbstractValidator
     public function setDeniedMimeTypes($types)
     {
         if (!is_array($types)) {
-            throw new \Exception("You can only set an array as denied mime types");
+            throw new \Exception('You can only set an array as denied mime types');
         }
         $this->deniedMimeTypes = $types;
     }

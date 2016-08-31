@@ -59,7 +59,7 @@ class FloatValidator extends AbstractValidator
         $decimalPoint = self::DECIMAL_POINT
     ) {
         if ($message === null) {
-            $message = dgettext('formhandler', 'This value is incorrect.');
+            $message = 'This value is incorrect.';
         }
 
         $this->setMax($max);

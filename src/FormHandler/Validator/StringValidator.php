@@ -30,7 +30,7 @@ class StringValidator extends AbstractValidator
     public function __construct($minLength = 0, $maxLength = 0, $required = true, $message = null)
     {
         if ($message === null) {
-            $message = dgettext('formhandler', 'This value is incorrect.');
+            $message = 'This value is incorrect.';
         }
 
         $this->setMaxLength($maxLength);

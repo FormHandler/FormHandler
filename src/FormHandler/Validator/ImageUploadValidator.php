@@ -60,6 +60,20 @@ class ImageUploadValidator extends UploadValidator
     protected $maximumHeight;
 
     /**
+     * List of error messages which we can display if something is wrong
+     * @var array
+     */
+    protected $messages = [
+        'not_an_image'          => 'It seems that the uploaded file is not an image. Please upload a valid image file.',
+        'aspect_ratio'          => 'The aspect ratio of the uploaded file (%s) is not the same as the required aspect ratio (%s).',
+        'aspect_ratio_denied'   => 'The aspect ratio of the uploaded file (%s) is not allowed.',
+        'size_height_max'       => 'The height of the uploaded image (%spx) is larger than the maximum allowed height (%spx)',
+        'size_height_min'       => 'The height of the uploaded image (%spx) is smaller than the minimum allowed height (%spx)',
+        'size_width_max'        => 'The width of the uploaded image (%spx) is larger than the maximum allowed width (%spx)',
+        'size_width_min'        => 'The width of the uploaded image (%spx) is smaller than the minimum allowed width (%spx)',
+    ];
+
+    /**
      * Set the minimum proportions of the uploaded image.
      *
      * If the width of height is smaller than the given values, the upload will be marked as invalid.
@@ -152,10 +166,7 @@ class ImageUploadValidator extends UploadValidator
         // check if it's an image, and get it's size
         $size = @getimagesize($value['tmp_name']);
         if ($size === false) {
-            $this->setErrorMessage(dgettext(
-                'formhandler',
-                'It seems that the uploaded file is not an image. Please upload a valid image file.'
-            ));
+            $this->setErrorMessage( $this->messages['not_an_image'] );
             return false;
         }
         list ($width, $height) = $size;
@@ -198,10 +209,7 @@ class ImageUploadValidator extends UploadValidator
 
             if ($x != $this->allowAspectRatioX || $y != $this->allowAspectRatioY) {
                 $this->setErrorMessage(sprintf(
-                    dgettext(
-                        'formhandler',
-                        'The aspect ratio of the uploaded file (%s) is not the same as the required aspect ratio (%s).'
-                    ),
+                    $this->messages['aspect_ratio'],
                     $x . ':' . $y,
                     $this->allowAspectRatioX . ':' . $this->allowAspectRatioY
                 ));
@@ -218,10 +226,10 @@ class ImageUploadValidator extends UploadValidator
             $y = $height / $gcd;
 
             if ($x == $this->denyAspectRatioX && $y == $this->denyAspectRatioY) {
-                $this->setErrorMessage(sprintf(dgettext(
-                    'formhandler',
-                    'The aspect ratio of the uploaded file (%s) is not allowed.'
-                ), $x . ':' . $y));
+                $this->setErrorMessage(sprintf(
+                   $this->messages['aspect_ratio_denied'],
+                    $x . ':' . $y
+                ));
                 return false;
             }
         }
@@ -239,10 +247,7 @@ class ImageUploadValidator extends UploadValidator
     {
         if ($this->maximumHeight && $height > $this->maximumHeight) {
             $this->setErrorMessage(sprintf(
-                dgettext(
-                    'formhandler',
-                    'The height of the uploaded image (%spx) is larger than the maximum allowed height (%spx)'
-                ),
+                $this->messages['size_height_max'],
                 $height,
                 $this->maximumHeight
             ));
@@ -251,10 +256,7 @@ class ImageUploadValidator extends UploadValidator
 
         if ($this->maximumWidth && $width > $this->maximumWidth) {
             $this->setErrorMessage(sprintf(
-                dgettext(
-                    'formhandler',
-                    'The width of the uploaded image (%spx) is larger than the maximum allowed width (%spx)'
-                ),
+                $this->messages['size_width_max'],
                 $width,
                 $this->maximumWidth
             ));
@@ -263,10 +265,7 @@ class ImageUploadValidator extends UploadValidator
 
         if ($this->minimumHeight && $height < $this->minimumHeight) {
             $this->setErrorMessage(sprintf(
-                dgettext(
-                    'formhandler',
-                    'The height of the uploaded image (%spx) is smaller than the minimum allowed height (%spx)'
-                ),
+                $this->messages['size_height_min'],
                 $height,
                 $this->minimumHeight
             ));
@@ -275,10 +274,7 @@ class ImageUploadValidator extends UploadValidator
 
         if ($this->minimumWidth && $width < $this->minimumWidth) {
             $this->setErrorMessage(sprintf(
-                dgettext(
-                    'formhandler',
-                    'The width of the uploaded image (%spx) is smaller than the minimum allowed width (%spx)'
-                ),
+                $this->messages['size_width_min'],
                 $width,
                 $this->minimumWidth
             ));

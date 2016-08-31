@@ -26,7 +26,7 @@ class SameFieldsValidator extends AbstractValidator
     public function __construct($field2, $message = null, $required = true)
     {
         if ($message === null) {
-            $message = dgettext('formhandler', 'The given passwords are not the same.');
+            $message = 'The given passwords are not the same.';
         }
 
         $this->setRequired($required);

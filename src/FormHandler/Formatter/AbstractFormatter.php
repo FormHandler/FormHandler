@@ -2,7 +2,7 @@
 namespace FormHandler\Formatter;
 
 use FormHandler\Field\Element;
-use FormHandler\Form;
+
 
 /**
  * Formatter class.

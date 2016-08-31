@@ -341,8 +341,12 @@ abstract class AbstractFormField extends Element
     public function isRequired()
     {
         foreach ($this->validators as $validator) {
-            $validator->isRequired();
+            if( $validator->isRequired() ) {
+                return true;
+            }
         }
+
+        return false;
     }
 
     /**

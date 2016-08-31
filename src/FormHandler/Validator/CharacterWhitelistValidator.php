@@ -26,7 +26,7 @@ class CharacterWhitelistValidator extends AbstractValidator
     public function __construct($whitelist, $required = true, $message = null)
     {
         if ($message === null) {
-            $message = dgettext('formhandler', 'This value is incorrect.');
+            $message = 'This value is incorrect.';
         }
 
         $this->setWhitelist($whitelist);

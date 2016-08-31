@@ -34,7 +34,7 @@ class EqualsValidator extends AbstractValidator
     public function __construct($compareValue, $required = true, $message = null, $not = false)
     {
         if ($message === null) {
-            $message = dgettext('formhandler', 'The value is incorrect.');
+            $message = 'The value is incorrect.';
         }
 
         $this->setCompareToValue($compareValue);

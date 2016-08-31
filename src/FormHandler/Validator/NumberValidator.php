@@ -30,7 +30,7 @@ class NumberValidator extends AbstractValidator
     public function __construct($min = null, $max = null, $required = true, $message = null)
     {
         if ($message === null) {
-            $message = dgettext('formhandler', 'This value is incorrect.');
+            $message = 'This value is incorrect.';
         }
 
         $this->setMax($max);
