@@ -136,10 +136,10 @@ class UploadHelper
             // should we create the destination path if not exists?
             if ($createDestinationIfNotExist) {
                 if (!is_dir($dirname) && !mkdir(
-                    $dirname,
-                    is_bool($createDestinationIfNotExist) ? 0777 : $createDestinationIfNotExist,
-                    true
-                )
+                        $dirname,
+                        is_bool($createDestinationIfNotExist) ? 0777 : $createDestinationIfNotExist,
+                        true
+                    )
                 ) {
                     throw new \Exception(sprintf(
                         'Failed to create the destination directory "%s"',
@@ -176,190 +176,60 @@ class UploadHelper
     }
 
     /**
-     * Return the GD version installed.
-     * Returns 0 when no version installed.
-     * @return int
+     * This function takes a path to a file. If the file exists,
+     * the filename will be altered and a digit will be added to make the
+     * filename unique (non-existing).
+     *
+     *  So, if /tmp/image.jpg exists, it becomes /tmp/image(1).jpg.
+     *
+     * @param string $destination
+     * @return string
      */
-    public static function getGDVersion()
+    public static function getNonExistingFilename($destination)
     {
-        static $version = null;
-
-        if ($version === null) {
-            if (!extension_loaded('gd')) {
-                return $version = 0;
-            }
-
-            // use the gd_info() function if possible.
-            if (function_exists('gd_info')) {
-                $info = gd_info();
-                if (!empty($info['GD Version']) && preg_match('/\d/', $info['GD Version'], $match)) {
-                    return $version = $match[0];
-                }
-            }
-
-            if (!preg_match('/phpinfo/', ini_get('disable_functions'))) {
-                // ...otherwise use phpinfo().
-                ob_start();
-                phpinfo(8);
-                $info = ob_get_contents();
-                ob_end_clean();
-                $info = stristr($info, 'gd version');
-                if ($info && preg_match('/\d/', $info, $match)) {
-                    $version = $match[0];
-                }
-            }
-
-            $version = 1;
+        // find a unique name
+        $dir = dirname($destination);
+        $file = basename($destination);
+        $ext = UploadHelper::getFileExtension($file);
+        if ($ext) {
+            $ext = '.' . $ext;
+            $file = substr($file, 0, 0 - strlen($ext));
         }
 
-        return $version;
+        $extra = "";
+        $i = 1;
+
+        while (file_exists($dir . DIRECTORY_SEPARATOR . $file . $extra . $ext)) {
+            $extra = '(' . $i++ . ')';
+        }
+
+        return $dir . DIRECTORY_SEPARATOR . $file . $extra . $ext;
     }
 
     /**
-     * Resize an image by using GD.
+     * Return the extension of a filename, or null if no extension could be found.
+     * The extension is lower-cased and does NOT contain a leading dot.
      *
-     * $source is the path to the source image file. Only jpg, gif and png files are allowed.
-     * Gif images are only supported if the function "imagecreatefromgif" exists.
-     *
-     * $destination is the full path to the image how it should be saved. If the file exists,
-     * it will be overwritten. If the destination ends with a slash (both are allowed), then the original
-     * file name is kept and saved in the $destination directory.
-     * The destination folder needs to exists!
-     * If the destination file extension is different from the source,
-     * the image will also be converted to the new file type.
-     *
-     * $newWidth and $newHeight are the new image size in pixels.
-     * If both $newWidth and $newHeight are given, these will be used for the new image. If only one of both are given,
-     * and $constrainProportions is set to true (default), then the other value will be calculated automatically
-     * to constrain the proportions.
-     *
-     * $quality is the quality of the saved resized image if this is a JPG image.
-     * For the other formats, this parameter is ignored.
-     *
-     * If $constrainProportions is set to false, the original size will be used for the missing size.
-     * If both sizes are missing, the original will be used.
-     *
-     * Example:
-     * <code>
-     * UploadHelper::resizeImage(
-     *     'images/image.jpg',     // the original image
-     *     'images/thumbs/',     // save the resized image in this dir, keep the original filename. If exists, it will be overwritten.
-     *     250,                     // make the new image 250 pixels width
-     *     null,                 // no height given
-     *     80,                     // quality to safe the image in (in percentage), default 80
-     *     true                     // auto calculate the missing size so that the proportions are kept of the file? (default true)
-     * );
-     * </code>
-     *
-     * @param string $source
-     * @param string $destination
-     * @param int $newWidth
-     * @param int $newHeight
-     * @param int $quality
-     * @param boolean $constrainProportions
-     * @return string The location where the image was saved
-     * @throws \Exception
+     * @param string $filename
+     * @return string
      */
-    public static function resizeImage(
-        $source,
-        $destination = null,
-        $newWidth = null,
-        $newHeight = null,
-        $quality = 80,
-        $constrainProportions = true
-    ) {
-        // check if the source exists
-        if (!is_file($source) || !($size = getimagesize($source))) {
-            throw new \Exception(sprintf('Could not find or read the file to resize: %s'), $source);
+    public static function getFileExtension($filename)
+    {
+        $filename = basename($filename);
+
+        // remove possible query string
+        $pos = strpos($filename, '?');
+        if ($pos !== false) {
+            $filename = substr($filename, 0, $pos);
         }
 
-        // no destination given? Then overwrite the original one!
-        if (!$destination) {
-            $destination = $source;
+        // retrieve the extension
+        $pos = strrpos($filename, '.');
+        if ($pos !== false) {
+            return strtolower(substr($filename, $pos + 1));
         }
 
-        // get the original size
-        list($orgWidth, $orgHeight) = $size;
-        // store the requested size
-        $myNewWidth = $newWidth ? $newWidth : $orgWidth;
-        $myNewHeight = $newHeight ? $newHeight : $orgHeight;
-
-        // should we keep the proportions?
-        if ($constrainProportions) {
-            // both sizes are given? Then only use the size which is the largest of the original image.
-            if (!($newWidth xor $newHeight)) {
-                if ($orgWidth > $orgHeight) {
-                    $newHeight = null;
-                } else {
-                    $newWidth = null;
-                }
-            }
-
-            if ($newWidth) {
-                $newHeight = ($newWidth / ($orgWidth / 100)) * ($orgHeight / 100);
-                // Check again if the images size is not out of proportion
-                if ($newHeight > $myNewHeight) {
-                    $newHeight = $myNewHeight;
-                    $newWidth = ($newHeight / ($orgHeight / 100)) * ($orgWidth / 100);
-                }
-            } else {
-                $newWidth = ($newHeight / ($orgHeight / 100)) * ($orgWidth / 100);
-                // Check again if the images size is not out of proportion
-                if ($newWidth > $myNewWidth) {
-                    $newWidth = $myNewWidth;
-                    $newHeight = ($newWidth / ($orgWidth / 100)) * ($orgHeight / 100);
-                }
-            }
-        } // dont keep proportions
-        else {
-            if (!$newWidth) {
-                $newWidth = $orgWidth;
-            }
-
-            if (!$newHeight) {
-                $newHeight = $orgHeight;
-            }
-        }
-
-        // add the original filename
-        $lastChar = substr($destination, -1);
-        if ($lastChar == '/' || $lastChar == '\\') {
-            $destination .= basename($source);
-        }
-
-        $gdVersion = UploadHelper::getGDVersion();
-        if (!$gdVersion) {
-            throw new \Exception('Could not resize image because GD is not installed!');
-        }
-
-        $ext = UploadHelper::getFileExtension($source);
-        $destExt = UploadHelper::getFileExtension($destination);
-
-        // open the image
-        $image = UploadHelper::openImage($source, $ext);
-
-        // generate the new image
-        if ($gdVersion >= 2) {
-            $resized = imagecreatetruecolor($newWidth, $newHeight);
-            imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $orgWidth, $orgHeight);
-        } else {
-            $resized = imagecreate($newWidth, $newHeight);
-            imagecopyresized($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $orgWidth, $orgHeight);
-        }
-
-        // close the image
-        $result = UploadHelper::closeImage($destExt, $resized, $destination, $quality);
-
-        // clean up
-        imagedestroy($image);
-        imagedestroy($resized);
-
-        // quality assurance
-        if (!$result) {
-            throw new \Exception('Error while writing image file after resize process in UploadHelper.');
-        }
-
-        return $destination;
+        return null;
     }
 
     /**
@@ -494,271 +364,6 @@ class UploadHelper
     }
 
     /**
-     * This is a function to both resize and crop images.
-     * Note: this function has only been minimally tested, and recursively calls itself.
-     * It should not be used for any serious use-case yet, but is a start.
-     *
-     * @param string $original
-     * @param string $destination
-     * @param integer $targetX
-     * @param integer $targetY
-     * @param integer $quality
-     * @return void
-     * @throws \Exception
-     */
-    public static function resizeAndCropImage($original, $destination, $targetX, $targetY, $quality = 80)
-    {
-        if (!$destination) {
-            $destination = $original;
-        }
-
-        // check if the source exists
-        if (!is_file($original) || !($size = getimagesize($original))) {
-            throw new \Exception(sprintf(
-                'Could not find or read the original image for cropping: %s',
-                $original
-            ));
-        }
-
-        // get the original size
-        list($orgWidth, $orgHeight) = $size;
-
-        $aspectRatio = $orgWidth / $orgHeight;
-
-        if (($orgWidth / $orgHeight) == ($targetX / $targetY)) {
-            self::resizeImage($original, $destination, $targetX, $targetY, $quality);
-            return;
-        }
-
-        $targetXResize = $targetX;
-        $targetYResize = $orgHeight / $aspectRatio;
-
-        $fromY = ($targetYResize / 2) - ($targetY / 2);
-
-        self::resizeImage($original, $destination, $targetXResize, $targetYResize, 100);
-        self::cropImage($destination, $destination, 0, $fromY, $targetX, $targetY, $quality);
-    }
-
-    /**
-     * Crop an image.
-     *
-     * Example:
-     * <code>
-     * UploadHelper::cropImage( 'path/to/file.jpg', '', 10, 10, 600, 600 );
-     * </code>
-     *
-     * @param string $original The file which should be cropped. Supported formats are jpg, gif and png
-     * @param string $destination The file where the cropped image should be saved in.
-     *                              When an empty string is given, the original file is overwritten
-     * @param int $x The x coordinate where we should start cutting
-     * @param int $y The x coordinate where we should start cutting
-     * @param int $width The width of the cut
-     * @param int $height The height of the cut
-     * @param int $quality
-     * @return string Returns the full path to the destination file, or null if something went wrong.
-     * @throws \Exception
-     */
-    public static function cropImage($original, $destination, $x, $y, $width, $height, $quality = 80)
-    {
-        if (!$destination) {
-            $destination = $original;
-        }
-
-        // check if the source exists
-        if (!is_file($original) || !($size = getimagesize($original))) {
-            throw new \Exception(sprintf(
-                'Could not find or read the original image for cropping: %s',
-                $original
-            ));
-        }
-
-        // check if gd is supported
-        $gdVersion = UploadHelper::getGDVersion();
-        if (!$gdVersion) {
-            throw new \Exception('Could not resize image because GD is not installed!');
-        }
-
-        $ext = UploadHelper::getFileExtension($original);
-
-        // open the image
-        $image = UploadHelper::openImage($original, $ext);
-
-        // generate the new image
-        if ($gdVersion >= 2) {
-            $cropped = imagecreatetruecolor($width, $height);
-            imagecopyresampled($cropped, $image, 0, 0, $x, $y, $width, $height, $width, $height);
-        } else {
-            $cropped = imagecreate($width, $height);
-            imagecopyresized($cropped, $image, 0, 0, $x, $y, $width, $height, $width, $height);
-        }
-
-        // close the image
-        UploadHelper::closeImage($ext, $cropped, $destination, $quality);
-
-        // clean up
-        imagedestroy($image);
-        imagedestroy($cropped);
-
-        return $destination;
-    }
-
-    /**
-     * This function takes a path to a file. If the file exists,
-     * the filename will be altered and a digit will be added to make the
-     * filename unique (non-existing).
-     *
-     *  So, if /tmp/image.jpg exists, it becomes /tmp/image(1).jpg.
-     *
-     * @param string $destination
-     * @return string
-     */
-    public static function getNonExistingFilename($destination)
-    {
-        // find a unique name
-        $dir = dirname($destination);
-        $file = basename($destination);
-        $ext = UploadHelper::getFileExtension($file);
-        if ($ext) {
-            $ext = '.' . $ext;
-            $file = substr($file, 0, 0 - strlen($ext));
-        }
-
-        $extra = "";
-        $i = 1;
-
-        while (file_exists($dir . DIRECTORY_SEPARATOR . $file . $extra . $ext)) {
-            $extra = '(' . $i++ . ')';
-        }
-
-        return $dir . DIRECTORY_SEPARATOR . $file . $extra . $ext;
-    }
-
-    /**
-     * Return the max upload size in bytes
-     * @return int
-     */
-    public static function getMaxUploadSize()
-    {
-        if (!ini_get('file_uploads')) {
-            return 0;
-        }
-
-        $max = 0;
-
-        try {
-            $max = self::iniSizeToBytes(ini_get('upload_max_filesize'));
-        } catch (\Exception $e) {
-        }
-
-        try {
-            $max2 = self::iniSizeToBytes(ini_get('post_max_size'));
-            if ($max2 < $max) {
-                $max = $max2;
-            }
-        } catch (\Exception $e) {
-        }
-
-        return $max;
-    }
-
-    /**
-     * Make the ini size like 2M to bytes
-     *
-     * @param string $str
-     * @return int
-     * @throws \Exception
-     */
-    public static function iniSizeToBytes($str)
-    {
-        if (!preg_match('/^(\d+)([bkm]*)$/i', trim($str), $parts)) {
-            throw new \Exception("Failed to convert string to bytes!");
-        }
-
-        switch (strtolower($parts[2])) {
-            case 'm':
-                return (int)($parts[1] * 1048576);
-            case 'k':
-                return (int)($parts[1] * 1024);
-            case 'b':
-            default:
-                return (int)$parts[1];
-        }
-    }
-
-    /**
-     * Return the extension of a filename, or null if no extension could be found.
-     * The extension is lower-cased and does NOT contain a leading dot.
-     *
-     * @param string $filename
-     * @return string
-     */
-    public static function getFileExtension($filename)
-    {
-        $filename = basename($filename);
-
-        // remove possible query string
-        $pos = strpos($filename, '?');
-        if ($pos !== false) {
-            $filename = substr($filename, 0, $pos);
-        }
-
-        // retrieve the extension
-        $pos = strrpos($filename, '.');
-        if ($pos !== false) {
-            return strtolower(substr($filename, $pos + 1));
-        }
-
-        return null;
-    }
-
-    #################################################################
-    ############ From here, protected helper methods ################
-    #################################################################
-
-
-    /**
-     * Get the position of the stamp image based on the original size image
-     *
-     * @param int $size : the size of the image (width of height)
-     * @param int $stampSize : the size of the stamp (width of height)
-     * @param string $where : position where to put the stamp on the image
-     * @return int
-     */
-    protected static function getPosition($size, $stampSize, $where)
-    {
-        // percentage ?
-        if (strpos($where, '%') !== false) {
-            $percent = str_replace('%', '', $where);
-            $part = $size / 100;
-            $x = ceil($percent * $part);
-        } else {
-            if (is_numeric(str_replace('px', '', strtolower($where)))) {
-                $x = $where;
-            } else {
-                // get the pos for the copyright stamp
-                switch (strtolower($where)) {
-                    case 'top':
-                    case 'left':
-                        $x = 0;
-                        break;
-                    case 'middle':
-                    case 'center':
-                        $x = ceil($size / 2) - ceil($stampSize / 2);
-                        break;
-                    case 'bottom':
-                    case 'right':
-                        $x = $size - $stampSize;
-                        break;
-                    default:
-                        $x = 0;
-                }
-            }
-        }
-
-        return $x;
-    }
-
-    /**
      * Open an image based on it's extension
      * @param string $file
      * @param string $ext
@@ -840,6 +445,48 @@ class UploadHelper
     }
 
     /**
+     * Get the position of the stamp image based on the original size image
+     *
+     * @param int $size : the size of the image (width of height)
+     * @param int $stampSize : the size of the stamp (width of height)
+     * @param string $where : position where to put the stamp on the image
+     * @return int
+     */
+    protected static function getPosition($size, $stampSize, $where)
+    {
+        // percentage ?
+        if (strpos($where, '%') !== false) {
+            $percent = str_replace('%', '', $where);
+            $part = $size / 100;
+            $x = ceil($percent * $part);
+        } else {
+            if (is_numeric(str_replace('px', '', strtolower($where)))) {
+                $x = $where;
+            } else {
+                // get the pos for the copyright stamp
+                switch (strtolower($where)) {
+                    case 'top':
+                    case 'left':
+                        $x = 0;
+                        break;
+                    case 'middle':
+                    case 'center':
+                        $x = ceil($size / 2) - ceil($stampSize / 2);
+                        break;
+                    case 'bottom':
+                    case 'right':
+                        $x = $size - $stampSize;
+                        break;
+                    default:
+                        $x = 0;
+                }
+            }
+        }
+
+        return $x;
+    }
+
+    /**
      * Close an image based on its extension
      *
      * @param string $ext The image extension without leading dot.
@@ -861,6 +508,361 @@ class UploadHelper
             throw new \Exception(
                 'Only images with the following extension are allowed: jpg, jpeg, png, gif'
             );
+        }
+    }
+
+    /**
+     * This is a function to both resize and crop images.
+     * Note: this function has only been minimally tested, and recursively calls itself.
+     * It should not be used for any serious use-case yet, but is a start.
+     *
+     * @param string $original
+     * @param string $destination
+     * @param integer $targetX
+     * @param integer $targetY
+     * @param integer $quality
+     * @return void
+     * @throws \Exception
+     */
+    public static function resizeAndCropImage($original, $destination, $targetX, $targetY, $quality = 80)
+    {
+        if (!$destination) {
+            $destination = $original;
+        }
+
+        // check if the source exists
+        if (!is_file($original) || !($size = getimagesize($original))) {
+            throw new \Exception(sprintf(
+                'Could not find or read the original image for cropping: %s',
+                $original
+            ));
+        }
+
+        // get the original size
+        list($orgWidth, $orgHeight) = $size;
+
+        $aspectRatio = $orgWidth / $orgHeight;
+
+        if (($orgWidth / $orgHeight) == ($targetX / $targetY)) {
+            self::resizeImage($original, $destination, $targetX, $targetY, $quality);
+            return;
+        }
+
+        $targetXResize = $targetX;
+        $targetYResize = $orgHeight / $aspectRatio;
+
+        $fromY = ($targetYResize / 2) - ($targetY / 2);
+
+        self::resizeImage($original, $destination, $targetXResize, $targetYResize, 100);
+        self::cropImage($destination, $destination, 0, $fromY, $targetX, $targetY, $quality);
+    }
+
+    /**
+     * Resize an image by using GD.
+     *
+     * $source is the path to the source image file. Only jpg, gif and png files are allowed.
+     * Gif images are only supported if the function "imagecreatefromgif" exists.
+     *
+     * $destination is the full path to the image how it should be saved. If the file exists,
+     * it will be overwritten. If the destination ends with a slash (both are allowed), then the original
+     * file name is kept and saved in the $destination directory.
+     * The destination folder needs to exists!
+     * If the destination file extension is different from the source,
+     * the image will also be converted to the new file type.
+     *
+     * $newWidth and $newHeight are the new image size in pixels.
+     * If both $newWidth and $newHeight are given, these will be used for the new image. If only one of both are given,
+     * and $constrainProportions is set to true (default), then the other value will be calculated automatically
+     * to constrain the proportions.
+     *
+     * $quality is the quality of the saved resized image if this is a JPG image.
+     * For the other formats, this parameter is ignored.
+     *
+     * If $constrainProportions is set to false, the original size will be used for the missing size.
+     * If both sizes are missing, the original will be used.
+     *
+     * Example:
+     * <code>
+     * UploadHelper::resizeImage(
+     *     'images/image.jpg',   // the original image
+     *     'images/thumbs/',     // save the resized image in this dir, keep the original filename.
+     *                           // If exists, it will be overwritten.
+     *
+     *     250,                  // make the new image 250 pixels width
+     *     null,                 // no height given
+     *     80,                   // quality to safe the image in (in percentage), default 80
+     *     true                  // auto calculate the missing size so that the proportions are kept of the file?
+     *                           // (default true)
+     * );
+     * </code>
+     *
+     * @param string $source
+     * @param string $destination
+     * @param int $newWidth
+     * @param int $newHeight
+     * @param int $quality
+     * @param boolean $constrainProportions
+     * @return string The location where the image was saved
+     * @throws \Exception
+     */
+    public static function resizeImage(
+        $source,
+        $destination = null,
+        $newWidth = null,
+        $newHeight = null,
+        $quality = 80,
+        $constrainProportions = true
+    ) {
+        // check if the source exists
+        if (!is_file($source) || !($size = getimagesize($source))) {
+            throw new \Exception(sprintf('Could not find or read the file to resize: %s'), $source);
+        }
+
+        // no destination given? Then overwrite the original one!
+        if (!$destination) {
+            $destination = $source;
+        }
+
+        // get the original size
+        list($orgWidth, $orgHeight) = $size;
+        // store the requested size
+        $myNewWidth = $newWidth ? $newWidth : $orgWidth;
+        $myNewHeight = $newHeight ? $newHeight : $orgHeight;
+
+        // should we keep the proportions?
+        if ($constrainProportions) {
+            // both sizes are given? Then only use the size which is the largest of the original image.
+            if (!($newWidth xor $newHeight)) {
+                if ($orgWidth > $orgHeight) {
+                    $newHeight = null;
+                } else {
+                    $newWidth = null;
+                }
+            }
+
+            if ($newWidth) {
+                $newHeight = ($newWidth / ($orgWidth / 100)) * ($orgHeight / 100);
+                // Check again if the images size is not out of proportion
+                if ($newHeight > $myNewHeight) {
+                    $newHeight = $myNewHeight;
+                    $newWidth = ($newHeight / ($orgHeight / 100)) * ($orgWidth / 100);
+                }
+            } else {
+                $newWidth = ($newHeight / ($orgHeight / 100)) * ($orgWidth / 100);
+                // Check again if the images size is not out of proportion
+                if ($newWidth > $myNewWidth) {
+                    $newWidth = $myNewWidth;
+                    $newHeight = ($newWidth / ($orgWidth / 100)) * ($orgHeight / 100);
+                }
+            }
+        } // dont keep proportions
+        else {
+            if (!$newWidth) {
+                $newWidth = $orgWidth;
+            }
+
+            if (!$newHeight) {
+                $newHeight = $orgHeight;
+            }
+        }
+
+        // add the original filename
+        $lastChar = substr($destination, -1);
+        if ($lastChar == '/' || $lastChar == '\\') {
+            $destination .= basename($source);
+        }
+
+        $gdVersion = UploadHelper::getGDVersion();
+        if (!$gdVersion) {
+            throw new \Exception('Could not resize image because GD is not installed!');
+        }
+
+        $ext = UploadHelper::getFileExtension($source);
+        $destExt = UploadHelper::getFileExtension($destination);
+
+        // open the image
+        $image = UploadHelper::openImage($source, $ext);
+
+        // generate the new image
+        if ($gdVersion >= 2) {
+            $resized = imagecreatetruecolor($newWidth, $newHeight);
+            imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $orgWidth, $orgHeight);
+        } else {
+            $resized = imagecreate($newWidth, $newHeight);
+            imagecopyresized($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $orgWidth, $orgHeight);
+        }
+
+        // close the image
+        $result = UploadHelper::closeImage($destExt, $resized, $destination, $quality);
+
+        // clean up
+        imagedestroy($image);
+        imagedestroy($resized);
+
+        // quality assurance
+        if (!$result) {
+            throw new \Exception('Error while writing image file after resize process in UploadHelper.');
+        }
+
+        return $destination;
+    }
+
+    #################################################################
+    ############ From here, protected helper methods ################
+    #################################################################
+
+    /**
+     * Return the GD version installed.
+     * Returns 0 when no version installed.
+     * @return int
+     */
+    public static function getGDVersion()
+    {
+        static $version = null;
+
+        if ($version === null) {
+            if (!extension_loaded('gd')) {
+                return $version = 0;
+            }
+
+            // use the gd_info() function if possible.
+            if (function_exists('gd_info')) {
+                $info = gd_info();
+                if (!empty($info['GD Version']) && preg_match('/\d/', $info['GD Version'], $match)) {
+                    return $version = $match[0];
+                }
+            }
+
+            if (!preg_match('/phpinfo/', ini_get('disable_functions'))) {
+                // ...otherwise use phpinfo().
+                ob_start();
+                phpinfo(8);
+                $info = ob_get_contents();
+                ob_end_clean();
+                $info = stristr($info, 'gd version');
+                if ($info && preg_match('/\d/', $info, $match)) {
+                    $version = $match[0];
+                }
+            }
+
+            $version = 1;
+        }
+
+        return $version;
+    }
+
+    /**
+     * Crop an image.
+     *
+     * Example:
+     * <code>
+     * UploadHelper::cropImage( 'path/to/file.jpg', '', 10, 10, 600, 600 );
+     * </code>
+     *
+     * @param string $original The file which should be cropped. Supported formats are jpg, gif and png
+     * @param string $destination The file where the cropped image should be saved in.
+     *                              When an empty string is given, the original file is overwritten
+     * @param int $x The x coordinate where we should start cutting
+     * @param int $y The x coordinate where we should start cutting
+     * @param int $width The width of the cut
+     * @param int $height The height of the cut
+     * @param int $quality
+     * @return string Returns the full path to the destination file, or null if something went wrong.
+     * @throws \Exception
+     */
+    public static function cropImage($original, $destination, $x, $y, $width, $height, $quality = 80)
+    {
+        if (!$destination) {
+            $destination = $original;
+        }
+
+        // check if the source exists
+        if (!is_file($original) || !($size = getimagesize($original))) {
+            throw new \Exception(sprintf(
+                'Could not find or read the original image for cropping: %s',
+                $original
+            ));
+        }
+
+        // check if gd is supported
+        $gdVersion = UploadHelper::getGDVersion();
+        if (!$gdVersion) {
+            throw new \Exception('Could not resize image because GD is not installed!');
+        }
+
+        $ext = UploadHelper::getFileExtension($original);
+
+        // open the image
+        $image = UploadHelper::openImage($original, $ext);
+
+        // generate the new image
+        if ($gdVersion >= 2) {
+            $cropped = imagecreatetruecolor($width, $height);
+            imagecopyresampled($cropped, $image, 0, 0, $x, $y, $width, $height, $width, $height);
+        } else {
+            $cropped = imagecreate($width, $height);
+            imagecopyresized($cropped, $image, 0, 0, $x, $y, $width, $height, $width, $height);
+        }
+
+        // close the image
+        UploadHelper::closeImage($ext, $cropped, $destination, $quality);
+
+        // clean up
+        imagedestroy($image);
+        imagedestroy($cropped);
+
+        return $destination;
+    }
+
+    /**
+     * Return the max upload size in bytes
+     * @return int
+     */
+    public static function getMaxUploadSize()
+    {
+        if (!ini_get('file_uploads')) {
+            return 0;
+        }
+
+        $max = 0;
+
+        try {
+            $max = self::iniSizeToBytes(ini_get('upload_max_filesize'));
+        } catch (\Exception $e) {
+        }
+
+        try {
+            $max2 = self::iniSizeToBytes(ini_get('post_max_size'));
+            if ($max2 < $max) {
+                $max = $max2;
+            }
+        } catch (\Exception $e) {
+        }
+
+        return $max;
+    }
+
+    /**
+     * Make the ini size like 2M to bytes
+     *
+     * @param string $str
+     * @return int
+     * @throws \Exception
+     */
+    public static function iniSizeToBytes($str)
+    {
+        if (!preg_match('/^(\d+)([bkm]*)$/i', trim($str), $parts)) {
+            throw new \Exception("Failed to convert string to bytes!");
+        }
+
+        switch (strtolower($parts[2])) {
+            case 'm':
+                return (int)($parts[1] * 1048576);
+            case 'k':
+                return (int)($parts[1] * 1024);
+            case 'b':
+            default:
+                return (int)$parts[1];
         }
     }
 }
