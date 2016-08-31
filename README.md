@@ -84,6 +84,49 @@ So, this was our first basic example. Lets see what happens here.
 - Finally, in our view we render the HTML. You are self responsible to render the fields where you want. 
   FormHandler does not mix with the design of your fields, except from some form related HTML tags like ```label```
   for a radio button.
+  
+Fluent Interface 
+-----  
+
+FormHandler implements a fluent interface. This means that you *can* use method chaining. It's not required though.
+
+Example:
+```php
+$form = new Form();
+
+// An example using method chaining.
+$form -> textField( 'name' )
+      -> setSize( 10 )
+      -> setId( 'myName' )
+      -> setTitle( 'Enter your name' )
+      -> setPlaceholder( '<name here>' )
+      -> addValidator( new StringValidator( 2, 50, true ) );
+```
+
+
+  
+General methods 
+-----
+
+Most objects (the form, fields and the buttons) represent an HTML tag. All of these objects have some general 
+available getters and setters to influence some of the attributes of the HTML tag. For example:
+
+  * setTabindex(`$index`)
+  * getTabindex()
+  * setAccesskey(`$key`)
+  * getAccesskey()
+  * setStyle(`$style`)
+  * addStyle(`$style`)
+  * getStyle()
+  * addClass(`$class`)
+  * getClass()
+  * setClass(`$class`)
+  * setTitle(`$title`)
+  * getTitle()
+  * setId()
+  * getId()
+  
+
 
 The `Form` Object
 -----
@@ -91,30 +134,43 @@ The `Form` Object
 This object represents the Form. It allows you to create fields in this form, retrieve fields, ask the status 
 of the form (submitted, valid) and set form specific attributes (like `action`, `enctype`, etc).
 
+
 The form object has an "invoke" option which allows you to quickly retrieve a form by its *name*. You can use it 
 like this:
 
 ```php
-// create a new form
+// Create a new form
 $form = new Form();
 
-// craete a field in the form
+// Create a field in the form
 $form -> textField('name');
 
-// retrieve the form by it's name using the shorthand:
+// Retrieve the form by it's name using the shorthand:
 $field = $form('name');
 
-// ... etc
+// ... Etc
 ```
 
 Fields
 ------
 
-#### General rules which apply for all fields
+In short, you have these fields available. 
 
-... @todo ...
+  * textField(`$name`) 
+  * hiddenField(`$name`)
+  * passField(`$name`)
+  * selectField(`$name`)
+  * radioButton(`$name`, `$value = null`)
+  * selectField(`$name`)
+  * textarea(`$name`, `$cols = 40`, `$rows = 7`)
+  * checkBox(`$name`, `$value = 1`)
+  * uploadField(`$name`)
+  
+You also have these buttons available:
 
- 
+  * submitButton(`$name`, `$value = ''`)
+  * imageButton(`$name`, `$src = ''`)
+
 #### TextField
 
 This will create a new text field. The default type will be `text`, but you can also change it to another type which
