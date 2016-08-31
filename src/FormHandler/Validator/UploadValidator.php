@@ -59,7 +59,7 @@ class UploadValidator extends AbstractValidator
         'incomplete' => 'The file was not completly uploaded. Please try again.',
         'cannot_write' => 'Failed to save the uploaded file to disk. Please try again.',
         'error' => 'Failed to upload this file due to an error. Please try again.',
-        'wrong_extension' => 'The uploaded file extension is not allowed.',
+        'wrong_extension' => 'The uploaded file extension is not allowed. Allowed is: %s',
         'wrong_type' => 'The uploaded file type is not allowed.',
         'file_larger_then' => 'The uploaded file is larger then the maximum allowed size of %d kb.',
         'file_smaller_then' => 'The uploaded file is smaller then the minimum allowed size of %d kb.',
@@ -144,7 +144,7 @@ class UploadValidator extends AbstractValidator
 
         // retrieve the extension
         if (!$this->isExtensionAllowed($value['name'])) {
-            $this->setErrorMessage($this->messages['wrong_extension']);
+            $this->setErrorMessage(sprintf($this->messages['wrong_extension'], implode(',', $this->allowedExtensions)));
             return false;
         }
 
@@ -212,6 +212,13 @@ class UploadValidator extends AbstractValidator
      */
     protected function isMimetypeAllowed($filename, $default = "")
     {
+        $numAllowed = sizeof($this->allowedMimeTypes);
+        $numDenied = sizeof($this->deniedMimeTypes);
+
+        if ($numAllowed == 0 && $numDenied == 0) {
+            return true;
+        }
+
         /**
          * Try to retrieve the mime type of the file
          */
@@ -230,16 +237,26 @@ class UploadValidator extends AbstractValidator
         }
 
         // validate the mime type agains the white and blacklists
-        if (sizeof($this->allowedMimeTypes) > 0 && !in_array($mimetype, $this->allowedMimeTypes / 1024)) {
+        if ($numAllowed > 0 && !in_array($mimetype, $this->allowedMimeTypes / 1024)) {
             return false;
         }
-        if (sizeof($this->deniedMimeTypes) > 0 && in_array($mimetype, $this->deniedMimeTypes / 1024)) {
+        if ($numDenied > 0 && in_array($mimetype, $this->deniedMimeTypes / 1024)) {
             return false;
         }
 
         return true;
     }
 
+    /**
+     * Return the min filesize in bytes.
+     * Returns null if no minimum is set.
+     *
+     * @return integer
+     */
+    public function getMinFilesize()
+    {
+        return $this->minFilesize;
+    }
 
     /**
      * Set the min filesize in bytes.
@@ -259,14 +276,13 @@ class UploadValidator extends AbstractValidator
     }
 
     /**
-     * Return the min filesize in bytes.
-     * Returns null if no minimum is set.
+     * Return the max filesize.
      *
-     * @return integer
+     * @return int
      */
-    public function getMinFilesize()
+    public function getMaxFilesize()
     {
-        return $this->minFilesize;
+        return $this->maxFilesize;
     }
 
     /**
@@ -281,13 +297,13 @@ class UploadValidator extends AbstractValidator
     }
 
     /**
-     * Return the max filesize.
+     * Get the allowed mime types.
      *
-     * @return int
+     * @return array
      */
-    public function getMaxFilesize()
+    public function getAllowedMimeTypes()
     {
-        return $this->maxFilesize;
+        return $this->allowedMimeTypes;
     }
 
     /**
@@ -302,16 +318,6 @@ class UploadValidator extends AbstractValidator
             throw new \Exception('You can only set an array as allowed mime types');
         }
         $this->allowedMimeTypes = $types;
-    }
-
-    /**
-     * Get the allowed mime types.
-     *
-     * @return array
-     */
-    public function getAllowedMimeTypes()
-    {
-        return $this->allowedMimeTypes;
     }
 
     /**
@@ -348,22 +354,6 @@ class UploadValidator extends AbstractValidator
     }
 
     /**
-     * Set the extensions which are allowed.
-     * The extensions should be in an array. The extension should NOT contain a dot (.) in front of it.
-     * Example:
-     *
-     * ```php
-     * $validator -> setAllowedExtensions( array('pdf', 'txt', 'zip', 'jpg' ) );
-     * ```
-     *
-     * @param array $extensions
-     */
-    public function setAllowedExtensions(array $extensions)
-    {
-        $this->allowedExtensions = $extensions;
-    }
-
-    /**
      * Get all allowed extensions.
      * Returns an array with all extensions in it (without leading dot ".")
      *
@@ -372,6 +362,22 @@ class UploadValidator extends AbstractValidator
     public function getAllowedExtensions()
     {
         return $this->allowedExtensions;
+    }
+
+    /**
+     * Set the extensions which are allowed.
+     * The extensions should be in an array. The extension should NOT contain a dot (.) in front of it.
+     * Example:
+     *
+     * ```php
+     * $validator -> setAllowedExtensions( ['pdf', 'txt', 'zip', 'jpg' ] );
+     * ```
+     *
+     * @param array $extensions
+     */
+    public function setAllowedExtensions(array $extensions)
+    {
+        $this->allowedExtensions = $extensions;
     }
 
     /**
@@ -410,6 +416,16 @@ class UploadValidator extends AbstractValidator
     }
 
     /**
+     * Get the denied mime types, or an empty array if none
+     *
+     * @return array
+     */
+    public function getDeniedMimeTypes()
+    {
+        return $this->deniedMimeTypes;
+    }
+
+    /**
      * Set the mime type or types which are denied for uploading.
      *
      * @param array $types
@@ -421,16 +437,6 @@ class UploadValidator extends AbstractValidator
             throw new \Exception('You can only set an array as denied mime types');
         }
         $this->deniedMimeTypes = $types;
-    }
-
-    /**
-     * Get the denied mime types, or an empty array if none
-     *
-     * @return array
-     */
-    public function getDeniedMimeTypes()
-    {
-        return $this->deniedMimeTypes;
     }
 
     /**
@@ -467,6 +473,17 @@ class UploadValidator extends AbstractValidator
     }
 
     /**
+     * Get all denied extensions.
+     * Returns an array with all extensions in it (without leading dot ".")
+     *
+     * @return array
+     */
+    public function getDeniedExtensions()
+    {
+        return $this->deniedExtensions;
+    }
+
+    /**
      * Set the extensions which are denied.
      * The extensions should be in an array. The extension should NOT contain a loading dot "."
      * Example:
@@ -480,17 +497,6 @@ class UploadValidator extends AbstractValidator
     public function setDeniedExtensions(array $extensions)
     {
         $this->deniedExtensions = $extensions;
-    }
-
-    /**
-     * Get all denied extensions.
-     * Returns an array with all extensions in it (without leading dot ".")
-     *
-     * @return array
-     */
-    public function getDeniedExtensions()
-    {
-        return $this->deniedExtensions;
     }
 
     /**

@@ -135,7 +135,8 @@ class UploadHelper
             $dirname = dirname($destination);
             // should we create the destination path if not exists?
             if ($createDestinationIfNotExist) {
-                if (!is_dir($dirname) && !mkdir(
+                if (!is_dir($dirname) &&
+                    !mkdir(
                         $dirname,
                         is_bool($createDestinationIfNotExist) ? 0777 : $createDestinationIfNotExist,
                         true
