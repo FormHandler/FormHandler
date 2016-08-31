@@ -11,4 +11,4 @@ before_script:
     - travis_retry composer --prefer-source --dev install
 
 script:
-  - ant full-build
+  - ant quick-build
