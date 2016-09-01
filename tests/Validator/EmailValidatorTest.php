@@ -22,6 +22,13 @@ namespace FormHandler\Validator {
             return $exists;
         }
     }
+
+    function getmxrr( $host, $tmp )
+    {
+        static $count = 0;
+
+        return $count++ === 0 ? false : true;
+    }
 }
 
 namespace FormHandler\Tests\Validator {

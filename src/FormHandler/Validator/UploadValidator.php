@@ -68,14 +68,14 @@ class UploadValidator extends AbstractValidator
     /**
      * Create a new upload validator
      *
-     * @param boolean $required
-     * @param string $message
+     * @param boolean $required Set this field as required or not
+     * @param array $messages A list of messages which should be used as error message when validating this upload.
      */
-    public function __construct($required = true, $message = null)
+    public function __construct($required = true, array $messages = [])
     {
         $this->setRequired($required);
-        if ($message) {
-            $this->setErrorMessage($message);
+        if (sizeof($messages) > 0) {
+            $this->messages = array_merge($this->messages, $messages);
         }
     }
 

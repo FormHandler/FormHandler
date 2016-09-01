@@ -22,7 +22,7 @@ namespace FormHandler\Tests\Validator {
 
     class UploadValidatorTest extends TestCase
     {
-        public function testUpload()
+        public function testValidUpload()
         {
             $form = new Form();
             $field = $form->uploadField('cv');
@@ -34,13 +34,28 @@ namespace FormHandler\Tests\Validator {
             $field->setValidator($validator);
 
             $valid = $form->isValid();
-            var_dump($field->getErrorMessages());
             $this->assertTrue(
                 $valid,
                 'File should be valid, good extension and not too large'
             );
+        }
 
+        public function testInvalidUpload()
+        {
+            $form = new Form();
+            $field = $form->uploadField('cv');
 
+            $validator = new UploadValidator(true);
+            $validator->setMaxFilesize(1024 * 1024);
+            $validator->setAllowedExtensions(['doc']);
+
+            $field->setValidator($validator);
+
+            $valid = $form->isValid();
+            $this->assertFalse(
+                $valid,
+                'File should be invalid, incorrect extension'
+            );
         }
 
         /**
