@@ -7,6 +7,18 @@ use PHPUnit\Framework\TestCase;
 
 class StringValidatorTest extends TestCase
 {
+
+    public function testInvalidValidator()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageRegExp('/AbstractValidator/');
+
+        $form = new Form('', false);
+
+        $field = $form->textField('name');
+        $field -> addValidator( new \stdClass );
+
+    }
     public function testRequired()
     {
         $form = new Form('', false);

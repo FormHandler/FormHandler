@@ -5,8 +5,6 @@ namespace FormHandler\Field;
  */
 class Optgroup extends Element
 {
-    use HasAttributes;
-
     /**
      * List of the options in this optgroup
      *

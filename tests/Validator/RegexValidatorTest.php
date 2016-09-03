@@ -25,6 +25,7 @@ class RegexValidatorTest extends TestCase
         $validator -> setRequired(true);
         $validator -> setErrorMessage($errormsg);
         $field -> setValidator($validator);
+
         $this -> assertFalse(
             $field -> isValid(),
             'Field should be invalid as its empty and required'

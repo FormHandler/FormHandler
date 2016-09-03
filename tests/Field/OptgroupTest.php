@@ -1,5 +1,5 @@
 <?php
-namespace FormHandler\Tests;
+namespace FormHandler\Tests\Field;
 
 use PHPUnit\Framework\TestCase;
 use FormHandler\Field\Optgroup;
@@ -74,8 +74,13 @@ class OptgroupTest extends TestCase
         $optgroup -> setClass("className");
         $optgroup -> setStyle('color: black');
 
+        $optgroup -> setTitle('Dont start');
+        $this -> assertEquals('Dont start', $optgroup -> getTitle());
+
+        $optgroup -> addAttribute('data-evil', 'true');
+
         $this->expectOutputRegex(
-            "/<optgroup label=\"(.*?)\"(.*?)(disabled=\"disabled\")?(id=\"(.*?)\")?(.*?)>".
+            "/<optgroup label=\"(.*?)\" disabled=\"disabled\" id=\"(.*?)\" title=\"(.*?)\" style=\"(.*?)\" class=\"(.*?)\" data-evil=\"(.*?)\">".
             "(<option value=\"(.*?)\">(.*?)<\/option>)*<\/optgroup>/i",
             'Check input html tag'
         );

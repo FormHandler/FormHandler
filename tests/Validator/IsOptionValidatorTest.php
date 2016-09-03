@@ -49,8 +49,7 @@ class IsOptionValidatorTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['pet'] = 'dog';
 
-        $form = new Form();
-        $form->clearCache();
+        $form = new Form('',false);
 
         $field = $form->selectField('pet')
             ->addOptionsAsArray($this->options, false)
@@ -68,8 +67,7 @@ class IsOptionValidatorTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['pet'] = 'DOG';
 
-        $form = new Form(null, false);
-        $form->clearCache();
+        $form = new Form('', false);
 
         $field = $form->selectField('pet')
             ->addOptionsAsArray($this->options, false)
@@ -87,8 +85,7 @@ class IsOptionValidatorTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['pet'] = array('dog', 'horse');
 
-        $form = new Form(null, false);
-        $form->clearCache();
+        $form = new Form('', false);
 
         $field = $form->selectField('pet')
             ->addOptionsAsArray($this->options, false)
@@ -112,8 +109,7 @@ class IsOptionValidatorTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['pet'] = array('dog', 'dragon');
 
-        $form = new Form(null, false);
-        $form->clearCache();
+        $form = new Form('', false);
 
         $pets = new Optgroup('pets');
         $pets->addOptionsAsArray(['dog', 'cat', 'mouse'], false);
@@ -148,5 +144,14 @@ class IsOptionValidatorTest extends TestCase
 
         $form = new Form(null, false);
         $form->textField('name')->addValidator(new IsOptionValidator(true));
+    }
+
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown()
+    {
+        $_POST = [];
     }
 }

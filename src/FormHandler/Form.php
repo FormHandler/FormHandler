@@ -4,7 +4,12 @@ namespace FormHandler;
 use FormHandler\Encoding\InterfaceEncodingFilter;
 use FormHandler\Encoding\Utf8EncodingFilter;
 use FormHandler\Field;
+use FormHandler\Field\AbstractFormField;
+use FormHandler\Field\CheckBox;
 use FormHandler\Field\Element;
+use FormHandler\Field\RadioButton;
+use FormHandler\Field\SelectField;
+use FormHandler\Field\UploadField;
 use FormHandler\Formatter\AbstractFormatter;
 use FormHandler\Formatter\PlainFormatter;
 use FormHandler\Validator\CsrfValidator;
@@ -221,8 +226,10 @@ class Form extends Field\Element
         $this->action = $action;
         $this->setFormatter(Form::$defaultFormatter ?: new PlainFormatter());
         $this->setEncodingFilter(Form::$defaultEncodingFilter ?: new Utf8EncodingFilter());
-    }
 
+        // make sure that cache is cleared.
+        $this -> clearCache();
+    }
 
     /**
      * Clear our cache of the submitted values.
@@ -264,6 +271,79 @@ class Form extends Field\Element
     public static function setDefaultFormatter(AbstractFormatter $formatter)
     {
         Form::$defaultFormatter = $formatter;
+    }
+
+    /**
+     * Get the values of all fields as an array.
+
+     * @return array
+     * @codeCoverageIgnore - Needed because the "instanceof" tests are not correctly picked up as covered.
+     */
+    public function getDataAsArray()
+    {
+        $fields = $this->getFields();
+
+        if (!$fields) {
+            return [];
+        }
+
+        $result = [];
+
+        foreach ($fields as $field) {
+            if ($field instanceof CheckBox) {
+                if (!$field->isDisabled()) {
+                    $result[$field->getName()] = $field->isChecked() ? $field->getValue() : '';
+                }
+            } else {
+                if ($field instanceof RadioButton) {
+                    // if the field is not checked...
+                    if (!$field->isChecked()) {
+                        // there was no other field with the same name yet
+                        if (!array_key_exists($field->getName(), $result)) {
+                            // the field is not disabled...
+                            if (!$field->isDisabled()) {
+                                // then set the field with an empty value
+                                $result[$field->getName()] = '';
+                            }
+                        }
+                    } // the field is checked
+                    else {
+                        // the field is not disabled...
+                        if (!$field->isDisabled()) {
+                            $result[$field->getName()] = $field->getValue();
+                        }
+                    }
+                } elseif ($field instanceof UploadField) {
+                    $value = $field->getValue();
+                    if (!$value ||
+                        !isset($value['error']) ||
+                        $value['error'] == UPLOAD_ERR_NO_FILE ||
+                        empty($value['name'])
+                    ) {
+                        continue;
+                    }
+                    if (!$field->isDisabled()) {
+                        $result[$field->getName()] = $value['name'];
+                    }
+                } elseif ($field instanceof SelectField) {
+                    $value = $field->getValue();
+                    if ($field->isMultiple()) {
+                        if (!$field->isDisabled()) {
+                            $result[$field->getName()] = $value;
+                        }
+                    } else {
+                        if (!$field->isDisabled()) {
+                            $result[$field->getName()] = $value;
+                        }
+                    }
+                } elseif ($field instanceof AbstractFormField) {
+                    if (!$field->isDisabled()) {
+                        $result[$field->getName()] = $field->getValue();
+                    }
+                }
+            }
+        }
+        return $result;
     }
 
     /**

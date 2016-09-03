@@ -7,9 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class CharacterBlacklistTest extends TestCase
 {
-    /**
-     * Test the blacklist validator
-     */
     public function testBlacklistValidator()
     {
         // create a form and the field
@@ -54,15 +51,15 @@ class CharacterBlacklistTest extends TestCase
         );
 
         // array-object as whitelist, should be valid
-        $whitelist = new \ArrayObject($whitelist);
-        $whitelist->append('a');
-        $whitelist->append('e');
-        $whitelist->append('o');
-        $whitelist->append('u');
-        $whitelist->append('i');
+        $whitelistObj = new \ArrayObject($whitelist);
+        $whitelistObj->append('a');
+        $whitelistObj->append('e');
+        $whitelistObj->append('o');
+        $whitelistObj->append('u');
+        $whitelistObj->append('i');
 
         $errormsg = 'Numbers or vowels are not allowed. Good luck';
-        $validator->setBlacklist($whitelist);
+        $validator->setBlacklist($whitelistObj);
         $validator->setErrorMessage($errormsg);
         $field->setValidator($validator);
 

@@ -162,12 +162,6 @@ class ImageUploadValidator extends UploadValidator
 
         $value = $this->field->getValue();
 
-        if (!$value || !isset($value['error']) || $value['error'] == UPLOAD_ERR_NO_FILE) {
-            // If here, and nothing is uploaded, than the field is also not required.
-            // Just validate the field as valid
-            return true;
-        }
-
         // if here, we know that the field is uploaded.
 
         // check if it's an image, and get it's size
@@ -307,5 +301,77 @@ class ImageUploadValidator extends UploadValidator
             $b = $remainder;
         }
         return abs($a);
+    }
+
+    /**
+     * @return float
+     */
+    public function getMinimumWidth()
+    {
+        return $this->minimumWidth;
+    }
+
+    /**
+     * @param float $minimumWidth
+     * @return ImageUploadValidator
+     */
+    public function setMinimumWidth($minimumWidth)
+    {
+        $this->minimumWidth = $minimumWidth;
+        return $this;
+    }
+
+    /**
+     * @param float $minimumHeight
+     * @return ImageUploadValidator
+     */
+    public function setMinimumHeight($minimumHeight)
+    {
+        $this->minimumHeight = $minimumHeight;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMinimumHeight()
+    {
+        return $this->minimumHeight;
+    }
+
+    /**
+     * @param float $maximumWidth
+     * @return ImageUploadValidator
+     */
+    public function setMaximumWidth($maximumWidth)
+    {
+        $this->maximumWidth = $maximumWidth;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMaximumWidth()
+    {
+        return $this->maximumWidth;
+    }
+
+    /**
+     * @param float $maximumHeight
+     * @return ImageUploadValidator
+     */
+    public function setMaximumHeight($maximumHeight)
+    {
+        $this->maximumHeight = $maximumHeight;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMaximumHeight()
+    {
+        return $this->maximumHeight;
     }
 }

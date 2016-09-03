@@ -1,5 +1,5 @@
 <?php
-namespace FormHandler\Tests;
+namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
 use PHPUnit\Framework\TestCase;
@@ -42,6 +42,9 @@ class TextFieldTest extends TestCase
 
         $field -> setMaxlength(10);
         $this -> assertEquals(10, $field -> getMaxlength());
+
+        $field -> setAttribute('data-country', 'nl');
+        $this->assertEquals('nl', $field -> getAttribute('data-country'));
 
         $this->expectOutputRegex(
             "/<input type=\"(.*?)\" name=\"(.*?)\" value=\"(.*?)\" size=\"(\d+)\" ".

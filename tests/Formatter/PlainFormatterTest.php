@@ -6,7 +6,7 @@ use FormHandler\Formatter\PlainFormatter;
 use FormHandler\Validator\StringValidator;
 use PHPUnit\Framework\TestCase;
 
-class FormatterTest extends TestCase
+class PlainFormatterTest extends TestCase
 {
     public function testFormatter()
     {

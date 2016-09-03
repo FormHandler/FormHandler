@@ -1,5 +1,5 @@
 <?php
-namespace FormHandler\Tests;
+namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +15,6 @@ class RadioButtonTest extends TestCase
     public function testRadioButton()
     {
         $form = new Form();
-        $form->clearCache(); // clear cache from other tests
 
         $form->hiddenField('hidden')->setValue('1');
         $form->radioButton('gender', 'male')->setId('male');
@@ -62,7 +61,6 @@ class RadioButtonTest extends TestCase
         $_POST['hidden'] = '1';
 
         $form = new Form();
-        $form->clearCache(); // clear cache from other tests
 
         $form->hiddenField('hidden')->setValue('1');
         $form->radioButton('gender', 'male')->setId('male');
@@ -85,5 +83,14 @@ class RadioButtonTest extends TestCase
             'Check input html tag'
         );
         echo $male;
+    }
+
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown()
+    {
+        $_POST = [];
     }
 }

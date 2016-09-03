@@ -6,8 +6,6 @@ namespace FormHandler\Field;
  */
 class Option extends Element
 {
-    use HasAttributes;
-
     /**
      * The id of this option
      * @var string

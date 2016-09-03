@@ -226,6 +226,7 @@ abstract class AbstractFormField extends Element
      * });
      * ```
      *
+     * @codeCoverageIgnore - Needed because "$validator instanceof AbstractValidator" is not set as covered while it is.
      * @param mixed $validator
      * @return $this
      * @throws \Exception

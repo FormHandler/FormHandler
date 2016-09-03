@@ -1,5 +1,5 @@
 <?php
-namespace FormHandler\Tests;
+namespace FormHandler\Tests\Field;
 
 use FormHandler\Field\Option;
 use FormHandler\Field\SelectField;

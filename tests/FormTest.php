@@ -170,7 +170,6 @@ class FormTest extends TestCase
 
         // create a new form without csrf protection
         $form = new Form('', false);
-        $form->clearCache();
 
         // add a field
         $form->textField('name')
@@ -486,5 +485,14 @@ class FormTest extends TestCase
 //
 //        $this->assertTrue($form->isCsrfValid());
 //        $this->assertTrue($form->isValid());
+    }
+
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown()
+    {
+        $_POST = [];
     }
 }

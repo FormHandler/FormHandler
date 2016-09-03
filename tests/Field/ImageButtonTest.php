@@ -1,24 +1,24 @@
 <?php
-namespace FormHandler\Tests;
+namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test Submit Button.
+ * Test Image Button.
  * User: teye
  * Date: 23-08-16
  * Time: 16:23
  */
-class SubmitButtonTest extends TestCase
+class ImageButtonTest extends TestCase
 {
-    public function testSubmitButton()
+    public function testImageButton()
     {
         $form = new Form();
-        $btn = $form -> submitButton('submit', 'Submit Form');
+        $btn = $form -> imageButton('submit', 'images/button.png');
 
         $this -> assertEquals('submit', $btn -> getName());
-        $this -> assertEquals('Submit Form', $btn -> getValue());
+        $this -> assertEquals('images/button.png', $btn -> getSrc());
 
         $this -> assertEquals($form, $btn -> getForm());
         $this -> assertFalse($btn -> isDisabled());
@@ -27,10 +27,13 @@ class SubmitButtonTest extends TestCase
 
         $btn -> setSize(20);
         $this -> assertEquals(20, $btn -> getSize());
+        $btn -> setAlt('alt');
+        $this -> assertEquals('alt', $btn -> getAlt());
+
 
         $this->expectOutputRegex(
-            "/<input type=\"submit\" name=\"(.*?)\" ".
-            "size=\"(\d+)\" disabled=\"disabled\" \/>/i",
+            "/<input type=\"image\" name=\"(.*?)\" ".
+            "src=\"(.*?)\" alt=\"(.*?)\" size=\"(\d+)\" disabled=\"disabled\" \/>/i",
             'Check html tag'
         );
         echo $btn;

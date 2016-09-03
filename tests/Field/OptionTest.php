@@ -1,5 +1,5 @@
 <?php
-namespace FormHandler\Tests;
+namespace FormHandler\Tests\Field;
 
 use PHPUnit\Framework\TestCase;
 use FormHandler\Field\Option;
