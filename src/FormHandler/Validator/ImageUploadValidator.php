@@ -60,25 +60,35 @@ class ImageUploadValidator extends UploadValidator
     protected $maximumHeight;
 
     /**
-     * List of error messages which we can display if something is wrong
-     * @var array
+     * ImageUploadValidator constructor.
+     * @param bool $required
+     * @param array $messages
      */
-    protected $messages = [
-        'not_an_image' =>
-            'It seems that the uploaded file is not an image. Please upload a valid image file.',
-        'aspect_ratio' =>
-            'The aspect ratio of the uploaded file (%s) is not the same as the required aspect ratio (%s).',
-        'aspect_ratio_denied' =>
-            'The aspect ratio of the uploaded file (%s) is not allowed.',
-        'size_height_max' =>
-            'The height of the uploaded image (%spx) is larger than the maximum allowed height (%spx)',
-        'size_height_min' =>
-            'The height of the uploaded image (%spx) is smaller than the minimum allowed height (%spx)',
-        'size_width_max' =>
-            'The width of the uploaded image (%spx) is larger than the maximum allowed width (%spx)',
-        'size_width_min' =>
-            'The width of the uploaded image (%spx) is smaller than the minimum allowed width (%spx)',
-    ];
+    public function __construct($required, array $messages = [])
+    {
+        $default = [
+            'not_an_image' =>
+                'It seems that the uploaded file is not an image. Please upload a valid image file.',
+            'aspect_ratio' =>
+                'The aspect ratio of the uploaded file (%s) is not the same as the required aspect ratio (%s).',
+            'aspect_ratio_denied' =>
+                'The aspect ratio of the uploaded file (%s) is not allowed.',
+            'size_height_max' =>
+                'The height of the uploaded image (%spx) is larger than the maximum allowed height (%spx)',
+            'size_height_min' =>
+                'The height of the uploaded image (%spx) is smaller than the minimum allowed height (%spx)',
+            'size_width_max' =>
+                'The width of the uploaded image (%spx) is larger than the maximum allowed width (%spx)',
+            'size_width_min' =>
+                'The width of the uploaded image (%spx) is smaller than the minimum allowed width (%spx)',
+        ];
+
+        if (sizeof($messages) > 0) {
+            $default = array_merge($default, $messages);
+        }
+
+        parent::__construct($required, $default);
+    }
 
     /**
      * Set the minimum proportions of the uploaded image.
