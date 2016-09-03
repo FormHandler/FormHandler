@@ -1,7 +1,6 @@
 <?php
 namespace FormHandler\Tests\Validator;
 
-
 use FormHandler\Form;
 use FormHandler\Validator\EmailValidator;
 use PHPUnit\Framework\TestCase;

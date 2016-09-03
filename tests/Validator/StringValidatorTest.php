@@ -16,8 +16,7 @@ class StringValidatorTest extends TestCase
         $form = new Form('', false);
 
         $field = $form->textField('name');
-        $field -> addValidator( new \stdClass );
-
+        $field -> addValidator(new \stdClass);
     }
     public function testRequired()
     {

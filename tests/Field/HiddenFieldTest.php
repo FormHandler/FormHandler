@@ -19,5 +19,4 @@ class HiddenFieldTest extends TestCase
         );
         echo $field;
     }
-
 }

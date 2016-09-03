@@ -228,7 +228,7 @@ class Form extends Field\Element
         $this->setEncodingFilter(Form::$defaultEncodingFilter ?: new Utf8EncodingFilter());
 
         // make sure that cache is cleared.
-        $this -> clearCache();
+        $this->clearCache();
     }
 
     /**
@@ -275,7 +275,6 @@ class Form extends Field\Element
 
     /**
      * Get the values of all fields as an array.
-
      * @return array
      * @codeCoverageIgnore - Needed because the "instanceof" tests are not correctly picked up as covered.
      */
@@ -290,60 +289,114 @@ class Form extends Field\Element
         $result = [];
 
         foreach ($fields as $field) {
+            //ignore non-fields
+            if (!$field instanceof AbstractFormField) {
+                continue;
+            }
+
+            // if a field is disabled, we will ignore the field and only set an empty string as value
+            if ($field->isDisabled()) {
+                if (!array_key_exists($field->getName(), $result)) {
+                    $result[$field->getName()] = '';
+                }
+                continue;
+            }
+
+
             if ($field instanceof CheckBox) {
-                if (!$field->isDisabled()) {
-                    $result[$field->getName()] = $field->isChecked() ? $field->getValue() : '';
+                $result[$field->getName()] = $field->isChecked() ? $field->getValue() : '';
+            } elseif ($field instanceof RadioButton) {
+                // if the field is not checked...
+                if (!$field->isChecked()) {
+                    // there was no other field with the same name yet
+                    if (!array_key_exists($field->getName(), $result)) {
+                        // then set the field with an empty value
+                        $result[$field->getName()] = '';
+                    }
+                } // the field is checked
+                else {
+                    $result[$field->getName()] = $field->getValue();
                 }
-            } else {
-                if ($field instanceof RadioButton) {
-                    // if the field is not checked...
-                    if (!$field->isChecked()) {
-                        // there was no other field with the same name yet
-                        if (!array_key_exists($field->getName(), $result)) {
-                            // the field is not disabled...
-                            if (!$field->isDisabled()) {
-                                // then set the field with an empty value
-                                $result[$field->getName()] = '';
-                            }
-                        }
-                    } // the field is checked
-                    else {
-                        // the field is not disabled...
-                        if (!$field->isDisabled()) {
-                            $result[$field->getName()] = $field->getValue();
-                        }
-                    }
-                } elseif ($field instanceof UploadField) {
-                    $value = $field->getValue();
-                    if (!$value ||
-                        !isset($value['error']) ||
-                        $value['error'] == UPLOAD_ERR_NO_FILE ||
-                        empty($value['name'])
-                    ) {
-                        continue;
-                    }
-                    if (!$field->isDisabled()) {
-                        $result[$field->getName()] = $value['name'];
-                    }
-                } elseif ($field instanceof SelectField) {
-                    $value = $field->getValue();
-                    if ($field->isMultiple()) {
-                        if (!$field->isDisabled()) {
-                            $result[$field->getName()] = $value;
-                        }
-                    } else {
-                        if (!$field->isDisabled()) {
-                            $result[$field->getName()] = $value;
-                        }
-                    }
-                } elseif ($field instanceof AbstractFormField) {
-                    if (!$field->isDisabled()) {
-                        $result[$field->getName()] = $field->getValue();
-                    }
+            } elseif ($field instanceof UploadField) {
+                $value = $field->getValue();
+                if (!$value ||
+                    !isset($value['error']) ||
+                    $value['error'] == UPLOAD_ERR_NO_FILE ||
+                    empty($value['name'])
+                ) {
+                    continue;
                 }
+                $result[$field->getName()] = $value['name'];
+            } elseif ($field instanceof AbstractFormField) {
+                $result[$field->getName()] = $field->getValue();
             }
         }
         return $result;
+    }
+
+    /**
+     * Get an array with all validation errors
+     * @return array
+     */
+    public function getValidationErrors()
+    {
+        $fields = $this->getFields();
+        if (!$fields) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($fields as $field) {
+            if ($field instanceof AbstractFormField) {
+                if (!$field->isValid()) {
+                    $result = array_merge($result, $field->getErrorMessages());
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Auto fill the given form with the given values.
+     * $values can either be an object or an array. The array key's or object's properties must match the
+     * names of the field in the form.
+     *
+     * Example:
+     * ```php
+     * // here an array with fieldname => value format
+     * $default = array(
+     *   'myfield' => 'Value',
+     *   'field2'  => 'Another value'
+     * );
+     *
+     * // here we fill the form with the values
+     *  $form -> fill( $form, $default );
+     * ```
+     *
+     * @param Form $form
+     * @param object|array $values
+     * @throws \Exception
+     * @return void
+     */
+    public function fill($values)
+    {
+        // make sure its a composite type
+        if (!is_array($values) && !is_object($values)) {
+            throw new \Exception('Only composite types can be used for filling a form!');
+        }
+
+        foreach ($values as $key => $value) {
+            $fields = $this->getFieldsByName($key);
+
+            foreach ($fields as $field) {
+                if ($field instanceof CheckBox || $field instanceof RadioButton) {
+                    $field->setChecked($value == $field->getValue());
+                } else {
+                    $field->setValue($value);
+                }
+            }
+        }
     }
 
     /**
@@ -673,6 +726,8 @@ class Form extends Field\Element
     public function isSubmitted(&$reason = null)
     {
         $reason = '';
+
+        // if we did not yet detect before if this field was submitted, then analyze the submitted values.
         if ($this->submitted === null) {
             $this->submitted = true;
 

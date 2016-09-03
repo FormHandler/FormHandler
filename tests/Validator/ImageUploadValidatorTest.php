@@ -6,7 +6,6 @@ use FormHandler\Form;
 use FormHandler\Validator\ImageUploadValidator;
 use PHPUnit\Framework\TestCase;
 
-
 class ImageUploadValidatorTest extends TestCase
 {
     public function testValidUpload()
@@ -62,7 +61,7 @@ class ImageUploadValidatorTest extends TestCase
 
         $validator = new ImageUploadValidator(true, $messages);
 
-        $validator->setMaximumWidth( 50 );
+        $validator->setMaximumWidth(50);
 
         $this->assertEquals(50, $validator->getMaximumWidth());
 
@@ -86,7 +85,7 @@ class ImageUploadValidatorTest extends TestCase
         $field = $form->uploadField('pic');
 
         $validator = new ImageUploadValidator(true, $messages);
-        $validator->setMaximumHeight( 50 );
+        $validator->setMaximumHeight(50);
 
         $this->assertEquals(50, $validator->getMaximumHeight());
 

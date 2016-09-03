@@ -80,7 +80,8 @@ class OptgroupTest extends TestCase
         $optgroup -> addAttribute('data-evil', 'true');
 
         $this->expectOutputRegex(
-            "/<optgroup label=\"(.*?)\" disabled=\"disabled\" id=\"(.*?)\" title=\"(.*?)\" style=\"(.*?)\" class=\"(.*?)\" data-evil=\"(.*?)\">".
+            "/<optgroup label=\"(.*?)\" disabled=\"disabled\" id=\"(.*?)\" title=\"(.*?)\" ".
+            "style=\"(.*?)\" class=\"(.*?)\" data-evil=\"(.*?)\">".
             "(<option value=\"(.*?)\">(.*?)<\/option>)*<\/optgroup>/i",
             'Check input html tag'
         );

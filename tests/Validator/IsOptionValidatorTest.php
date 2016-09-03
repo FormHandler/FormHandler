@@ -49,7 +49,7 @@ class IsOptionValidatorTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['pet'] = 'dog';
 
-        $form = new Form('',false);
+        $form = new Form('', false);
 
         $field = $form->selectField('pet')
             ->addOptionsAsArray($this->options, false)

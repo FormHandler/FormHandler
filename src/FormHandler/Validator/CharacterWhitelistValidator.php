@@ -71,7 +71,7 @@ class CharacterWhitelistValidator extends AbstractValidator
      * Set the whitelist of characters which are allowed for this field.
      * This can either be an array or a string.
      *
-     * @codeCoverageIgnore - It's covered, but somehow the "$whitelist instanceof \ArrayObject" is not set as covered, while it is.
+     * @codeCoverageIgnore - It's covered, but somehow the "$whitelist instanceof \ArrayObject" is not set as covered
      * @param array|\ArrayObject|string $whitelist
      * @throws \Exception
      */

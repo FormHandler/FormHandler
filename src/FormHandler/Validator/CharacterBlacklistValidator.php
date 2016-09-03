@@ -70,7 +70,7 @@ class CharacterBlacklistValidator extends AbstractValidator
      * Set the blacklist of characters which are allowed for this field.
      * This can either be an array or a string.
      *
-     * @codeCoverageIgnore - It's covered, but somehow the "$blacklist instanceof \ArrayObject" is not set as covered, while it is.
+     * @codeCoverageIgnore - It's covered, but somehow the "$blacklist instanceof \ArrayObject" is not set as covered
      * @param array|\ArrayObject|string $blacklist
      * @throws \Exception
      */

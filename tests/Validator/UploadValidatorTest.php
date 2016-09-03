@@ -7,7 +7,6 @@ use FormHandler\Form;
 use FormHandler\Validator\UploadValidator;
 use PHPUnit\Framework\TestCase;
 
-
 class UploadValidatorTest extends TestCase
 {
     public function testValidUpload()
