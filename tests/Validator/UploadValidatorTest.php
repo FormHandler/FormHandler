@@ -53,6 +53,8 @@ class UploadValidatorTest extends TestCase
     {
         mkdir(__DIR__ . '/_tmp');
 
+        $GLOBALS['mock_file_size'] = 542;
+
         $_FILES = array(
             'cv' => array(
                 'name' => 'test.pdf',
@@ -71,6 +73,7 @@ class UploadValidatorTest extends TestCase
     protected function tearDown()
     {
         unset($_FILES);
+        unset($GLOBALS['mock_file_size']);
         @unlink(__DIR__ . '/_tmp/test.pdf');
         @rmdir(__DIR__ . '/_tmp');
     }

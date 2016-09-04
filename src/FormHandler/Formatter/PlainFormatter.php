@@ -1,7 +1,12 @@
 <?php
 namespace FormHandler\Formatter;
 
-use FormHandler\Field;
+use FormHandler\Field\AbstractFormField;
+use FormHandler\Field\CheckBox;
+use FormHandler\Field\Element;
+use FormHandler\Field\HiddenField;
+use FormHandler\Field\RadioButton;
+use FormHandler\Field\UploadField;
 use FormHandler\Form;
 use FormHandler\Validator\UploadValidator;
 
@@ -12,6 +17,8 @@ use FormHandler\Validator\UploadValidator;
  *
  * For checkboxes and radio buttons, it renders the <label> tags
  * directly after the field.
+ *
+ * Invalid fields will receive the CSS class invalid.
  *
  * All form fields will be checked if they are invalid. If so,
  * the error messages will be added behind the <field> tag surrounded
@@ -25,19 +32,24 @@ class PlainFormatter extends AbstractFormatter
     /**
      * Format the element and return it's new layout
      *
-     * @param Field\Element $element
+     * @param Element $element
      * @return string
      */
-    public function format(Field\Element $element)
+    public function format(Element $element)
     {
         // if a method exists for this element, then use that one
         $className = get_class($element);
+
+        // strip namespaces;
+        $className = substr($className, strrpos($className, '\\') + 1);
+
+        // make first char lower case
         $className = strtolower(substr($className, 0, 1)) . substr($className, 1);
 
         if (method_exists($this, $className)) {
             $html = $this->$className($element);
         } // if form field
-        elseif ($element instanceof Field\AbstractFormField) {
+        elseif ($element instanceof AbstractFormField) {
             $html = $this->formField($element);
         } // in case that the form class was overwritten...
         elseif ($element instanceof Form && method_exists($this, 'form')) {
@@ -48,7 +60,7 @@ class PlainFormatter extends AbstractFormatter
         }
 
         // if the element is a form field, also render the errors
-        if ($element instanceof Field\AbstractFormField) {
+        if ($element instanceof AbstractFormField) {
             if ($element->getHelpText()) {
                 $html .= '<dfn>' . $element->getHelpText() . '</dfn>' . PHP_EOL;
             }
@@ -67,10 +79,10 @@ class PlainFormatter extends AbstractFormatter
     /**
      * Render een radio button
      *
-     * @param Field\AbstractFormField $field
+     * @param AbstractFormField $field
      * @return string
      */
-    public function radioButton(Field\AbstractFormField $field)
+    public function radioButton(AbstractFormField $field)
     {
         return $this->checkBox($field);
     }
@@ -78,10 +90,10 @@ class PlainFormatter extends AbstractFormatter
     /**
      * Render a checkbox
      *
-     * @param Field\AbstractFormField $element
+     * @param AbstractFormField $element
      * @return string
      */
-    public function checkBox(Field\AbstractFormField $element)
+    public function checkBox(AbstractFormField $element)
     {
         // if the form is submitted
         if ($element->getForm()->isSubmitted()) {
@@ -93,7 +105,7 @@ class PlainFormatter extends AbstractFormatter
         }
 
         $label = "";
-        if ($element instanceof Field\CheckBox || $element instanceof Field\RadioButton) {
+        if ($element instanceof CheckBox || $element instanceof RadioButton) {
             $label = $element->getLabel();
         }
         if (! empty($label) && $element->getId() == "") {
@@ -111,10 +123,10 @@ class PlainFormatter extends AbstractFormatter
     /**
      * Render a "general" form field
      *
-     * @param Field\AbstractFormField $element
+     * @param AbstractFormField $element
      * @return string
      */
-    public function formField(Field\AbstractFormField $element)
+    public function formField(AbstractFormField $element)
     {
         // if the form is submitted
         if ($element->getForm()->isSubmitted()) {
@@ -143,11 +155,11 @@ class PlainFormatter extends AbstractFormatter
 
         $hiddenHtml = "";
         foreach ($fields as $field) {
-            if ($field instanceof Field\HiddenField) {
+            if ($field instanceof HiddenField) {
                 $hiddenHtml .= $field->render() . PHP_EOL;
             }
 
-            if ($field instanceof Field\UploadField && ! $form->getFieldByName('MAX_FILE_SIZE')) {
+            if ($field instanceof UploadField && ! $form->getFieldByName('MAX_FILE_SIZE')) {
                 $validators = $field->getValidators();
                 if ($validators) {
                     foreach ($validators as $validator) {

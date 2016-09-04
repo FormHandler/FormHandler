@@ -1,9 +1,9 @@
 <?php
 namespace FormHandler\Tests;
 
+use FormHandler\Encoding\Utf8EncodingFilter;
+use FormHandler\Form;
 use PHPUnit\Framework\TestCase;
-use \FormHandler\Encoding\Utf8EncodingFilter;
-use \FormHandler\Form;
 
 class Utf8EncodingTest extends TestCase
 {

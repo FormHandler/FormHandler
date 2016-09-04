@@ -1,9 +1,9 @@
 <?php
 namespace FormHandler\Tests\Field;
 
-use PHPUnit\Framework\TestCase;
 use FormHandler\Field\Optgroup;
 use FormHandler\Field\Option;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Created by PhpStorm.

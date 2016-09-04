@@ -2,7 +2,6 @@
 namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
-use FormHandler\Validator\EqualsValidator;
 use FormHandler\Validator\SameFieldsValidator;
 use PHPUnit\Framework\TestCase;
 

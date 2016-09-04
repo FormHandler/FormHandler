@@ -1,9 +1,9 @@
 <?php
 namespace FormHandler\Tests\Validator;
 
+use FormHandler\Form;
 use FormHandler\Validator\RadioButtonCheckedValidator;
 use PHPUnit\Framework\TestCase;
-use FormHandler\Form;
 
 class RadioButtonCheckedValidatorTest extends TestCase
 {

@@ -42,6 +42,11 @@ class ErrorAsTitleFormatter extends PlainFormatter
 
         // if a method exists for this element, then use that one
         $className = get_class($element);
+
+        // strip namespaces;
+        $className = substr($className, strrpos($className, '\\') + 1);
+
+        // make first char lower case
         $className = strtolower(substr($className, 0, 1)) . substr($className, 1);
 
         if (method_exists($this, $className)) {

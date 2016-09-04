@@ -9,61 +9,97 @@ namespace FormHandler\Tests {
 }
 
 // @codingStandardsIgnoreStart
+namespace FormHandler\Utils {
+    function extension_loaded($ext)
+    {
+        if (isset($GLOBALS['mock_extension_not_loaded']) && $GLOBALS['mock_extension_not_loaded'] == $ext) {
+            return false;
+        } elseif (isset($GLOBALS['mock_extension_loaded']) && $GLOBALS['mock_extension_loaded'] == $ext) {
+            return true;
+        } else {
+            return \extension_loaded($ext);
+        }
+    }
+
+    function gd_info()
+    {
+        if (isset($GLOBALS['mock_gd_info'])) {
+            return $GLOBALS['mock_gd_info'];
+        } else {
+            return \function_exists('gd_info') ? \gd_info() : [];
+        }
+    }
+
+    function function_exists($func)
+    {
+        if (isset($GLOBALS['mock_function_exists']) && $GLOBALS['mock_function_exists'] == $func) {
+            return true;
+        } elseif (isset($GLOBALS['mock_function_not_exists']) && $GLOBALS['mock_function_not_exists'] == $func) {
+            return false;
+        } else {
+            return \function_exists($func);
+        }
+    }
+
+    function phpinfo($int)
+    {
+        if (isset($GLOBALS['mock_php_info'])) {
+            echo $GLOBALS['mock_php_info'];
+            return true;
+        } else {
+            return \phpinfo($int);
+        }
+    }
+
+    function ini_get($var)
+    {
+        if (isset($GLOBALS['mock_ini_get']) && isset($GLOBALS['mock_ini_get'][$var] )) {
+            return $GLOBALS['mock_ini_get'][$var];
+        } else {
+            return \ini_get($var);
+        }
+    }
+
+
+}
+
 namespace FormHandler\Validator {
 
     function filesize($file)
     {
-        if ($file == __DIR__ . '/Validator/_tmp/test.pdf') {
-            return 542;
-        } else  if ($file == __DIR__ . '/Validator/_tmp/avatar.gif') {
-            return 543;
+        if (isset($GLOBALS['mock_file_size'])) {
+            return $GLOBALS['mock_file_size'];
         } else {
             return \filesize($file);
         }
     }
 
-    function getimagesize( $image )
+    function getimagesize($image)
     {
-        if ($image == __DIR__ . '/Validator/_tmp/avatar.gif') {
-            return [
-                200, // width
-                100, // height
-                IMAGETYPE_GIF,
-                'height="100" width="200"',
-
-            ];
-        } elseif ($image == __DIR__ . '/Validator/_tmp/test.pdf') {
-            return false;
+        if (isset($GLOBALS['mock_image_size'])) {
+            return $GLOBALS['mock_image_size'];
         } else {
-            return \getimagesize( $image );
+            return \getimagesize($image);
         }
     }
 
-    /**
-     * Check if a function exists.
-     * We override this function so that we can mock that the "getmxrr" function does not exists, so that
-     * we can test both cases.
-     *
-     * @param $func
-     * @return bool
-     */
     function function_exists($func)
     {
-        static $count = 0;
-
-        $exists = \function_exists($func);
-
-        if ($func == 'getmxrr') {
-            return ($count++ === 0 || !$exists) ? false : true;
+        if (isset($GLOBALS['mock_function_exists']) && $GLOBALS['mock_function_exists'] == $func) {
+            return true;
+        } elseif (isset($GLOBALS['mock_function_not_exists']) && $GLOBALS['mock_function_not_exists'] == $func) {
+            return false;
         } else {
-            return $exists;
+            return \function_exists($func);
         }
     }
 
-    function getmxrr( $host, $tmp )
+    function getmxrr($host, $tmp)
     {
-        static $count = 0;
-
-        return $count++ === 0 ? false : true;
+        if (isset($GLOBALS['mock_mxrr_response'])) {
+            return $GLOBALS['mock_mxrr_response'];
+        } else {
+            return \function_exists('getmxrr') ? \getmxrr($host, $tmp) : false;
+        }
     }
 }

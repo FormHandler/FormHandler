@@ -36,9 +36,7 @@ class EmailValidatorTest extends TestCase
 
         $field = $form->textField('email');
 
-        $validator = new EmailValidator(true);
-
-        $field->addValidator($validator);
+        $field->addValidator(new EmailValidator(true));
 
 
         $valid = [
@@ -103,26 +101,60 @@ class EmailValidatorTest extends TestCase
         $validator = new EmailValidator(true);
 
         $field = $form->textField('email');
-        $field->setValue('john@iamabsolutlysurethatthisdomainwillneverexistsbecauseits.bogus');
         $field->setValidator($validator);
 
+        $field->setValue('john@iamabsolutlysurethatthisdomainwillneverexistsbecauseits.bogus');
         $this->assertTrue(
             $field->isValid(),
             'Field should be valid because email address has correct format (no host checking)'
         );
+
+        $GLOBALS['mock_function_not_exists'] = 'getmxrr';
 
         $validator->setCheckIfDomainExist(true);
         $field->setValidator($validator);
 
         $this->assertFalse(
             $field->isValid(),
-            'Field should be invalid because host of email address does not exists'
+            'Field should be invalid because host of email address does not exists (getmxrr disabled)'
         );
 
         $field->setValue('test@gmail.com');
         $this->assertTrue(
             $field->isValid(),
-            'Field should be valid because host of email address does exists'
+            'Field should be valid because host of email address does exists (getmxrr disabled)'
+        );
+
+        unset($GLOBALS['mock_function_not_exists']);
+        $GLOBALS['mock_function_exists'] = 'getmxrr';
+
+        $validator->setCheckIfDomainExist(true);
+        $field->setValidator($validator);
+        $field->setValue('john@iamabsolutlysurethatthisdomainwillneverexistsbecauseits.bogus');
+
+        $this->assertFalse(
+            $field->isValid(),
+            'Field should be invalid because host of email address does not exists (getmxrr enabled)'
+        );
+
+        $field->setValue('test@gmail.com');
+        $this->assertTrue(
+            $field->isValid(),
+            'Field should be valid because host of email address does exists (getmxrr enabled)'
+        );
+
+        $GLOBALS['mock_mxrr_response'] = true;
+        $field->setValue('john@iamabsolutlysurethatthisdomainwillneverexistsbecauseits.bogus');
+        $this->assertTrue(
+            $field->isValid(),
+            'Field should be valid because we getmxrr respond with true'
+        );
+
+        $GLOBALS['mock_mxrr_response'] = false;
+        $field -> clearCache();
+        $this->assertFalse(
+            $field->isValid(),
+            'Field should be invalid because we getmxrr respond with false'
         );
     }
 

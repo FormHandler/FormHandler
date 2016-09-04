@@ -6,6 +6,10 @@ use FormHandler\Form;
 use FormHandler\Validator\ImageUploadValidator;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ImageUploadValidatorTest
+ * @package FormHandler\Tests\Validator
+ */
 class ImageUploadValidatorTest extends TestCase
 {
     public function testValidUpload()
@@ -237,6 +241,7 @@ class ImageUploadValidatorTest extends TestCase
     public function testNotAnImage()
     {
         $_FILES['pic']['tmp_name'] = __DIR__ . '/_tmp/test.pdf';
+        $GLOBALS['mock_image_size'] = false;
 
         $form = new Form();
         $field = $form->uploadField('pic');
@@ -284,6 +289,14 @@ class ImageUploadValidatorTest extends TestCase
     {
         mkdir(__DIR__ . '/_tmp');
 
+        $GLOBALS['mock_file_size'] = 542;
+        $GLOBALS['mock_image_size'] = [
+            200, // width
+            100, // height
+            IMAGETYPE_GIF,
+            'height="100" width="200"'
+        ];
+
         $_FILES = array(
             'pic' => array(
                 'name' => 'avatar.gif',
@@ -301,6 +314,8 @@ class ImageUploadValidatorTest extends TestCase
      */
     protected function tearDown()
     {
+        unset($GLOBALS['mock_file_size']);
+        unset($GLOBALS['mock_image_size']);
         unset($_FILES);
         @unlink(__DIR__ . '/_tmp/avatar.gif');
         @rmdir(__DIR__ . '/_tmp');

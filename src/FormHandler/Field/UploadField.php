@@ -79,7 +79,7 @@ use FormHandler\Form;
  * )
  * ```
  *
- * After uploading a file, you can use the UploadHelper {@see form/helpers/UploadHelper.php} for the
+ * After uploading a file, you can use the FormUtils {@see FormUtils.php} for the
  * most common actions (like moving a uploaded file, do some image mutations, etc).
  */
 class UploadField extends AbstractFormField

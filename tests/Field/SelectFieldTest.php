@@ -1,11 +1,11 @@
 <?php
 namespace FormHandler\Tests\Field;
 
+use FormHandler\Field\Optgroup;
 use FormHandler\Field\Option;
 use FormHandler\Field\SelectField;
 use FormHandler\Form;
 use PHPUnit\Framework\TestCase;
-use \FormHandler\Field\Optgroup;
 
 /**
  * Created by PhpStorm.

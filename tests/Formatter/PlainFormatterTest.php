@@ -8,18 +8,21 @@ use PHPUnit\Framework\TestCase;
 
 class PlainFormatterTest extends TestCase
 {
-    public function testFormatter()
+    public function testCheckbox()
     {
         $formatter = new PlainFormatter();
 
         $form = new Form();
-        $form -> setFormatter($formatter);
+        $form->setFormatter($formatter);
+        $form -> setSubmitted(true);
 
-        $form -> radioButton('test1');
+        $form->radioButton('test1');
 
-        $form -> checkBox('test2');
+        $form->checkBox('test2')
+            ->setLabel('Please check this')
+            ->addErrorMessage('You should check this field', true);
 
-        $form -> textField('name') -> addValidator(new StringValidator(1, 50, true));
+        $form->textField('name')->addValidator(new StringValidator(1, 50, true));
 
 
         echo "\n";

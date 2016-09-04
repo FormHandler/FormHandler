@@ -6,10 +6,10 @@ use FormHandler\Field\AbstractFormField;
 use FormHandler\Field\HiddenField;
 use FormHandler\Field\RadioButton;
 use FormHandler\Field\TextField;
+use FormHandler\Form;
 use FormHandler\Formatter\PlainFormatter;
 use FormHandler\Validator\StringValidator;
 use PHPUnit\Framework\TestCase;
-use FormHandler\Form;
 
 /**
  * Created by PhpStorm.
