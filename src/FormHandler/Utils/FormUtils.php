@@ -104,8 +104,8 @@ class FormUtils
         $destination,
         $existMode = FormUtils::MODE_RENAME,
         $createDestinationIfNotExist = false
-    )
-    {
+    ) {
+    
 
         $filedata = $field->getValue();
 
@@ -197,7 +197,7 @@ class FormUtils
                 // move the file
                 if (move_uploaded_file($filedata['tmp_name'][$index], $destination)) {
                     $result[$index] = $destination;
-                }  else {
+                } else {
                     throw new \Exception(sprintf(
                         'Error, we failed to move file "%s" to destination "%s"',
                         $filedata['tmp_name'],
@@ -660,8 +660,8 @@ class FormUtils
         $newHeight = null,
         $quality = 80,
         $constrainProportions = true
-    )
-    {
+    ) {
+    
 
         // check if the source exists
         if (!is_file($source) || !($size = getimagesize($source))) {

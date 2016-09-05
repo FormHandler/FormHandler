@@ -89,7 +89,7 @@ class FormUtilsTest extends TestCase
         $form = new Form('', false);
         $field = $form->uploadField('cv');
 
-        $dest = FormUtils::moveUploadedFile($field, __DIR__ . '/_new/', FormUtils::MODE_OVERWRITE, true );
+        $dest = FormUtils::moveUploadedFile($field, __DIR__ . '/_new/', FormUtils::MODE_OVERWRITE, true);
 
         $this->assertEquals(__DIR__ . '/_new/test.pdf', $dest);
         $this->assertTrue(is_dir(__DIR__ . '/_new/'));
@@ -109,7 +109,7 @@ class FormUtilsTest extends TestCase
 
         $GLOBALS['mock_mkdir_response'] = false;
 
-        FormUtils::moveUploadedFile($field, __DIR__ . '/_abc123/', FormUtils::MODE_OVERWRITE, true );
+        FormUtils::moveUploadedFile($field, __DIR__ . '/_abc123/', FormUtils::MODE_OVERWRITE, true);
     }
 
     public function testIsNotWritable()
@@ -122,7 +122,7 @@ class FormUtilsTest extends TestCase
 
         $GLOBALS['mock_is_writable_response'] = false;
 
-        FormUtils::moveUploadedFile($field, __DIR__ . '/_new/', FormUtils::MODE_OVERWRITE, true );
+        FormUtils::moveUploadedFile($field, __DIR__ . '/_new/', FormUtils::MODE_OVERWRITE, true);
     }
 
     public function testMoveFailed()
@@ -135,7 +135,7 @@ class FormUtilsTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/we failed to move file/');
 
-        FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/blaat.tmp', FormUtils::MODE_OVERWRITE, true );
+        FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/blaat.tmp', FormUtils::MODE_OVERWRITE, true);
     }
 
     public function testMoveMultipleFiles()
@@ -150,16 +150,16 @@ class FormUtilsTest extends TestCase
             )
         );
 
-        @touch( __DIR__ .'/_tmp/test1.pdf');
+        @touch(__DIR__ .'/_tmp/test1.pdf');
 
         $form = new Form('', false);
         $field = $form->uploadField('cv');
         $field->setMultiple(true); // multiple files allowed
 
-        $dest = FormUtils::moveUploadedFile($field, __DIR__ . '/_new/', FormUtils::MODE_OVERWRITE, true );
+        $dest = FormUtils::moveUploadedFile($field, __DIR__ . '/_new/', FormUtils::MODE_OVERWRITE, true);
 
-        $this -> assertCount( 2, $dest );
-        $this -> assertEquals([ __DIR__ . '/_new/test.pdf', __DIR__ . '/_new/test1.pdf'], $dest );
+        $this -> assertCount(2, $dest);
+        $this -> assertEquals([ __DIR__ . '/_new/test.pdf', __DIR__ . '/_new/test1.pdf'], $dest);
 
         @unlink(__DIR__ . '/_new/test.pdf');
         @unlink(__DIR__ . '/_new/test1.pdf');
@@ -180,14 +180,14 @@ class FormUtilsTest extends TestCase
 
         $form = new Form('', false);
         $field = $form->uploadField('cv');
-        $field -> setMultiple( true );
+        $field -> setMultiple(true);
 
         $GLOBALS['mock_move_uploaded_file_response'] = false;
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/we failed to move file/');
 
-        FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/', FormUtils::MODE_OVERWRITE, true );
+        FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/', FormUtils::MODE_OVERWRITE, true);
     }
 
     public function testGetNonExistingFilename()
@@ -373,9 +373,9 @@ class FormUtilsTest extends TestCase
 
     protected function tearDown()
     {
-        foreach ( $GLOBALS as $key => $value ) {
-            if( substr($key, 0, 5 ) == 'mock_' ) {
-                unset( $GLOBALS[$key]);
+        foreach ($GLOBALS as $key => $value) {
+            if (substr($key, 0, 5) == 'mock_') {
+                unset($GLOBALS[$key]);
             }
         }
         @unlink(__DIR__ . '/_tmp/moved.pdf');
