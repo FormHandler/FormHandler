@@ -23,6 +23,11 @@ class FormUtilsTest extends TestCase
         }
     }
 
+    public function testMoveUploadedFile()
+    {
+
+    }
+
     public function testGetNonExistingFilename()
     {
         // setup

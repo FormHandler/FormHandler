@@ -84,14 +84,30 @@ use FormHandler\Form;
  */
 class UploadField extends AbstractFormField
 {
-
+    /**
+     * The size of this field
+     * @var int
+     */
     protected $size;
 
-    protected $value;
+    /**
+     * The value of this field (as it is submitted)
+     * @var array
+     */
+    protected $value = [];
 
+    /**
+     * A list of mime types of files which we accept
+     * @var string
+     */
     protected $accept;
 
+    /**
+     * When set to true, we allow multiple files to be uploaded by this field.
+     * @var bool
+     */
     protected $multiple = false;
+
  // allow multiple files to be uploaded by 1 uploadfield?
     public function __construct(Form &$form, $name = '')
     {
@@ -102,20 +118,6 @@ class UploadField extends AbstractFormField
         if (! empty($name)) {
             $this->setName($name);
         }
-    }
-
-    /**
-     * Returns true if the form was submited and there was a file uploaded.
-     *
-     * @return boolean
-     */
-    public function isUploaded()
-    {
-        if ($this->form->isSubmitted() && is_array($this->value) && $this->value['error'] == UPLOAD_ERR_OK) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -134,16 +136,17 @@ class UploadField extends AbstractFormField
     }
 
     /**
-     * Specifies the types of files that can be submitted through a file upload
-     * Example: text/html, image/jpeg, audio/mpeg, video/quicktime, text/css, and text/javascript
+     * Returns true if the form was submited and there was a file uploaded.
      *
-     * @param string $mimeType
-     * @return $this
+     * @return boolean
      */
-    public function setAccept($mimeType)
+    public function isUploaded()
     {
-        $this->accept = $mimeType;
-        return $this;
+        if ($this->form->isSubmitted() && is_array($this->value) && $this->value['error'] == UPLOAD_ERR_OK) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -157,14 +160,15 @@ class UploadField extends AbstractFormField
     }
 
     /**
-     * Set the size of the field and return the TextField reference
+     * Specifies the types of files that can be submitted through a file upload
+     * Example: text/html, image/jpeg, audio/mpeg, video/quicktime, text/css, and text/javascript
      *
-     * @param int $size
-     * @return UploadField
+     * @param string $mimeType
+     * @return $this
      */
-    public function setSize($size)
+    public function setAccept($mimeType)
     {
-        $this->size = $size;
+        $this->accept = $mimeType;
         return $this;
     }
 
@@ -179,15 +183,14 @@ class UploadField extends AbstractFormField
     }
 
     /**
-     * allow multiple files to be uploaded by 1 uploadfield?
-     * Set the value for multiple
+     * Set the size of the field and return the UploadField reference
      *
-     * @param $value
+     * @param int $size
      * @return UploadField
      */
-    public function setMultiple($value)
+    public function setSize($size)
     {
-        $this->multiple = $value;
+        $this->size = $size;
         return $this;
     }
 
@@ -200,6 +203,19 @@ class UploadField extends AbstractFormField
     public function getMultiple()
     {
         return $this->multiple;
+    }
+
+    /**
+     * allow multiple files to be uploaded by 1 uploadfield?
+     * Set the value for multiple
+     *
+     * @param $value
+     * @return UploadField
+     */
+    public function setMultiple($value)
+    {
+        $this->multiple = $value;
+        return $this;
     }
 
     /**
