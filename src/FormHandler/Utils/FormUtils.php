@@ -91,10 +91,10 @@ class FormUtils
      * @param UploadField $field The field where the file was uploaded in
      * @param string $destination The destination where to save the file
      * @param int $existMode Mode what to do if the file exists. Default: rename
-     * @param boolean $createDestinationIfNotExist Create the $destination path if not exists or not.
-     *                                              You can also give a umask here (like 644).
-     * @return string                               The destination of the new file or null on an error.
-     *                                              When multiple files are uploaded, this will be an array
+     * @param int|boolean $createDestinationIfNotExist Create the $destination path if not exists or not.
+     * You can also give a umask here (like 644).
+     * @return string The destination of the new file or null on an error.
+     * When multiple files are uploaded, this will be an array
      *
      * @throws \UnexpectedValueException
      * @throws \Exception
@@ -104,8 +104,9 @@ class FormUtils
         $destination,
         $existMode = FormUtils::MODE_RENAME,
         $createDestinationIfNotExist = false
-    ) {
-    
+    )
+    {
+
         $filedata = $field->getValue();
 
         // is multiple file uploads enabled?
@@ -122,12 +123,12 @@ class FormUtils
 
         // to walk "something", make an array of the name, even if we are not using multiple file uploads.
         if (!is_array($filedata['name'])) {
-            $filedata['name'] = array($filedata['name']);
+            $filedata['name'] = [$filedata['name']];
         }
 
         $originalDestination = $destination;
 
-        $result = array();
+        $result = [];
 
         // walk all uploaded files
         foreach ($filedata['name'] as $index => $filename) {
@@ -196,12 +197,24 @@ class FormUtils
                 // move the file
                 if (move_uploaded_file($filedata['tmp_name'][$index], $destination)) {
                     $result[$index] = $destination;
+                }  else {
+                    throw new \Exception(sprintf(
+                        'Error, we failed to move file "%s" to destination "%s"',
+                        $filedata['tmp_name'],
+                        $destination
+                    ));
                 }
             } // not an array (e.g. not multiple file uploads)
             else {
                 // move the file
                 if (move_uploaded_file($filedata['tmp_name'], $destination)) {
                     return $destination;
+                } else {
+                    throw new \Exception(sprintf(
+                        'Error, we failed to move file "%s" to destination "%s"',
+                        $filedata['tmp_name'],
+                        $destination
+                    ));
                 }
             }
         }
@@ -344,17 +357,17 @@ class FormUtils
                 }
 
                 if (strlen($transparant) == 6) {
-                    $transparant = array(
+                    $transparant = [
                         hexdec($transparant[0] . $transparant[1]),
                         hexdec($transparant[2] . $transparant[3]),
                         hexdec($transparant[4] . $transparant[5])
-                    );
+                    ];
                 } elseif (strlen($transparant) == 3) {
-                    $transparant = array(
+                    $transparant = [
                         hexdec($transparant[0] . $transparant[0]),
                         hexdec($transparant[1] . $transparant[1]),
                         hexdec($transparant[2] . $transparant[2])
-                    );
+                    ];
                 }
             }
         }
@@ -459,7 +472,7 @@ class FormUtils
         }
 
         // define the array of first 8 png bytes
-        $png_header = array(137, 80, 78, 71, 13, 10, 26, 10);
+        $png_header = [137, 80, 78, 71, 13, 10, 26, 10];
         // or: array(0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A);
 
         // open file for reading
@@ -647,8 +660,9 @@ class FormUtils
         $newHeight = null,
         $quality = 80,
         $constrainProportions = true
-    ) {
-    
+    )
+    {
+
         // check if the source exists
         if (!is_file($source) || !($size = getimagesize($source))) {
             throw new \Exception(sprintf('Could not find or read the file to resize: %s'), $source);

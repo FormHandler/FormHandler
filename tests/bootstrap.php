@@ -21,6 +21,33 @@ namespace FormHandler\Utils {
         }
     }
 
+    function mkdir($dirname, $mode = 0777, $recursive = false)
+    {
+        if (isset($GLOBALS['mock_mkdir_response'])) {
+            return $GLOBALS['mock_mkdir_response'];
+        } else {
+            return \mkdir($dirname, $mode, $recursive);
+        }
+    }
+
+    function is_writable($filename)
+    {
+        if (isset($GLOBALS['mock_is_writable_response'])) {
+            return $GLOBALS['mock_is_writable_response'];
+        } else {
+            return \is_writable($filename);
+        }
+    }
+
+    function move_uploaded_file($file, $dest)
+    {
+        if( isset( $GLOBALS['mock_move_uploaded_file_response'] )) {
+            return $GLOBALS['mock_move_uploaded_file_response'];
+        } else {
+            return rename($file, $dest);
+        }
+    }
+
     function gd_info()
     {
         if (isset($GLOBALS['mock_gd_info'])) {
@@ -53,7 +80,7 @@ namespace FormHandler\Utils {
 
     function ini_get($var)
     {
-        if (isset($GLOBALS['mock_ini_get']) && isset($GLOBALS['mock_ini_get'][$var] )) {
+        if (isset($GLOBALS['mock_ini_get']) && isset($GLOBALS['mock_ini_get'][$var])) {
             return $GLOBALS['mock_ini_get'][$var];
         } else {
             return \ini_get($var);
