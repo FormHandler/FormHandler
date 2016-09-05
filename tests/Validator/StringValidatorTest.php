@@ -16,8 +16,9 @@ class StringValidatorTest extends TestCase
         $form = new Form('', false);
 
         $field = $form->textField('name');
-        $field -> addValidator(new \stdClass);
+        $field->addValidator(new \stdClass);
     }
+
     public function testRequired()
     {
         $form = new Form('', false);
@@ -27,26 +28,29 @@ class StringValidatorTest extends TestCase
         $validator = new StringValidator(2, 10, true);
         $field->addValidator($validator);
 
+
+        $this->assertTrue($validator->isRequired());
         $this->assertFalse(
             $field->isValid(),
             'Field should be invalid as its empty but required'
         );
 
-        $validator -> setRequired(false);
-        $field -> setValidator($validator);
+        $validator->setRequired(false);
+        $this->assertFalse($validator->isRequired());
+        $field->setValidator($validator);
 
         $this->assertTrue(
             $field->isValid(),
             'Field should be valid as its empty and not required'
         );
 
-        $field -> setValue('a');
+        $field->setValue('a');
         $this->assertFalse(
             $field->isValid(),
             'Field should be invalid as too short'
         );
 
-        $field -> setValue('123456789011111');
+        $field->setValue('123456789011111');
         $this->assertFalse(
             $field->isValid(),
             'Field should be invalid as its too long'

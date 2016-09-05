@@ -93,7 +93,7 @@ class EmailValidatorTest extends TestCase
         }
     }
 
-    public function testDomainCheck()
+    public function testWithoutDomainCheck()
     {
         $form = new Form('', false);
 
@@ -108,11 +108,22 @@ class EmailValidatorTest extends TestCase
             $field->isValid(),
             'Field should be valid because email address has correct format (no host checking)'
         );
+    }
 
+    public function testDomainCheckViaGetHostByName()
+    {
         $GLOBALS['mock_function_not_exists'] = 'getmxrr';
 
+        $form = new Form('', false);
+
+        // first skip domain check
+        $validator = new EmailValidator(true);
         $validator->setCheckIfDomainExist(true);
+
+        $field = $form->textField('email');
         $field->setValidator($validator);
+
+        $field->setValue('john@iamabsolutlysurethatthisdomainwillneverexistsbecauseits.bogus');
 
         $this->assertFalse(
             $field->isValid(),
@@ -126,10 +137,24 @@ class EmailValidatorTest extends TestCase
         );
 
         unset($GLOBALS['mock_function_not_exists']);
+    }
+
+    public function testDomainCheckWithGetMxrr()
+    {
         $GLOBALS['mock_function_exists'] = 'getmxrr';
 
+        $form = new Form('', false);
+
+        // first skip domain check
+        $validator = new EmailValidator(true);
         $validator->setCheckIfDomainExist(true);
+
+        $field = $form->textField('email');
         $field->setValidator($validator);
+
+        $GLOBALS['mock_mxrr_response'] = false;
+        $GLOBALS['mock_dnsrr_response'] = false;
+
         $field->setValue('john@iamabsolutlysurethatthisdomainwillneverexistsbecauseits.bogus');
 
         $this->assertFalse(
@@ -137,21 +162,42 @@ class EmailValidatorTest extends TestCase
             'Field should be invalid because host of email address does not exists (getmxrr enabled)'
         );
 
+        $GLOBALS['mock_mxrr_response'] = true;
+
         $field->setValue('test@gmail.com');
         $this->assertTrue(
             $field->isValid(),
             'Field should be valid because host of email address does exists (getmxrr enabled)'
         );
 
-        $GLOBALS['mock_mxrr_response'] = true;
+        unset($GLOBALS['mock_mxrr_response']);
+        unset($GLOBALS['mock_dnsrr_response']);
+        unset($GLOBALS['mock_function_exists']);
+    }
+
+    public function testDomainCheckWithCheckDnsrr()
+    {
+        $form = new Form('', false);
+
+        // first skip domain check
+        $validator = new EmailValidator(true);
+        $validator->setCheckIfDomainExist(true);
+
+        $field = $form->textField('email');
+        $field->setValidator($validator);
+
+        $GLOBALS['mock_mxrr_response'] = false;
+        $GLOBALS['mock_dnsrr_response'] = true;
+
         $field->setValue('john@iamabsolutlysurethatthisdomainwillneverexistsbecauseits.bogus');
         $this->assertTrue(
             $field->isValid(),
             'Field should be valid because we getmxrr respond with true'
         );
 
-        $GLOBALS['mock_mxrr_response'] = false;
-        $field -> clearCache();
+        $GLOBALS['mock_dnsrr_response'] = false;
+
+        $field->clearCache();
         $this->assertFalse(
             $field->isValid(),
             'Field should be invalid because we getmxrr respond with false'

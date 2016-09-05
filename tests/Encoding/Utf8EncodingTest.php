@@ -1,5 +1,5 @@
 <?php
-namespace FormHandler\Tests;
+namespace FormHandler\Tests\Encoding;
 
 use FormHandler\Encoding\Utf8EncodingFilter;
 use FormHandler\Form;

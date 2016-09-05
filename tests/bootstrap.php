@@ -102,4 +102,32 @@ namespace FormHandler\Validator {
             return \function_exists('getmxrr') ? \getmxrr($host, $tmp) : false;
         }
     }
+
+    function mime_content_type($file)
+    {
+        if (isset($GLOBALS['mock_mime_content_type'])) {
+            return $GLOBALS['mock_mime_content_type'];
+        } else {
+            return \function_exists('mime_content_type') ? \mime_content_type($file) : false;
+        }
+    }
+
+    function checkdnsrr($host, $type = 'MX')
+    {
+        if (isset($GLOBALS['mock_dnsrr_response'])) {
+            return $GLOBALS['mock_dnsrr_response'];
+        } else {
+            return \function_exists('checkdnsrr') ? \checkdnsrr($host, $type) : false;
+        }
+
+    }
+
+    function finfo_file($finfo, $filename)
+    {
+        if (isset($GLOBALS['mock_finfo_file'])) {
+            return $GLOBALS['mock_finfo_file'];
+        } else {
+            return \finfo_file($finfo, $filename);
+        }
+    }
 }

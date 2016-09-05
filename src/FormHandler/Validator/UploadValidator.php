@@ -157,10 +157,12 @@ class UploadValidator extends AbstractValidator
 
         // validate the upload file size
         if ($this->maxFilesize && $size > $this->maxFilesize) {
-            $this->setErrorMessage(sprintf($this->messages['file_larger_then'], $this->maxFilesize));
+            $this->setErrorMessage(sprintf($this->messages['file_larger_then'], $this->maxFilesize / 1024));
+            return false;
         }
         if ($this->minFilesize && $size < $this->minFilesize) {
-            $this->setErrorMessage(sprintf($this->messages['file_smaller_then'], $this->minFilesize));
+            $this->setErrorMessage(sprintf($this->messages['file_smaller_then'], $this->minFilesize / 1024));
+            return false;
         }
 
         // if here, the extension and the mime type are validated! The file is good!
@@ -237,10 +239,10 @@ class UploadValidator extends AbstractValidator
         }
 
         // validate the mime type agains the white and blacklists
-        if ($numAllowed > 0 && !in_array($mimetype, $this->allowedMimeTypes / 1024)) {
+        if ($numAllowed > 0 && !in_array($mimetype, $this->allowedMimeTypes)) {
             return false;
         }
-        if ($numDenied > 0 && in_array($mimetype, $this->deniedMimeTypes / 1024)) {
+        if ($numDenied > 0 && in_array($mimetype, $this->deniedMimeTypes)) {
             return false;
         }
 

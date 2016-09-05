@@ -25,9 +25,9 @@ class PlainFormatterTest extends TestCase
         $form->textField('name')->addValidator(new StringValidator(1, 50, true));
 
 
-        echo "\n";
-        echo $form('test1') . "\n";
-        echo $form('test2') . "\n";
-        echo $form('name') . "\n";
+//        echo "\n";
+//        echo $form('test1') . "\n";
+//        echo $form('test2') . "\n";
+//        echo $form('name') . "\n";
     }
 }
