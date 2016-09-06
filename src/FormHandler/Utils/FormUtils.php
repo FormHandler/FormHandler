@@ -11,6 +11,10 @@ use FormHandler\Form;
  */
 class FormUtils
 {
+    const MODE_RENAME = 1;
+    const MODE_OVERWRITE = 2;
+    const MODE_EXCEPTION = 3;
+
     /**
      * Add query string params as hidden field to the given form.
      * This can be handy if you want to pass along the data in a $_POST way.
@@ -36,10 +40,6 @@ class FormUtils
             }
         }
     }
-
-    const MODE_RENAME = 1;
-    const MODE_OVERWRITE = 2;
-    const MODE_EXCEPTION = 3;
 
     /**
      * Move the uploaded file of the given field to the given destination.
@@ -105,7 +105,7 @@ class FormUtils
         $existMode = FormUtils::MODE_RENAME,
         $createDestinationIfNotExist = false
     ) {
-    
+
         $filedata = $field->getValue();
 
         // is multiple file uploads enabled?
@@ -459,7 +459,7 @@ class FormUtils
         }
 
         // define the array of first 8 png bytes
-        $png_header = array(137, 80, 78, 71, 13, 10, 26, 10);
+        $pngHeader = array(137, 80, 78, 71, 13, 10, 26, 10);
         // or: array(0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A);
 
         // open file for reading
@@ -476,7 +476,7 @@ class FormUtils
         $chars = array_map('ord', $chars);
 
         // return true if there are no differences or false otherwise
-        return (count(array_diff($png_header, $chars)) === 0);
+        return (count(array_diff($pngHeader, $chars)) === 0);
     }
 
     /**
@@ -648,7 +648,7 @@ class FormUtils
         $quality = 80,
         $constrainProportions = true
     ) {
-    
+
         // check if the source exists
         if (!is_file($source) || !($size = getimagesize($source))) {
             throw new \Exception(sprintf('Could not find or read the file to resize: %s'), $source);

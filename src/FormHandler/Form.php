@@ -80,43 +80,78 @@ use Herrera\Json\Exception\Exception;
 class Form extends Field\Element
 {
     /**
+     * Constant which can be used to set the form's submit method to GET
+     */
+    const METHOD_GET = 'get';
+    /**
+     * Constant which can be used to set the form's submit method to POST (default)
+     */
+    const METHOD_POST = 'post';
+    /**
+     * No characters are encoded. This value is required when you are using forms that have a file upload control
+     */
+    const ENCTYPE_MULTIPART = 'multipart/form-data';
+    /**
+     * Spaces are converted to "+" symbols, but no special characters are encoded
+     */
+    const ENCTYPE_PLAIN = 'text/plain';
+    /**
+     * Default. All characters are encoded before sent
+     * (spaces are converted to "+" symbols, and special characters are converted to ASCII HEX values)
+     */
+    const ENCTYPE_URLENCODED = 'application/x-www-form-urlencoded';
+    /**
+     * The default formatter which will be used for all FromHandler instances.
+     * @var Formatter\AbstractFormatter
+     */
+    protected static $defaultFormatter = null;
+    /**
+     * The default encoding filter which will be used for all FormHandler instancens.
+     * @var Encoding\InterfaceEncodingFilter
+     */
+    protected static $defaultEncodingFilter = null;
+    /**
+     * Out default settings for our csrf protection which will be used for all FormHandler instances.
+     * @var boolean
+     */
+    protected static $defaultCsrfProtectionEnabled = true;
+    /**
+     * After parsing the submitted values we cache these so that we don't have to analyse them more then once.
+     * @var array
+     */
+    protected static $cache = [];
+    /**
      * The action of the Form (location where the form is sent to).
      * When the action is empty, it will be posted to itsself (default)
      * @var string
      */
     protected $action;
-
     /**
      * The target window where the form should posted to
      * @var string
      * @deprecated
      */
     protected $target = '';
-
     /**
      * The name of the form.
      * @var string
      */
     protected $name;
-
     /**
      * The method how the form is submitted. Can either be POST or GET
      * @var string
      */
     protected $method = self::METHOD_POST;
-
     /**
      * The encoding type of the form. Use one of the ENCTYPE_* constants.
      * @var string
      */
     protected $enctype = self::ENCTYPE_URLENCODED;
-
     /**
      * Specifies the character encodings that are to be used for the form submission
      * @var string
      */
     protected $acceptCharset;
-
     /**
      * Not supported in HTML5.
      * Specifies a comma-separated list of file types that the server accepts
@@ -126,88 +161,33 @@ class Form extends Field\Element
      * @deprecated
      */
     protected $accept;
-
     /**
      * List of all fields in this form
      * @var array
      */
     protected $fields = [];
-
     /**
      * An formatter which will be used to format the fields.
      * @var Formatter\AbstractFormatter
      */
     protected $formatter;
-
     /**
      * An encoding filter which will be used to filter the data
      * @var Encoding\InterfaceEncodingFilter
      */
     protected $encodingFilter;
-
     /**
      * Remember if this form was submitted or not. When this is null, we did not check
      * yet if the form was submitted, and we will parse the complete request and store the result here.
      * @var boolean
      */
     protected $submitted = null;
-
-    /**
-     * The default formatter which will be used for all FromHandler instances.
-     * @var Formatter\AbstractFormatter
-     */
-    protected static $defaultFormatter = null;
-
-    /**
-     * The default encoding filter which will be used for all FormHandler instancens.
-     * @var Encoding\InterfaceEncodingFilter
-     */
-    protected static $defaultEncodingFilter = null;
-
-    /**
-     * Out default settings for our csrf protection which will be used for all FormHandler instances.
-     * @var boolean
-     */
-    protected static $defaultCsrfProtectionEnabled = true;
-
     /**
      * Should we enable Cross Site Request Forgery protection?
      * If not given, we will use possible default settings. If those are not set, we will enable it for POST forms.
      * @var bool
      */
     protected $csrfProtection;
-
-    /**
-     * After parsing the submitted values we cache these so that we don't have to analyse them more then once.
-     * @var array
-     */
-    protected static $cache = [];
-
-    /**
-     * Constant which can be used to set the form's submit method to GET
-     */
-    const METHOD_GET = 'get';
-
-    /**
-     * Constant which can be used to set the form's submit method to POST (default)
-     */
-    const METHOD_POST = 'post';
-
-    /**
-     * No characters are encoded. This value is required when you are using forms that have a file upload control
-     */
-    const ENCTYPE_MULTIPART = 'multipart/form-data';
-
-    /**
-     * Spaces are converted to "+" symbols, but no special characters are encoded
-     */
-    const ENCTYPE_PLAIN = 'text/plain';
-
-    /**
-     * Default. All characters are encoded before sent
-     * (spaces are converted to "+" symbols, and special characters are converted to ASCII HEX values)
-     */
-    const ENCTYPE_URLENCODED = 'application/x-www-form-urlencoded';
 
     /**
      * Create a new Form object.
@@ -232,6 +212,90 @@ class Form extends Field\Element
     }
 
     /**
+     * Should we enable Cross Site Request Forgery protection?
+     * If not given, we will use possible default settings.
+     * If those are not set, we will enable it for POST forms.
+     * Set the value for csrfProtection
+     *
+     * @param bool $value
+     * @return Form
+     */
+    public function setCsrfProtection($value)
+    {
+        $this->csrfProtection = (bool)$value;
+
+        if (!$value) {
+            $this->removeFieldByName('csrftoken');
+        } else {
+            $field = $this->getFieldByName('csrftoken');
+
+            // if the field does not exists yet, lets add it.
+            if ($field === null) {
+                // Add a hidden 'csrftoken' field.
+                $field = $this->hiddenField('csrftoken');
+                $field->addValidator(new CsrfValidator());
+
+                // @todo: fixme. This is wrong because when an post is done without a csrftoken value,
+                // we will generate a new one which is always valid.
+                if (!$field->getValue()) {
+                    $field->setValue(CsrfValidator::generateToken());
+                }
+            }
+        }
+
+
+        return $this;
+    }
+
+    /**
+     * Remove a field from the form by the name of the field.
+     * If there are more then 1 field with the given name, then only the first one will
+     * be removed.
+     *
+     * @param $name
+     * @return Form
+     */
+    public function removeFieldByName($name)
+    {
+        foreach ($this->fields as $i => $field) {
+            if ($field->getName() == $name) {
+                unset($this->fields[$i]);
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Return a field by it's name. We will return null if it's not found.
+     *
+     * @param string $name
+     * @return Field\AbstractFormField
+     */
+    public function getFieldByName($name)
+    {
+        foreach ($this->fields as $field) {
+            if ($field->getName() == $name) {
+                return $field;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return a new hiddenfield
+     *
+     * @param string $name
+     * @return Field\HiddenField
+     */
+    public function hiddenField($name)
+    {
+        return new Field\HiddenField($this, $name);
+    }
+
+    /**
      * Clear our cache of the submitted values.
      * This could be useful when you have changed the submitted values and want to re-analyze them.
      * @return Form
@@ -253,6 +317,18 @@ class Form extends Field\Element
     }
 
     /**
+     * Get the default formatter.
+     *
+     * For more information about formatters, {@see AbstractFormatter}
+     *
+     * @return AbstractFormatter
+     */
+    public static function getDefaultFormatter()
+    {
+        return Form::$defaultFormatter;
+    }
+
+    /**
      * Set a default formatter for all the form objects which are created.
      *
      * This could be useful when creating multiple forms in your project, and
@@ -271,6 +347,56 @@ class Form extends Field\Element
     public static function setDefaultFormatter(AbstractFormatter $formatter)
     {
         Form::$defaultFormatter = $formatter;
+    }
+
+    /**
+     * Return the default encoding filter.
+     *
+     * @return InterfaceEncodingFilter
+     */
+    public static function getDefaultEncodingFilter()
+    {
+        return Form::$defaultEncodingFilter;
+    }
+
+    /**
+     * Set a default encoding filter.
+     * This will be used to filter the input to make sure it's the correct encoding.
+     *
+     * This could be useful when creating multiple forms in your project, and
+     * if you don't want to set a custom encoding filter for every Form object.
+     *
+     * Example:
+     * ```php
+     * // set the default formatter which should be used
+     * Form::setDefaultEncodingFilter( new Utf8EncodingFilter() );
+     * ```
+     *
+     * @param InterfaceEncodingFilter $filter
+     */
+    public static function setDefaultEncodingFilter(InterfaceEncodingFilter $filter)
+    {
+        Form::$defaultEncodingFilter = $filter;
+    }
+
+    /**
+     * Return if CSRF protection is enabled by default.
+     *
+     * @return bool
+     */
+    public static function isDefaultCsrfProtectionEnabled()
+    {
+        return Form::$defaultCsrfProtectionEnabled;
+    }
+
+    /**
+     * Set if CSRF protection is enabled by default.
+     *
+     * @param boolean $enabled
+     */
+    public static function setDefaultCsrfProtectionEnabled($enabled)
+    {
+        Form::$defaultCsrfProtectionEnabled = (bool)$enabled;
     }
 
     /**
@@ -332,6 +458,18 @@ class Form extends Field\Element
             }
         }
         return $result;
+    }
+
+    /**
+     * Return an array with all fields from this form.
+     * This method will return an array.
+     * When there are no fields, it will return an empty array.
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
     }
 
     /**
@@ -400,65 +538,22 @@ class Form extends Field\Element
     }
 
     /**
-     * Get the default formatter.
+     * Return a list of fields which have the name which equals the given name
      *
-     * For more information about formatters, {@see AbstractFormatter}
-     *
-     * @return AbstractFormatter
+     * @param string $name
+     * @return Field\AbstractFormField[]
      */
-    public static function getDefaultFormatter()
+    public function getFieldsByName($name)
     {
-        return Form::$defaultFormatter;
-    }
+        $result = [];
 
-    /**
-     * Set a default encoding filter.
-     * This will be used to filter the input to make sure it's the correct encoding.
-     *
-     * This could be useful when creating multiple forms in your project, and
-     * if you don't want to set a custom encoding filter for every Form object.
-     *
-     * Example:
-     * ```php
-     * // set the default formatter which should be used
-     * Form::setDefaultEncodingFilter( new Utf8EncodingFilter() );
-     * ```
-     *
-     * @param InterfaceEncodingFilter $filter
-     */
-    public static function setDefaultEncodingFilter(InterfaceEncodingFilter $filter)
-    {
-        Form::$defaultEncodingFilter = $filter;
-    }
+        foreach ($this->fields as $field) {
+            if ($field->getName() == $name) {
+                $result[] = $field;
+            }
+        }
 
-    /**
-     * Return the default encoding filter.
-     *
-     * @return InterfaceEncodingFilter
-     */
-    public static function getDefaultEncodingFilter()
-    {
-        return Form::$defaultEncodingFilter;
-    }
-
-    /**
-     * Return if CSRF protection is enabled by default.
-     *
-     * @return bool
-     */
-    public static function isDefaultCsrfProtectionEnabled()
-    {
-        return Form::$defaultCsrfProtectionEnabled;
-    }
-
-    /**
-     * Set if CSRF protection is enabled by default.
-     *
-     * @param boolean $enabled
-     */
-    public static function setDefaultCsrfProtectionEnabled($enabled)
-    {
-        Form::$defaultCsrfProtectionEnabled = (bool)$enabled;
+        return $result;
     }
 
     /**
@@ -481,42 +576,6 @@ class Form extends Field\Element
     public function __invoke($name)
     {
         return $this->getFieldByName($name);
-    }
-
-    /**
-     * Should we enable Cross Site Request Forgery protection?
-     * If not given, we will use possible default settings.
-     * If those are not set, we will enable it for POST forms.
-     * Set the value for csrfProtection
-     *
-     * @param bool $value
-     * @return Form
-     */
-    public function setCsrfProtection($value)
-    {
-        $this->csrfProtection = (bool)$value;
-
-        if (!$value) {
-            $this->removeFieldByName('csrftoken');
-        } else {
-            $field = $this->getFieldByName('csrftoken');
-
-            // if the field does not exists yet, lets add it.
-            if ($field === null) {
-                // Add a hidden 'csrftoken' field.
-                $field = $this->hiddenField('csrftoken');
-                $field->addValidator(new CsrfValidator());
-
-                // @todo: fixme. This is wrong because when an post is done without a csrftoken value,
-                // we will generate a new one which is always valid.
-                if (!$field->getValue()) {
-                    $field->setValue(CsrfValidator::generateToken());
-                }
-            }
-        }
-
-
-        return $this;
     }
 
     /**
@@ -600,15 +659,35 @@ class Form extends Field\Element
     }
 
     /**
-     * Return an array with all fields from this form.
-     * This method will return an array.
-     * When there are no fields, it will return an empty array.
+     * Return the method how this form should be submitted
      *
-     * @return array
+     * @return string
      */
-    public function getFields()
+    public function getMethod()
     {
-        return $this->fields;
+        return $this->method;
+    }
+
+    /**
+     * Set the method how this form should be submitted
+     *
+     * @param string $method
+     * @return Form
+     * @throws Exception
+     */
+    public function setMethod($method)
+    {
+        $method = strtolower($method);
+
+        if (in_array($method, [
+            Form::METHOD_GET,
+            Form::METHOD_POST
+        ])) {
+            $this->method = $method;
+        } else {
+            throw new Exception('Incorrect method value given');
+        }
+        return $this;
     }
 
     /**
@@ -621,26 +700,6 @@ class Form extends Field\Element
     {
         foreach ($this->fields as $i => $elem) {
             if ($elem == $field) {
-                unset($this->fields[$i]);
-                break;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove a field from the form by the name of the field.
-     * If there are more then 1 field with the given name, then only the first one will
-     * be removed.
-     *
-     * @param $name
-     * @return Form
-     */
-    public function removeFieldByName($name)
-    {
-        foreach ($this->fields as $i => $field) {
-            if ($field->getName() == $name) {
                 unset($this->fields[$i]);
                 break;
             }
@@ -686,24 +745,81 @@ class Form extends Field\Element
     }
 
     /**
-     * Overwrite the isSubmitted value.
-     * Could be useful sometimes to
-     * allow a form to be submitted even if some fields are missing.
-     *
-     * @param boolean $status
-     */
-    public function setSubmitted($status)
-    {
-        $this->submitted = (bool)$status;
-    }
-
-    /**
      * Return the form close tag: ```</form>```
      * @return string
      */
     public function close()
     {
         return '</form>';
+    }
+
+    /**
+     * Return a field by it's id, or null when its not found.
+     *
+     * @param string $id
+     * @return Field\AbstractFormField
+     */
+    public function getFieldById($id)
+    {
+        foreach ($this->fields as $field) {
+            if ($field->getId() == $id) {
+                return $field;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if the Cross-Site-Request-Forgery (CSRF) security token was valid or not.
+     *
+     * @return boolean
+     */
+    public function isCsrfValid()
+    {
+        // csrf protection is disabled.
+        if (!$this->isCsrfProtectionEnabled()) {
+            return true;
+        }
+
+        // the form is not submitted
+        if (!$this->isSubmitted()) {
+            return true;
+        }
+
+        // the form is valid, so the csrf is also valid.
+        if ($this->isValid()) {
+            return true;
+        }
+
+        // the form is invalid. Let's check if the CSRF value is the problem.
+        foreach ($this->fields as $field) {
+            if ($field instanceof Field\AbstractFormField && $field->getName() == 'csrftoken' && !$field->isValid()) {
+                return false;
+            }
+        }
+
+        // the field is not the problem...
+        return true;
+    }
+
+    /**
+     * Returns the current CSRF protection state.
+     * CSRF stands for Cross Site Request Forgery.
+     *
+     * This method returns if we want to use a token to protect ourselfs agains this kind of attacks.
+     * NOTE: This requires that we can make use of sessions. If this is disabled, we will return false!
+     *
+     * @return boolean
+     */
+    public function isCsrfProtectionEnabled()
+    {
+        // is there no session available? Then always disable CSRF protection.
+        if (session_id() == '') {
+            return false;
+        }
+
+        return $this->csrfProtection;
     }
 
     /**
@@ -846,89 +962,15 @@ class Form extends Field\Element
     }
 
     /**
-     * Return a field by it's name. We will return null if it's not found.
+     * Overwrite the isSubmitted value.
+     * Could be useful sometimes to
+     * allow a form to be submitted even if some fields are missing.
      *
-     * @param string $name
-     * @return Field\AbstractFormField
+     * @param boolean $status
      */
-    public function getFieldByName($name)
+    public function setSubmitted($status)
     {
-        foreach ($this->fields as $field) {
-            if ($field->getName() == $name) {
-                return $field;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Return a list of fields which have the name which equals the given name
-     *
-     * @param string $name
-     * @return Field\AbstractFormField[]
-     */
-    public function getFieldsByName($name)
-    {
-        $result = [];
-
-        foreach ($this->fields as $field) {
-            if ($field->getName() == $name) {
-                $result[] = $field;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Return a field by it's id, or null when its not found.
-     *
-     * @param string $id
-     * @return Field\AbstractFormField
-     */
-    public function getFieldById($id)
-    {
-        foreach ($this->fields as $field) {
-            if ($field->getId() == $id) {
-                return $field;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Check if the Cross-Site-Request-Forgery (CSRF) security token was valid or not.
-     *
-     * @return boolean
-     */
-    public function isCsrfValid()
-    {
-        // csrf protection is disabled.
-        if (!$this->isCsrfProtectionEnabled()) {
-            return true;
-        }
-
-        // the form is not submitted
-        if (!$this->isSubmitted()) {
-            return true;
-        }
-
-        // the form is valid, so the csrf is also valid.
-        if ($this->isValid()) {
-            return true;
-        }
-
-        // the form is invalid. Let's check if the CSRF value is the problem.
-        foreach ($this->fields as $field) {
-            if ($field instanceof Field\AbstractFormField && $field->getName() == 'csrftoken' && !$field->isValid()) {
-                return false;
-            }
-        }
-
-        // the field is not the problem...
-        return true;
+        $this->submitted = (bool)$status;
     }
 
     /**
@@ -967,25 +1009,13 @@ class Form extends Field\Element
     }
 
     /**
-     * Set a formatter object
+     * Return the EncodingFilter, which is used to filter all the imput so that its of the correct character encoding.
      *
-     * @param AbstractFormatter $formatter
-     * @return Form
+     * @return InterfaceEncodingFilter
      */
-    public function setFormatter(AbstractFormatter $formatter)
+    public function getEncodingFilter()
     {
-        $this->formatter = $formatter;
-        return $this;
-    }
-
-    /**
-     * Return the formatter
-     *
-     * @return AbstractFormatter
-     */
-    public function getFormatter()
-    {
-        return $this->formatter;
+        return $this->encodingFilter;
     }
 
     /**
@@ -1005,16 +1035,6 @@ class Form extends Field\Element
     }
 
     /**
-     * Return the EncodingFilter, which is used to filter all the imput so that its of the correct character encoding.
-     *
-     * @return InterfaceEncodingFilter
-     */
-    public function getEncodingFilter()
-    {
-        return $this->encodingFilter;
-    }
-
-    /**
      * add a field to this form, so that it can be retrieved by the method getFieldByName
      *
      * @param Element $field
@@ -1022,6 +1042,16 @@ class Form extends Field\Element
     public function addField(Element &$field)
     {
         $this->fields[] = $field;
+    }
+
+    /**
+     * Return the action of this form
+     *
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
     }
 
     /**
@@ -1039,13 +1069,16 @@ class Form extends Field\Element
     }
 
     /**
-     * Return the action of this form
+     * Return the target
      *
+     * @deprecated
+     *
+     * @see http://www.w3schools.com/tags/tag_form.asp
      * @return string
      */
-    public function getAction()
+    public function getTarget()
     {
-        return $this->action;
+        return $this->target;
     }
 
     /**
@@ -1065,16 +1098,13 @@ class Form extends Field\Element
     }
 
     /**
-     * Return the target
+     * Return the name of the form
      *
-     * @deprecated
-     *
-     * @see http://www.w3schools.com/tags/tag_form.asp
      * @return string
      */
-    public function getTarget()
+    public function getName()
     {
-        return $this->target;
+        return $this->name;
     }
 
     /**
@@ -1086,30 +1116,6 @@ class Form extends Field\Element
     public function setName($name)
     {
         $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * Return the name of the form
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set the mime-types of files that can be submitted through a file upload
-     * and return the Form reference
-     *
-     * @param string $accept
-     * @deprecated
-     * @return Form
-     */
-    public function setAccept($accept)
-    {
-        $this->accept = $accept;
         return $this;
     }
 
@@ -1128,9 +1134,34 @@ class Form extends Field\Element
     }
 
     /**
+     * Set the mime-types of files that can be submitted through a file upload
+     * and return the Form reference
+     *
+     * @param string $accept
+     * @deprecated
+     * @return Form
+     */
+    public function setAccept($accept)
+    {
+        $this->accept = $accept;
+        return $this;
+    }
+
+    /**
+     * Return how form-data should be encoded before sending it to a server
+     *
+     * @return string
+     */
+    public function getEnctype()
+    {
+        return $this->enctype;
+    }
+
+    /**
      * Set how form-data should be encoded before sending it to a server
      * Possible values:
      * - application/x-www-form-urlencoded
+     * sdfkjsdhfkjhsdjfhkjsdhfkjhsdfkjhsdkjhsdfkjhsdkjfhsdkjhfsdkjhfkjshdkfjhsdkjfhsdkjhfkjsdhfkjsdhfkjhsdkjfhsdkjfhkjsdhfkjdhdkjfh
      * - multipart/form-data
      * - text/plain
      *
@@ -1156,45 +1187,13 @@ class Form extends Field\Element
     }
 
     /**
-     * Return how form-data should be encoded before sending it to a server
+     * Returns the character-sets the server can handle for form-data
      *
      * @return string
      */
-    public function getEnctype()
+    public function getAcceptCharset()
     {
-        return $this->enctype;
-    }
-
-    /**
-     * Return the method how this form should be submitted
-     *
-     * @return string
-     */
-    public function getMethod()
-    {
-        return $this->method;
-    }
-
-    /**
-     * Set the method how this form should be submitted
-     *
-     * @param string $method
-     * @return Form
-     * @throws Exception
-     */
-    public function setMethod($method)
-    {
-        $method = strtolower($method);
-
-        if (in_array($method, [
-            Form::METHOD_GET,
-            Form::METHOD_POST
-        ])) {
-            $this->method = $method;
-        } else {
-            throw new Exception('Incorrect method value given');
-        }
-        return $this;
+        return $this->acceptCharset;
     }
 
     /**
@@ -1208,16 +1207,6 @@ class Form extends Field\Element
     {
         $this->acceptCharset = $charset;
         return $this;
-    }
-
-    /**
-     * Returns the character-sets the server can handle for form-data
-     *
-     * @return string
-     */
-    public function getAcceptCharset()
-    {
-        return $this->acceptCharset;
     }
 
     /**
@@ -1291,17 +1280,6 @@ class Form extends Field\Element
     public function checkBox($name, $value = '1')
     {
         return new Field\CheckBox($this, $name, $value);
-    }
-
-    /**
-     * Return a new hiddenfield
-     *
-     * @param string $name
-     * @return Field\HiddenField
-     */
-    public function hiddenField($name)
-    {
-        return new Field\HiddenField($this, $name);
     }
 
     /**
@@ -1390,21 +1368,24 @@ class Form extends Field\Element
     }
 
     /**
-     * Returns the current CSRF protection state.
-     * CSRF stands for Cross Site Request Forgery.
+     * Return the formatter
      *
-     * This method returns if we want to use a token to protect ourselfs agains this kind of attacks.
-     * NOTE: This requires that we can make use of sessions. If this is disabled, we will return false!
-     *
-     * @return boolean
+     * @return AbstractFormatter
      */
-    public function isCsrfProtectionEnabled()
+    public function getFormatter()
     {
-        // is there no session available? Then always disable CSRF protection.
-        if (session_id() == '') {
-            return false;
-        }
+        return $this->formatter;
+    }
 
-        return $this->csrfProtection;
+    /**
+     * Set a formatter object
+     *
+     * @param AbstractFormatter $formatter
+     * @return Form
+     */
+    public function setFormatter(AbstractFormatter $formatter)
+    {
+        $this->formatter = $formatter;
+        return $this;
     }
 }

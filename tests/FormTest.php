@@ -1,6 +1,7 @@
 <?php
 namespace FormHandler\Tests;
 
+use FormHandler\Encoding\Utf8EncodingFilter;
 use FormHandler\Field\AbstractFormField;
 use FormHandler\Field\HiddenField;
 use FormHandler\Field\RadioButton;
@@ -63,14 +64,14 @@ class FormTest extends TestCase
      */
     public function testDefaultEncodingFilter()
     {
-//        $this->assertNull(Form::getDefaultEncodingFilter());
-//
-//        // our UTF8 encoding filter is the default
-//        $form = new Form();
-//        $this->assertInstanceOf(Utf8EncodingFilter::class, $form->getEncodingFilter());
-//
-//        Form::setDefaultEncodingFilter(new Utf8EncodingFilter());
-//        $this->assertInstanceOf(Utf8EncodingFilter::class, Form::getDefaultEncodingFilter());
+        $this->assertNull(Form::getDefaultEncodingFilter());
+
+        // our UTF8 encoding filter is the default
+        $form = new Form();
+        $this->assertInstanceOf(Utf8EncodingFilter::class, $form->getEncodingFilter());
+
+        Form::setDefaultEncodingFilter(new Utf8EncodingFilter());
+        $this->assertInstanceOf(Utf8EncodingFilter::class, Form::getDefaultEncodingFilter());
     }
 
     /**
@@ -81,7 +82,7 @@ class FormTest extends TestCase
         $form = new Form('');
         $this->assertEquals('', $form->getAction());
 
-        $form->setAction('/form/test');
+        $form->setAction("/form/test");
         $this->assertEquals('/form/test', $form->getAction());
     }
 
@@ -140,7 +141,7 @@ class FormTest extends TestCase
         $this->assertEquals('</form>', $form->close());
 
         $this->expectOutputRegex(
-            '/^<form action="" name="myForm" accept="text\/plain" accept-charset="utf-8" '.
+            '/^<form action="" name="myForm" accept="text\/plain" accept-charset="utf-8" ' .
             'enctype="application\/x-www-form-urlencoded" method="post" target="_self">$/i',
             'Check html tag'
         );
@@ -557,7 +558,7 @@ class FormTest extends TestCase
             'agree' => 1,
             'gender' => 'm'
         ];
-        $form -> fill($values);
+        $form->fill($values);
 
         $this->assertEquals('John', $form->getFieldByName('name')->getValue());
         $this->assertTrue($form->getFieldById('genderM')->isChecked());
@@ -571,18 +572,18 @@ class FormTest extends TestCase
         $this->expectExceptionMessageRegExp('/composite types/');
 
         $form = new Form();
-        $form -> fill('wrong');
+        $form->fill('wrong');
     }
 
     public function testValidationErrors()
     {
         $form = new Form('', false);
-        $this -> assertEquals([], $form -> getValidationErrors());
+        $this->assertEquals([], $form->getValidationErrors());
 
-        $form -> textField('test') -> addValidator(new StringValidator(2, 50, true, 'Enter your name'));
-        $this -> assertEquals(['Enter your name'], $form -> getValidationErrors());
+        $form->textField('test')->addValidator(new StringValidator(2, 50, true, 'Enter your name'));
+        $this->assertEquals(['Enter your name'], $form->getValidationErrors());
 
-        $this -> assertFalse($form -> isValid());
+        $this->assertFalse($form->isValid());
     }
 
 
