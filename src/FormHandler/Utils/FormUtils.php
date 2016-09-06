@@ -93,8 +93,8 @@ class FormUtils
      * @param int $existMode Mode what to do if the file exists. Default: rename
      * @param int|boolean $createDestinationIfNotExist Create the $destination path if not exists or not.
      * You can also give a umask here (like 644).
-     * @return string The destination of the new file or null on an error.
-     * When multiple files are uploaded, this will be an array
+     * @return string|string[] The destination of the new file or null on an error.
+     * When multiple files are uploaded, this will be an array of destinations
      *
      * @throws \UnexpectedValueException
      * @throws \Exception
@@ -123,6 +123,7 @@ class FormUtils
         // to walk "something", make an array of the name, even if we are not using multiple file uploads.
         if (!is_array($filedata['name'])) {
             $filedata['name'] = [$filedata['name']];
+            $filedata['tmp_name'] = [$filedata['tmp_name']];
         }
 
         $originalDestination = $destination;
@@ -131,6 +132,8 @@ class FormUtils
 
         // walk all uploaded files
         foreach ($filedata['name'] as $index => $filename) {
+            $tmpName = $filedata['tmp_name'][$index];
+
             // keep the original filename if wanted
             $lastChar = substr($originalDestination, -1);
             if ($lastChar == '/' || $lastChar == '\\') {
@@ -192,33 +195,19 @@ class FormUtils
                 );
             }
 
-            if (is_array($filedata['tmp_name'])) {
-                // move the file
-                if (move_uploaded_file($filedata['tmp_name'][$index], $destination)) {
-                    $result[$index] = $destination;
-                } else {
-                    throw new \Exception(sprintf(
-                        'Error, we failed to move file "%s" to destination "%s"',
-                        $filedata['tmp_name'],
-                        $destination
-                    ));
-                }
-            } // not an array (e.g. not multiple file uploads)
-            else {
-                // move the file
-                if (move_uploaded_file($filedata['tmp_name'], $destination)) {
-                    return $destination;
-                } else {
-                    throw new \Exception(sprintf(
-                        'Error, we failed to move file "%s" to destination "%s"',
-                        $filedata['tmp_name'],
-                        $destination
-                    ));
-                }
+            // move the file
+            if (move_uploaded_file($tmpName, $destination)) {
+                $result[] = $destination;
+            } else {
+                throw new \Exception(sprintf(
+                    'Error, we failed to move file "%s" to destination "%s"',
+                    $tmpName,
+                    $destination
+                ));
             }
         }
 
-        return $result;
+        return $field->getMultiple() ? $result : $result[0];
     }
 
     /**
