@@ -168,8 +168,7 @@ class FormUtilsTest extends TestCase
 
     public function testMoveMultipleFilesException()
     {
-        $_FILES = '1';
-        $x = array(
+        $_FILES = array(
             'cv' => array(
                 'name' => ['test.pdf', 'test1.pdf'],
                 'type' => ['application/pdf', 'application/pdf'],
