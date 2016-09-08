@@ -1,7 +1,6 @@
 <?php
 namespace FormHandler\Renderer;
 
-
 class Tag
 {
     /**

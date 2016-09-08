@@ -37,7 +37,7 @@ abstract class AbstractRenderer
      * @param Element $element
      * @return string
      */
-    protected function getMethodNameForClass( Element $element )
+    protected function getMethodNameForClass(Element $element)
     {
         // if a method exists for this element, then use that one
         $className = get_class($element);
