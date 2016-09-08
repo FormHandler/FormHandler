@@ -203,3 +203,15 @@ FormHandler does only contain some default error messages which are shown when a
 Only the ```UploadValidator``` and ```ImageUploadValidator``` contain some more translations, based on the reason
 why a file could not be uploaded. You can overwrite these also. See for more details the documentation for the 
 ```UploadValidator``` and ```ImageUploadValidator```.
+
+HTML Escaping
+------
+
+Security is very important in web forms. Displaying non-safe data can create serious security issues. 
+Therefore it needs to be absolutly clear how FormHandler displays strings and which data is HTML escaped or not.
+ 
+ There are two rules which you need to remember:
+   * The values of fields are **always** escaped, as they can be filled automatically from `$_GET` or `$_POST`. 
+   * Other attributes are filled by *you*, and are thus **NOT** escaped. 
+
+This means that button values are thus also not escaped, as they cannot be filled from the `$_GET` or `$_POST`.

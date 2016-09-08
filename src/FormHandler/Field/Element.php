@@ -109,6 +109,15 @@ class Element
     }
 
     /**
+     * Return the associative array with key > value pairs which represent the attributes
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
      * Set the tab index for this element and return an instance to itsself
      *
      * @param int $index
@@ -280,31 +289,31 @@ class Element
     public function render()
     {
         $str = '';
-        if (! empty($this->id)) {
+        if (!empty($this->id)) {
             $str .= ' id="' . $this->id . '"';
         }
 
-        if (! empty($this->title)) {
+        if (!empty($this->title)) {
             $str .= ' title="' . $this->title . '"';
         }
 
-        if (! empty($this->style)) {
+        if (!empty($this->style)) {
             $str .= ' style="' . $this->style . '"';
         }
 
-        if (! empty($this->class)) {
+        if (!empty($this->class)) {
             $str .= ' class="' . $this->class . '"';
         }
 
-        if (! empty($this->tabindex)) {
+        if (!empty($this->tabindex)) {
             $str .= ' tabindex="' . $this->tabindex . '"';
         }
 
-        if (! empty($this->accesskey)) {
+        if (!empty($this->accesskey)) {
             $str .= ' accesskey="' . $this->accesskey . '"';
         }
 
-        if (isset($this -> attributes)) {
+        if (isset($this->attributes)) {
             foreach ($this->attributes as $name => $value) {
                 $str .= ' ' . $name . '="' . $value . '"';
             }
