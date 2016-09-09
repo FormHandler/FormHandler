@@ -2237,7 +2237,8 @@ class FormHandler
                 if(array_key_exists($field, $_POST))
                 {
                     $post_value = $_POST[$field];
-                    if(substr($post_value, 0, 11) == '__FH_JSON__')
+                    if(is_string($post_value)
+                        && substr($post_value, 0, 11) == '__FH_JSON__')
                     {
                         $post_value = json_decode(substr($post_value, 11), true);
                     }
@@ -3070,7 +3071,7 @@ class FormHandler
                 {
                     $new_js .= "function load_" . $function_name . "(values)\n";
                 }
-                
+
                 $protocol = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
                     ? 'https'
                     : 'http';
