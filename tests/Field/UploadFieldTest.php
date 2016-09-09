@@ -51,23 +51,7 @@ class UploadFieldTest extends TestCase
         $this->assertTrue($field->getMultiple());
     }
 
-    public function testRender()
-    {
-        $form = new Form('', false);
-        $field = $form->uploadField('cv');
 
-        $field->setMultiple(true);
-        $field->setSize(20);
-        $field->setAccept('image/jpg');
-        $field->setDisabled(true);
-
-        $this->expectOutputRegex(
-            "/<input type=\"file\" name=\"(.*?)\" size=\"(\d+)\" accept=\"(.*?)\" " .
-            "multiple=\"\" disabled=\"disabled\" \/>/i",
-            'Check html tag'
-        );
-        echo $field;
-    }
 
     /**
      * Sets up the fixture, for example, opens a network connection.

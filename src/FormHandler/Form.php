@@ -10,8 +10,8 @@ use FormHandler\Field\Element;
 use FormHandler\Field\RadioButton;
 use FormHandler\Field\SelectField;
 use FormHandler\Field\UploadField;
-use FormHandler\Formatter\AbstractFormatter;
-use FormHandler\Formatter\PlainFormatter;
+use FormHandler\Renderer\AbstractRenderer;
+use FormHandler\Renderer\XhtmlRenderer;
 use FormHandler\Validator\CsrfValidator;
 use Herrera\Json\Exception\Exception;
 
@@ -83,75 +83,90 @@ class Form extends Field\Element
      * Constant which can be used to set the form's submit method to GET
      */
     const METHOD_GET = 'get';
+
     /**
      * Constant which can be used to set the form's submit method to POST (default)
      */
     const METHOD_POST = 'post';
+
     /**
      * No characters are encoded. This value is required when you are using forms that have a file upload control
      */
     const ENCTYPE_MULTIPART = 'multipart/form-data';
+
     /**
      * Spaces are converted to "+" symbols, but no special characters are encoded
      */
     const ENCTYPE_PLAIN = 'text/plain';
+
     /**
      * Default. All characters are encoded before sent
      * (spaces are converted to "+" symbols, and special characters are converted to ASCII HEX values)
      */
     const ENCTYPE_URLENCODED = 'application/x-www-form-urlencoded';
+
     /**
-     * The default formatter which will be used for all FromHandler instances.
-     * @var Formatter\AbstractFormatter
+     * The default renderer which will be used for all FromHandler instances.
+     * @var Renderer\AbstractRenderer
      */
-    protected static $defaultFormatter = null;
+    protected static $defaultRenderer = null;
+
     /**
      * The default encoding filter which will be used for all FormHandler instancens.
      * @var Encoding\InterfaceEncodingFilter
      */
     protected static $defaultEncodingFilter = null;
+
     /**
      * Out default settings for our csrf protection which will be used for all FormHandler instances.
      * @var boolean
      */
     protected static $defaultCsrfProtectionEnabled = true;
+
     /**
      * After parsing the submitted values we cache these so that we don't have to analyse them more then once.
      * @var array
      */
     protected static $cache = [];
+
     /**
      * The action of the Form (location where the form is sent to).
      * When the action is empty, it will be posted to itsself (default)
      * @var string
      */
     protected $action;
+
     /**
      * The target window where the form should posted to
      * @var string
      * @deprecated
      */
     protected $target = '';
+
     /**
      * The name of the form.
      * @var string
      */
     protected $name;
+
     /**
      * The method how the form is submitted. Can either be POST or GET
      * @var string
      */
     protected $method = self::METHOD_POST;
+
     /**
      * The encoding type of the form. Use one of the ENCTYPE_* constants.
      * @var string
      */
     protected $enctype = self::ENCTYPE_URLENCODED;
+
     /**
      * Specifies the character encodings that are to be used for the form submission
      * @var string
      */
     protected $acceptCharset;
+
     /**
      * Not supported in HTML5.
      * Specifies a comma-separated list of file types that the server accepts
@@ -161,27 +176,32 @@ class Form extends Field\Element
      * @deprecated
      */
     protected $accept;
+
     /**
      * List of all fields in this form
      * @var array
      */
     protected $fields = [];
+
     /**
-     * An formatter which will be used to format the fields.
-     * @var Formatter\AbstractFormatter
+     * An renderer which will be used to render the fields.
+     * @var Renderer\AbstractRenderer
      */
-    protected $formatter;
+    protected $renderer;
+
     /**
      * An encoding filter which will be used to filter the data
      * @var Encoding\InterfaceEncodingFilter
      */
     protected $encodingFilter;
+
     /**
      * Remember if this form was submitted or not. When this is null, we did not check
      * yet if the form was submitted, and we will parse the complete request and store the result here.
      * @var boolean
      */
     protected $submitted = null;
+
     /**
      * Should we enable Cross Site Request Forgery protection?
      * If not given, we will use possible default settings. If those are not set, we will enable it for POST forms.
@@ -204,7 +224,7 @@ class Form extends Field\Element
         $this->setCsrfProtection($csrfprotection === null ? static::$defaultCsrfProtectionEnabled : $csrfprotection);
 
         $this->action = $action;
-        $this->setFormatter(Form::$defaultFormatter ?: new PlainFormatter());
+        $this->setRenderer(Form::$defaultRenderer ?: new XhtmlRenderer());
         $this->setEncodingFilter(Form::$defaultEncodingFilter ?: new Utf8EncodingFilter());
 
         // make sure that cache is cleared.
@@ -319,13 +339,13 @@ class Form extends Field\Element
     /**
      * Get the default formatter.
      *
-     * For more information about formatters, {@see AbstractFormatter}
+     * For more information about formatters, {@see AbstractRenderer}
      *
-     * @return AbstractFormatter
+     * @return AbstractRenderer
      */
-    public static function getDefaultFormatter()
+    public static function getDefaultRenderer()
     {
-        return Form::$defaultFormatter;
+        return Form::$defaultRenderer;
     }
 
     /**
@@ -337,16 +357,16 @@ class Form extends Field\Element
      * Example:
      * ```php
      * // set the default formatter which should be used
-     * Form::setDefaultFormatter( new MyCustomFormatter() );
+     * Form::setDefaultRenderer( new MyCustomRenderer() );
      * ```
      *
-     * For more information about formatters, {@see AbstractFormatter}
+     * For more information about renderers, {@see AbstractRenderer}
      *
-     * @param AbstractFormatter $formatter
+     * @param AbstractRenderer $renderer
      */
-    public static function setDefaultFormatter(AbstractFormatter $formatter)
+    public static function setDefaultRenderer(AbstractRenderer $renderer)
     {
-        Form::$defaultFormatter = $formatter;
+        Form::$defaultRenderer = $renderer;
     }
 
     /**
@@ -512,10 +532,9 @@ class Form extends Field\Element
      *  $form -> fill( $form, $default );
      * ```
      *
-     * @param Form $form
      * @param object|array $values
      * @throws \Exception
-     * @return void
+     * @internal param Form $form
      */
     public function fill($values)
     {
@@ -549,6 +568,28 @@ class Form extends Field\Element
 
         foreach ($this->fields as $field) {
             if ($field->getName() == $name) {
+                $result[] = $field;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return a list of fields which have the name which equals the given name
+     *
+     * @param string $className
+     * @return Field\AbstractFormField[]
+     */
+    public function getFieldsByClass($className)
+    {
+        $result = [];
+
+        foreach ($this->fields as $field) {
+            if ($field instanceof $className ||
+                get_class($field) == $className ||
+                (new \ReflectionClass($field))->getShortName() == $className
+            ) {
                 $result[] = $field;
             }
         }
@@ -1210,45 +1251,6 @@ class Form extends Field\Element
     }
 
     /**
-     * Return a string representation of the form tag
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $str = '<form action="' . $this->action . '"';
-
-        if (!empty($this->name)) {
-            $str .= ' name="' . $this->name . '"';
-        }
-
-        if (!empty($this->accept)) {
-            $str .= ' accept="' . $this->accept . '"';
-        }
-
-        if (!empty($this->acceptCharset)) {
-            $str .= ' accept-charset="' . $this->acceptCharset . '"';
-        }
-
-        if (!empty($this->enctype)) {
-            $str .= ' enctype="' . $this->enctype . '"';
-        }
-
-        if (!empty($this->method)) {
-            $str .= ' method="' . $this->method . '"';
-        }
-
-        if (!empty($this->target)) {
-            $str .= ' target="' . $this->target . '"';
-        }
-
-        $str .= parent::render();
-        $str .= ">";
-
-        return $str;
-    }
-
-    /**
      * Create a new textfield
      *
      * @param string $name
@@ -1363,29 +1365,38 @@ class Form extends Field\Element
      */
     public function __toString()
     {
-        $format = $this->getFormatter();
-        return $format($this);
+        return $this->render();
+    }
+
+    /**
+     * Return a string representation of the form tag
+     *
+     * @return string
+     */
+    public function render()
+    {
+        return $this->getRenderer()->render($this);
     }
 
     /**
      * Return the formatter
      *
-     * @return AbstractFormatter
+     * @return AbstractRenderer
      */
-    public function getFormatter()
+    public function getRenderer()
     {
-        return $this->formatter;
+        return $this->renderer;
     }
 
     /**
-     * Set a formatter object
+     * Set a renderer object
      *
-     * @param AbstractFormatter $formatter
+     * @param AbstractRenderer $renderer
      * @return Form
      */
-    public function setFormatter(AbstractFormatter $formatter)
+    public function setRenderer(AbstractRenderer $renderer)
     {
-        $this->formatter = $formatter;
+        $this->renderer = $renderer;
         return $this;
     }
 }

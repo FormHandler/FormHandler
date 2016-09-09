@@ -62,6 +62,17 @@ class EqualsValidator extends AbstractValidator
     }
 
     /**
+     * Get the "NOT" value.
+     * If set to true, the field's value will be set as "correct" if the value DOES NOT match.
+     * If set to false (default), the field will be "correct" if the value DOES match.
+     * @return bool
+     */
+    public function isNot()
+    {
+        return $this->not;
+    }
+
+    /**
      * Set the "NOT" value.
      * If set to true, the field's value will be set as "correct" if the value DOES NOT match.
      * If set to false (default), the field will be "correct" if the value DOES match.
@@ -74,18 +85,6 @@ class EqualsValidator extends AbstractValidator
     }
 
     /**
-     * Get the "NOT" value.
-     * If set to true, the field's value will be set as "correct" if the value DOES NOT match.
-     * If set to false (default), the field will be "correct" if the value DOES match.
-
-     * @return bool
-     */
-    public function isNot()
-    {
-        return $this->not;
-    }
-
-    /**
      * Check if the given field is valid or not.
      *
      * @return boolean
@@ -95,16 +94,16 @@ class EqualsValidator extends AbstractValidator
         $value = $this->field->getValue();
 
         // required but not given
-        if ($this->required && ! $value) {
+        if ($this->required && !$value) {
             return false;
         } // if the field is not required and the value is empty, then it's also valid
-        elseif (! $this->required && $value == "") {
+        elseif (!$this->required && $value == "") {
             return true;
         }
 
         // radio button or checkbox
         if ($this->field instanceof CheckBox || $this->field instanceof RadioButton) {
-            if (! $this->field->isChecked()) {
+            if (!$this->field->isChecked()) {
                 return false;
             }
         }

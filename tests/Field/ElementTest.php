@@ -44,12 +44,5 @@ class ElementTest extends TestCase
         $this->assertEquals('color:red', $field->getStyle());
         $field->addStyle(';');
         $this->assertEquals('color:red;', $field->getStyle());
-
-        $this->expectOutputRegex(
-            "/id=\"(.*?)\" title=\"(.*?)\" " .
-            "style=\"(.*?)\" class=\"(.*?)\" tabindex=\"(\d+)\" accesskey=\"(.*?)\"/i",
-            'Check html tag'
-        );
-        echo $field;
     }
 }

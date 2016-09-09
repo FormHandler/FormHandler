@@ -5,57 +5,21 @@ namespace FormHandler\Field;
 use FormHandler\Form;
 
 /**
- * Create a text inpit field.
+ * Create a text input field.
  *
  * Other HTML5 types are also allowed. See the ```TextField::TYPE_*``` constants
  * @package FormHandler\Field
  */
-class TextField extends AbstractFormField
+class TextField extends PassField
 {
-    /**
-     * The max length which is allowed to put into this field.
-     * @var int
-     */
-    protected $maxlength;
-
-    /**
-     * Set if this field is readonly or not.
-     * @var bool
-     */
-    protected $readonly = false;
-
-    /**
-     * Set the size of this field.
-     * @var int
-     */
-    protected $size;
-
-    /**
-     * Set the value for this field.
-     * @var string
-     */
-    protected $value;
-
-    /**
-     * The type of the field. Default is text, but HTML5 types
-     * are also allowed. See the ```TextField::TYPE_*``` constants
-     * @var string
-     */
-    protected $type = self::TYPE_TEXT;
-
-    /**
-     * Set the placeholder for this field for when it has no value.
-     * @var string
-     */
-    protected $placeholder;
-
-    // common used (HTML5) types
     const TYPE_COLOR = 'color';
     const TYPE_DATE = 'date';
     const TYPE_DATETIME = 'datetime';
     const TYPE_DATETIME_LOCAL = 'datetime-local';
     const TYPE_EMAIL = 'email';
     const TYPE_MONTH = 'month';
+
+    // common used (HTML5) types
     const TYPE_NUMBER = 'number';
     const TYPE_RANGE = 'range';
     const TYPE_SEARCH = 'search';
@@ -64,6 +28,13 @@ class TextField extends AbstractFormField
     const TYPE_TIME = 'time';
     const TYPE_URL = 'url';
     const TYPE_WEEK = 'week';
+
+    /**
+     * The type of the field. Default is text, but HTML5 types
+     * are also allowed. See the ```TextField::TYPE_*``` constants
+     * @var string
+     */
+    protected $type = self::TYPE_TEXT;
 
     /**
      * TextField constructor.
@@ -94,15 +65,12 @@ class TextField extends AbstractFormField
     }
 
     /**
-     * Set the max length of this field and return the TextField reference
-     *
-     * @param int $maxlength
-     * @return TextField
+     * Get the value for type. Default text
+     * @return string
      */
-    public function setMaxlength($maxlength)
+    public function getType()
     {
-        $this->maxlength = (integer)$maxlength;
-        return $this;
+        return $this->type;
     }
 
     /**
@@ -115,132 +83,5 @@ class TextField extends AbstractFormField
     {
         $this->type = $value;
         return $this;
-    }
-
-    /**
-     * Get the value for type. Default text
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-
-    /**
-     * Return the max length of this field
-     *
-     * @return int
-     */
-    public function getMaxlength()
-    {
-        return $this->maxlength;
-    }
-
-    /**
-     * Set if this field is readonly and return the TextField reference
-     *
-     * @param bool $readonly
-     * @return TextField
-     */
-    public function setReadonly($readonly)
-    {
-        $this->readonly = $readonly;
-        return $this;
-    }
-
-    /**
-     * Return the readonly status of this field
-     *
-     * @return bool
-     */
-    public function isReadonly()
-    {
-        return $this->readonly;
-    }
-
-    /**
-     * Set the size of the field and return the TextField reference
-     *
-     * @param int $size
-     * @return TextField
-     */
-    public function setSize($size)
-    {
-        $this->size = $size;
-        return $this;
-    }
-
-    /**
-     * Return the size of the field
-     *
-     * @return int
-     */
-    public function getSize()
-    {
-        return $this->size;
-    }
-
-    /**
-     * Set the value for placeholder
-     * @param string $value
-     * @return TextField
-     */
-    public function setPlaceholder($value)
-    {
-        $this->placeholder = $value;
-        return $this;
-    }
-
-    /**
-     * Get the value for placeholder
-     * @return string
-     */
-    public function getPlaceholder()
-    {
-        return $this->placeholder;
-    }
-
-    /**
-     * Return string representation of this field
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $str = '<input type="' . $this->getType() . '"';
-
-        if (!empty($this->name)) {
-            $str .= ' name="' . $this->name . '"';
-        }
-
-        if ($this->value != '') {
-            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
-        }
-
-        if (!empty($this->size)) {
-            $str .= ' size="' . $this->size . '"';
-        }
-
-        if ($this->disabled !== null && $this->disabled) {
-            $str .= ' disabled="disabled"';
-        }
-
-        if (!empty($this->maxlength)) {
-            $str .= ' maxlength="' . $this->maxlength . '"';
-        }
-
-        if ($this->readonly !== null && $this->readonly) {
-            $str .= ' readonly="readonly"';
-        }
-
-        if ($this->placeholder) {
-            $str .= ' placeholder="' . htmlentities($this->placeholder, ENT_QUOTES, 'UTF-8') . '"';
-        }
-
-        $str .= parent::render();
-        $str .= ' />';
-
-        return $str;
     }
 }

@@ -104,18 +104,6 @@ class SubmitButton extends AbstractFormButton
     }
 
     /**
-     * Set the value for this field and return the TextField reference
-     *
-     * @param string $value
-     * @return SubmitButton
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-        return $this;
-    }
-
-    /**
      * Return the value for this field
      *
      * @return string
@@ -126,33 +114,14 @@ class SubmitButton extends AbstractFormButton
     }
 
     /**
-     * Return string representation of this field
+     * Set the value for this field and return the TextField reference
      *
-     * @return string
+     * @param string $value
+     * @return SubmitButton
      */
-    public function render()
+    public function setValue($value)
     {
-        $str = '<input type="submit"';
-
-        if (!empty($this->name)) {
-            $str .= ' name="' . $this->name . '"';
-        }
-
-        if (!empty($this->value)) {
-            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
-        }
-
-        if (!empty($this->size)) {
-            $str .= ' size="' . $this->size . '"';
-        }
-
-        if ($this->disabled !== null && $this->disabled) {
-            $str .= ' disabled="disabled"';
-        }
-
-        $str .= parent::render();
-        $str .= ' />';
-
-        return $str;
+        $this->value = $value;
+        return $this;
     }
 }

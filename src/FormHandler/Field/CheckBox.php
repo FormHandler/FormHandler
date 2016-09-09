@@ -50,6 +50,33 @@ class CheckBox extends AbstractFormField
     }
 
     /**
+     * Set the value for this field and return the CheckBox reference
+     *
+     * @param string $value
+     * @return CheckBox
+     */
+    public function setValue($value)
+    {
+        parent::setValue($value);
+        $this->setCheckedBasedOnValue();
+        return $this;
+    }
+
+    /**
+     * Set this field to checked if the value matches
+     */
+    protected function setCheckedBasedOnValue()
+    {
+        $value = $this->form->getFieldValue($this->name);
+        if (is_array($value)) {
+            // is this ever used?
+            $this->setChecked(in_array($this->getValue(), $value));
+        } else {
+            $this->setChecked($this->getValue() == $value);
+        }
+    }
+
+    /**
      * Set the name of this field
      *
      * @param string $name
@@ -61,6 +88,16 @@ class CheckBox extends AbstractFormField
         $this->setCheckedBasedOnValue();
 
         return $this;
+    }
+
+    /**
+     * Get the label for this field.
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
     }
 
     /**
@@ -80,13 +117,13 @@ class CheckBox extends AbstractFormField
     }
 
     /**
-     * Get the label for this field.
+     * Return if this input element should be preselected when the page loads
      *
-     * @return string
+     * @return bool
      */
-    public function getLabel()
+    public function isChecked()
     {
-        return $this->label;
+        return $this->checked;
     }
 
     /**
@@ -100,88 +137,5 @@ class CheckBox extends AbstractFormField
         $this->clearCache();
         $this->checked = $checked;
         return $this;
-    }
-
-    /**
-     * Return if this input element should be preselected when the page loads
-     *
-     * @return bool
-     */
-    public function isChecked()
-    {
-        return $this->checked;
-    }
-
-    /**
-     * Set the value for this field and return the CheckBox reference
-     *
-     * @param string $value
-     * @return CheckBox
-     */
-    public function setValue($value)
-    {
-        parent::setValue($value);
-        $this->setCheckedBasedOnValue();
-        return $this;
-    }
-
-    /**
-     * Return string representation of this field
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $str = '<input type="checkbox"';
-
-        if (!empty($this->name)) {
-            $str .= ' name="' . $this->name . '"';
-
-            /*
-             * Why is this???
-             * if( $this -> form -> getMethod() == Form::METHOD_POST )
-             * {
-             * if( isset( $_POST[$this->name]) )
-             * {
-             * $this -> setChecked( $_POST[$this->name] == $this -> value );
-             * }
-             * }
-             * else if( isset( $_GET[$this->name]) )
-             * {
-             * $this -> setChecked( $_GET[$this->name] == $this -> value );
-             * }
-             */
-        }
-
-        if ($this->checked) {
-            $str .= ' checked="checked"';
-        }
-
-        if ($this->disabled) {
-            $str .= ' disabled="disabled"';
-        }
-
-        if (!empty($this->value)) {
-            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
-        }
-
-        $str .= parent::render();
-        $str .= ' />';
-
-        return $str;
-    }
-
-    /**
-     * Set this field to checked if the value matches
-     */
-    protected function setCheckedBasedOnValue()
-    {
-        $value = $this->form->getFieldValue($this->name);
-        if (is_array($value)) {
-            // is this ever used?
-            $this->setChecked(in_array($this->getValue(), $value));
-        } else {
-            $this->setChecked($this->getValue() == $value);
-        }
     }
 }

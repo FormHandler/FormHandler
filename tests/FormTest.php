@@ -7,7 +7,7 @@ use FormHandler\Field\HiddenField;
 use FormHandler\Field\RadioButton;
 use FormHandler\Field\TextField;
 use FormHandler\Form;
-use FormHandler\Formatter\PlainFormatter;
+use FormHandler\Renderer\XhtmlRenderer;
 use FormHandler\Validator\StringValidator;
 use PHPUnit\Framework\TestCase;
 
@@ -22,12 +22,12 @@ class FormTest extends TestCase
     /**
      * @todo: also make sure that the formatter is applied
      */
-    public function testDefaultFormatter()
+    public function testDefaultRenderer()
     {
         // set a formatter and check if it's still defined
-        $this->assertNull(Form::getDefaultFormatter());
-        Form::setDefaultFormatter(new PlainFormatter());
-        $this->assertInstanceOf(PlainFormatter::class, Form::getDefaultFormatter());
+        $this->assertNull(Form::getDefaultRenderer());
+        Form::setDefaultRenderer(new XhtmlRenderer());
+        $this->assertInstanceOf(XhtmlRenderer::class, Form::getDefaultRenderer());
     }
 
     /**
@@ -126,26 +126,6 @@ class FormTest extends TestCase
         $str = 'image/jpeg image/jpg';
         $this->assertInstanceOf(Form::class, $form->setAccept($str));
         $this->assertEquals($str, $form->getAccept());
-    }
-
-    /**
-     * Test the HTML form tags of the form
-     */
-    public function testFormTags()
-    {
-        $form = new Form(null, false);
-        $form->setName('myForm');
-        $form->setAccept('text/plain');
-        $form->setTarget('_self');
-
-        $this->assertEquals('</form>', $form->close());
-
-        $this->expectOutputRegex(
-            '/^<form action="" name="myForm" accept="text\/plain" accept-charset="utf-8" ' .
-            'enctype="application\/x-www-form-urlencoded" method="post" target="_self">$/i',
-            'Check html tag'
-        );
-        echo $form;
     }
 
     /**

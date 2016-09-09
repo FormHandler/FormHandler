@@ -166,34 +166,20 @@ In short, you have these fields available.
   * checkBox(`$name`, `$value = 1`)
   * uploadField(`$name`)
   
+Buttons
+------
+
 You also have these buttons available:
 
   * submitButton(`$name`, `$value = ''`)
   * imageButton(`$name`, `$src = ''`)
 
-#### TextField
-
-This will create a new text field. The default type will be `text`, but you can also change it to another type which
-are available in HTML5.
-```php
-textField( $name )
-```
-
-To change its type, you can use one of the *TextField::TYPE_* constants. Example:
-```php
-$form -> textField('email') -> setType( TextField::TYPE_EMAIL );
-```
-
-
-
-Buttons
-------
 
 You can also render buttons with FormHandler. A button is not used for validation, 
 but when you create a button we do expect the button to be present in the submitted form.
 
 If you have created mutiple buttons, then only 1 button needs to be present. If this is not 
-the case, we do not handle the form as submitted.
+the case, we assume the form is not submitted.
  
 Translations
 ------ 

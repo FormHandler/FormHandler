@@ -51,13 +51,5 @@ class OptionTest extends TestCase
         $this->assertTrue($option->isSelected());
 
         $option -> addAttribute('data-full-name', 'male');
-
-        $this->expectOutputRegex(
-            "/<option value=\"(.*?)\" disabled=\"disabled\" id=\"(.*?)\" title=\"(.*?)\" " .
-            "style=\"(.*?)\" class=\"(.*?)\" data-full-name=\"male\">(.*?)" .
-            "<\/option>/i",
-            'Check input html tag'
-        );
-        echo $option;
     }
 }

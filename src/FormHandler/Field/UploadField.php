@@ -108,14 +108,14 @@ class UploadField extends AbstractFormField
      */
     protected $multiple = false;
 
- // allow multiple files to be uploaded by 1 uploadfield?
+    // allow multiple files to be uploaded by 1 uploadfield?
     public function __construct(Form &$form, $name = '')
     {
         $this->form = $form;
         $this->form->setEnctype(Form::ENCTYPE_MULTIPART);
         $this->form->addField($this);
 
-        if (! empty($name)) {
+        if (!empty($name)) {
             $this->setName($name);
         }
     }
@@ -216,50 +216,5 @@ class UploadField extends AbstractFormField
     {
         $this->multiple = $value;
         return $this;
-    }
-
-    /**
-     * Return string representation of this field
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $str = '<input type="file"';
-
-        if (! empty($this->name)) {
-            $str .= ' name="' . $this->name;
-
-            // Can we upload multiple files?
-            if ($this->multiple) {
-                // then make sure to make an array of the result
-                if (! preg_match('/\[\]/', $this->name)) {
-                    $str .= '[]';
-                }
-            }
-
-            $str .= '"';
-        }
-
-        if (! empty($this->size)) {
-            $str .= ' size="' . $this->size . '"';
-        }
-
-        if (! empty($this->accept)) {
-            $str .= ' accept="' . $this->accept . '"';
-        }
-
-        if ($this->multiple) {
-            $str .= ' multiple=""';
-        }
-
-        if ($this->disabled !== null && $this->disabled) {
-            $str .= ' disabled="disabled"';
-        }
-
-        $str .= parent::render();
-        $str .= ' />';
-
-        return $str;
     }
 }

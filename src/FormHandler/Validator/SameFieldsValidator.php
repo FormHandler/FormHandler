@@ -53,6 +53,26 @@ class SameFieldsValidator extends AbstractValidator
     }
 
     /**
+     * Check if the given field is valid or not.
+     *
+     * @return boolean
+     */
+    public function isValid()
+    {
+        if ($this->required && $this->field->getValue() == "") {
+            return false;
+        }
+
+        // values not the same
+        if ($this->field->getValue() != $this->getField2()->getValue()) {
+            return false;
+        }
+
+        // if here, it's ok
+        return true;
+    }
+
+    /**
      * Return the instance of the second passfield
      *
      * @return PassField
@@ -64,25 +84,5 @@ class SameFieldsValidator extends AbstractValidator
         }
 
         return $this->field2;
-    }
-
-    /**
-     * Check if the given field is valid or not.
-     *
-     * @return boolean
-     */
-    public function isValid()
-    {
-        if ($this -> required && $this->field->getValue() == "") {
-            return false;
-        }
-
-        // values not the same
-        if ($this->field->getValue() != $this->getField2()->getValue()) {
-            return false;
-        }
-
-        // if here, it's ok
-        return true;
     }
 }

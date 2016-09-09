@@ -2,19 +2,23 @@
 
 namespace FormHandler\Renderer;
 
+use FormHandler\Field\AbstractFormField;
 use FormHandler\Field\CheckBox;
 use FormHandler\Field\Element;
-use FormHandler\Field\HiddenField;
 use FormHandler\Field\ImageButton;
 use FormHandler\Field\Optgroup;
 use FormHandler\Field\Option;
 use FormHandler\Field\PassField;
 use FormHandler\Field\RadioButton;
+use FormHandler\Field\SelectField;
 use FormHandler\Field\SubmitButton;
+use FormHandler\Field\TextArea;
+use FormHandler\Field\TextField;
+use FormHandler\Field\UploadField;
+use FormHandler\Form;
 
 class XhtmlRenderer extends AbstractRenderer
 {
-
     /**
      * Render this specific element
      *
@@ -25,17 +29,9 @@ class XhtmlRenderer extends AbstractRenderer
     {
         $method = $this->getMethodNameForClass($element);
 
+        $html = '';
         if (method_exists($this, $method)) {
             $html = $this->$method($element);
-        } // if form field
-        elseif ($element instanceof AbstractFormField) {
-            $html = $this->formField($element);
-        } // in case that the form class was overwritten...
-        elseif ($element instanceof Form && method_exists($this, 'form')) {
-            $html = $this->form($element);
-        } // a "normal" element, like a submitbutton or such
-        else {
-            $html = $element->render();
         }
 
         // if the element is a form field, also render the errors
@@ -43,6 +39,7 @@ class XhtmlRenderer extends AbstractRenderer
             if ($element->getHelpText()) {
                 $html .= '<dfn>' . $element->getHelpText() . '</dfn>' . PHP_EOL;
             }
+
             if ($element->getForm()->isSubmitted() && !$element->isValid()) {
                 $errors = $element->getErrorMessages();
                 // if there are any errors to show...
@@ -55,38 +52,14 @@ class XhtmlRenderer extends AbstractRenderer
         return $html;
     }
 
-    protected function checkBox(CheckBox $checkbox)
+    /**
+     * By default we do not render hidden fields, as they are rendered together
+     * with the <form> tag.
+     * @return string
+     */
+    public function hiddenField()
     {
-        $tag = new Tag('input');
-        $tag->addAttribute('type', 'checkbox');
-
-        if ($checkbox->isChecked()) {
-            $tag->addAttribute('checked', 'checked');
-        }
-
-        $this->parseDefaultElement($tag, $checkbox);
-
-        return $tag->render();
-    }
-
-    protected function submitButton(SubmitButton $button)
-    {
-        $tag = new Tag('input');
-        $tag->addAttribute('type', 'submit');
-
-        $this->parseDefaultElement($tag, $button);
-
-        return $tag->render();
-    }
-
-    public function hiddenField(HiddenField $field)
-    {
-        $tag = new Tag('input');
-        $tag->addAttribute('type', 'hidden');
-
-        $this->parseDefaultElement($tag, $field);
-
-        return $tag->render();
+        return '';
     }
 
     public function imageButton(ImageButton $button)
@@ -96,9 +69,7 @@ class XhtmlRenderer extends AbstractRenderer
         $tag->addAttribute('src', $button->getSrc());
         $tag->addAttribute('alt', $button->getAlt());
 
-        $this->parseDefaultElement($tag, $button);
-
-        return $tag->render();
+        return $this->parseTag($tag, $button);
     }
 
     public function optgroup(Optgroup $optgroup)
@@ -112,9 +83,7 @@ class XhtmlRenderer extends AbstractRenderer
         $tag = new Tag('optgroup', $innerHtml);
         $tag->addAttribute('label', $optgroup->getLabel());
 
-        $this->parseDefaultElement($tag, $optgroup);
-
-        return $tag->render();
+        return $this->parseTag($tag, $optgroup);
     }
 
     public function option(Option $option)
@@ -126,9 +95,7 @@ class XhtmlRenderer extends AbstractRenderer
             $tag->addAttribute('selected', 'selected');
         }
 
-        $this->parseDefaultElement($tag, $option);
-
-        return $tag->render();
+        return $this->parseTag($tag, $option);
     }
 
     public function passField(PassField $passField)
@@ -137,9 +104,8 @@ class XhtmlRenderer extends AbstractRenderer
         $tag->addAttribute('type', 'password');
         $tag->addAttribute('maxlength', $passField->getMaxlength());
 
-        $this->parseDefaultElement($tag, $passField);
 
-        return $tag->render();
+        return $this->parseTag($tag, $passField);
     }
 
     public function radioButton(RadioButton $radioButton)
@@ -147,50 +113,142 @@ class XhtmlRenderer extends AbstractRenderer
         $tag = new Tag('input');
         $tag->addAttribute('type', 'radio');
 
+        if (!$radioButton->getId() && $radioButton->getLabel()) {
+            $radioButton->setId('field-' . uniqid('radiobutton'));
+        }
+
         if ($radioButton->isChecked()) {
             $tag->addAttribute('checked', 'checked');
         }
 
-        $this->parseDefaultElement($tag, $radioButton);
+        $html = $this->parseTag($tag, $radioButton);
 
-        return $tag->render();
+        if ($radioButton->getLabel()) {
+            $label = new Tag('label', $radioButton->getLabel());
+            $label->addAttribute('for', $radioButton->getId());
+            $html .= $label->render();
+        }
+
+        return $html;
     }
 
-    protected function parseDefaultElement(Tag &$tag, Element $element)
+    public function selectField(SelectField $selectField)
     {
-        if (method_exists($element, 'isDisabled') && $element->isDisabled()) {
-            $tag->addAttribute('disabled', 'disabled');
+        $value = $selectField->getValue();
+        $values = is_array($value) ? $value : array((string)$value);
+
+        $innerHtml = '';
+
+        // walk all options
+        foreach ($selectField->getOptions() as $option) {
+            // set selected if the value matches
+            if ($option instanceof Option) {
+                $option->setSelected(in_array((string)$option->getValue(), $values));
+            } elseif ($option instanceof Optgroup) {
+                foreach ($option->getOptions() as $option2) {
+                    $option2->setSelected(in_array((string)$option2->getValue(), $values));
+                }
+            }
+
+            $innerHtml .= $option->render();
         }
 
-        if (method_exists($element, 'isReadonly') && $element->isReadonly()) {
-            $tag->addAttribute('readonly', 'readonly');
+        $tag = new Tag('select', $innerHtml);
+
+        if ($selectField->isMultiple()) {
+            $tag->addAttribute('multiple', 'multiple');
         }
 
-        if (method_exists($element, 'getPlaceholder')) {
-            $tag->addAttribute('placeholder', $element->getPlaceholder());
+        return $this->parseTag($tag, $selectField);
+    }
+
+    public function textArea(TextArea $textArea)
+    {
+        $value = htmlentities($textArea->getValue(), ENT_QUOTES, 'UTF-8');
+
+        $tag = new Tag('textarea', $value);
+        $tag->addAttribute('cols', $textArea->getCols());
+        $tag->addAttribute('rows', $textArea->getRows());
+
+        return $this->parseTag($tag, $textArea);
+    }
+
+    public function textField(TextField $textField)
+    {
+        $tag = new Tag('input');
+        $tag->setAttribute('type', $textField->getType());
+
+        return $this->parseTag($tag, $textField);
+    }
+
+    public function uploadField(UploadField $uploadField)
+    {
+        $tag = new Tag('input');
+        $tag->addAttribute('type', 'file');
+        $tag->addAttribute('accept', $uploadField->getAccept());
+
+        return $this->parseTag($tag, $uploadField);
+    }
+
+    public function form(Form $form)
+    {
+        $tag = new Tag('form');
+        $tag->addAttribute('action', $form->getAction());
+        $tag->addAttribute('accept', $form->getAccept());
+        $tag->addAttribute('accept-charset', $form->getAcceptCharset());
+        $tag->addAttribute('enctype', $form->getEnctype());
+        $tag->addAttribute('method', $form->getMethod());
+        $tag->addAttribute('target', $form->getTarget());
+
+        $html = $this->parseTag($tag, $form);
+
+        $fields = $form->getFieldsByClass('HiddenField');
+
+        if (sizeof($fields) > 0) {
+            $html .= '<ins>' . PHP_EOL;
+
+            foreach ($fields as $field) {
+                // hidden fields
+                $tag = new Tag('input');
+                $tag->addAttribute('type', 'hidden');
+
+                $html .= $this->parseTag($tag, $field) . PHP_EOL;
+            }
+            $html .= '</ins>' . PHP_EOL;
         }
 
-        if (method_exists($element, 'getName') && $element->getName()) {
-            $tag->addAttribute('name', $element->getName());
+        return $html;
+    }
+
+    protected function checkBox(CheckBox $checkbox)
+    {
+        $tag = new Tag('input');
+        $tag->addAttribute('type', 'checkbox');
+
+        if (!$checkbox->getId() && $checkbox->getLabel()) {
+            $checkbox->setId('field-' . uniqid('checkbox'));
         }
 
-        if (method_exists($element, 'getValue') && $element->getValue() !== null) {
-            $tag->addAttribute('value', htmlentities($element->getValue(), ENT_QUOTES, 'UTF-8'));
+        if ($checkbox->isChecked()) {
+            $tag->addAttribute('checked', 'checked');
         }
 
-        if (method_exists($element, 'getSize') && $element->getSize()) {
-            $tag->addAttribute('size', $element->getSize());
+        $html = $this->parseTag($tag, $checkbox);
+
+        if ($checkbox->getLabel()) {
+            $label = new Tag('label', $checkbox->getLabel());
+            $label->addAttribute('for', $checkbox->getId());
+            $html .= $label->render();
         }
 
-        $tag->addAttribute('id', $element->getId());
-        $tag->addAttribute('title', $element->getTitle());
-        $tag->addAttribute('style', $element->getStyle());
-        $tag->addAttribute('class', $element->getClass());
-        $tag->addAttribute('tabindex', $element->getTabindex());
-        $tag->addAttribute('accesskey', $element->getAccesskey());
+        return $html;
+    }
 
-        foreach ($element->getAttributes() as $name => $value) {
-            $tag->addAttribute($name, $value);
-        }
+    protected function submitButton(SubmitButton $button)
+    {
+        $tag = new Tag('input');
+        $tag->addAttribute('type', 'submit');
+
+        return $this->parseTag($tag, $button);
     }
 }

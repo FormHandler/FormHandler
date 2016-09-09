@@ -1,6 +1,7 @@
 <?php
 namespace FormHandler\Renderer;
 
+use FormHandler\Field\AbstractFormField;
 use FormHandler\Field\Element;
 
 /**
@@ -27,6 +28,14 @@ abstract class AbstractRenderer
     }
 
     /**
+     * Render this specific element
+     *
+     * @param Element $element
+     * @return string The HTML of the element
+     */
+    abstract public function render(Element $element);
+
+    /**
      * Return the name of the method as we would expect it for this class.
      *
      * It creates method names like this:
@@ -50,10 +59,60 @@ abstract class AbstractRenderer
     }
 
     /**
-     * Render this specific element
+     * Parse the given element and put it's attributes in the given tag.
+     * Then render the HTML tag and return its HTML body.
      *
+     * @param Tag $tag
      * @param Element $element
-     * @return string The HTML of the element
+     * @return string
      */
-    abstract public function render(Element $element);
+    protected function parseTag(Tag &$tag, Element $element)
+    {
+        if (method_exists($element, 'isDisabled') && $element->isDisabled()) {
+            $tag->addAttribute('disabled', 'disabled');
+        }
+
+        if (method_exists($element, 'isReadonly') && $element->isReadonly()) {
+            $tag->addAttribute('readonly', 'readonly');
+        }
+
+        if (method_exists($element, 'getPlaceholder')) {
+            $tag->addAttribute('placeholder', $element->getPlaceholder());
+        }
+
+        if (method_exists($element, 'getName') && $element->getName()) {
+            $name = $element->getName();
+            $suffix = "";
+            if (method_exists($element, 'isMultiple') && $element->isMultiple() && substr($name, -1) != ']') {
+                $suffix = "[]";
+            }
+
+            $tag->addAttribute('name', $name . $suffix);
+        }
+
+        if (method_exists($element, 'getValue') && $element->getValue() !== null && $tag->getName() != 'textarea') {
+            $tag->addAttribute('value', htmlentities($element->getValue(), ENT_QUOTES, 'UTF-8'));
+        }
+
+        if (method_exists($element, 'getSize') && $element->getSize()) {
+            $tag->addAttribute('size', $element->getSize());
+        }
+
+        $tag->addAttribute('id', $element->getId());
+        $tag->addAttribute('title', $element->getTitle());
+        $tag->addAttribute('style', $element->getStyle());
+        $tag->addAttribute('class', $element->getClass());
+        $tag->addAttribute('tabindex', $element->getTabindex());
+        $tag->addAttribute('accesskey', $element->getAccesskey());
+
+        if ($element instanceof AbstractFormField && $element->isRequired()) {
+            $tag->addAttribute('required', 'required');
+        }
+
+        foreach ($element->getAttributes() as $name => $value) {
+            $tag->addAttribute($name, $value);
+        }
+
+        return $tag->render();
+    }
 }

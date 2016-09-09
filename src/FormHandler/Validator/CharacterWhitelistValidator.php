@@ -68,6 +68,16 @@ class CharacterWhitelistValidator extends AbstractValidator
     }
 
     /**
+     * Return the whitelist
+     *
+     * @return array
+     */
+    public function getWhitelist()
+    {
+        return $this->whitelist;
+    }
+
+    /**
      * Set the whitelist of characters which are allowed for this field.
      * This can either be an array or a string.
      *
@@ -89,15 +99,5 @@ class CharacterWhitelistValidator extends AbstractValidator
         } else {
             throw new \Exception('Incorrect whitelist given. Allowed whitelist are: string, array or ArrayObject.');
         }
-    }
-
-    /**
-     * Return the whitelist
-     *
-     * @return array
-     */
-    public function getWhitelist()
-    {
-        return $this->whitelist;
     }
 }

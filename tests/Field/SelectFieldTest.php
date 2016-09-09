@@ -28,23 +28,23 @@ class SelectFieldTest extends TestCase
         // lets set some options and check if they are still there
         $field->setOptionsAsArray([1, 2, 3], false);
         $expect = [
-            new Option(1, 1),
-            new Option(2, 2),
-            new Option(3, 3)
+            (new Option(1, 1))->setForm($form),
+            (new Option(2, 2))->setForm($form),
+            (new Option(3, 3))->setForm($form)
         ];
         $this->assertEquals($expect, $field->getOptions());
 
         // add some more options (as array) without key as value
-        $expect[] = new Option(4, 4);
-        $expect[] = new Option(5, 5);
+        $expect[] = (new Option(4, 4))->setForm($form);
+        $expect[] = (new Option(5, 5))->setForm($form);
         $field->addOptionsAsArray([4, 5], false);
         $this->assertEquals($expect, $field->getOptions());
 
         // Set the options (overwrite current one)
         $options = [
-            new Option(1, 'One'),
-            new Option(2, 'Two'),
-            new Option(3, 'Three')
+            (new Option(1, 'One'))->setForm($form),
+            (new Option(2, 'Two'))->setForm($form),
+            (new Option(3, 'Three'))->setForm($form)
         ];
 
         $field->setOptions($options);
@@ -58,8 +58,8 @@ class SelectFieldTest extends TestCase
         $field->addOptionsAsArray($add, true);
 
         // lets add some options to our expected result
-        $options[] = new Option(4, 'Four');
-        $options[] = new Option(0, 'None');
+        $options[] = (new Option(4, 'Four'))->setForm($form);
+        $options[] = (new Option(0, 'None'))->setForm($form);
 
         // get the options in the field.
         $infield = $field->getOptions();
@@ -148,53 +148,42 @@ class SelectFieldTest extends TestCase
         $field->setMultiple(true);
         $this->assertEquals([], $field->getValue());
 
-        $option = $field -> getOptionByValue(5);
-        $this -> assertInstanceOf(Option::class, $option);
-        $this -> assertEquals($option -> getLabel(), 'Five');
+        $option = $field->getOptionByValue(5);
+        $this->assertInstanceOf(Option::class, $option);
+        $this->assertEquals($option->getLabel(), 'Five');
 
-        $this -> assertEquals(null, $field -> getOptionByValue(92));
+        $this->assertEquals(null, $field->getOptionByValue(92));
 
         // Remove the 'None' option
-        $this -> assertInstanceOf(SelectField::class, $field -> removeOptionByValue(0));
+        $this->assertInstanceOf(SelectField::class, $field->removeOptionByValue(0));
 
-        $infield = $field -> getOptions();
+        $infield = $field->getOptions();
 
         // we should now have 5 options left.
-        $this -> assertEquals(5, sizeof($infield));
+        $this->assertEquals(5, sizeof($infield));
         foreach ($infield as $option) {
             if ($option instanceof Option) {
-                $this -> assertNotEquals(0, $option -> getValue());
-                $this -> assertNotEquals('None', $option -> getLabel());
+                $this->assertNotEquals(0, $option->getValue());
+                $this->assertNotEquals('None', $option->getLabel());
             }
         }
 
         // now remove the option in the optgroup, which should also remove the optgroup itsself
-        $field -> removeOptionByValue(5);
+        $field->removeOptionByValue(5);
 
         // check the disabled field
-        $this -> assertFalse($field -> isDisabled());
-        $field -> setDisabled(true);
-        $this -> assertTrue($field -> isDisabled());
+        $this->assertFalse($field->isDisabled());
+        $field->setDisabled(true);
+        $this->assertTrue($field->isDisabled());
 
-        $infield = $field -> getOptions();
+        $infield = $field->getOptions();
 
         // we should now have 4 options left.
-        $this -> assertEquals(4, sizeof($infield));
-        $this -> assertContainsOnly(Option::class, $infield);
+        $this->assertEquals(4, sizeof($infield));
+        $this->assertContainsOnly(Option::class, $infield);
 
         // add it again
-        $optgroup -> addOption(new Option(99, 'A lot'));
-        $field -> addOptgroup($optgroup);
-
-
-        $this->expectOutputRegex(
-            "/<select name=\"(.*?)\" multiple=\"multiple\" ".
-            "size=\"(\d+)\" disabled=\"disabled\">".
-            "(<option value=\"(\d+)\">(.*?)<\/option>)+" .
-            "(<optgroup label=\"(.*?)\">(<option value=\"(\d+)\">(.*?)<\/option>)*<\/optgroup>)*" .
-            "<\/select>/i",
-            'Check input html tag'
-        );
-        echo $field;
+        $optgroup->addOption(new Option(99, 'A lot'));
+        $field->addOptgroup($optgroup);
     }
 }

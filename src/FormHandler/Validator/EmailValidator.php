@@ -32,6 +32,15 @@ class EmailValidator extends AbstractValidator
     }
 
     /**
+     * Store if we should check if the domain name of the email address exists
+     * @param bool $value
+     */
+    public function setCheckIfDomainExist($value)
+    {
+        $this->checkIfDomainExists = (bool)$value;
+    }
+
+    /**
      * Check if the given field is valid or not.
      * @return bool
      * @throws \Exception
@@ -88,14 +97,5 @@ class EmailValidator extends AbstractValidator
     public function isCheckIfDomainExist()
     {
         return $this->checkIfDomainExists;
-    }
-
-    /**
-     * Store if we should check if the domain name of the email address exists
-     * @param bool $value
-     */
-    public function setCheckIfDomainExist($value)
-    {
-        $this->checkIfDomainExists = (bool)$value;
     }
 }

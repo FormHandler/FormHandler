@@ -249,6 +249,24 @@ class ImageUploadValidator extends UploadValidator
     }
 
     /**
+     * Calculate the greatest common divisor
+     *
+     * @param $a
+     * @param $b
+     * @SuppressWarnings(PHPMD)
+     * @return int
+     */
+    protected function gcd($a, $b)
+    {
+        while ($b != 0) {
+            $remainder = $a % $b;
+            $a = $b;
+            $b = $remainder;
+        }
+        return abs($a);
+    }
+
+    /**
      * Validate the size. If the size is invalid, we will also push an error message with setErrorMessage.
      * @param int $width
      * @param int $height
@@ -296,24 +314,6 @@ class ImageUploadValidator extends UploadValidator
     }
 
     /**
-     * Calculate the greatest common divisor
-     *
-     * @param $a
-     * @param $b
-     * @SuppressWarnings(PHPMD)
-     * @return int
-     */
-    protected function gcd($a, $b)
-    {
-        while ($b != 0) {
-            $remainder = $a % $b;
-            $a = $b;
-            $b = $remainder;
-        }
-        return abs($a);
-    }
-
-    /**
      * @return float
      */
     public function getMinimumWidth()
@@ -332,6 +332,14 @@ class ImageUploadValidator extends UploadValidator
     }
 
     /**
+     * @return float
+     */
+    public function getMinimumHeight()
+    {
+        return $this->minimumHeight;
+    }
+
+    /**
      * @param float $minimumHeight
      * @return ImageUploadValidator
      */
@@ -344,9 +352,9 @@ class ImageUploadValidator extends UploadValidator
     /**
      * @return float
      */
-    public function getMinimumHeight()
+    public function getMaximumWidth()
     {
-        return $this->minimumHeight;
+        return $this->maximumWidth;
     }
 
     /**
@@ -362,9 +370,9 @@ class ImageUploadValidator extends UploadValidator
     /**
      * @return float
      */
-    public function getMaximumWidth()
+    public function getMaximumHeight()
     {
-        return $this->maximumWidth;
+        return $this->maximumHeight;
     }
 
     /**
@@ -375,13 +383,5 @@ class ImageUploadValidator extends UploadValidator
     {
         $this->maximumHeight = $maximumHeight;
         return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getMaximumHeight()
-    {
-        return $this->maximumHeight;
     }
 }

@@ -56,12 +56,12 @@ class NumberValidator extends AbstractValidator
         if ($this->required && $value == null) {
             return false;
         } // if the field is not required and the value is empty, then it's also valid
-        elseif (! $this->required && $value == "") {
+        elseif (!$this->required && $value == "") {
             return true;
         }
 
         // check if the field contains a valid number value.
-        if (! preg_match('/^-?\d+$/', $value)) {
+        if (!preg_match('/^-?\d+$/', $value)) {
             return false;
         }
 
@@ -83,6 +83,16 @@ class NumberValidator extends AbstractValidator
     }
 
     /**
+     * Return the max allowed value
+     *
+     * @return int
+     */
+    public function getMax()
+    {
+        return $this->max;
+    }
+
+    /**
      * Set the max length number which the value of this field can be.
      * The $max number itsself is also allowed.
      * Set to null to have no max.
@@ -92,6 +102,16 @@ class NumberValidator extends AbstractValidator
     public function setMax($max)
     {
         $this->max = $max;
+    }
+
+    /**
+     * Return the min allowed value.
+     *
+     * @return int
+     */
+    public function getMin()
+    {
+        return $this->min;
     }
 
     /**
@@ -105,25 +125,5 @@ class NumberValidator extends AbstractValidator
     public function setMin($min)
     {
         $this->min = $min;
-    }
-
-    /**
-     * Return the max allowed value
-     *
-     * @return int
-     */
-    public function getMax()
-    {
-        return $this->max;
-    }
-
-    /**
-     * Return the min allowed value.
-     *
-     * @return int
-     */
-    public function getMin()
-    {
-        return $this->min;
     }
 }

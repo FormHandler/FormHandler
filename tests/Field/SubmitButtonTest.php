@@ -31,12 +31,5 @@ class SubmitButtonTest extends TestCase
 
         $btn -> setSize(20);
         $this -> assertEquals(20, $btn -> getSize());
-
-        $this->expectOutputRegex(
-            "/<input type=\"submit\" name=\"(.*?)\" ".
-            "size=\"(\d+)\" disabled=\"disabled\" \/>/i",
-            'Check html tag'
-        );
-        echo $btn;
     }
 }

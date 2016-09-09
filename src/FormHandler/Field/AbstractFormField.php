@@ -1,7 +1,6 @@
 <?php
 namespace FormHandler\Field;
 
-use FormHandler\Form;
 use FormHandler\Validator\AbstractValidator;
 use FormHandler\Validator\UserFunctionValidator;
 use FormHandler\Validator\UserMethodValidator;
@@ -14,6 +13,8 @@ use FormHandler\Validator\UserMethodValidator;
  */
 abstract class AbstractFormField extends Element
 {
+    use TraitFormAware;
+
     /**
      * List of all validators for this Form Field.
      *
@@ -27,12 +28,6 @@ abstract class AbstractFormField extends Element
      * @var string
      */
     protected $name;
-
-    /**
-     * The Form object
-     * @var Form
-     */
-    protected $form;
 
     /**
      * Check if this field is disabled or not.
@@ -59,6 +54,22 @@ abstract class AbstractFormField extends Element
     protected $helpText = "";
 
     /**
+     * The value of this field
+     * @var mixed
+     */
+    protected $value;
+
+    /**
+     * Return the value for this field
+     *
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
      * Set the value for this field and return the reference of this field
      *
      * @param mixed $value
@@ -73,30 +84,20 @@ abstract class AbstractFormField extends Element
         $this->value = $value;
 
         // also clear cache of possible validations if the value is changed.
-        $this -> clearCache();
+        $this->clearCache();
 
         return $this;
     }
 
     /**
-     * Return the value for this field
-     *
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Set if this field is valid or not
-     *
-     * @param boolean $value
+     * Clear abstract cache .
+     * We cache for example the result of the isValid method, so that for a second call, we do not
+     * have to validate the field again. This method clears such caches.
      * @return $this
      */
-    public function setValid($value)
+    public function clearCache()
     {
-        $this->valid = $value;
+        $this->valid = null;
         return $this;
     }
 
@@ -119,22 +120,6 @@ abstract class AbstractFormField extends Element
     }
 
     /**
-     * Set a small description which will be displayed
-     * next to the field to notify the user what to enter in the field.
-     *
-     * Please note that this value is only used if the formatter
-     * uses it. Otherwise it will be ignored!
-     *
-     * @param string $text
-     * @return $this
-     */
-    public function setHelpText($text)
-    {
-        $this->helpText = $text;
-        return $this;
-    }
-
-    /**
      * Returns the help text; a small description for
      * the user to notify him about what to enter in the field.
      *
@@ -149,14 +134,18 @@ abstract class AbstractFormField extends Element
     }
 
     /**
-     * Clear abstract cache .
-     * We cache for example the result of the isValid method, so that for a second call, we do not
-     * have to validate the field again. This method clears such caches.
+     * Set a small description which will be displayed
+     * next to the field to notify the user what to enter in the field.
+     *
+     * Please note that this value is only used if the formatter
+     * uses it. Otherwise it will be ignored!
+     *
+     * @param string $text
      * @return $this
      */
-    public function clearCache()
+    public function setHelpText($text)
     {
-        $this->valid = null;
+        $this->helpText = $text;
         return $this;
     }
 
@@ -186,6 +175,18 @@ abstract class AbstractFormField extends Element
     }
 
     /**
+     * Set if this field is valid or not
+     *
+     * @param boolean $value
+     * @return $this
+     */
+    public function setValid($value)
+    {
+        $this->valid = $value;
+        return $this;
+    }
+
+    /**
      * Get the validation errors for this field
      *
      * @return array
@@ -193,6 +194,23 @@ abstract class AbstractFormField extends Element
     public function getErrorMessages()
     {
         return $this->errors;
+    }
+
+    /**
+     * Set the validator to the given validator.
+     * *WARNING*: this will overwrite the current validators and only set the given validator.
+     * Most of the times you probably want to use ```addValidator```
+     *
+     * @param mixed $validator
+     * @return $this
+     */
+    public function setValidator($validator)
+    {
+        $this->clearCache();
+        $this->validators = [];
+        $this->addValidator($validator);
+
+        return $this;
     }
 
     /**
@@ -254,23 +272,6 @@ abstract class AbstractFormField extends Element
     }
 
     /**
-     * Set the validator to the given validator.
-     * *WARNING*: this will overwrite the current validators and only set the given validator.
-     * Most of the times you probably want to use ```addValidator```
-     *
-     * @param mixed $validator
-     * @return $this
-     */
-    public function setValidator($validator)
-    {
-        $this -> clearCache();
-        $this->validators = [];
-        $this->addValidator($validator);
-
-        return $this;
-    }
-
-    /**
      * Remove all validators from this field.
      * @return $this
      */
@@ -292,13 +293,13 @@ abstract class AbstractFormField extends Element
     }
 
     /**
-     * Return the form instance of this field
+     * Return the name of the textfield
      *
-     * @return Form
+     * @return string
      */
-    public function getForm()
+    public function getName()
     {
-        return $this->form;
+        return $this->name;
     }
 
     /**
@@ -314,13 +315,13 @@ abstract class AbstractFormField extends Element
     }
 
     /**
-     * Return the name of the textfield
+     * Return if this field is disabled
      *
-     * @return string
+     * @return bool
      */
-    public function getName()
+    public function isDisabled()
     {
-        return $this->name;
+        return $this->disabled;
     }
 
     /**
@@ -336,22 +337,21 @@ abstract class AbstractFormField extends Element
     }
 
     /**
-     * Return if this field is disabled
-     *
-     * @return bool
-     */
-    public function isDisabled()
-    {
-        return $this->disabled;
-    }
-
-    /**
      * Return the HTML field formatted
      */
     public function __toString()
     {
-        $format = $this->getForm()->getFormatter();
-        return $format($this);
+        return $this->render();
+    }
+
+    /**
+     * Return string representation of this field
+     *
+     * @return string
+     */
+    public function render()
+    {
+        return $this->getForm()->getRenderer()->render($this);
     }
 
     /**
@@ -367,20 +367,5 @@ abstract class AbstractFormField extends Element
         }
 
         return false;
-    }
-
-    /**
-     * Return an string representation for this element
-     * @return string
-     */
-    public function render()
-    {
-        $str = parent::render();
-
-        if ($this->isRequired()) {
-            $str .= " required";
-        }
-
-        return $str;
     }
 }

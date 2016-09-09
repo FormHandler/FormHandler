@@ -45,12 +45,5 @@ class TextFieldTest extends TestCase
 
         $field -> setAttribute('data-country', 'nl');
         $this->assertEquals('nl', $field -> getAttribute('data-country'));
-
-        $this->expectOutputRegex(
-            "/<input type=\"(.*?)\" name=\"(.*?)\" value=\"(.*?)\" size=\"(\d+)\" ".
-            "disabled=\"disabled\" maxlength=\"(\d+)\" readonly=\"readonly\" placeholder=\"(.*?)\" \/>/i",
-            'Check html tag'
-        );
-        echo $field;
     }
 }

@@ -53,20 +53,6 @@ class Tag
     }
 
     /**
-     * Set an attribute.
-     * If the attribute exists, it will be overwritten
-     *
-     * @param string $name
-     * @param string $value
-     * @return $this
-     */
-    public function setAttribute($name, $value = '')
-    {
-        $this->attributes[$name] = $value;
-        return $this;
-    }
-
-    /**
      * Get a attribute.
      * When the attribute does not exists, we will return an empty array.
      *
@@ -80,6 +66,20 @@ class Tag
         }
 
         return '';
+    }
+
+    /**
+     * Set an attribute.
+     * If the attribute exists, it will be overwritten
+     *
+     * @param string $name
+     * @param string $value
+     * @return $this
+     */
+    public function setAttribute($name, $value = '')
+    {
+        $this->attributes[$name] = $value;
+        return $this;
     }
 
     public function render()
@@ -99,5 +99,23 @@ class Tag
         }
 
         return $str;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return Tag
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
     }
 }

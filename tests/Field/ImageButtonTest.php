@@ -29,13 +29,5 @@ class ImageButtonTest extends TestCase
         $this -> assertEquals(20, $btn -> getSize());
         $btn -> setAlt('alt');
         $this -> assertEquals('alt', $btn -> getAlt());
-
-
-        $this->expectOutputRegex(
-            "/<input type=\"image\" name=\"(.*?)\" ".
-            "src=\"(.*?)\" alt=\"(.*?)\" size=\"(\d+)\" disabled=\"disabled\" \/>/i",
-            'Check html tag'
-        );
-        echo $btn;
     }
 }

@@ -18,7 +18,7 @@ class CowSayFormatter extends PlainFormatter
         $html = parent::format($element);
 
         if ($element instanceof AbstractFormField) {
-            return $this -> cowSay($html);
+            return $this->cowSay($html);
         }
 
         return $html;
@@ -32,7 +32,7 @@ class CowSayFormatter extends PlainFormatter
     public function cowSay($html)
     {
         return
-        '<div id="bubble" >' . $html .'</div>
+            '<div id="bubble" >' . $html . '</div>
 	    <pre id="cow">
            \   ^__^
             \  (oo)\_______

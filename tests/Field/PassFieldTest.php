@@ -42,13 +42,5 @@ class PassFieldTest extends TestCase
 
         $field -> setMaxlength(10);
         $this -> assertEquals(10, $field -> getMaxlength());
-
-        $this->expectOutputRegex(
-            "/<input type=\"password\" name=\"(.*?)\" size=\"(\d+)\" ".
-            "disabled=\"disabled\" maxlength=\"(\d+)\" readonly=\"readonly\" ".
-            "placeholder=\"(.*?)\" title=\"(.*?)\" \/>/i",
-            'Check html tag'
-        );
-        echo $field;
     }
 }

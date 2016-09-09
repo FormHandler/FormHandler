@@ -78,14 +78,5 @@ class OptgroupTest extends TestCase
         $this -> assertEquals('Dont start', $optgroup -> getTitle());
 
         $optgroup -> addAttribute('data-evil', 'true');
-
-        $this->expectOutputRegex(
-            "/<optgroup label=\"(.*?)\" disabled=\"disabled\" id=\"(.*?)\" title=\"(.*?)\" ".
-            "style=\"(.*?)\" class=\"(.*?)\" data-evil=\"(.*?)\">".
-            "(<option value=\"(.*?)\">(.*?)<\/option>)*<\/optgroup>/i",
-            'Check input html tag'
-        );
-        echo $optgroup;
-        //echo $obj;
     }
 }

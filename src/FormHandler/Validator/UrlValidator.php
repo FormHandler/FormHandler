@@ -98,15 +98,17 @@ class UrlValidator extends AbstractValidator
     }
 
     /**
-     * Check if the field is required or not.
-     * If it's not required, and if its empty.
+     * Determines which schemes are allowed for this validator.
+     * (e.g. http/https/ftp)
+     * Must be an array. Defaults to both HTTP and HTTPS.
      *
-     * @param $value
-     * @return bool
+     * Get the value for allowedSchemes
+     *
+     * @return array
      */
-    protected function isNotRequiredAndEmpty($value)
+    public function getAllowedSchemes()
     {
-        return ( !$this -> required && !$value );
+        return $this->allowedSchemes;
     }
 
     /**
@@ -128,17 +130,25 @@ class UrlValidator extends AbstractValidator
     }
 
     /**
-     * Determines which schemes are allowed for this validator.
-     * (e.g. http/https/ftp)
-     * Must be an array. Defaults to both HTTP and HTTPS.
+     * Check if the field is required or not.
+     * If it's not required, and if its empty.
      *
-     * Get the value for allowedSchemes
-     *
-     * @return array
+     * @param $value
+     * @return bool
      */
-    public function getAllowedSchemes()
+    protected function isNotRequiredAndEmpty($value)
     {
-        return $this->allowedSchemes;
+        return (!$this->required && !$value);
+    }
+
+    /**
+     * Get the maximum length of this field.
+     *
+     * @return int
+     */
+    public function getMaxLength()
+    {
+        return $this->maxLength;
     }
 
     /**
@@ -152,13 +162,15 @@ class UrlValidator extends AbstractValidator
     }
 
     /**
-     * Get the maximum length of this field.
+     * Can we skip the tld check?
      *
-     * @return int
+     * Get the value for skipTldCheck
+     *
+     * @return boolean
      */
-    public function getMaxLength()
+    public function isSkipTldCheck()
     {
-        return $this->maxLength;
+        return $this->skipTldCheck;
     }
 
     /**
@@ -173,17 +185,5 @@ class UrlValidator extends AbstractValidator
     {
         $this->skipTldCheck = $value;
         return $this;
-    }
-
-    /**
-     * Can we skip the tld check?
-     *
-     * Get the value for skipTldCheck
-     *
-     * @return boolean
-     */
-    public function isSkipTldCheck()
-    {
-        return $this->skipTldCheck;
     }
 }

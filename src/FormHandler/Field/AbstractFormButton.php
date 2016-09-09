@@ -30,13 +30,13 @@ abstract class AbstractFormButton extends Element
     protected $size;
 
     /**
-     * Return the form instance of this field
+     * Return if this field is disabled
      *
-     * @return Form
+     * @return bool
      */
-    public function getForm()
+    public function isDisabled()
     {
-        return $this->form;
+        return $this->disabled;
     }
 
     /**
@@ -52,13 +52,13 @@ abstract class AbstractFormButton extends Element
     }
 
     /**
-     * Return if this field is disabled
+     * Return the name of the ImageButton
      *
-     * @return bool
+     * @return string
      */
-    public function isDisabled()
+    public function getName()
     {
-        return $this->disabled;
+        return $this->name;
     }
 
     /**
@@ -74,13 +74,13 @@ abstract class AbstractFormButton extends Element
     }
 
     /**
-     * Return the name of the ImageButton
+     * Return the size of the field
      *
-     * @return string
+     * @return int
      */
-    public function getName()
+    public function getSize()
     {
-        return $this->name;
+        return $this->size;
     }
 
     /**
@@ -96,12 +96,22 @@ abstract class AbstractFormButton extends Element
     }
 
     /**
-     * Return the size of the field
+     * Return string representation of this button
      *
-     * @return int
+     * @return string
      */
-    public function getSize()
+    public function render()
     {
-        return $this->size;
+        return $this->getForm()->getRenderer()->render($this);
+    }
+
+    /**
+     * Return the form instance of this field
+     *
+     * @return Form
+     */
+    public function getForm()
+    {
+        return $this->form;
     }
 }

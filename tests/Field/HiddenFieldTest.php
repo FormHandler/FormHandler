@@ -9,16 +9,13 @@ class HiddenFieldTest extends TestCase
     public function testHiddenField()
     {
         $form = new Form();
-        $field = $form->hiddenField('bid')->setValue('17,00')->setDisabled(true);
+        $field = $form->hiddenField('bid');
 
-        $this->expectOutputRegex(
-            "/<input type=\"hidden\" name=\"(.*?)\" value=\"(.*?)\" " .
-            "disabled=\"disabled\" \/>/i",
-            'Check html tag'
-        );
+        $field->setValue('17,00');
 
-        // Note, we use render because our formatter will only output the hidden fields
-        // at the <form> tag.
-        echo $field -> render();
+        $this->assertEquals('17,00', $field->getValue());
+
+        $field->setDisabled(true);
+        $this->assertTrue($field->isDisabled());
     }
 }

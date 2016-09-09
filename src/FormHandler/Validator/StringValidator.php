@@ -56,7 +56,7 @@ class StringValidator extends AbstractValidator
         if ($this->required && $value == null) {
             return false;
         } // if the field is not required and the value is empty, then it's also valid
-        elseif (! $this->required && $value == "") {
+        elseif (!$this->required && $value == "") {
             return true;
         }
 
@@ -76,15 +76,13 @@ class StringValidator extends AbstractValidator
     }
 
     /**
-     * Set the max length the string.
-     * Set to zero (or null) if no
-     * max is defined.
+     * Return the min lenght allowed for this validation
      *
-     * @param int $length
+     * @return int
      */
-    public function setMaxLength($length)
+    public function getMinLength()
     {
-        $this->maxLength = $length;
+        return $this->minLength;
     }
 
     /**
@@ -109,12 +107,14 @@ class StringValidator extends AbstractValidator
     }
 
     /**
-     * Return the min lenght allowed for this validation
+     * Set the max length the string.
+     * Set to zero (or null) if no
+     * max is defined.
      *
-     * @return int
+     * @param int $length
      */
-    public function getMinLength()
+    public function setMaxLength($length)
     {
-        return $this->minLength;
+        $this->maxLength = $length;
     }
 }

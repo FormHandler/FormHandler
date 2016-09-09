@@ -36,18 +36,6 @@ class ImageButton extends AbstractFormButton
     }
 
     /**
-     * Set the the alternative text for the button
-     *
-     * @param string $value
-     * @return ImageButton
-     */
-    public function setAlt($value)
-    {
-        $this->alt = $value;
-        return $this;
-    }
-
-    /**
      * Return the alternative text for the button
      *
      * @return string
@@ -58,14 +46,14 @@ class ImageButton extends AbstractFormButton
     }
 
     /**
-     * Set the image source
+     * Set the the alternative text for the button
      *
      * @param string $value
      * @return ImageButton
      */
-    public function setSrc($value)
+    public function setAlt($value)
     {
-        $this->src = $value;
+        $this->alt = $value;
         return $this;
     }
 
@@ -80,37 +68,14 @@ class ImageButton extends AbstractFormButton
     }
 
     /**
-     * Return string representation of this field
+     * Set the image source
      *
-     * @return string
+     * @param string $value
+     * @return ImageButton
      */
-    public function render()
+    public function setSrc($value)
     {
-        $str = '<input type="image"';
-
-        if (!empty($this->name)) {
-            $str .= ' name="' . $this->name . '"';
-        }
-
-        if (!empty($this->src)) {
-            $str .= ' src="' . $this->src . '"';
-        }
-
-        if (!empty($this->alt)) {
-            $str .= ' alt="' . htmlentities($this->alt, ENT_QUOTES, 'UTF-8') . '"';
-        }
-
-        if (!empty($this->size)) {
-            $str .= ' size="' . $this->size . '"';
-        }
-
-        if ($this->disabled !== null && $this->disabled) {
-            $str .= ' disabled="disabled"';
-        }
-
-        $str .= parent::render();
-        $str .= ' />';
-
-        return $str;
+        $this->src = $value;
+        return $this;
     }
 }

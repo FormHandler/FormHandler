@@ -6,7 +6,7 @@ namespace FormHandler\Field;
  * global HTML attributes.
  * See also [this link](http://www.w3schools.com/tags/ref_standardattributes.asp)
  */
-class Element
+abstract class Element
 {
     /**
      * Specifies a shortcut key to activate/focus an element
@@ -79,20 +79,6 @@ class Element
     }
 
     /**
-     * Set an attribute.
-     * If the attribute exists, it will be overwritten
-     *
-     * @param string $name
-     * @param string $value
-     * @return $this
-     */
-    public function setAttribute($name, $value = '')
-    {
-        $this->attributes[$name] = $value;
-        return $this;
-    }
-
-    /**
      * Get a attribute.
      * When the attribute does not exists, we will return an empty array.
      *
@@ -109,12 +95,36 @@ class Element
     }
 
     /**
+     * Set an attribute.
+     * If the attribute exists, it will be overwritten
+     *
+     * @param string $name
+     * @param string $value
+     * @return $this
+     */
+    public function setAttribute($name, $value = '')
+    {
+        $this->attributes[$name] = $value;
+        return $this;
+    }
+
+    /**
      * Return the associative array with key > value pairs which represent the attributes
      * @return array
      */
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * Get the tabindex of this element
+     *
+     * @return int
+     */
+    public function getTabindex()
+    {
+        return $this->tabindex;
     }
 
     /**
@@ -130,13 +140,13 @@ class Element
     }
 
     /**
-     * Get the tabindex of this element
+     * Returns the access key of this element
      *
-     * @return int
+     * @return string
      */
-    public function getTabindex()
+    public function getAccesskey()
     {
-        return $this->tabindex;
+        return $this->accesskey;
     }
 
     /**
@@ -148,28 +158,6 @@ class Element
     public function setAccesskey($key)
     {
         $this->accesskey = $key;
-        return $this;
-    }
-
-    /**
-     * Returns the access key of this element
-     *
-     * @return string
-     */
-    public function getAccesskey()
-    {
-        return $this->accesskey;
-    }
-
-    /**
-     * Set the style for this element
-     *
-     * @param string $style
-     * @return string
-     */
-    public function setStyle($style)
-    {
-        $this->style = $style;
         return $this;
     }
 
@@ -196,6 +184,18 @@ class Element
     }
 
     /**
+     * Set's the css class and return an instance to itsself
+     *
+     * @param string $class
+     * @return $this
+     */
+    public function setClass($class)
+    {
+        $this->class = $class;
+        return $this;
+    }
+
+    /**
      * Return the style set for this element
      *
      * @return string
@@ -203,6 +203,18 @@ class Element
     public function getStyle()
     {
         return $this->style;
+    }
+
+    /**
+     * Set the style for this element
+     *
+     * @param string $style
+     * @return string
+     */
+    public function setStyle($style)
+    {
+        $this->style = $style;
+        return $this;
     }
 
     /**
@@ -225,15 +237,13 @@ class Element
     }
 
     /**
-     * Set's the css class and return an instance to itsself
+     * Return the title of this element
      *
-     * @param string $class
-     * @return $this
+     * @return string
      */
-    public function setClass($class)
+    public function getTitle()
     {
-        $this->class = $class;
-        return $this;
+        return $this->title;
     }
 
     /**
@@ -246,16 +256,6 @@ class Element
     {
         $this->title = $title;
         return $this;
-    }
-
-    /**
-     * Return the title of this element
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
     }
 
     /**
@@ -283,46 +283,6 @@ class Element
     }
 
     /**
-     * Return an string representation for this element
-     * @return string
-     */
-    public function render()
-    {
-        $str = '';
-        if (!empty($this->id)) {
-            $str .= ' id="' . $this->id . '"';
-        }
-
-        if (!empty($this->title)) {
-            $str .= ' title="' . $this->title . '"';
-        }
-
-        if (!empty($this->style)) {
-            $str .= ' style="' . $this->style . '"';
-        }
-
-        if (!empty($this->class)) {
-            $str .= ' class="' . $this->class . '"';
-        }
-
-        if (!empty($this->tabindex)) {
-            $str .= ' tabindex="' . $this->tabindex . '"';
-        }
-
-        if (!empty($this->accesskey)) {
-            $str .= ' accesskey="' . $this->accesskey . '"';
-        }
-
-        if (isset($this->attributes)) {
-            foreach ($this->attributes as $name => $value) {
-                $str .= ' ' . $name . '="' . $value . '"';
-            }
-        }
-
-        return $str;
-    }
-
-    /**
      * Return a rendered object if it's called as a string.
      *
      * @return string
@@ -331,4 +291,10 @@ class Element
     {
         return $this->render();
     }
+
+    /**
+     * Render a field and return the HTML
+     * @return string
+     */
+    abstract public function render();
 }

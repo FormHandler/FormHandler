@@ -48,6 +48,19 @@ class RadioButton extends AbstractFormField
     }
 
     /**
+     * Set the value for this field and return the CheckBox reference
+     *
+     * @param string $value
+     * @return RadioButton
+     */
+    public function setValue($value)
+    {
+        parent::setValue($value);
+        $this->setChecked($this->form->getFieldValue($this->name) == $this->getValue());
+        return $this;
+    }
+
+    /**
      * Set the name
      *
      * @param string $name
@@ -61,16 +74,13 @@ class RadioButton extends AbstractFormField
     }
 
     /**
-     * Specifies that an input element should be preselected when the page loads
+     * Get the label for this field.
      *
-     * @param bool $checked
-     * @return RadioButton
+     * @return string
      */
-    public function setChecked($checked = true)
+    public function getLabel()
     {
-        $this->clearCache();
-        $this->checked = (bool)$checked;
-        return $this;
+        return $this->label;
     }
 
     /**
@@ -90,16 +100,6 @@ class RadioButton extends AbstractFormField
     }
 
     /**
-     * Get the label for this field.
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
      * Return if this input element should be preselected when the page loads
      *
      * @return bool
@@ -110,46 +110,15 @@ class RadioButton extends AbstractFormField
     }
 
     /**
-     * Set the value for this field and return the CheckBox reference
+     * Specifies that an input element should be preselected when the page loads
      *
-     * @param string $value
+     * @param bool $checked
      * @return RadioButton
      */
-    public function setValue($value)
+    public function setChecked($checked = true)
     {
-        parent::setValue($value);
-        $this->setChecked($this->form->getFieldValue($this->name) == $this->getValue());
+        $this->clearCache();
+        $this->checked = (bool)$checked;
         return $this;
-    }
-
-    /**
-     * Return string representation of this field
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $str = '<input type="radio"';
-
-        if (!empty($this->name)) {
-            $str .= ' name="' . $this->name . '"';
-        }
-
-        if ($this->checked) {
-            $str .= ' checked="checked"';
-        }
-
-        if ($this->disabled !== null && $this->disabled) {
-            $str .= ' disabled="disabled"';
-        }
-
-        if ($this->value !== null) {
-            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
-        }
-
-        $str .= parent::render();
-        $str .= ' />';
-
-        return $str;
     }
 }

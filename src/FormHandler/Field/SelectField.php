@@ -72,22 +72,6 @@ class SelectField extends AbstractFormField
     }
 
     /**
-     * Set the options of this selectfield
-     *
-     * @param array $options
-     * @return SelectField
-     */
-    public function setOptions(array $options)
-    {
-        $this->options = $options;
-
-        // this will auto select the options based on this fields value
-        $this->selectOptionsFromValue();
-
-        return $this;
-    }
-
-    /**
      * Set the options with an assoc array
      *
      * @param array $options
@@ -100,6 +84,7 @@ class SelectField extends AbstractFormField
 
         foreach ($options as $value => $label) {
             $option = new Option();
+            $option->setForm($this->getForm());
             $option->setLabel($label);
             $option->setValue($useArrayKeyAsValue ? $value : $label);
 
@@ -113,6 +98,45 @@ class SelectField extends AbstractFormField
     }
 
     /**
+     * This function will use the "value" for this field to
+     * select the correct options
+     * @codeCoverageIgnore - Ignore because "$option instanceof Optgroup" is not covered while it is.
+     */
+    protected function selectOptionsFromValue()
+    {
+        if (!$this->options) {
+            return;
+        }
+
+        // there is no current value known. So, just stop.
+        if ($this->value === null) {
+            return;
+        }
+
+        // walk all options
+        foreach ($this->options as $option) {
+            if ($option instanceof Option) {
+                if (is_array($this->value)) {
+                    $option->setSelected(in_array($option->getValue(), $this->value));
+                } else {
+                    $option->setSelected($option->getValue() == $this->value);
+                }
+            } elseif ($option instanceof Optgroup) {
+                $options = $option->getOptions();
+                if ($options) {
+                    foreach ($options as $option2) {
+                        if (is_array($this->value)) {
+                            $option2->setSelected(in_array($option2->getValue(), $this->value));
+                        } else {
+                            $option2->setSelected($option2->getValue() == $this->value);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Add options with an assoc array
      *
      * @param array $options
@@ -123,6 +147,7 @@ class SelectField extends AbstractFormField
     {
         foreach ($options as $value => $label) {
             $option = new Option();
+            $option->setForm($this->getForm());
             $option->setLabel($label);
             $option->setValue($useArrayKeyAsValue ? $value : $label);
 
@@ -143,6 +168,8 @@ class SelectField extends AbstractFormField
      */
     public function addOption(Option $option)
     {
+        $option->setForm($this->getForm());
+
         $this->options[] = $option;
 
         // this will auto select the options based on this fields value
@@ -159,6 +186,11 @@ class SelectField extends AbstractFormField
      */
     public function addOptgroup(Optgroup $optgroup)
     {
+        $optgroup->setForm($this->getForm());
+
+        foreach ($optgroup->getOptions() as $option) {
+            $option->setForm($this->getForm());
+        }
         $this->options[] = $optgroup;
 
         // this will auto select the options based on this fields value
@@ -176,6 +208,7 @@ class SelectField extends AbstractFormField
     public function addOptions(array $options)
     {
         foreach ($options as $option) {
+            $option->setForm($this->getForm());
             $this->options[] = $option;
         }
         // this will auto select the options based on this fields value
@@ -196,37 +229,22 @@ class SelectField extends AbstractFormField
     }
 
     /**
-     * Specifies that multiple options can be selected
+     * Set the options of this selectfield
      *
-     * @param bool $multiple
+     * @param array $options
      * @return SelectField
      */
-    public function setMultiple($multiple)
+    public function setOptions(array $options)
     {
-        $this->multiple = (bool)$multiple;
-        $this->clearCache();
-        return $this;
-    }
+        foreach ($options as $option) {
+            $option->setForm($this->getForm());
+        }
+        $this->options = $options;
 
-    /**
-     * Return if multiple options can be selected or not
-     *
-     * @return bool
-     */
-    public function isMultiple()
-    {
-        return $this->multiple;
-    }
 
-    /**
-     * Specifies the number of visible options in a drop-down list
-     *
-     * @param int $size
-     * @return SelectField
-     */
-    public function setSize($size)
-    {
-        $this->size = $size;
+        // this will auto select the options based on this fields value
+        $this->selectOptionsFromValue();
+
         return $this;
     }
 
@@ -241,20 +259,14 @@ class SelectField extends AbstractFormField
     }
 
     /**
-     * Set the value for this field and return the SelectField reference.
-     * We do not yet set the option as selected, because it's likeley that the
-     * options are not loaded into this field yet.
+     * Specifies the number of visible options in a drop-down list
      *
-     * @param mixed $value
+     * @param int $size
      * @return SelectField
      */
-    public function setValue($value)
+    public function setSize($size)
     {
-        parent::setValue($value);
-
-        // this will auto select the options based on this fields value
-        $this->selectOptionsFromValue();
-
+        $this->size = $size;
         return $this;
     }
 
@@ -297,6 +309,47 @@ class SelectField extends AbstractFormField
         }
 
         return $this->isMultiple() ? [] : "";
+    }
+
+    /**
+     * Set the value for this field and return the SelectField reference.
+     * We do not yet set the option as selected, because it's likeley that the
+     * options are not loaded into this field yet.
+     *
+     * @param mixed $value
+     * @return SelectField
+     */
+    public function setValue($value)
+    {
+        parent::setValue($value);
+
+        // this will auto select the options based on this fields value
+        $this->selectOptionsFromValue();
+
+        return $this;
+    }
+
+    /**
+     * Return if multiple options can be selected or not
+     *
+     * @return bool
+     */
+    public function isMultiple()
+    {
+        return $this->multiple;
+    }
+
+    /**
+     * Specifies that multiple options can be selected
+     *
+     * @param bool $multiple
+     * @return SelectField
+     */
+    public function setMultiple($multiple)
+    {
+        $this->multiple = (bool)$multiple;
+        $this->clearCache();
+        return $this;
     }
 
     /**
@@ -370,97 +423,5 @@ class SelectField extends AbstractFormField
         }
 
         return $this;
-    }
-
-    /**
-     * Return string representation of this field
-     *
-     * @codeCoverageIgnore - Ignore because "$option instanceof Optgroup" is not covered while it is.
-     * @return string
-     */
-    public function render()
-    {
-        $str = '<select';
-
-        if (!empty($this->name)) {
-            $suffix = ($this->isMultiple() && substr($this->name, -1) != ']' ? "[]" : "");
-            $str .= ' name="' . $this->name . $suffix . '"';
-        }
-
-        if ($this->isMultiple()) {
-            $str .= ' multiple="multiple"';
-        }
-
-        if (!empty($this->size)) {
-            $str .= ' size="' . $this->size . '"';
-        }
-
-        if ($this->disabled !== null && $this->disabled) {
-            $str .= ' disabled="disabled"';
-        }
-
-        $str .= parent::render();
-        $str .= '>';
-
-        $value = is_array($this->value) ? $this->value : array(
-            (string)$this->value
-        );
-
-        // walk all options
-        foreach ($this->options as $option) {
-            // set selected if the value matches
-            if ($option instanceof Option) {
-                $option->setSelected(in_array((string)$option->getValue(), $value));
-            } elseif ($option instanceof Optgroup) {
-                $options = $option->getOptions();
-                foreach ($options as $option2) {
-                    $option2->setSelected(in_array((string)$option2->getValue(), $value));
-                }
-            }
-
-            $str .= $option->render();
-        }
-
-        $str .= '</select>';
-        return $str;
-    }
-
-    /**
-     * This function will use the "value" for this field to
-     * select the correct options
-     * @codeCoverageIgnore - Ignore because "$option instanceof Optgroup" is not covered while it is.
-     */
-    protected function selectOptionsFromValue()
-    {
-        if (!$this->options) {
-            return;
-        }
-
-        // there is no current value known. So, just stop.
-        if ($this->value === null) {
-            return;
-        }
-
-        // walk all options
-        foreach ($this->options as $option) {
-            if ($option instanceof Option) {
-                if (is_array($this->value)) {
-                    $option->setSelected(in_array($option->getValue(), $this->value));
-                } else {
-                    $option->setSelected($option->getValue() == $this->value);
-                }
-            } elseif ($option instanceof Optgroup) {
-                $options = $option->getOptions();
-                if ($options) {
-                    foreach ($options as $option2) {
-                        if (is_array($this->value)) {
-                            $option2->setSelected(in_array($option2->getValue(), $this->value));
-                        } else {
-                            $option2->setSelected($option2->getValue() == $this->value);
-                        }
-                    }
-                }
-            }
-        }
     }
 }

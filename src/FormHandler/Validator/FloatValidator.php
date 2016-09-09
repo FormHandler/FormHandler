@@ -109,6 +109,26 @@ class FloatValidator extends AbstractValidator
     }
 
     /**
+     * Return the regex used for matching valid float
+     *
+     * @return string
+     */
+    public function getRegex()
+    {
+        switch ($this->decimalPoint) {
+            case self::DECIMAL_COMMA:
+                return '/^-?\d+(,\d+)?$/';
+
+            case self::DECIMAL_POINT_OR_COMMA:
+                return '/^-?\d+((\.|,)\d+)?$/';
+
+            case self::DECIMAL_POINT:
+            default:
+                return '/^-?\d+(\.\d+)?$/';
+        }
+    }
+
+    /**
      * Check if the given value is too low.
      * @param $value
      * @return bool
@@ -145,6 +165,16 @@ class FloatValidator extends AbstractValidator
     }
 
     /**
+     * Return the const DECIMAL_POINT, DECIMAL_COMMA or DECIMAL_POINT_OR_COMMA
+     *
+     * @return string
+     */
+    public function getDecimalPoint()
+    {
+        return $this->decimalPoint;
+    }
+
+    /**
      * Set the decimal point
      *
      * @param int|string $decimalPoint
@@ -174,33 +204,13 @@ class FloatValidator extends AbstractValidator
     }
 
     /**
-     * Return the const DECIMAL_POINT, DECIMAL_COMMA or DECIMAL_POINT_OR_COMMA
+     * Return the max allowed value
      *
-     * @return string
+     * @return int
      */
-    public function getDecimalPoint()
+    public function getMax()
     {
-        return $this->decimalPoint;
-    }
-
-    /**
-     * Return the regex used for matching valid float
-     *
-     * @return string
-     */
-    public function getRegex()
-    {
-        switch ($this->decimalPoint) {
-            case self::DECIMAL_COMMA:
-                return '/^-?\d+(,\d+)?$/';
-
-            case self::DECIMAL_POINT_OR_COMMA:
-                return '/^-?\d+((\.|,)\d+)?$/';
-
-            case self::DECIMAL_POINT:
-            default:
-                return '/^-?\d+(\.\d+)?$/';
-        }
+        return $this->max;
     }
 
     /**
@@ -216,6 +226,16 @@ class FloatValidator extends AbstractValidator
     }
 
     /**
+     * Return the min allowed value.
+     *
+     * @return int
+     */
+    public function getMin()
+    {
+        return $this->min;
+    }
+
+    /**
      * Set the minimum value of this field.
      * The $min value
      * is also allowed.
@@ -226,25 +246,5 @@ class FloatValidator extends AbstractValidator
     public function setMin($min)
     {
         $this->min = $min === null ? null : floatval($min);
-    }
-
-    /**
-     * Return the max allowed value
-     *
-     * @return int
-     */
-    public function getMax()
-    {
-        return $this->max;
-    }
-
-    /**
-     * Return the min allowed value.
-     *
-     * @return int
-     */
-    public function getMin()
-    {
-        return $this->min;
     }
 }

@@ -39,7 +39,7 @@ abstract class AbstractFormatter
      */
     public function __invoke(Element $element)
     {
-        return $this -> format($element);
+        return $this->format($element);
     }
 
     /**

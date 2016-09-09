@@ -67,6 +67,16 @@ class CharacterBlacklistValidator extends AbstractValidator
     }
 
     /**
+     * Return the blacklist
+     *
+     * @return array
+     */
+    public function getBlacklist()
+    {
+        return $this->blacklist;
+    }
+
+    /**
      * Set the blacklist of characters which are allowed for this field.
      * This can either be an array or a string.
      *
@@ -88,15 +98,5 @@ class CharacterBlacklistValidator extends AbstractValidator
         } else {
             throw new \Exception('Incorrect blacklist given. Allowed blacklist are: string, array or ArrayObject.');
         }
-    }
-
-    /**
-     * Return the blacklist
-     *
-     * @return array
-     */
-    public function getBlacklist()
-    {
-        return $this->blacklist;
     }
 }

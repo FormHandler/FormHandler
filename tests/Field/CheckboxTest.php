@@ -71,22 +71,6 @@ class CheckboxTest extends TestCase
         $this -> assertTrue($obj1 -> isChecked(), 'Obj1 should be checked');
     }
 
-    public function testRender()
-    {
-        $form = new Form('');
-        $obj = $form -> checkBox('test', '1');
-        $obj -> setChecked(true);
-        $obj -> setDisabled(true);
-
-
-        $this->expectOutputRegex(
-            "/<input type=\"checkbox\"(.*) checked=\"checked\" ".
-            "disabled=\"disabled\" value=\"1\"(.*)\/>/i",
-            'Check input html tag'
-        );
-        echo $obj;
-    }
-
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.

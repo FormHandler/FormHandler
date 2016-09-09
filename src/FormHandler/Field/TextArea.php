@@ -68,6 +68,16 @@ class TextArea extends AbstractFormField
     }
 
     /**
+     * Get the visible width of a text-area
+     *
+     * @return int
+     */
+    public function getCols()
+    {
+        return $this->cols;
+    }
+
+    /**
      * Specifies the visible width of a text-area
      *
      * @param int $cols
@@ -77,6 +87,16 @@ class TextArea extends AbstractFormField
     {
         $this->cols = (integer)$cols;
         return $this;
+    }
+
+    /**
+     * Get the visible number of rows in a text-area
+     *
+     * @return int
+     */
+    public function getRows()
+    {
+        return $this->rows;
     }
 
     /**
@@ -92,23 +112,13 @@ class TextArea extends AbstractFormField
     }
 
     /**
-     * Get the visible width of a text-area
+     * Return the max length of this field
      *
      * @return int
      */
-    public function getCols()
+    public function getMaxlength()
     {
-        return $this->cols;
-    }
-
-    /**
-     * Get the visible number of rows in a text-area
-     *
-     * @return int
-     */
-    public function getRows()
-    {
-        return $this->rows;
+        return $this->maxlength;
     }
 
     /**
@@ -124,13 +134,13 @@ class TextArea extends AbstractFormField
     }
 
     /**
-     * Return the max length of this field
+     * Return the readonly status of this field
      *
-     * @return int
+     * @return bool
      */
-    public function getMaxlength()
+    public function isReadonly()
     {
-        return $this->maxlength;
+        return $this->readonly;
     }
 
     /**
@@ -146,13 +156,13 @@ class TextArea extends AbstractFormField
     }
 
     /**
-     * Return the readonly status of this field
+     * Get the value for placeholder
      *
-     * @return bool
+     * @return string
      */
-    public function isReadonly()
+    public function getPlaceholder()
     {
-        return $this->readonly;
+        return $this->placeholder;
     }
 
     /**
@@ -165,57 +175,5 @@ class TextArea extends AbstractFormField
     {
         $this->placeholder = $value;
         return $this;
-    }
-
-    /**
-     * Get the value for placeholder
-     *
-     * @return string
-     */
-    public function getPlaceholder()
-    {
-        return $this->placeholder;
-    }
-
-    /**
-     * Return string representation of this field
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $str = '<textarea';
-        $str .= ' cols="' . $this->cols . '"';
-        $str .= ' rows="' . $this->rows . '"';
-
-        if (!empty($this->name)) {
-            $str .= ' name="' . $this->name . '"';
-        }
-
-        if ($this->disabled !== null && $this->disabled) {
-            $str .= ' disabled="disabled"';
-        }
-
-        if (!empty($this->maxlength)) {
-            $str .= ' maxlength="' . $this->maxlength . '"';
-        }
-
-        if ($this->readonly !== null && $this->readonly) {
-            $str .= ' readonly="readonly"';
-        }
-
-        if ($this->placeholder) {
-            $str .= ' placeholder="' . htmlentities($this->placeholder, ENT_QUOTES, 'UTF-8') . '"';
-        }
-
-        $str .= parent::render();
-        $str .= '>';
-
-        if (!empty($this->value)) {
-            $str .= htmlentities($this->value, ENT_QUOTES, 'UTF-8');
-        }
-        $str .= '</textarea>';
-
-        return $str;
     }
 }

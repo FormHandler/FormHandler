@@ -65,16 +65,6 @@ abstract class AbstractValidator
     }
 
     /**
-     * Set if this field is required or not.
-     *
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = (bool) $required;
-    }
-
-    /**
      * Get if this field is required or not.
      *
      * @return boolean
@@ -82,5 +72,15 @@ abstract class AbstractValidator
     public function isRequired()
     {
         return $this->required;
+    }
+
+    /**
+     * Set if this field is required or not.
+     *
+     * @param boolean $required
+     */
+    public function setRequired($required)
+    {
+        $this->required = (bool)$required;
     }
 }

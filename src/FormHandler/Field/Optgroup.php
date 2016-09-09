@@ -5,6 +5,8 @@ namespace FormHandler\Field;
  */
 class Optgroup extends Element
 {
+    use TraitFormAware;
+
     /**
      * List of the options in this optgroup
      *
@@ -29,18 +31,6 @@ class Optgroup extends Element
     public function __construct($label)
     {
         $this->setLabel($label);
-    }
-
-    /**
-     * Set the options of this optgroup
-     *
-     * @param array $options
-     * @return Optgroup
-     */
-    public function setOptions(array $options)
-    {
-        $this->options = $options;
-        return $this;
     }
 
     /**
@@ -122,6 +112,18 @@ class Optgroup extends Element
     }
 
     /**
+     * Set the options of this optgroup
+     *
+     * @param array $options
+     * @return Optgroup
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
+        return $this;
+    }
+
+    /**
      * Get if this optgroup is disabled or not
      *
      * @return boolean
@@ -144,6 +146,16 @@ class Optgroup extends Element
     }
 
     /**
+     * Return the label of this optgroup
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
      * Set the label for this optgroup
      *
      * @param string $label
@@ -153,16 +165,6 @@ class Optgroup extends Element
     {
         $this->label = $label;
         return $this;
-    }
-
-    /**
-     * Return the label of this optgroup
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
     }
 
     /**
@@ -176,48 +178,16 @@ class Optgroup extends Element
     }
 
     /**
-     * Return a string representation of this optgroup
+     * Return string representation of this field
      *
      * @return string
      */
     public function render()
     {
-        $str = '<optgroup label="' . htmlentities($this->label, ENT_QUOTES, 'UTF-8') . '"';
-
-        if ($this->disabled !== null && $this->disabled) {
-            $str .= ' disabled="disabled"';
+        if ($this->getForm() instanceof Form) {
+            return $this->getForm()->getRenderer()->render($this);
         }
 
-        if (!empty($this->id)) {
-            $str .= ' id="' . $this->id . '"';
-        }
-
-        if (!empty($this->title)) {
-            $str .= ' title="' . htmlentities($this->title, ENT_QUOTES, 'UTF-8') . '"';
-        }
-
-        if (!empty($this->style)) {
-            $str .= ' style="' . $this->style . '"';
-        }
-
-        if (!empty($this->class)) {
-            $str .= ' class="' . $this->class . '"';
-        }
-
-        foreach ($this->attributes as $name => $value) {
-            $str .= ' ' . $name . '="' . $value . '"';
-        }
-
-        $str .= '>';
-
-        if ($this->options && sizeof($this->options) > 0) {
-            foreach ($this->options as $option) {
-                $str .= $option->render();
-            }
-        }
-
-        $str .= '</optgroup>';
-
-        return $str;
+        return '';
     }
 }

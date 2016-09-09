@@ -39,13 +39,5 @@ class TextAreaTest extends TestCase
 
         $field -> setValue('Piet');
         $this -> assertEquals('Piet', $field -> getValue());
-
-        $this->expectOutputRegex(
-            "/<textarea cols=\"(\d+)\" rows=\"(\d+)\" name=\"(.*?)\" ".
-            "disabled=\"disabled\" maxlength=\"(\d+)\" readonly=\"readonly\" ".
-            "placeholder=\"(.*?)\">(.*?)<\/textarea>/i",
-            'Check html tag'
-        );
-        echo $field;
     }
 }

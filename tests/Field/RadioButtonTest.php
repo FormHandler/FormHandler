@@ -74,15 +74,6 @@ class RadioButtonTest extends TestCase
         $this->assertTrue($male->isChecked());
         $this->assertFalse($female->isChecked());
         $this->assertFalse($alien->isChecked());
-
-        $male -> setDisabled(true);
-
-        $this->expectOutputRegex(
-            "/<input type=\"radio\" name=\"(.*?)\" checked=\"checked\" ".
-            "disabled=\"disabled\" value=\"(.*?)\" id=\"(.*?)\" \/>/i",
-            'Check input html tag'
-        );
-        echo $male;
     }
 
     /**

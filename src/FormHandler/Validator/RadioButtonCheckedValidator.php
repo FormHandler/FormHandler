@@ -22,7 +22,7 @@ class RadioButtonCheckedValidator extends AbstractValidator
             $message = 'You have to select a value!';
         }
 
-        $this -> setRequired(true);
+        $this->setRequired(true);
 
         $this->setErrorMessage($message);
     }
@@ -35,7 +35,7 @@ class RadioButtonCheckedValidator extends AbstractValidator
      */
     public function setField(AbstractFormField $field)
     {
-        if (! ($field instanceof RadioButton)) {
+        if (!($field instanceof RadioButton)) {
             throw new \Exception('The validator "' . get_class($this) . '" only works on radio buttons!');
         }
 

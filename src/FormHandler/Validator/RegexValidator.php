@@ -17,7 +17,7 @@ class RegexValidator extends AbstractValidator
      * So, if the value does match the regex, the field will be *invalid*
      * @var boolean
      */
-    protected $not = false ;
+    protected $not = false;
 
     /**
      * Create a new regular expression validator
@@ -41,15 +41,13 @@ class RegexValidator extends AbstractValidator
     }
 
     /**
-     * Set the "NOT" value.
-     * If set to true, the field's value will be set as "correct" if the Regex DOES NOT match.
-     * If set to false (default), the field will be "correct" if the regex DOES match.
+     * Set the regular expression to test the value with
      *
-     * @param boolean $not
+     * @param string $regex
      */
-    public function setNot($not = false)
+    public function setRegularExpression($regex)
     {
-        $this->not = $not;
+        $this->regex = $regex;
     }
 
     /**
@@ -65,13 +63,15 @@ class RegexValidator extends AbstractValidator
     }
 
     /**
-     * Set the regular expression to test the value with
+     * Set the "NOT" value.
+     * If set to true, the field's value will be set as "correct" if the Regex DOES NOT match.
+     * If set to false (default), the field will be "correct" if the regex DOES match.
      *
-     * @param string $regex
+     * @param boolean $not
      */
-    public function setRegularExpression($regex)
+    public function setNot($not = false)
     {
-        $this->regex = $regex;
+        $this->not = $not;
     }
 
     /**

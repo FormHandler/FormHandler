@@ -62,6 +62,16 @@ class PassField extends AbstractFormField
     }
 
     /**
+     * Return the max length of this field
+     *
+     * @return int
+     */
+    public function getMaxlength()
+    {
+        return $this->maxlength;
+    }
+
+    /**
      * Set the max length of this field and return the PassField reference
      *
      * @param int $maxlength
@@ -74,13 +84,13 @@ class PassField extends AbstractFormField
     }
 
     /**
-     * Return the max length of this field
+     * Return the readonly status of this field
      *
-     * @return int
+     * @return bool
      */
-    public function getMaxlength()
+    public function isReadonly()
     {
-        return $this->maxlength;
+        return $this->readonly;
     }
 
     /**
@@ -96,13 +106,13 @@ class PassField extends AbstractFormField
     }
 
     /**
-     * Return the readonly status of this field
+     * Return the size of the field
      *
-     * @return bool
+     * @return int
      */
-    public function isReadonly()
+    public function getSize()
     {
-        return $this->readonly;
+        return $this->size;
     }
 
     /**
@@ -118,13 +128,13 @@ class PassField extends AbstractFormField
     }
 
     /**
-     * Return the size of the field
+     * Get the value for placeholder
      *
-     * @return int
+     * @return string
      */
-    public function getSize()
+    public function getPlaceholder()
     {
-        return $this->size;
+        return $this->placeholder;
     }
 
     /**
@@ -137,54 +147,5 @@ class PassField extends AbstractFormField
     {
         $this->placeholder = $value;
         return $this;
-    }
-
-    /**
-     * Get the value for placeholder
-     *
-     * @return string
-     */
-    public function getPlaceholder()
-    {
-        return $this->placeholder;
-    }
-
-    /**
-     * Return string representation of this field
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $str = '<input type="password"';
-
-        if (!empty($this->name)) {
-            $str .= ' name="' . $this->name . '"';
-        }
-
-        if (!empty($this->size)) {
-            $str .= ' size="' . $this->size . '"';
-        }
-
-        if ($this->disabled !== null && $this->disabled) {
-            $str .= ' disabled="disabled"';
-        }
-
-        if (!empty($this->maxlength)) {
-            $str .= ' maxlength="' . $this->maxlength . '"';
-        }
-
-        if ($this->readonly !== null && $this->readonly) {
-            $str .= ' readonly="readonly"';
-        }
-
-        if ($this->placeholder) {
-            $str .= ' placeholder="' . htmlentities($this->placeholder, ENT_QUOTES, 'UTF-8') . '"';
-        }
-
-        $str .= parent::render();
-        $str .= ' />';
-
-        return $str;
     }
 }

@@ -6,30 +6,7 @@ namespace FormHandler\Field;
  */
 class Option extends Element
 {
-    /**
-     * The id of this option
-     * @var string
-     * @SuppressWarnings(PHPMD)
-     */
-    protected $id;
-
-    /**
-     * A style string which is applied to this option
-     * @var string
-     */
-    protected $style;
-
-    /**
-     * A classname which is applied to this option
-     * @var
-     */
-    protected $class;
-
-    /**
-     * The title of this option
-     * @var string
-     */
-    protected $title;
+    use TraitFormAware;
 
     /**
      * Is this option disabled?
@@ -72,6 +49,16 @@ class Option extends Element
     }
 
     /**
+     * Get if this option is disabled or not
+     *
+     * @return boolean
+     */
+    public function isDisabled()
+    {
+        return $this->disabled;
+    }
+
+    /**
      * Set if this option is disabled or not
      *
      * @param bool $disabled
@@ -81,6 +68,16 @@ class Option extends Element
     {
         $this->disabled = $disabled;
         return $this;
+    }
+
+    /**
+     * Return the label of this option
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
     }
 
     /**
@@ -97,6 +94,16 @@ class Option extends Element
     }
 
     /**
+     * Return if this option is selected or not
+     *
+     * @return string
+     */
+    public function isSelected()
+    {
+        return $this->selected;
+    }
+
+    /**
      * Set if this option is selected.
      *
      * @param bool $selected
@@ -104,8 +111,18 @@ class Option extends Element
      */
     public function setSelected($selected)
     {
-        $this->selected = (boolean) $selected;
+        $this->selected = (boolean)$selected;
         return $this;
+    }
+
+    /**
+     * Return the value of this option
+     *
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 
     /**
@@ -122,152 +139,6 @@ class Option extends Element
     }
 
     /**
-     * Get if this option is disabled or not
-     *
-     * @return boolean
-     */
-    public function isDisabled()
-    {
-        return $this->disabled;
-    }
-
-    /**
-     * Return the label of this option
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * Return if this option is selected or not
-     *
-     * @return string
-     */
-    public function isSelected()
-    {
-        return $this->selected;
-    }
-
-    /**
-     * Return the value of this option
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Return the style set for this element
-     *
-     * @return string
-     */
-    public function getStyle()
-    {
-        return $this->style;
-    }
-
-    /**
-     * Set the style
-     *
-     * @param string $style
-     * @return Element
-     */
-    public function setStyle($style)
-    {
-        $this->style = $style;
-        return $this;
-    }
-
-    /**
-     * Get the class(ses) which are set for this element
-     *
-     * @return string
-     */
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    /**
-     * Adds a class and return an instance to itsself
-     *
-     * @param string $class
-     * @return Element
-     */
-    public function addClass($class)
-    {
-        if (empty($this->class)) {
-            $this->class = trim($class);
-        } else {
-            $this->class .= " " . trim($class);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set's the css class and return an instance to itsself
-     *
-     * @param string $class
-     * @return Element
-     */
-    public function setClass($class)
-    {
-        $this->class = $class;
-        return $this;
-    }
-
-    /**
-     * Set the title and return an instance to itsself
-     *
-     * @param string $title
-     * @return Element
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-        return $this;
-    }
-
-    /**
-     * Return the title of this element
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Get the id of this element
-     *
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the id of this element and return an instance to itsself
-     *
-     * @SuppressWarnings(PHPMD)
-     * @param string $id
-     * @return Element
-     */
-    public function setId($id)
-    {
-        $this->id = trim($id);
-        return $this;
-    }
-
-    /**
      * Return the HTML field formatted
      */
     public function __toString()
@@ -276,49 +147,16 @@ class Option extends Element
     }
 
     /**
-     * Return string representation
-     * @SuppressWarnings(PHPMD)
+     * Return string representation of this field
+     *
      * @return string
      */
     public function render()
     {
-        $str = '<option';
-
-        if ($this->value !== null) {
-            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
+        if ($this->getForm() instanceof Form) {
+            return $this->getForm()->getRenderer()->render($this);
         }
 
-        if ($this->selected !== null && $this->selected) {
-            $str .= ' selected="selected"';
-        }
-
-        if ($this->disabled !== null && $this->disabled) {
-            $str .= ' disabled="disabled"';
-        }
-
-        if (! empty($this->id)) {
-            $str .= ' id="' . $this->id . '"';
-        }
-
-        if (! empty($this->title)) {
-            $str .= ' title="' . htmlentities($this->title, ENT_QUOTES, 'UTF-8') . '"';
-        }
-
-        if (! empty($this->style)) {
-            $str .= ' style="' . $this->style . '"';
-        }
-
-        if (! empty($this->class)) {
-            $str .= ' class="' . $this->class . '"';
-        }
-
-        foreach ($this->attributes as $name => $value) {
-            $str .= ' ' . $name . '="' . $value . '"';
-        }
-
-        $str .= '>' . htmlentities(! empty($this->label) ? $this->label : $this->value, ENT_QUOTES, 'UTF-8');
-        $str .= '</option>';
-
-        return $str;
+        return '';
     }
 }

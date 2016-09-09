@@ -32,31 +32,4 @@ class HiddenField extends AbstractFormField
         $this->setValue($this->form->getFieldValue($this->name));
         return $this;
     }
-
-    /**
-     * Return string representation of this field
-     *
-     * @return string
-     */
-    public function render()
-    {
-        $str = '<input type="hidden"';
-
-        if (!empty($this->name)) {
-            $str .= ' name="' . $this->name . '"';
-        }
-
-        if (!empty($this->value)) {
-            $str .= ' value="' . htmlentities($this->value, ENT_QUOTES, 'UTF-8') . '"';
-        }
-
-        if ($this->disabled !== null && $this->disabled) {
-            $str .= ' disabled="disabled"';
-        }
-
-        $str .= parent::render();
-        $str .= ' />';
-
-        return $str;
-    }
 }

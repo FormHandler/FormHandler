@@ -64,57 +64,13 @@ class PlainFormatter extends AbstractFormatter
             if ($element->getHelpText()) {
                 $html .= '<dfn>' . $element->getHelpText() . '</dfn>' . PHP_EOL;
             }
-            if ($element->getForm()->isSubmitted() && ! $element->isValid()) {
+            if ($element->getForm()->isSubmitted() && !$element->isValid()) {
                 $errors = $element->getErrorMessages();
                 // if there are any errors to show...
                 if ($errors) {
                     $html .= '<tt>' . implode('<br />' . PHP_EOL, $errors) . '</tt>';
                 }
             }
-        }
-
-        return $html;
-    }
-
-    /**
-     * Render een radio button
-     *
-     * @param AbstractFormField $field
-     * @return string
-     */
-    public function radioButton(AbstractFormField $field)
-    {
-        return $this->checkBox($field);
-    }
-
-    /**
-     * Render a checkbox
-     *
-     * @param AbstractFormField $element
-     * @return string
-     */
-    public function checkBox(AbstractFormField $element)
-    {
-        // if the form is submitted
-        if ($element->getForm()->isSubmitted()) {
-            // if this field was not valid
-            if (! $element->isValid()) {
-                // add css class
-                $element->addClass('invalid');
-            }
-        }
-
-        $label = "";
-        if ($element instanceof CheckBox || $element instanceof RadioButton) {
-            $label = $element->getLabel();
-        }
-        if (! empty($label) && $element->getId() == "") {
-            $element->setId("field-" . uniqid(get_class($element)));
-        }
-
-        $html = $element->render();
-        if (! empty($label)) {
-            $html .= '<label for="' . $element->getId() . '">' . $label . '</label>' . PHP_EOL;
         }
 
         return $html;
@@ -131,7 +87,7 @@ class PlainFormatter extends AbstractFormatter
         // if the form is submitted
         if ($element->getForm()->isSubmitted()) {
             // if this field was not valid
-            if (! $element->isValid()) {
+            if (!$element->isValid()) {
                 // add css class
                 $element->addClass('invalid');
             }
@@ -159,7 +115,7 @@ class PlainFormatter extends AbstractFormatter
                 $hiddenHtml .= $field->render() . PHP_EOL;
             }
 
-            if ($field instanceof UploadField && ! $form->getFieldByName('MAX_FILE_SIZE')) {
+            if ($field instanceof UploadField && !$form->getFieldByName('MAX_FILE_SIZE')) {
                 $validators = $field->getValidators();
                 if ($validators) {
                     foreach ($validators as $validator) {
@@ -177,12 +133,56 @@ class PlainFormatter extends AbstractFormatter
 
         if ($maxFilesize) {
             $hiddenHtml .= $form->hiddenField('MAX_FILE_SIZE')
-                ->setValue($maxFilesize)
-                ->render() . PHP_EOL;
+                    ->setValue($maxFilesize)
+                    ->render() . PHP_EOL;
         }
 
-        if (! empty($hiddenHtml)) {
+        if (!empty($hiddenHtml)) {
             $html .= "<ins>" . PHP_EOL . $hiddenHtml . "</ins>" . PHP_EOL;
+        }
+
+        return $html;
+    }
+
+    /**
+     * Render een radio button
+     *
+     * @param AbstractFormField $field
+     * @return string
+     */
+    public function radioButton(AbstractFormField $field)
+    {
+        return $this->checkBox($field);
+    }
+
+    /**
+     * Render a checkbox
+     *
+     * @param AbstractFormField $element
+     * @return string
+     */
+    public function checkBox(AbstractFormField $element)
+    {
+        // if the form is submitted
+        if ($element->getForm()->isSubmitted()) {
+            // if this field was not valid
+            if (!$element->isValid()) {
+                // add css class
+                $element->addClass('invalid');
+            }
+        }
+
+        $label = "";
+        if ($element instanceof CheckBox || $element instanceof RadioButton) {
+            $label = $element->getLabel();
+        }
+        if (!empty($label) && $element->getId() == "") {
+            $element->setId("field-" . uniqid(get_class($element)));
+        }
+
+        $html = $element->render();
+        if (!empty($label)) {
+            $html .= '<label for="' . $element->getId() . '">' . $label . '</label>' . PHP_EOL;
         }
 
         return $html;
