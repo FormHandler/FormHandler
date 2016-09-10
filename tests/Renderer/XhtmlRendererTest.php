@@ -1,7 +1,10 @@
 <?php
 namespace FormHandler\Tests\Renderer;
 
+use FormHandler\Field\Optgroup;
+use FormHandler\Field\Option;
 use FormHandler\Form;
+use FormHandler\Validator\UploadValidator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -12,6 +15,11 @@ use PHPUnit\Framework\TestCase;
  */
 class XhtmlRendererTest extends TestCase
 {
+    protected function expectAttribute($html, $name, $value)
+    {
+        $this -> assertContains($name .'="'. $value .'"', $html, 'Tag should contain attribute '. $name);
+    }
+
     public function testUploadRender()
     {
         $form = new Form('', false);
@@ -21,17 +29,43 @@ class XhtmlRendererTest extends TestCase
         $field->setSize(20);
         $field->setAccept('image/jpg');
         $field->setDisabled(true);
+        $field->addAttribute('data-descr', 'CV');
 
-//        $this->expectOutputRegex(
-//            "/<input type=\"file\" name=\"(.*?)\" size=\"(\d+)\" accept=\"(.*?)\" " .
-//            "multiple=\"\" disabled=\"disabled\" \/>/i",
-//            'Check html tag'
-//        );
-//        echo $field;
+        $field->addValidator(new UploadValidator(true));
+
+        ob_start();
+        echo $field;
+        $html = ob_get_clean();
+
+        $this -> expectAttribute($html, 'type', 'file');
+        $this -> expectAttribute($html, 'size', 20);
+        $this -> expectAttribute($html, 'accept', 'image/jpg');
+        $this -> expectAttribute($html, 'disabled', 'disabled');
+        $this -> expectAttribute($html, 'name', 'cv[]');
+        $this -> expectAttribute($html, 'required', 'required');
+        $this -> expectAttribute($html, 'data-descr', 'CV');
     }
 
     public function testOptGroup()
     {
+        $optgroup = new Optgroup('Favorite Benelux Country');
+        $optgroup -> addOption(new Option('nl', 'Netherlands'));
+        $optgroup -> addOption(new Option('be', 'Belgium'));
+        $optgroup -> addOption(new Option('lu', 'Luxemburg'));
+
+        $html = $optgroup -> render();
+        $this -> assertEquals('', $html, 'Response should be empty as no renderer is known');
+
+        $form = new Form();
+        $optgroup -> setForm($form);
+        $this -> assertEquals($form, $optgroup -> getForm());
+
+        ob_start();
+        echo $optgroup;
+        $html = ob_get_clean();
+
+        //$this -> expectAttribute( $html, 'label', 'Favorite Benelux Country');
+
 //        $this->expectOutputRegex(
 //            "/<optgroup label=\"(.*?)\" disabled=\"disabled\" id=\"(.*?)\" title=\"(.*?)\" ".
 //            "style=\"(.*?)\" class=\"(.*?)\" data-evil=\"(.*?)\">".

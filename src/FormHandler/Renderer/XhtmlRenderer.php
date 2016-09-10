@@ -2,7 +2,6 @@
 
 namespace FormHandler\Renderer;
 
-use FormHandler\Field\AbstractFormField;
 use FormHandler\Field\CheckBox;
 use FormHandler\Field\Element;
 use FormHandler\Field\ImageButton;
@@ -16,6 +15,7 @@ use FormHandler\Field\TextArea;
 use FormHandler\Field\TextField;
 use FormHandler\Field\UploadField;
 use FormHandler\Form;
+use Herrera\Json\Exception\Exception;
 
 class XhtmlRenderer extends AbstractRenderer
 {
@@ -24,32 +24,18 @@ class XhtmlRenderer extends AbstractRenderer
      *
      * @param Element $element
      * @return string The HTML of the element
+     * @throws Exception
      */
     public function render(Element $element)
     {
         $method = $this->getMethodNameForClass($element);
 
-        $html = '';
-        if (method_exists($this, $method)) {
-            $html = $this->$method($element);
+
+        if (!method_exists($this, $method)) {
+            throw new Exception('Error, render method "' . $method . '" was not foumd');
         }
 
-        // if the element is a form field, also render the errors
-        if ($element instanceof AbstractFormField) {
-            if ($element->getHelpText()) {
-                $html .= '<dfn>' . $element->getHelpText() . '</dfn>' . PHP_EOL;
-            }
-
-            if ($element->getForm()->isSubmitted() && !$element->isValid()) {
-                $errors = $element->getErrorMessages();
-                // if there are any errors to show...
-                if ($errors) {
-                    $html .= '<tt>' . implode('<br />' . PHP_EOL, $errors) . '</tt>';
-                }
-            }
-        }
-
-        return $html;
+        return $this->$method($element);
     }
 
     /**
@@ -78,7 +64,6 @@ class XhtmlRenderer extends AbstractRenderer
         foreach ($optgroup->getOptions() as $option) {
             $innerHtml .= $option->render() . PHP_EOL;
         }
-
 
         $tag = new Tag('optgroup', $innerHtml);
         $tag->addAttribute('label', $optgroup->getLabel());

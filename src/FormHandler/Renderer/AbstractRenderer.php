@@ -82,15 +82,19 @@ abstract class AbstractRenderer
 
         if (method_exists($element, 'getName') && $element->getName()) {
             $name = $element->getName();
-            $suffix = "";
+            $suffix = '';
             if (method_exists($element, 'isMultiple') && $element->isMultiple() && substr($name, -1) != ']') {
-                $suffix = "[]";
+                $suffix = '[]';
             }
 
             $tag->addAttribute('name', $name . $suffix);
         }
 
-        if (method_exists($element, 'getValue') && $element->getValue() !== null && $tag->getName() != 'textarea') {
+        if (method_exists($element, 'getValue') &&
+            $element->getValue() !== null &&
+            $tag->getName() != 'textarea' &&
+            is_scalar($element->getValue())
+        ) {
             $tag->addAttribute('value', htmlentities($element->getValue(), ENT_QUOTES, 'UTF-8'));
         }
 

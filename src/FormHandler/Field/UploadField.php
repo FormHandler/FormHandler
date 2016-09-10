@@ -195,12 +195,12 @@ class UploadField extends AbstractFormField
     }
 
     /**
-     * allow multiple files to be uploaded by 1 uploadfield?
+     * Allow multiple files to be uploaded by 1 uploadfield?
      * Get the value for multiple
      *
-     * @return string
+     * @return boolean
      */
-    public function getMultiple()
+    public function isMultiple()
     {
         return $this->multiple;
     }
@@ -209,7 +209,7 @@ class UploadField extends AbstractFormField
      * allow multiple files to be uploaded by 1 uploadfield?
      * Set the value for multiple
      *
-     * @param $value
+     * @param bool $value
      * @return UploadField
      */
     public function setMultiple($value)

@@ -109,7 +109,7 @@ class FormUtils
         $filedata = $field->getValue();
 
         // is multiple file uploads enabled?
-        if ($field->getMultiple()) {
+        if ($field->isMultiple()) {
             // not ending with a slash?
             $lastChar = substr($destination, -1);
             if (!($lastChar == '/' || $lastChar == '\\')) {
@@ -207,7 +207,7 @@ class FormUtils
             }
         }
 
-        return $field->getMultiple() ? $result : $result[0];
+        return $field->isMultiple() ? $result : $result[0];
     }
 
     /**

@@ -46,9 +46,9 @@ class UploadFieldTest extends TestCase
         $form = new Form('', false);
         $field = $form->uploadField('cv');
 
-        $this->assertFalse($field->getMultiple());
+        $this->assertFalse($field->isMultiple());
         $field->setMultiple(true);
-        $this->assertTrue($field->getMultiple());
+        $this->assertTrue($field->isMultiple());
     }
 
 

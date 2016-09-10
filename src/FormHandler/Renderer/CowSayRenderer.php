@@ -1,21 +1,14 @@
 <?php
-namespace FormHandler\Formatter;
 
-use FormHandler\Field\AbstractFormField;
+namespace FormHandler\Renderer;
+
 use FormHandler\Field\Element;
 
-class CowSayFormatter extends PlainFormatter
+class CowSayRenderer extends XhtmlRenderer
 {
-
-    /**
-     * Format the element and return it's new layout
-     *
-     * @param Element $element
-     * @return string
-     */
-    public function format(Element $element)
+    public function render(Element $element)
     {
-        $html = parent::format($element);
+        $html = parent::render($element);
 
         if ($element instanceof AbstractFormField) {
             return $this->cowSay($html);

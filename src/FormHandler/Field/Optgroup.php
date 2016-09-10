@@ -28,6 +28,10 @@ class Optgroup extends Element
      */
     protected $disabled = false;
 
+    /**
+     * Optgroup constructor.
+     * @param $label
+     */
     public function __construct($label)
     {
         $this->setLabel($label);
