@@ -28,23 +28,23 @@ class SelectFieldTest extends TestCase
         // lets set some options and check if they are still there
         $field->setOptionsAsArray([1, 2, 3], false);
         $expect = [
-            (new Option(1, 1))->setForm($form),
-            (new Option(2, 2))->setForm($form),
-            (new Option(3, 3))->setForm($form)
+            new Option(1, 1),
+            new Option(2, 2),
+            new Option(3, 3)
         ];
         $this->assertEquals($expect, $field->getOptions());
 
         // add some more options (as array) without key as value
-        $expect[] = (new Option(4, 4))->setForm($form);
-        $expect[] = (new Option(5, 5))->setForm($form);
+        $expect[] = new Option(4, 4);
+        $expect[] = new Option(5, 5);
         $field->addOptionsAsArray([4, 5], false);
         $this->assertEquals($expect, $field->getOptions());
 
         // Set the options (overwrite current one)
         $options = [
-            (new Option(1, 'One'))->setForm($form),
-            (new Option(2, 'Two'))->setForm($form),
-            (new Option(3, 'Three'))->setForm($form)
+            new Option(1, 'One'),
+            new Option(2, 'Two'),
+            new Option(3, 'Three')
         ];
 
         $field->setOptions($options);
@@ -58,8 +58,8 @@ class SelectFieldTest extends TestCase
         $field->addOptionsAsArray($add, true);
 
         // lets add some options to our expected result
-        $options[] = (new Option(4, 'Four'))->setForm($form);
-        $options[] = (new Option(0, 'None'))->setForm($form);
+        $options[] = new Option(4, 'Four');
+        $options[] = new Option(0, 'None');
 
         // get the options in the field.
         $infield = $field->getOptions();

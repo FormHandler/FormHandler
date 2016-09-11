@@ -14,7 +14,7 @@ class SameFieldsValidatorTest extends TestCase
         $field2 = $form->textField('email2');
 
         $validator = new SameFieldsValidator($field2, null, false);
-        $field1 -> setValidator($validator);
+        $field1->setValidator($validator);
 
         $this->assertTrue(
             $field1->isValid(),
@@ -23,14 +23,14 @@ class SameFieldsValidatorTest extends TestCase
 
         $errormsg = 'You should enter something';
         $validator->setRequired(true);
-        $validator-> setErrorMessage($errormsg);
+        $validator->setErrorMessage($errormsg);
 
         $field1->setValidator($validator);
         $this->assertFalse(
             $field1->isValid(),
             'Value should be invalid because validator is required and field is empty'
         );
-        $this-> assertContains($errormsg, $field1 -> getErrorMessages());
+        $this->assertContains($errormsg, $field1->getErrorMessages());
     }
 
     public function testFieldByName()
@@ -41,19 +41,19 @@ class SameFieldsValidatorTest extends TestCase
 
         $validator = new SameFieldsValidator('email2', null, false);
 
-        $field1 -> setValidator($validator);
+        $field1->setValidator($validator);
 
-        $field1 -> setValue('abv');
-        $field2 -> setValue('test');
+        $field1->setValue('abv');
+        $field2->setValue('test');
 
-        $this -> assertFalse(
-            $field1 -> isValid(),
+        $this->assertFalse(
+            $field1->isValid(),
             'Field should be invalid as the values are not the same'
         );
 
-        $field1 -> setValue('test');
-        $this -> assertTrue(
-            $field1 -> isValid(),
+        $field1->setValue('test');
+        $this->assertTrue(
+            $field1->isValid(),
             'Field should be valid as the values are now the same'
         );
     }

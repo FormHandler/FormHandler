@@ -59,29 +59,29 @@ class EqualsValidatorTest extends TestCase
 
         $validator = new EqualsValidator('OK', false);
 
-        $radiobutton = $form->radioButton('radiobutton', 'OK') -> addValidator($validator);
-        $checkbox = $form->checkBox('checkbox', 'OK') -> addValidator($validator);
+        $radiobutton = $form->radioButton('radiobutton', 'OK')->addValidator($validator);
+        $checkbox = $form->checkBox('checkbox', 'OK')->addValidator($validator);
 
-        $this ->assertFalse(
-            $checkbox -> isValid(),
+        $this->assertFalse(
+            $checkbox->isValid(),
             'Checkbox should be invalid because its not checked, thus value does not equals'
         );
 
-        $this ->assertFalse(
-            $radiobutton -> isValid(),
+        $this->assertFalse(
+            $radiobutton->isValid(),
             'Radiobutton should be invalid because its not checked, thus value does not equals'
         );
 
-        $checkbox -> setChecked(true);
-        $radiobutton -> setChecked(true);
+        $checkbox->setChecked(true);
+        $radiobutton->setChecked(true);
 
-        $this ->assertTrue(
-            $checkbox -> isValid(),
+        $this->assertTrue(
+            $checkbox->isValid(),
             'Checkbox should be valid because its checked and thus value does not equals'
         );
 
-        $this ->assertTrue(
-            $radiobutton -> isValid(),
+        $this->assertTrue(
+            $radiobutton->isValid(),
             'Radiobutton should be valid because its checked and thus value does not equals'
         );
     }

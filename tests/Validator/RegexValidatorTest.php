@@ -11,60 +11,60 @@ class RegexValidatorTest extends TestCase
     {
         $form = new Form('', false);
 
-        $field = $form -> textField('name');
+        $field = $form->textField('name');
 
         $validator = new RegexValidator('/^[a-z]{2,50}$/i', false);
 
-        $field -> setValidator($validator);
-        $this -> assertTrue(
-            $field -> isValid(),
+        $field->setValidator($validator);
+        $this->assertTrue(
+            $field->isValid(),
             'Field should be valid as its empty and not required'
         );
 
         $errormsg = 'Invalid field!';
-        $validator -> setRequired(true);
-        $validator -> setErrorMessage($errormsg);
-        $field -> setValidator($validator);
+        $validator->setRequired(true);
+        $validator->setErrorMessage($errormsg);
+        $field->setValidator($validator);
 
-        $this -> assertFalse(
-            $field -> isValid(),
+        $this->assertFalse(
+            $field->isValid(),
             'Field should be invalid as its empty and required'
         );
 
-        $this -> assertContains(
+        $this->assertContains(
             $errormsg,
-            $field -> getErrorMessages()
+            $field->getErrorMessages()
         );
 
         // test a invalid value
-        $field -> setValue('Piet06');
-        $this -> assertFalse(
-            $field -> isValid(),
+        $field->setValue('Piet06');
+        $this->assertFalse(
+            $field->isValid(),
             'Field should be invalid as it contains an invalid value'
         );
 
         // test a valid value
-        $field -> setValue('Pieter');
-        $this -> assertTrue(
-            $field -> isValid(),
+        $field->setValue('Pieter');
+        $this->assertTrue(
+            $field->isValid(),
             'Field should be valid as it contains an valid value'
         );
 
         // test the NOT logic
-        $validator -> setNot(true);
-        $field -> setValidator($validator);
+        $validator->setNot(true);
+        $field->setValidator($validator);
 
         // test a valid value, but now with NOT. thus this should be invalid
-        $field -> setValue('Pieter');
-        $this -> assertFalse(
-            $field -> isValid(),
+        $field->setValue('Pieter');
+        $this->assertFalse(
+            $field->isValid(),
             'Field should be invalid as it contains an valid value, but we now use NOT'
         );
 
         // test a invalid value, but now with NOT. thus this should be valid
-        $field -> setValue('Piet06');
-        $this -> assertTrue(
-            $field -> isValid(),
+        $field->setValue('Piet06');
+        $this->assertTrue(
+            $field->isValid(),
             'Field should be valid as it contains an invalid value, but we now use NOT'
         );
     }
@@ -82,7 +82,7 @@ class RegexValidatorTest extends TestCase
             ->addOptionsAsArray([1, 2, 4, 5, 6, 7, 8, 9])
             ->setMultiple(true)
             ->setValue([1, 5, 6, 9])
-            -> addValidator(new RegexValidator('/^[a-z]*$/i', true));
+            ->addValidator(new RegexValidator('/^[a-z]*$/i', true));
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/scalar types/');

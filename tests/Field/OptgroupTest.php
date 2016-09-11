@@ -70,13 +70,13 @@ class OptgroupTest extends TestCase
         $optgroup->setDisabled(true);
         $this->assertTrue($optgroup->isDisabled());
 
-        $optgroup -> setId('kids');
-        $optgroup -> setClass("className");
-        $optgroup -> setStyle('color: black');
+        $optgroup->setId('kids');
+        $optgroup->setClass("className");
+        $optgroup->setStyle('color: black');
 
-        $optgroup -> setTitle('Dont start');
-        $this -> assertEquals('Dont start', $optgroup -> getTitle());
+        $optgroup->setTitle('Dont start');
+        $this->assertEquals('Dont start', $optgroup->getTitle());
 
-        $optgroup -> addAttribute('data-evil', 'true');
+        $optgroup->addAttribute('data-evil', 'true');
     }
 }

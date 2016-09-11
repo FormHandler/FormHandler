@@ -1,6 +1,8 @@
 <?php
 namespace FormHandler\Field;
 
+use FormHandler\Form;
+
 /**
  */
 class Optgroup extends Element

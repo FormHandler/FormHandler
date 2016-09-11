@@ -50,6 +50,6 @@ class OptionTest extends TestCase
         $option->setSelected(true);
         $this->assertTrue($option->isSelected());
 
-        $option -> addAttribute('data-full-name', 'male');
+        $option->addAttribute('data-full-name', 'male');
     }
 }

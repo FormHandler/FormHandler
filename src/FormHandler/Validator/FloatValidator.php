@@ -58,6 +58,7 @@ class FloatValidator extends AbstractValidator
         $message = null,
         $decimalPoint = self::DECIMAL_POINT
     ) {
+    
         if ($message === null) {
             $message = 'This value is incorrect.';
         }

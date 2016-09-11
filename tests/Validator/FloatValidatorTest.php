@@ -42,7 +42,7 @@ class FloatValidatorTest extends TestCase
             ->addOptionsAsArray([1, 2, 4, 5, 6, 7, 8, 9])
             ->setMultiple(true)
             ->setValue([1, 5, 6, 9])
-            -> addValidator(new FloatValidator(0.0, 1.0, true));
+            ->addValidator(new FloatValidator(0.0, 1.0, true));
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/scalar types/');

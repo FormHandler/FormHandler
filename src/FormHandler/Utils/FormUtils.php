@@ -105,6 +105,7 @@ class FormUtils
         $existMode = FormUtils::MODE_RENAME,
         $createDestinationIfNotExist = false
     ) {
+    
 
         $filedata = $field->getValue();
 
@@ -649,6 +650,7 @@ class FormUtils
         $quality = 80,
         $constrainProportions = true
     ) {
+    
 
         // check if the source exists
         if (!is_file($source) || !($size = getimagesize($source))) {

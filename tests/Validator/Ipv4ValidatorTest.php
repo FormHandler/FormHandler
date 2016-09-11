@@ -36,9 +36,9 @@ class Ipv4ValidatorTest extends TestCase
             'This field should be valid, because its empty and not required'
         );
 
-        $validator -> setErrorMessage($errormsg);
+        $validator->setErrorMessage($errormsg);
 
-        $field -> setValidator($validator);
+        $field->setValidator($validator);
 
         // should be invalid, not valid ipv4 address
         $field->setValue('127.0.0.256');

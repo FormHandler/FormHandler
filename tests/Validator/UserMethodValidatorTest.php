@@ -36,19 +36,19 @@ class UserMethodValidatorTest extends TestCase
             'Field should be valid because its John'
         );
 
-        $field -> setValidator(function (AbstractFormField $field) {
-            return $field ->getValue() == "OK";
+        $field->setValidator(function (AbstractFormField $field) {
+            return $field->getValue() == "OK";
         });
 
-        $field -> setValue('NOK');
+        $field->setValue('NOK');
         $this->assertFalse(
-            $field -> isValid(),
+            $field->isValid(),
             'Field should be invalid because its not OK'
         );
 
-        $field -> setValue('OK');
+        $field->setValue('OK');
         $this->assertTrue(
-            $field -> isValid(),
+            $field->isValid(),
             'Field should be valid because its OK'
         );
     }

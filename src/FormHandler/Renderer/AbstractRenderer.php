@@ -69,15 +69,15 @@ abstract class AbstractRenderer
     protected function parseTag(Tag &$tag, Element $element)
     {
         if (method_exists($element, 'isDisabled') && $element->isDisabled()) {
-            $tag->addAttribute('disabled', 'disabled');
+            $tag->setAttribute('disabled', 'disabled');
         }
 
         if (method_exists($element, 'isReadonly') && $element->isReadonly()) {
-            $tag->addAttribute('readonly', 'readonly');
+            $tag->setAttribute('readonly', 'readonly');
         }
 
         if (method_exists($element, 'getPlaceholder')) {
-            $tag->addAttribute('placeholder', $element->getPlaceholder());
+            $tag->setAttribute('placeholder', $element->getPlaceholder());
         }
 
         if (method_exists($element, 'getName') && $element->getName()) {
@@ -87,7 +87,7 @@ abstract class AbstractRenderer
                 $suffix = '[]';
             }
 
-            $tag->addAttribute('name', $name . $suffix);
+            $tag->setAttribute('name', $name . $suffix);
         }
 
         if (method_exists($element, 'getValue') &&
@@ -95,26 +95,26 @@ abstract class AbstractRenderer
             $tag->getName() != 'textarea' &&
             is_scalar($element->getValue())
         ) {
-            $tag->addAttribute('value', htmlentities($element->getValue(), ENT_QUOTES, 'UTF-8'));
+            $tag->setAttribute('value', htmlentities($element->getValue(), ENT_QUOTES, 'UTF-8'));
         }
 
         if (method_exists($element, 'getSize') && $element->getSize()) {
-            $tag->addAttribute('size', $element->getSize());
+            $tag->setAttribute('size', $element->getSize());
         }
 
-        $tag->addAttribute('id', $element->getId());
-        $tag->addAttribute('title', $element->getTitle());
-        $tag->addAttribute('style', $element->getStyle());
-        $tag->addAttribute('class', $element->getClass());
-        $tag->addAttribute('tabindex', $element->getTabindex());
-        $tag->addAttribute('accesskey', $element->getAccesskey());
+        $tag->setAttribute('id', $element->getId());
+        $tag->setAttribute('title', $element->getTitle());
+        $tag->setAttribute('style', $element->getStyle());
+        $tag->setAttribute('class', $element->getClass());
+        $tag->setAttribute('tabindex', $element->getTabindex());
+        $tag->setAttribute('accesskey', $element->getAccesskey());
 
         if ($element instanceof AbstractFormField && $element->isRequired()) {
-            $tag->addAttribute('required', 'required');
+            $tag->setAttribute('required', 'required');
         }
 
         foreach ($element->getAttributes() as $name => $value) {
-            $tag->addAttribute($name, $value);
+            $tag->setAttribute($name, $value);
         }
 
         return $tag->render();

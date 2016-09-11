@@ -60,28 +60,6 @@ class SubmitButton extends AbstractFormButton
     }
 
     /**
-     * Set the name of the field and return the TextField reference
-     *
-     * @param string $name
-     * @return SubmitButton
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * Return the name of the textfield
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * Set the size of the field and return the TextField reference
      *
      * @param int $size

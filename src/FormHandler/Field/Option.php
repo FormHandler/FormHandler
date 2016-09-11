@@ -1,6 +1,8 @@
 <?php
 namespace FormHandler\Field;
 
+use FormHandler\Form;
+
 /**
  * This class represents an Option HTML element
  */

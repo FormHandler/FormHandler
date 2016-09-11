@@ -81,7 +81,7 @@ class NumberValidatorTest extends TestCase
             ->addOptionsAsArray([1, 2, 4, 5, 6, 7, 8, 9])
             ->setMultiple(true)
             ->setValue([1, 5, 6, 9])
-            -> addValidator(new NumberValidator(1, 99, true));
+            ->addValidator(new NumberValidator(1, 99, true));
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessageRegExp('/scalar types/');

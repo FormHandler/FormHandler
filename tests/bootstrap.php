@@ -2,10 +2,12 @@
 
 namespace FormHandler\Tests {
 
-// make sure to start sessions
+    // make sure to start sessions
     session_start();
 
     require dirname(__DIR__) . '/vendor/autoload.php';
+    include_once __DIR__ . '/Renderer/FakeElement.php';
+    include_once __DIR__ . '/Renderer/BaseTestRenderer.php';
 }
 
 // @codingStandardsIgnoreStart
@@ -41,7 +43,7 @@ namespace FormHandler\Utils {
 
     function move_uploaded_file($file, $dest)
     {
-        if( isset( $GLOBALS['mock_move_uploaded_file_response'] )) {
+        if (isset($GLOBALS['mock_move_uploaded_file_response'])) {
             return $GLOBALS['mock_move_uploaded_file_response'];
         } else {
             return rename($file, $dest);

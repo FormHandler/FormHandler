@@ -3,9 +3,10 @@ namespace FormHandler\Tests\Renderer;
 
 use FormHandler\Field\Optgroup;
 use FormHandler\Field\Option;
+use FormHandler\Field\TextField;
 use FormHandler\Form;
+use FormHandler\Renderer\XhtmlRenderer;
 use FormHandler\Validator\UploadValidator;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Created by PhpStorm.
@@ -13,11 +14,14 @@ use PHPUnit\Framework\TestCase;
  * Date: 09-09-16
  * Time: 15:24
  */
-class XhtmlRendererTest extends TestCase
+class XhtmlRendererTest extends BaseTestRenderer
 {
-    protected function expectAttribute($html, $name, $value)
+    public function testRenderInvalidClass()
     {
-        $this -> assertContains($name .'="'. $value .'"', $html, 'Tag should contain attribute '. $name);
+        $this->expectException(\Exception::class);
+
+        $renderer = new XhtmlRenderer();
+        $renderer->render(new FakeElement());
     }
 
     public function testUploadRender()
@@ -37,186 +41,237 @@ class XhtmlRendererTest extends TestCase
         echo $field;
         $html = ob_get_clean();
 
-        $this -> expectAttribute($html, 'type', 'file');
-        $this -> expectAttribute($html, 'size', 20);
-        $this -> expectAttribute($html, 'accept', 'image/jpg');
-        $this -> expectAttribute($html, 'disabled', 'disabled');
-        $this -> expectAttribute($html, 'name', 'cv[]');
-        $this -> expectAttribute($html, 'required', 'required');
-        $this -> expectAttribute($html, 'data-descr', 'CV');
+        $this->expectAttribute($html, 'type', 'file');
+        $this->expectAttribute($html, 'size', 20);
+        $this->expectAttribute($html, 'accept', 'image/jpg');
+        $this->expectAttribute($html, 'disabled', 'disabled');
+        $this->expectAttribute($html, 'name', 'cv[]');
+        $this->expectAttribute($html, 'required', 'required');
+        $this->expectAttribute($html, 'data-descr', 'CV');
     }
 
     public function testOptGroup()
     {
         $optgroup = new Optgroup('Favorite Benelux Country');
-        $optgroup -> addOption(new Option('nl', 'Netherlands'));
-        $optgroup -> addOption(new Option('be', 'Belgium'));
-        $optgroup -> addOption(new Option('lu', 'Luxemburg'));
+        $optgroup->addOption(new Option('nl', 'Netherlands'));
+        $optgroup->addOption(new Option('be', 'Belgium'));
+        $optgroup->addOption(new Option('lu', 'Luxemburg'));
 
-        $html = $optgroup -> render();
-        $this -> assertEquals('', $html, 'Response should be empty as no renderer is known');
+        $html = $optgroup->render();
+        $this->assertEquals('', $html, 'Response should be empty as no renderer is known');
 
         $form = new Form();
-        $optgroup -> setForm($form);
-        $this -> assertEquals($form, $optgroup -> getForm());
+        $optgroup->setForm($form);
+        $this->assertEquals($form, $optgroup->getForm());
 
         ob_start();
         echo $optgroup;
         $html = ob_get_clean();
 
-        //$this -> expectAttribute( $html, 'label', 'Favorite Benelux Country');
-
-//        $this->expectOutputRegex(
-//            "/<optgroup label=\"(.*?)\" disabled=\"disabled\" id=\"(.*?)\" title=\"(.*?)\" ".
-//            "style=\"(.*?)\" class=\"(.*?)\" data-evil=\"(.*?)\">".
-//            "(<option value=\"(.*?)\">(.*?)<\/option>)*<\/optgroup>/i",
-//            'Check input html tag'
-//        );
-//        echo $optgroup;
+        $this->expectAttribute($html, 'label', 'Favorite Benelux Country');
     }
 
     public function testOption()
     {
-//        $this->expectOutputRegex(
-//            "/<option value=\"(.*?)\" disabled=\"disabled\" id=\"(.*?)\" title=\"(.*?)\" " .
-//            "style=\"(.*?)\" class=\"(.*?)\" data-full-name=\"male\">(.*?)" .
-//            "<\/option>/i",
-//            'Check input html tag'
-//        );
-//        echo $option;
+        $option = new Option('name', 'Label');
+        $option->setSelected(true);
+
+        $html = $option->render();
+        $this->assertEquals('', $html, 'Response should be empty as no renderer is known');
+
+        $form = new Form();
+        $option->setForm($form);
+
+        ob_start();
+        echo $option;
+        $html = ob_get_clean();
+
+        $this->expectAttribute($html, 'value', 'name');
+        $this->expectAttribute($html, 'selected', 'selected');
+        $this->assertContains('Label', $html);
+    }
+
+    public function testSelectField()
+    {
+        $form = new Form();
+        $field = $form->selectField('country');
+        $field->setMultiple(true);
+
+        $optgroup = new Optgroup('Benelux');
+        $optgroup->addOptionsAsArray(['nl', 'be', 'lu'], false);
+        $field->addOptgroup($optgroup);
+        $field->addOption(new Option('-', 'Other'));
+
+        ob_start();
+        echo $field;
+        $html = ob_get_clean();
+
+        $this->expectAttribute($html, 'name', 'country[]');
+        $this->expectAttribute($html, 'multiple', 'multiple');
+        $this->assertContains('<select', $html);
+        $this->assertContains('<option', $html);
+        $this->assertContains('</option', $html);
+        $this->assertContains('</select', $html);
+        $this->expectAttribute($html, 'value', 'be');
     }
 
     public function testCheckbox()
     {
-//        $form = new Form('');
-//        $obj = $form -> checkBox('test', '1');
-//        $obj -> setChecked(true);
-//        $obj -> setDisabled(true);
-//
-//
-//        $this->expectOutputRegex(
-//            "/<input type=\"checkbox\"(.*) checked=\"checked\" ".
-//            "disabled=\"disabled\" value=\"1\"(.*)\/>/i",
-//            'Check input html tag'
-//        );
-//        echo $obj;
-    }
+        $form = new Form('');
+        $field = $form->checkBox('test', '1');
+        $field->setChecked(true);
+        $field->setDisabled(true);
+        $field->setLabel('Should we test?');
 
-    public function testElement()
-    {
-//        $this->expectOutputRegex(
-//            "/id=\"(.*?)\" title=\"(.*?)\" " .
-//            "style=\"(.*?)\" class=\"(.*?)\" tabindex=\"(\d+)\" accesskey=\"(.*?)\"/i",
-//            'Check html tag'
-//        );
-//        echo $field;
+        ob_start();
+        echo $field;
+        $html = ob_get_clean();
+
+        $this->expectAttribute($html, 'type', 'checkbox');
+        $this->expectAttribute($html, 'value', '1');
+        $this->expectAttribute($html, 'checked', 'checked');
+        $this->expectAttribute($html, 'disabled', 'disabled');
+        $this->assertContains('<label', $html);
+        $this->assertContains($field->getLabel(), $html);
+        $this->assertNotEmpty($field->getId());
     }
 
     public function testHiddenField()
     {
-//        $this->expectOutputRegex(
-//            "/<input type=\"hidden\" name=\"(.*?)\" value=\"(.*?)\" " .
-//            "disabled=\"disabled\" \/>/i",
-//            'Check html tag'
-//        );
-//
-//        // Note, we use render because our formatter will only output the hidden fields
-//        // at the <form> tag.
-//        echo $field -> render();
+        $form = new Form();
+        $field = $form->hiddenField('test');
+
+        ob_start();
+        echo $field;
+        $html = ob_get_clean();
+
+        // We don't render hidden fields by default.
+        // They are rendered with the <form> tag.
+        $this->assertEmpty($html);
     }
 
     public function testImageButton()
     {
-//        $this->expectOutputRegex(
-//            "/<input type=\"image\" name=\"(.*?)\" ".
-//            "src=\"(.*?)\" alt=\"(.*?)\" size=\"(\d+)\" disabled=\"disabled\" \/>/i",
-//            'Check html tag'
-//        );
-//        echo $btn;
+        $form = new Form();
+        $button = $form->imageButton('submit', 'test.png');
+
+        ob_start();
+        echo $button;
+        $html = ob_get_clean();
+
+        $this->expectAttribute($html, 'type', 'image');
+        $this->expectAttribute($html, 'src', 'test.png');
     }
 
     public function testPassField()
     {
-//        $this->expectOutputRegex(
-//            "/<input type=\"password\" name=\"(.*?)\" size=\"(\d+)\" ".
-//            "disabled=\"disabled\" maxlength=\"(\d+)\" readonly=\"readonly\" ".
-//            "placeholder=\"(.*?)\" title=\"(.*?)\" \/>/i",
-//            'Check html tag'
-//        );
-//        echo $field;
+        $form = new Form();
+        $field = $form->passField('password');
+        $field->setMaxlength(15);
+        $field->setReadonly(true);
+
+        ob_start();
+        echo $field;
+        $html = ob_get_clean();
+
+        $this->expectAttribute($html, 'type', 'password');
+        $this->expectAttribute($html, 'name', 'password');
+        $this->expectAttribute($html, 'readonly', 'readonly');
+        $this->expectAttribute($html, 'maxlength', '15');
     }
 
     public function testTextArea()
     {
-//        $this->expectOutputRegex(
-//            "/<textarea cols=\"(\d+)\" rows=\"(\d+)\" name=\"(.*?)\" ".
-//            "disabled=\"disabled\" maxlength=\"(\d+)\" readonly=\"readonly\" ".
-//            "placeholder=\"(.*?)\">(.*?)<\/textarea>/i",
-//            'Check html tag'
-//        );
-//        echo $field;
+        $form = new Form();
+        $field = $form->textArea('message');
+
+        ob_start();
+        echo $field;
+        $html = ob_get_clean();
+
+        $this->expectAttribute($html, 'name', 'message');
+        $this->expectAttribute($html, 'cols', 40);
+        $this->expectAttribute($html, 'rows', 7);
+        $this->assertContains('<textarea', $html);
     }
 
     public function testTextField()
     {
-//        $this->expectOutputRegex(
-//            "/<input type=\"(.*?)\" name=\"(.*?)\" value=\"(.*?)\" size=\"(\d+)\" ".
-//            "disabled=\"disabled\" maxlength=\"(\d+)\" readonly=\"readonly\" placeholder=\"(.*?)\" \/>/i",
-//            'Check html tag'
-//        );
-//        echo $field;
+        $form = new Form();
+        $field = $form->textField('phone');
+        $field->setType(TextField::TYPE_TEL);
+
+        ob_start();
+        echo $field;
+        $html = ob_get_clean();
+
+        $this->expectAttribute($html, 'name', 'phone');
+        $this->expectAttribute($html, 'type', 'tel');
+        $this->assertContains('<input', $html);
     }
 
     /**
      * Test the HTML form tags of the form
      */
-    public function testFormTags()
+    public function testFormTag()
     {
-//        $form = new Form(null, false);
-//        $form->setName('myForm');
-//        $form->setAccept('text/plain');
-//        $form->setTarget('_self');
-//
-//        $this->assertEquals('</form>', $form->close());
-//
-//        $this->expectOutputRegex(
-//            '/^<form action="" name="myForm" accept="text\/plain" accept-charset="utf-8" ' .
-//            'enctype="application\/x-www-form-urlencoded" method="post" target="_self">$/i',
-//            'Check html tag'
-//        );
-//        echo $form;
+        $form = new Form('/form');
+        $form->setMethod(Form::METHOD_GET);
+        $form->setAcceptCharset('UTF-8');
+        $form->setTarget('_blank');
+        $form->setAccept('text/plain');
+        $form->setEnctype(Form::ENCTYPE_PLAIN);
+
+        ob_start();
+        echo $form;
+        $html = ob_get_clean();
+
+        $this->expectAttribute($html, 'method', 'get');
+        $this->expectAttribute($html, 'accept-charset', 'UTF-8');
+        $this->expectAttribute($html, 'accept', 'text/plain');
+        $this->expectAttribute($html, 'enctype', 'text/plain');
+        $this->expectAttribute($html, 'target', '_blank');
+        $this->assertContains('<form', $html);
     }
 
     public function testSubmitButton()
     {
-//        $this->expectOutputRegex(
-//            "/<input type=\"submit\" name=\"(.*?)\" ".
-//            "size=\"(\d+)\" disabled=\"disabled\" \/>/i",
-//            'Check html tag'
-//        );
-//        echo $btn;
-    }
+        $form = new Form();
+        $button = $form->submitButton('submit', 'Send');
 
-    public function testSelectField()
-    {
-//        $this->expectOutputRegex(
-//            "/<select name=\"(.*?)\" multiple=\"multiple\" ".
-//            "size=\"(\d+)\" disabled=\"disabled\">".
-//            "(<option value=\"(\d+)\">(.*?)<\/option>)+" .
-//            "(<optgroup label=\"(.*?)\">(<option value=\"(\d+)\">(.*?)<\/option>)*<\/optgroup>)*" .
-//            "<\/select>/i",
-//            'Check input html tag'
-//        );
-//        echo $field;
+        ob_start();
+        echo $button;
+        $html = ob_get_clean();
+
+        $this->expectAttribute($html, 'type', 'submit');
+        $this->expectAttribute($html, 'name', 'submit');
+        $this->expectAttribute($html, 'value', 'Send');
     }
 
     public function testRadioButton()
     {
-//        $this->expectOutputRegex(
-//            "/<input type=\"radio\" name=\"(.*?)\" checked=\"checked\" ".
-//            "disabled=\"disabled\" value=\"(.*?)\" id=\"(.*?)\" \/>/i",
-//            'Check input html tag'
-//        );
-//        echo $male;
+        $form = new Form();
+        $field = $form->radioButton('gender', 'm')->setLabel('Male')->setChecked(true);
+
+        ob_start();
+        echo $field;
+        $html = ob_get_clean();
+
+        $this->expectAttribute($html, 'type', 'radio');
+        $this->expectAttribute($html, 'name', 'gender');
+        $this->expectAttribute($html, 'value', 'm');
+        $this->expectAttribute($html, 'checked', 'checked');
+        $this->assertContains('<label', $html);
+        $this->assertContains('Male', $html);
+        $this->assertNotEmpty($field->getId());
+    }
+
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp()
+    {
+        Form::setDefaultRenderer(new XhtmlRenderer());
     }
 }

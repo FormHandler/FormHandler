@@ -145,12 +145,12 @@ class FormUtilsTest extends TestCase
                 'name' => ['test.pdf', 'test1.pdf'],
                 'type' => ['application/pdf', 'application/pdf'],
                 'size' => [542, 541],
-                'tmp_name' => [ __DIR__ . '/_tmp/test.pdf', __DIR__ . '/_tmp/test1.pdf' ],
+                'tmp_name' => [__DIR__ . '/_tmp/test.pdf', __DIR__ . '/_tmp/test1.pdf'],
                 'error' => [0, 0]
             )
         );
 
-        @touch(__DIR__ .'/_tmp/test1.pdf');
+        @touch(__DIR__ . '/_tmp/test1.pdf');
 
         $form = new Form('', false);
         $field = $form->uploadField('cv');
@@ -158,12 +158,12 @@ class FormUtilsTest extends TestCase
 
         $dest = FormUtils::moveUploadedFile($field, __DIR__ . '/_new/', FormUtils::MODE_OVERWRITE, true);
 
-        $this -> assertCount(2, $dest);
-        $this -> assertEquals([ __DIR__ . '/_new/test.pdf', __DIR__ . '/_new/test1.pdf'], $dest);
+        $this->assertCount(2, $dest);
+        $this->assertEquals([__DIR__ . '/_new/test.pdf', __DIR__ . '/_new/test1.pdf'], $dest);
 
         @unlink(__DIR__ . '/_new/test.pdf');
         @unlink(__DIR__ . '/_new/test1.pdf');
-        @rmdir(__DIR__.'/_new');
+        @rmdir(__DIR__ . '/_new');
     }
 
     public function testMoveMultipleFilesException()
@@ -173,14 +173,14 @@ class FormUtilsTest extends TestCase
                 'name' => ['test.pdf', 'test1.pdf'],
                 'type' => ['application/pdf', 'application/pdf'],
                 'size' => [542, 541],
-                'tmp_name' => [ __DIR__ . '/_tmp/test.pdf', __DIR__ . '/_tmp/test1.pdf' ],
+                'tmp_name' => [__DIR__ . '/_tmp/test.pdf', __DIR__ . '/_tmp/test1.pdf'],
                 'error' => [0, 0]
             )
         );
 
         $form = new Form('', false);
         $field = $form->uploadField('cv');
-        $field -> setMultiple(true);
+        $field->setMultiple(true);
 
         $GLOBALS['mock_move_uploaded_file_response'] = false;
 

@@ -18,30 +18,30 @@ class RadioButtonCheckedValidatorTest extends TestCase
         $male->addValidator($validator);
 
         $this->assertFalse(
-            $male -> isValid(),
+            $male->isValid(),
             'Field should be invalid as its not checked, nor is any radio button with the same name'
         );
 
-        $female -> setChecked(true);
-        $male -> clearCache();
+        $female->setChecked(true);
+        $male->clearCache();
         $this->assertTrue(
-            $male -> isValid(),
+            $male->isValid(),
             'Field should be valid as a radio button with the same name is now checked'
         );
 
-        $errormsg='You should select one';
-        $validator -> setErrorMessage($errormsg);
+        $errormsg = 'You should select one';
+        $validator->setErrorMessage($errormsg);
 
         $male->setValidator($validator);
-        $female -> setChecked(false);
-        $male -> clearCache();
+        $female->setChecked(false);
+        $male->clearCache();
 
         $this->assertFalse(
-            $male -> isValid(),
+            $male->isValid(),
             'Field should be invalid as its not checked, nor is any radio button with the same name'
         );
 
-        $this->assertContains($errormsg, $male -> getErrorMessages());
+        $this->assertContains($errormsg, $male->getErrorMessages());
     }
 
     /**
@@ -53,7 +53,7 @@ class RadioButtonCheckedValidatorTest extends TestCase
         $this->expectExceptionMessageRegExp('/only works on radio buttons/');
 
         $form = new Form('', false);
-        $form -> textField('test')
-            -> addValidator(new RadioButtonCheckedValidator());
+        $form->textField('test')
+            ->addValidator(new RadioButtonCheckedValidator());
     }
 }

@@ -2,6 +2,7 @@
 namespace FormHandler\Field;
 
 use FormHandler;
+use FormHandler\Form;
 
 /**
  * Create a select form.
@@ -84,7 +85,6 @@ class SelectField extends AbstractFormField
 
         foreach ($options as $value => $label) {
             $option = new Option();
-            $option->setForm($this->getForm());
             $option->setLabel($label);
             $option->setValue($useArrayKeyAsValue ? $value : $label);
 
@@ -147,7 +147,6 @@ class SelectField extends AbstractFormField
     {
         foreach ($options as $value => $label) {
             $option = new Option();
-            $option->setForm($this->getForm());
             $option->setLabel($label);
             $option->setValue($useArrayKeyAsValue ? $value : $label);
 
@@ -168,8 +167,6 @@ class SelectField extends AbstractFormField
      */
     public function addOption(Option $option)
     {
-        $option->setForm($this->getForm());
-
         $this->options[] = $option;
 
         // this will auto select the options based on this fields value
@@ -186,11 +183,6 @@ class SelectField extends AbstractFormField
      */
     public function addOptgroup(Optgroup $optgroup)
     {
-        $optgroup->setForm($this->getForm());
-
-        foreach ($optgroup->getOptions() as $option) {
-            $option->setForm($this->getForm());
-        }
         $this->options[] = $optgroup;
 
         // this will auto select the options based on this fields value
@@ -208,7 +200,6 @@ class SelectField extends AbstractFormField
     public function addOptions(array $options)
     {
         foreach ($options as $option) {
-            $option->setForm($this->getForm());
             $this->options[] = $option;
         }
         // this will auto select the options based on this fields value
@@ -236,11 +227,7 @@ class SelectField extends AbstractFormField
      */
     public function setOptions(array $options)
     {
-        foreach ($options as $option) {
-            $option->setForm($this->getForm());
-        }
         $this->options = $options;
-
 
         // this will auto select the options based on this fields value
         $this->selectOptionsFromValue();

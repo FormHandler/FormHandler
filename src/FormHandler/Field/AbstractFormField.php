@@ -51,7 +51,7 @@ abstract class AbstractFormField extends Element
      * A container for setting some help text, if used by the formatter.
      * @var string
      */
-    protected $helpText = "";
+    protected $helpText = '';
 
     /**
      * The value of this field
@@ -293,7 +293,7 @@ abstract class AbstractFormField extends Element
     }
 
     /**
-     * Return the name of the textfield
+     * Return the name of this field
      *
      * @return string
      */
@@ -303,16 +303,15 @@ abstract class AbstractFormField extends Element
     }
 
     /**
-     * Set the name of the field and return the TextField reference
+     * Set the name of the field and return this Field
+     *
+     * This method is abstract because each field should implement this logic and also
+     * fetch it's value from the form's submitted data by this name. This varies per field.
      *
      * @param string $name
      * @return $this
      */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
+    abstract public function setName($name);
 
     /**
      * Return if this field is disabled
@@ -325,7 +324,7 @@ abstract class AbstractFormField extends Element
     }
 
     /**
-     * Set if this field is disabled and return the TextField reference
+     * Set if this field is disabled and return this Field
      *
      * @param bool $disabled
      * @return $this

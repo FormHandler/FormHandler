@@ -55,7 +55,7 @@ class TextField extends PassField
      * Set the name
      *
      * @param string $name
-     * @return TextField
+     * @return TextArea
      */
     public function setName($name)
     {
