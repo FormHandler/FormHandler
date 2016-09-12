@@ -126,6 +126,7 @@ class XhtmlRendererTest extends BaseTestRenderer
         $this->expectAttribute($html, 'accept', 'image/jpg');
         $this->expectAttribute($html, 'disabled', 'disabled');
         $this->expectAttribute($html, 'name', 'cv[]');
+        $this->expectAttribute($html, 'multiple', 'multiple');
         $this->expectAttribute($html, 'required', 'required');
         $this->expectAttribute($html, 'data-descr', 'CV');
     }

@@ -26,7 +26,6 @@ abstract class Element
      * The unique id of this HTML element
      *
      * @SuppressWarnings(PHPMD)
-     *
      * @var string
      */
     protected $id;

@@ -5,14 +5,13 @@ namespace FormHandler\Tests\Renderer;
 use FormHandler\Form;
 use FormHandler\Renderer\CowSayRenderer;
 use FormHandler\Renderer\ErrorAsTagRenderer;
-use FormHandler\Renderer\Tag;
 
 class CowSayRendererTest extends BaseTestRenderer
 {
     public function testCowSay()
     {
         $form = new Form(null, false);
-        $form->setRenderer(new CowSayRenderer() );
+        $form->setRenderer(new CowSayRenderer());
 
         $field = $form->textField('name');
 
@@ -25,7 +24,7 @@ class CowSayRendererTest extends BaseTestRenderer
     public function testNonCowSay()
     {
         $form = new Form(null, false);
-        $form->setRenderer(new CowSayRenderer() );
+        $form->setRenderer(new CowSayRenderer());
 
         $btn = $form->submitButton('btn');
 

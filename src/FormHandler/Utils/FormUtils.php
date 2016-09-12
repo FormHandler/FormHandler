@@ -91,7 +91,7 @@ class FormUtils
      * @param UploadField $field The field where the file was uploaded in
      * @param string $destination The destination where to save the file
      * @param int $existMode Mode what to do if the file exists. Default: rename
-     * @param int|boolean $createDestinationIfNotExist Create the $destination path if not exists or not.
+     * @param int|boolean $createDestIfNotExist Create the $destination path if not exists or not.
      * You can also give a umask here (like 644).
      * @return string|string[] The destination of the new file or null on an error.
      * When multiple files are uploaded, this will be an array of destinations
@@ -103,9 +103,9 @@ class FormUtils
         UploadField &$field,
         $destination,
         $existMode = FormUtils::MODE_RENAME,
-        $createDestinationIfNotExist = false
+        $createDestIfNotExist = false
     ) {
-    
+
 
         $filedata = $field->getValue();
 
@@ -158,31 +158,26 @@ class FormUtils
                     if ($existMode == FormUtils::MODE_RENAME) {
                         $destination = FormUtils::getNonExistingFilename($destination);
                     } // a different unkown mode is given, throw exception
-                    else {
-                        if ($existMode != FormUtils::MODE_OVERWRITE) {
-                            throw new \UnexpectedValueException(
-                                'Incorrect "exists" mode given! You have to use one of the ' .
-                                'MODE constants of the FormUtils as mode!'
-                            );
-                        }
+                    elseif ($existMode != FormUtils::MODE_OVERWRITE) {
+                        throw new \UnexpectedValueException(
+                            'Incorrect "exists" mode given! You have to use one of the ' .
+                            'MODE constants of the FormUtils as mode!'
+                        );
                     }
                 }
             }
 
             $dirname = dirname($destination);
             // should we create the destination path if not exists?
-            if ($createDestinationIfNotExist) {
+            if ($createDestIfNotExist) {
                 if (!is_dir($dirname) &&
                     !mkdir(
                         $dirname,
-                        is_bool($createDestinationIfNotExist) ? 0777 : $createDestinationIfNotExist,
+                        is_bool($createDestIfNotExist) ? 0755 : $createDestIfNotExist,
                         true
                     )
                 ) {
-                    throw new \Exception(sprintf(
-                        'Failed to create the destination directory "%s"',
-                        $dirname
-                    ));
+                    throw new \Exception(sprintf('Failed to create the destination directory "%s"', $dirname));
                 }
             }
 
@@ -232,11 +227,11 @@ class FormUtils
             $file = substr($file, 0, 0 - strlen($ext));
         }
 
-        $extra = "";
-        $i = 1;
+        $extra = '';
+        $index = 1;
 
         while (file_exists($dir . DIRECTORY_SEPARATOR . $file . $extra . $ext)) {
-            $extra = '(' . $i++ . ')';
+            $extra = '(' . $index++ . ')';
         }
 
         return $dir . DIRECTORY_SEPARATOR . $file . $extra . $ext;

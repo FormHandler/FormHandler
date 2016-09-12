@@ -11,7 +11,7 @@ class UploadValidatorTest extends TestCase
 {
     public function testValidUpload()
     {
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $validator = new UploadValidator(true);
@@ -30,7 +30,7 @@ class UploadValidatorTest extends TestCase
 
     public function testInvalidUpload()
     {
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $validator = new UploadValidator(true);
@@ -48,7 +48,7 @@ class UploadValidatorTest extends TestCase
 
     public function testInvalidExtensionUpload()
     {
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $messages = [
@@ -71,7 +71,7 @@ class UploadValidatorTest extends TestCase
 
     public function testInvalidMimeType()
     {
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $messages = [
@@ -99,7 +99,7 @@ class UploadValidatorTest extends TestCase
 
         $GLOBALS['mock_mime_content_type'] = 'application/pdf';
 
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $validator = new UploadValidator(true);
@@ -121,7 +121,7 @@ class UploadValidatorTest extends TestCase
 
     public function testMimeTypeDenied()
     {
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $validator = new UploadValidator(true);
@@ -140,7 +140,7 @@ class UploadValidatorTest extends TestCase
     {
         $GLOBALS['mock_image_size'] = ['mime' => 'image/jpg'];
 
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $validator = new UploadValidator(true);
@@ -163,7 +163,7 @@ class UploadValidatorTest extends TestCase
 
         $_FILES['cv']['error'] = UPLOAD_ERR_INI_SIZE;
 
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $field->setValidator(new UploadValidator(true, $messages));
@@ -187,7 +187,7 @@ class UploadValidatorTest extends TestCase
 
         $_FILES['cv']['error'] = UPLOAD_ERR_PARTIAL;
 
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $field->setValidator(new UploadValidator(true, $messages));
@@ -211,7 +211,7 @@ class UploadValidatorTest extends TestCase
 
         $_FILES['cv']['error'] = UPLOAD_ERR_CANT_WRITE;
 
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $field->setValidator(new UploadValidator(true, $messages));
@@ -235,7 +235,7 @@ class UploadValidatorTest extends TestCase
 
         $_FILES['cv']['error'] = UPLOAD_ERR_EXTENSION;
 
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $field->setValidator(new UploadValidator(true, $messages));
@@ -254,7 +254,7 @@ class UploadValidatorTest extends TestCase
 
     public function testTooLarge()
     {
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $messages = [
@@ -287,7 +287,7 @@ class UploadValidatorTest extends TestCase
 
     public function testTooSmall()
     {
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $messages = [
@@ -323,7 +323,7 @@ class UploadValidatorTest extends TestCase
         // no extension at all should also be false
         $_FILES['cv']['name'] = 'test';
 
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $messages = [
@@ -345,7 +345,7 @@ class UploadValidatorTest extends TestCase
 
     public function testInvalidField()
     {
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->textField('name');
 
         $messages = [
@@ -364,7 +364,7 @@ class UploadValidatorTest extends TestCase
         // no uploads
         $_FILES = [];
 
-        $form = new Form();
+        $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $messages = [

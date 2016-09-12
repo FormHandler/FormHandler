@@ -100,7 +100,6 @@ class SelectField extends AbstractFormField
     /**
      * This function will use the "value" for this field to
      * select the correct options
-     * @codeCoverageIgnore - Ignore because "$option instanceof Optgroup" is not covered while it is.
      */
     protected function selectOptionsFromValue()
     {
@@ -262,7 +261,6 @@ class SelectField extends AbstractFormField
      * This will return an array if the field
      * is setup as "multiple". Otherwise it will return a string with the selected value.
      *
-     * @codeCoverageIgnore - Ignore because "$option instanceof Optgroup" is not covered while it is.
      * @return array|string
      */
     public function getValue()
@@ -343,7 +341,6 @@ class SelectField extends AbstractFormField
      * Return the option which has the given value.
      * If there are multiple options with the same value, the first will be returned.
      *
-     * @codeCoverageIgnore - Ignore because "$option instanceof Optgroup" is not covered while it is.
      * @param $value
      * @return Option
      */
@@ -375,7 +372,6 @@ class SelectField extends AbstractFormField
      * and it was the only option in that optgroup, then the
      * optgroup is also removed.
      *
-     * @codeCoverageIgnore - Ignore because "$option instanceof Optgroup" is not covered while it is.
      * @param $value
      * @return SelectField
      */

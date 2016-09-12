@@ -239,7 +239,6 @@ class XhtmlRenderer extends AbstractRenderer
     /**
      * Render a selectField
      *
-     * @codeCoverageIgnore - Ignore because "$option instanceof Optgroup" is marked as not covered while it is.
      * @param SelectField $selectField
      * @return string
      */
@@ -315,6 +314,10 @@ class XhtmlRenderer extends AbstractRenderer
         $tag = new Tag('input');
         $tag->setAttribute('type', 'file');
         $tag->setAttribute('accept', $uploadField->getAccept());
+        if ($uploadField->isMultiple()) {
+            $tag->setAttribute('multiple', 'multiple');
+        }
+
 
         return $this->parseTag($tag, $uploadField);
     }

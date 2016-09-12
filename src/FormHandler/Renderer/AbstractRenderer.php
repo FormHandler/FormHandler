@@ -1,7 +1,6 @@
 <?php
 namespace FormHandler\Renderer;
 
-use FormHandler\Field\AbstractFormField;
 use FormHandler\Field\Element;
 
 /**
@@ -68,16 +67,32 @@ abstract class AbstractRenderer
      */
     protected function parseTag(Tag &$tag, Element $element)
     {
-        if (method_exists($element, 'isDisabled') && $element->isDisabled()) {
-            $tag->setAttribute('disabled', 'disabled');
-        }
+        $list = [
+            'disabled' => 'isDisabled',
+            'readonly' => 'isReadonly',
+            'required' => 'isRequired',
+            'placeholder' => 'getPlaceholder',
+            'id' => 'getId',
+            'title' => 'getTitle',
+            'style' => 'getStyle',
+            'class' => 'getClass',
+            'tabindex' => 'getTabindex',
+            'accesskey' => 'getAccessKey',
+            'size' => 'getSize'
+        ];
 
-        if (method_exists($element, 'isReadonly') && $element->isReadonly()) {
-            $tag->setAttribute('readonly', 'readonly');
-        }
+        foreach ($list as $attribute => $method) {
+            if (method_exists($element, $method)) {
+                $value = $element->$method();
 
-        if (method_exists($element, 'getPlaceholder')) {
-            $tag->setAttribute('placeholder', $element->getPlaceholder());
+                if (substr($method, 0, 2) == 'is') {
+                    if ($value) {
+                        $tag->setAttribute($attribute, $attribute);
+                    }
+                } else {
+                    $tag->setAttribute($attribute, $value);
+                }
+            }
         }
 
         if (method_exists($element, 'getName') && $element->getName()) {
@@ -96,21 +111,6 @@ abstract class AbstractRenderer
             is_scalar($element->getValue())
         ) {
             $tag->setAttribute('value', htmlentities($element->getValue(), ENT_QUOTES, 'UTF-8'));
-        }
-
-        if (method_exists($element, 'getSize') && $element->getSize()) {
-            $tag->setAttribute('size', $element->getSize());
-        }
-
-        $tag->setAttribute('id', $element->getId());
-        $tag->setAttribute('title', $element->getTitle());
-        $tag->setAttribute('style', $element->getStyle());
-        $tag->setAttribute('class', $element->getClass());
-        $tag->setAttribute('tabindex', $element->getTabindex());
-        $tag->setAttribute('accesskey', $element->getAccesskey());
-
-        if ($element instanceof AbstractFormField && $element->isRequired()) {
-            $tag->setAttribute('required', 'required');
         }
 
         foreach ($element->getAttributes() as $name => $value) {

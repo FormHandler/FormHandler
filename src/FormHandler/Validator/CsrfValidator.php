@@ -67,10 +67,10 @@ class CsrfValidator extends AbstractValidator
             // we start throwing away tokens here which either do not match this formatting,
             // or have been generated longer than the expiration time we just determined.
 
-            $explodedToken = explode('.', $token, 1);
+            $explodedToken = explode('.', $token, 2);
 
             // check if the token has a valid formatting (includes a timestamp)
-            if (count($explodedToken) !== 2 && is_numeric($explodedToken[0])) {
+            if (count($explodedToken) !== 2 || !is_numeric($explodedToken[0])) {
                 // Can't parse this token. This should not happen... get rid of it!
                 unset($_SESSION['csrftokens'][$key]);
                 continue;
