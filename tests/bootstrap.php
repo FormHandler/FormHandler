@@ -12,6 +12,7 @@ namespace FormHandler\Tests {
 
 // @codingStandardsIgnoreStart
 namespace FormHandler\Utils {
+
     function extension_loaded($ext)
     {
         if (isset($GLOBALS['mock_extension_not_loaded']) && $GLOBALS['mock_extension_not_loaded'] == $ext) {

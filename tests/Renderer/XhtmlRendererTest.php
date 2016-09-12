@@ -24,6 +24,85 @@ class XhtmlRendererTest extends BaseTestRenderer
         $renderer->render(new FakeElement());
     }
 
+    public function testHelpTextAsAttribute()
+    {
+        $form = new Form();
+        $field = $form->textField('name');
+        $field->setHelpText('Enter your name');
+
+        $renderer = new XhtmlRenderer();
+        $renderer->setHelpFormat(XhtmlRenderer::RENDER_AS_ATTRIBUTE);
+        $renderer->setHelpTagOrAttr('data-help');
+        $form->setRenderer($renderer);
+
+        $html = $field->render();
+
+        $this->assertEquals(XhtmlRenderer::RENDER_AS_ATTRIBUTE, $renderer->getHelpFormat());
+        $this->assertEquals('data-help', $renderer->getHelpTagOrAttr());
+        $this->expectAttribute($html, 'data-help', 'Enter your name');
+
+        $field->setTitle('test');
+        $renderer->setHelpTagOrAttr('title');
+
+        // title tag should be overwritten.
+        $html = $field->render();
+        $this->expectAttribute($html, 'title', 'Enter your name');
+    }
+
+    public function testHelpTextAsTag()
+    {
+        $form = new Form();
+        $field = $form->textField('name');
+        $field->setHelpText('Enter your name');
+
+        $renderer = new XhtmlRenderer();
+        $renderer->setHelpFormat(XhtmlRenderer::RENDER_AS_TAG);
+        $renderer->setHelpTagOrAttr('dfn');
+        $form->setRenderer($renderer);
+
+        $html = $field->render();
+
+        $this->assertEquals(XhtmlRenderer::RENDER_AS_TAG, $renderer->getHelpFormat());
+        $this->assertEquals('dfn', $renderer->getHelpTagOrAttr());
+        $this->assertContains('<dfn>Enter your name</dfn>', $html);
+    }
+
+    public function testErrorAsTag()
+    {
+        $form = new Form();
+        $field = $form->textField('name');
+        $field->addErrorMessage('Your name is too long.');
+
+        $renderer = new XhtmlRenderer();
+        $renderer->setErrorFormat(XhtmlRenderer::RENDER_AS_TAG);
+        $renderer->setErrorTagOrAttr('label');
+        $form->setRenderer($renderer);
+
+        $html = $field->render();
+
+        $this->assertEquals('label', $renderer->getErrorTagOrAttr());
+        $this->assertEquals(XhtmlRenderer::RENDER_AS_TAG, $renderer->getErrorFormat());
+        $this->assertContains('<label>Your name is too long.</label>', $html);
+    }
+
+    public function testErrorAsAttribute()
+    {
+        $form = new Form();
+        $field = $form->textField('name');
+        $field->addErrorMessage('Your name is too long.');
+
+        $renderer = new XhtmlRenderer();
+        $renderer->setErrorFormat(XhtmlRenderer::RENDER_AS_ATTRIBUTE);
+        $renderer->setErrorTagOrAttr('data-error');
+        $form->setRenderer($renderer);
+
+        $html = $field->render();
+
+        $this->assertEquals('data-error', $renderer->getErrorTagOrAttr());
+        $this->assertEquals(XhtmlRenderer::RENDER_AS_ATTRIBUTE, $renderer->getErrorFormat());
+        $this->expectAttribute($html, 'data-error', 'Your name is too long.');
+    }
+
     public function testUploadRender()
     {
         $form = new Form('', false);
@@ -38,7 +117,8 @@ class XhtmlRendererTest extends BaseTestRenderer
         $field->addValidator(new UploadValidator(true));
 
         ob_start();
-        echo $field;
+        $renderer = $form->getRenderer();
+        echo $renderer($field);
         $html = ob_get_clean();
 
         $this->expectAttribute($html, 'type', 'file');

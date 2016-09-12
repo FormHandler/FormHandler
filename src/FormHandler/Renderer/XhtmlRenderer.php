@@ -2,6 +2,7 @@
 
 namespace FormHandler\Renderer;
 
+use FormHandler\Field\AbstractFormField;
 use FormHandler\Field\CheckBox;
 use FormHandler\Field\Element;
 use FormHandler\Field\ImageButton;
@@ -20,22 +21,40 @@ use Herrera\Json\Exception\Exception;
 class XhtmlRenderer extends AbstractRenderer
 {
     /**
-     * Render the given element.
-     *
-     * @param Element $element
-     * @return string The HTML of the element
-     * @throws Exception
+     * Use this constant to make sure that errors are
+     * set in the "title" attribute of the field. Any previous value of the title attribute will be overwritten.
      */
-    public function render(Element $element)
-    {
-        $method = $this->getMethodNameForClass($element);
-
-        if (!method_exists($this, $method)) {
-            throw new Exception('Error, render method "' . $method . '" was not found');
-        }
-
-        return $this->$method($element);
-    }
+    const RENDER_AS_ATTRIBUTE = 1;
+    /**
+     * Use this constant to render error messages in a specific
+     * HTML tag.
+     */
+    const RENDER_AS_TAG = 2;
+    /**
+     * Use this constant if you don't want us to render error messages. In that case you should do it yourself.
+     */
+    const RENDER_NONE = 3;
+    /**
+     * Set an HTML tag or attribute which should be used for rendering error messages.
+     * If none is set we will use the `tt` tag.
+     * @var string
+     */
+    protected $errorTagOrAttr = 'tt';
+    /**
+     * Set an HTML tag or attribute whch should be used for rendering Help Text messages.
+     * By default we will use the `dfn` tag.
+     * @var string
+     */
+    protected $helpTagOrAttr = 'dfn';
+    /**
+     * Set the format how error messages should be rendered.
+     * @var int
+     */
+    protected $errorFormat = self::RENDER_AS_TAG;
+    /**
+     * @var int
+     */
+    protected $helpFormat = self::RENDER_AS_TAG;
 
     /**
      * Render a HiddenField.
@@ -81,6 +100,76 @@ class XhtmlRenderer extends AbstractRenderer
         $tag->setAttribute('label', $optgroup->getLabel());
 
         return $this->parseTag($tag, $optgroup);
+    }
+
+    /**
+     * Render the given element.
+     *
+     * @param Element $element
+     * @return string The HTML of the element
+     * @throws Exception
+     */
+    public function render(Element $element)
+    {
+        $method = $this->getMethodNameForClass($element);
+
+        if (!method_exists($this, $method)) {
+            throw new Exception('Error, render method "' . $method . '" was not found');
+        }
+
+        $errorHtml = $this->renderErrorMessages($element);
+
+        $helpHtml = $this->renderHelpText($element);
+
+        $html = $this->$method($element);
+
+        return $html . $helpHtml . $errorHtml;
+    }
+
+    /**
+     * If the given element is a form field and it has error messages, then also render those and return them
+     * in the expected format.
+     * @param Element $element
+     * @return string
+     */
+    protected function renderErrorMessages(Element $element)
+    {
+        $html = '';
+
+        // if we have error messages, then also render those
+        if ($element instanceof AbstractFormField && sizeof($element->getErrorMessages()) > 0) {
+            // render the error as title?
+            if ($this->errorFormat == self::RENDER_AS_ATTRIBUTE) {
+                // if the element is a form field, add the errors in the title tag
+                $element->setAttribute($this->errorTagOrAttr, implode("\n", $element->getErrorMessages()));
+            } elseif ($this->errorFormat == self::RENDER_AS_TAG) {
+                $tag = new Tag($this->errorTagOrAttr);
+                $tag->setInnerHtml(implode('<br />' . PHP_EOL, $element->getErrorMessages()));
+                $html .= $tag->render();
+            }
+        }
+
+        return $html;
+    }
+
+    public function renderHelpText(Element $element)
+    {
+        $html = '';
+
+        // if we have error messages, then also render those
+        if ($element instanceof AbstractFormField && $element->getHelpText()) {
+            // render the error as title?
+            if ($this->helpFormat == self::RENDER_AS_ATTRIBUTE) {
+                // if the element is a form field, add the errors in the title tag
+                $element->setAttribute($this->helpTagOrAttr, $element->getHelpText());
+            } elseif ($this->helpFormat == self::RENDER_AS_TAG) {
+                $tag = new Tag($this->helpTagOrAttr);
+                $tag->setInnerHtml($element->getHelpText());
+                $html .= $tag->render();
+            }
+        }
+
+        return $html;
     }
 
     /**
@@ -264,6 +353,78 @@ class XhtmlRenderer extends AbstractRenderer
         }
 
         return $html;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorTagOrAttr()
+    {
+        return $this->errorTagOrAttr;
+    }
+
+    /**
+     * @param string $errorTagOrAttr
+     * @return XhtmlRenderer
+     */
+    public function setErrorTagOrAttr($errorTagOrAttr)
+    {
+        $this->errorTagOrAttr = $errorTagOrAttr;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelpTagOrAttr()
+    {
+        return $this->helpTagOrAttr;
+    }
+
+    /**
+     * @param string $helpTagOrAttr
+     * @return XhtmlRenderer
+     */
+    public function setHelpTagOrAttr($helpTagOrAttr)
+    {
+        $this->helpTagOrAttr = $helpTagOrAttr;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getErrorFormat()
+    {
+        return $this->errorFormat;
+    }
+
+    /**
+     * @param int $errorFormat
+     * @return XhtmlRenderer
+     */
+    public function setErrorFormat($errorFormat)
+    {
+        $this->errorFormat = $errorFormat;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHelpFormat()
+    {
+        return $this->helpFormat;
+    }
+
+    /**
+     * @param int $helpFormat
+     * @return XhtmlRenderer
+     */
+    public function setHelpFormat($helpFormat)
+    {
+        $this->helpFormat = $helpFormat;
+        return $this;
     }
 
     /**

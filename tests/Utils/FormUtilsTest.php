@@ -200,50 +200,6 @@ class FormUtilsTest extends TestCase
         $this->assertEquals($newfile, __DIR__ . '/_tmp/test(1).pdf');
     }
 
-    public function testGdVersion()
-    {
-        $GLOBALS['mock_extension_not_loaded'] = 'gd';
-        $this->assertEquals(0, FormUtils::getGDVersion(false));
-
-        unset($GLOBALS['mock_extension_not_loaded']);
-        $GLOBALS['mock_extension_loaded'] = 'gd';
-        $GLOBALS['mock_function_exists'] = 'gd_info';
-
-        $GLOBALS['mock_gd_info'] = [
-            'GD Version' => 'bundled (2.1.0 compatible)',
-            // other keys are not of any interest, so we ignore those here.
-        ];
-        $this->assertEquals(2, FormUtils::getGDVersion(false));
-
-        // just a funky test :-)
-        $GLOBALS['mock_gd_info'] = ['GD Version' => '16.2'];
-        $this->assertEquals(16, FormUtils::getGDVersion(false));
-
-        $GLOBALS['mock_gd_info'] = ['GD Version' => '1.62'];
-        $this->assertEquals(1, FormUtils::getGDVersion(false));
-
-
-        unset($GLOBALS['mock_function_exists']);
-        unset($GLOBALS['mock_gd_info']);
-        $GLOBALS['mock_function_not_exists'] = 'gd_info';
-
-        // test when phpinfo is disabled
-        $GLOBALS['mock_ini_get']['disable_functions'] = 'phpinfo';
-        $this->assertEquals(1, FormUtils::getGDVersion(false));
-
-        unset($GLOBALS['mock_ini_get']);
-
-        // test the phpinfo
-        $GLOBALS['mock_php_info'] =
-            'other extension' . PHP_EOL .
-            'lot of spects here.' . PHP_EOL .
-            PHP_EOL .
-            'gd' . PHP_EOL .
-            'gd version 2.1.0' . PHP_EOL;
-
-        $this->assertEquals(2, FormUtils::getGDVersion(false));
-    }
-
     public function testSizeToBytes()
     {
         $tests = [

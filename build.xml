@@ -270,6 +270,12 @@
         <property name="phpunit.done" value="true"/>
     </target>
 
+    <target name="open-browser">
+        <exec executable="open">
+            <arg value="${basedir}/build/coverage/index.html"/>
+        </exec>
+    </target>
+
     <target name="phpunit-no-coverage"
             unless="phpunit.done"
             depends="prepare"
