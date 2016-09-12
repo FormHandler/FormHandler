@@ -201,3 +201,28 @@ Therefore it needs to be absolutly clear how FormHandler displays strings and wh
    * Other attributes are filled by *you*, and are thus **NOT** escaped. 
 
 This means that button values are thus also not escaped, as they cannot be filled from the `$_GET` or `$_POST`.
+
+
+Rendering
+------
+FormHandler tries to limit it's functionality to what it should do: handle forms. However, displaying the forms is 
+related to this topic. When displaying forms, you cannot limit yourself to only display the form fields. There
+are always elements which are related: 
+
+  * Title of the field
+  * Label of checkboxes / radio buttons
+  * Displaying error messages
+  * Displaying "help" information
+  * Displaying if the field is required or not
+
+FormHandler tries to not to interfere with the design part of your application. However, it should be clear that 
+its thus inevitable that FormHandler has some responsibility of generating HTML content.
+
+FormHandler comes with a class called a `Renderer`. This class is responsible for rendering the element 
+(field/button/form) and all its related information (error messages, titles, etc).
+  
+It's quite easy to create your own class which will render the elements in the way you expect them. 
+
+@todo: example here?
+  
+  
