@@ -2,6 +2,7 @@
 
 namespace FormHandler\Renderer;
 
+use FormHandler\Field\AbstractFormField;
 use FormHandler\Field\Element;
 
 class CowSayRenderer extends XhtmlRenderer
@@ -25,8 +26,8 @@ class CowSayRenderer extends XhtmlRenderer
     public function cowSay($html)
     {
         return
-            '<div id="bubble" >' . $html . '</div>
-	    <pre id="cow">
+            '<div>' . $html . '</div>
+	    <pre>
            \   ^__^
             \  (oo)\_______
                (__)\       )\/\
