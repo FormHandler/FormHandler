@@ -22,7 +22,7 @@ class FormTest extends TestCase
         // set a formatter and check if it's still defined
         $this->assertNull(Form::getDefaultRenderer());
         Form::setDefaultRenderer(new XhtmlRenderer());
-        $this->assertInstanceOf(XhtmlRenderer::class, Form::getDefaultRenderer());
+        $this->assertInstanceOf('\FormHandler\Renderer\XhtmlRenderer', Form::getDefaultRenderer());
     }
 
     /**
@@ -51,7 +51,7 @@ class FormTest extends TestCase
 
         $form = new Form();
         $this->assertTrue($form->isCsrfProtectionEnabled());
-        $this->assertInstanceOf(HiddenField::class, $form->getFieldByName('csrftoken'));
+        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $form->getFieldByName('csrftoken'));
     }
 
     /**
@@ -72,7 +72,7 @@ class FormTest extends TestCase
 
         // this should exists
         $field = $form->getFieldByName('csrftoken');
-        $this->assertInstanceOf(HiddenField::class, $field, 'csrf field should exists');
+        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $field, 'csrf field should exists');
 
         // this should contain a token
         $this->assertNotEmpty(
@@ -109,7 +109,7 @@ class FormTest extends TestCase
 
         // after checking it should exists, but if should be invalid.
         $field = $form->getFieldByName('csrftoken');
-        $this->assertInstanceOf(HiddenField::class, $field);
+        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $field);
 
         $this->assertEmpty($field->getValue(), 'csrf token should be emty');
     }
@@ -147,7 +147,7 @@ class FormTest extends TestCase
 
         // after checking it should exists, but if should be invalid.
         $field = $form->getFieldByName('csrftoken');
-        $this->assertInstanceOf(HiddenField::class, $field);
+        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $field);
 
         $this->assertEquals('wrong.value', $field->getValue(), 'csrf token should be wrong.value');
     }
@@ -281,10 +281,10 @@ class FormTest extends TestCase
 
         // our UTF8 encoding filter is the default
         $form = new Form();
-        $this->assertInstanceOf(Utf8EncodingFilter::class, $form->getEncodingFilter());
+        $this->assertInstanceOf('FormHandler\Encoding\Utf8EncodingFilter', $form->getEncodingFilter());
 
         Form::setDefaultEncodingFilter(new Utf8EncodingFilter());
-        $this->assertInstanceOf(Utf8EncodingFilter::class, Form::getDefaultEncodingFilter());
+        $this->assertInstanceOf('FormHandler\Encoding\Utf8EncodingFilter', Form::getDefaultEncodingFilter());
     }
 
     /**
@@ -307,7 +307,7 @@ class FormTest extends TestCase
         $form = new Form();
         $this->assertEmpty($form->getTarget());
 
-        $this->assertInstanceOf(Form::class, $form->setTarget('_blank'));
+        $this->assertInstanceOf('\FormHandler\Form', $form->setTarget('_blank'));
         $this->assertEquals('_blank', $form->getTarget());
     }
 
@@ -321,10 +321,10 @@ class FormTest extends TestCase
         // URLENCODED is default
         $this->assertEquals(Form::ENCTYPE_URLENCODED, $form->getEnctype());
 
-        $this->assertInstanceOf(Form::class, $form->setEnctype(Form::ENCTYPE_MULTIPART));
+        $this->assertInstanceOf('\FormHandler\Form', $form->setEnctype(Form::ENCTYPE_MULTIPART));
         $this->assertEquals(Form::ENCTYPE_MULTIPART, $form->getEnctype());
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $form->setEnctype('wrong');
     }
 
@@ -337,7 +337,7 @@ class FormTest extends TestCase
         $this->assertEmpty($form->getAccept());
 
         $str = 'image/jpeg image/jpg';
-        $this->assertInstanceOf(Form::class, $form->setAccept($str));
+        $this->assertInstanceOf('\FormHandler\Form', $form->setAccept($str));
         $this->assertEquals($str, $form->getAccept());
     }
 
@@ -392,7 +392,7 @@ class FormTest extends TestCase
         $this->assertFalse($form->isSubmitted());
 
         // invalid request method
-        $this->assertInstanceOf(Form::class, $form->clearCache());
+        $this->assertInstanceOf('\FormHandler\Form', $form->clearCache());
         $form->setMethod(Form::METHOD_POST);
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $this->assertFalse($form->isSubmitted());
@@ -534,7 +534,7 @@ class FormTest extends TestCase
         $form = new Form();
         $this->assertEmpty($form->getName());
 
-        $this->assertInstanceOf(Form::class, $form->setName('myForm'));
+        $this->assertInstanceOf('\FormHandler\Form', $form->setName('myForm'));
         $this->assertEquals('myForm', $form->getName());
     }
 
@@ -550,36 +550,36 @@ class FormTest extends TestCase
         $this->assertEquals([], $form->getFields());
 
         // after adding 1 it should only contain 1
-        $this->assertInstanceOf(TextField::class, $form->textField('name')->setId('name'));
-        $this->assertContainsOnlyInstancesOf(TextField::class, $form->getFields());
+        $this->assertInstanceOf('FormHandler\Field\TextField', $form->textField('name')->setId('name'));
+        $this->assertContainsOnlyInstancesOf('FormHandler\Field\TextField', $form->getFields());
         $this->assertCount(1, $form->getFields());
 
         // test invoke
         $field = $form('name');
-        $this->assertInstanceOf(TextField::class, $field);
+        $this->assertInstanceOf('FormHandler\Field\TextField', $field);
         $this->assertEquals('name', $field->getName());
 
         // add some more
-        $this->assertInstanceOf(RadioButton::class, $form->radioButton('gender', 'm'));
-        $this->assertInstanceOf(RadioButton::class, $form->radioButton('gender', 'f'));
-        $this->assertInstanceOf(RadioButton::class, $form->radioButton('gender', 'u'));
-        $this->assertContainsOnlyInstancesOf(AbstractFormField::class, $form->getFields());
+        $this->assertInstanceOf('FormHandler\Field\RadioButton', $form->radioButton('gender', 'm'));
+        $this->assertInstanceOf('FormHandler\Field\RadioButton', $form->radioButton('gender', 'f'));
+        $this->assertInstanceOf('FormHandler\Field\RadioButton', $form->radioButton('gender', 'u'));
+        $this->assertContainsOnlyInstancesOf('FormHandler\Field\AbstractFormField', $form->getFields());
         $this->assertCount(4, $form->getFields());
 
         $gender = $form->getFieldsByName('gender');
         $this->assertCount(3, $gender);
-        $this->assertContainsOnlyInstancesOf(RadioButton::class, $gender);
+        $this->assertContainsOnlyInstancesOf('FormHandler\Field\RadioButton', $gender);
 
         // now remove 1 gender field
-        $this->assertInstanceOf(Form::class, $form->removeFieldByName('gender'));
+        $this->assertInstanceOf('\FormHandler\Form', $form->removeFieldByName('gender'));
         $this->assertCount(3, $form->getFields());
 
         // now all gender fields should be removed
-        $this->assertInstanceOf(Form::class, $form->removeAllFieldsByName('gender'));
+        $this->assertInstanceOf('\FormHandler\Form', $form->removeAllFieldsByName('gender'));
         $this->assertCount(1, $form->getFields());
 
         // delete by id
-        $this->assertInstanceOf(Form::class, $form->removeFieldById('name'));
+        $this->assertInstanceOf('\FormHandler\Form', $form->removeFieldById('name'));
 
         $this->assertNull($form->getFieldById('IDontExists'));
 
@@ -587,8 +587,8 @@ class FormTest extends TestCase
         $this->assertEquals([], $form->getFields());
         $this->assertCount(0, $form->getFields());
 
-        $this->assertInstanceOf(TextField::class, $form->textField('age')->setId('age'));
-        $this->assertContainsOnlyInstancesOf(TextField::class, $form->getFields());
+        $this->assertInstanceOf('FormHandler\Field\TextField', $form->textField('age')->setId('age'));
+        $this->assertContainsOnlyInstancesOf('FormHandler\Field\TextField', $form->getFields());
         $this->assertCount(1, $form->getFields());
 
         $form->removeField($form->getFieldById('age'));
@@ -608,13 +608,13 @@ class FormTest extends TestCase
         // default
         $this->assertEquals(Form::METHOD_POST, $form->getMethod());
 
-        $this->assertInstanceOf(Form::class, $form->setMethod(Form::METHOD_GET));
+        $this->assertInstanceOf('\FormHandler\Form', $form->setMethod(Form::METHOD_GET));
         $this->assertEquals(Form::METHOD_GET, $form->getMethod());
 
-        $this->assertInstanceOf(Form::class, $form->setMethod(Form::METHOD_POST));
+        $this->assertInstanceOf('\FormHandler\Form', $form->setMethod(Form::METHOD_POST));
         $this->assertEquals(Form::METHOD_POST, $form->getMethod());
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $form->setMethod('put');
     }
 
@@ -699,7 +699,7 @@ class FormTest extends TestCase
 
     public function testIncorrectFill()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/composite types/');
 
         $form = new Form();

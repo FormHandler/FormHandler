@@ -139,7 +139,7 @@ class IsOptionValidatorTest extends TestCase
      */
     public function testIncorrectField()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/ works on select fields/');
 
         $form = new Form(null, false);

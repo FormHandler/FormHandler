@@ -55,7 +55,7 @@ class UserFunctionValidatorTest extends TestCase
 
     public function testNonExistingFunction()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/does not exists/');
 
         $form = new Form('', false);

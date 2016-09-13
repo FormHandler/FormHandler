@@ -75,7 +75,7 @@ class UrlValidatorTest extends TestCase
 
     public function testIncorrectSchemesType()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/not an array/');
 
         $validator = new UrlValidator();

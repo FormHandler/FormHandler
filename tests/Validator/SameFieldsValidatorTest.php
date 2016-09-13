@@ -60,7 +60,7 @@ class SameFieldsValidatorTest extends TestCase
 
     public function testInvalidField()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/has to be/');
 
         new SameFieldsValidator(1);

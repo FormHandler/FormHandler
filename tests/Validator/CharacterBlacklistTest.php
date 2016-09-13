@@ -71,7 +71,7 @@ class CharacterBlacklistTest extends TestCase
         $this->assertContains($errormsg, $field->getErrorMessages());
 
         // incorrect type as whitelist, expect an exception
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/Incorrect blacklist given/');
         $validator->setBlacklist(new \stdClass());
     }
@@ -95,7 +95,7 @@ class CharacterBlacklistTest extends TestCase
 
         $field->addValidator($validator);
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }

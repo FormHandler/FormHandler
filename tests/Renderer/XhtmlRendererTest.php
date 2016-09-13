@@ -18,7 +18,7 @@ class XhtmlRendererTest extends BaseTestRenderer
 {
     public function testRenderInvalidClass()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
 
         $renderer = new XhtmlRenderer();
         $renderer->render(new FakeElement());

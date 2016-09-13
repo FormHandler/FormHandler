@@ -49,7 +49,7 @@ class RadioButtonCheckedValidatorTest extends TestCase
      */
     public function testIncorrectField()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/only works on radio buttons/');
 
         $form = new Form('', false);

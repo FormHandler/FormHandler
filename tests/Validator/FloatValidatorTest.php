@@ -44,7 +44,7 @@ class FloatValidatorTest extends TestCase
             ->setValue([1, 5, 6, 9])
             ->addValidator(new FloatValidator(0.0, 1.0, true));
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }

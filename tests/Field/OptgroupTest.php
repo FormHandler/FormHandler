@@ -41,12 +41,12 @@ class OptgroupTest extends TestCase
 
         $option = new Option('4', 'Four');
         $optgroup->addOption($option);
-        $this->assertContainsOnlyInstancesOf(Option::class, $optgroup->getOptions());
+        $this->assertContainsOnlyInstancesOf('\FormHandler\Field\Option', $optgroup->getOptions());
         $this->assertCount(4, $optgroup->getOptions());
 
         $newoptions = [new Option('0', 'None')];
         $optgroup->addOptions($newoptions);
-        $this->assertContainsOnlyInstancesOf(Option::class, $optgroup->getOptions());
+        $this->assertContainsOnlyInstancesOf('\FormHandler\Field\Option', $optgroup->getOptions());
         $this->assertCount(5, $optgroup->getOptions());
         $this->assertEquals($alloptions, $optgroup->getOptions());
 

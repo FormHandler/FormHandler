@@ -29,7 +29,7 @@ class FormUtilsTest extends TestCase
         $field = $form->uploadField('cv');
         $field->setMultiple(true); // multiple files allowed
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/multiple files/');
 
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf');
@@ -66,7 +66,7 @@ class FormUtilsTest extends TestCase
 
         @touch(__DIR__ . '/_tmp/moved.pdf');
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/already exists/');
 
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf', FormUtils::MODE_EXCEPTION);
@@ -79,7 +79,7 @@ class FormUtilsTest extends TestCase
 
         @touch(__DIR__ . '/_tmp/moved.pdf');
 
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException('\UnexpectedValueException');
 
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf', 'wrong');
     }
@@ -104,7 +104,7 @@ class FormUtilsTest extends TestCase
         $form = new Form('', false);
         $field = $form->uploadField('cv');
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/Failed to create the destination directory/');
 
         $GLOBALS['mock_mkdir_response'] = false;
@@ -117,7 +117,7 @@ class FormUtilsTest extends TestCase
         $form = new Form('', false);
         $field = $form->uploadField('cv');
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/directory is not writable/');
 
         $GLOBALS['mock_is_writable_response'] = false;
@@ -132,7 +132,7 @@ class FormUtilsTest extends TestCase
 
         $GLOBALS['mock_move_uploaded_file_response'] = false;
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/we failed to move file/');
 
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/blaat.tmp', FormUtils::MODE_OVERWRITE, true);
@@ -184,7 +184,7 @@ class FormUtilsTest extends TestCase
 
         $GLOBALS['mock_move_uploaded_file_response'] = false;
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/we failed to move file/');
 
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/', FormUtils::MODE_OVERWRITE, true);
@@ -223,7 +223,7 @@ class FormUtilsTest extends TestCase
         }
 
         // test incorrect string given
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/incorrect size given/');
 
         FormUtils::sizeToBytes('wrong');
@@ -273,10 +273,10 @@ class FormUtilsTest extends TestCase
         $blacklist = null;
         FormUtils::queryStringToForm($form, $whitelist, $blacklist);
 
-        $this->assertInstanceOf(HiddenField::class, $form->getFieldByName('name'));
+        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $form->getFieldByName('name'));
         $this->assertEquals('John', $form->getFieldByName('name')->getValue());
 
-        $this->assertInstanceOf(HiddenField::class, $form->getFieldByName('gender'));
+        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $form->getFieldByName('gender'));
         $this->assertEquals('m', $form->getFieldByName('gender')->getValue());
 
         $this->assertNull($form->getFieldByName('age'));
@@ -294,10 +294,10 @@ class FormUtilsTest extends TestCase
         $blacklist = ['age'];
         FormUtils::queryStringToForm($form, $whitelist, $blacklist);
 
-        $this->assertInstanceOf(HiddenField::class, $form->getFieldByName('name'));
+        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $form->getFieldByName('name'));
         $this->assertEquals('John', $form->getFieldByName('name')->getValue());
 
-        $this->assertInstanceOf(HiddenField::class, $form->getFieldByName('gender'));
+        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $form->getFieldByName('gender'));
         $this->assertEquals('m', $form->getFieldByName('gender')->getValue());
 
         $this->assertNull($form->getFieldByName('age'));

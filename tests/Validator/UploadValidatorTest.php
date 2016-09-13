@@ -353,7 +353,7 @@ class UploadValidatorTest extends TestCase
         ];
         $validator = new UploadValidator(true, $messages);
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/only works on upload fields/');
 
         $field->setValidator($validator);

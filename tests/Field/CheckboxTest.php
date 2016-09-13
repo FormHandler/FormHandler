@@ -20,7 +20,7 @@ class CheckboxTest extends TestCase
         $obj->setAccesskey('a');
         $obj->setLabel('Set your name');
 
-        $this->assertClassHasAttribute('checked', CheckBox::class);
+        $this->assertClassHasAttribute('checked', '\FormHandler\Field\CheckBox');
 
         $this->assertEquals('test', $obj->getName());
         $this->assertEquals('test2', $obj->getId());

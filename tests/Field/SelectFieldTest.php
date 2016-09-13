@@ -66,7 +66,7 @@ class SelectFieldTest extends TestCase
 
         // make sure that the "None" field is not automatically selected because it's value is "0"
         // and no value ("null") is not the same as zero!
-        $this->assertInstanceOf(Option::class, $infield[4]);
+        $this->assertInstanceOf('\FormHandler\Field\Option', $infield[4]);
         $this->assertEquals('None', $infield[4]->getLabel());
         $this->assertEquals(false, $infield[4]->isSelected());
 
@@ -120,12 +120,12 @@ class SelectFieldTest extends TestCase
         $this->assertTrue($infield[4]->isSelected());
 
         // 5th element should be an Optgroup
-        $this->assertInstanceOf(Optgroup::class, $infield[5]);
+        $this->assertInstanceOf('\FormHandler\Field\Optgroup', $infield[5]);
 
         // this optgroup should have 1 Option and it should be selected
         $optgroup = $infield[5];
         $this->assertEquals(1, sizeof($optgroup->getOptions()));
-        $this->assertInstanceOf(Option::class, $optgroup->getOptions()[0]);
+        $this->assertInstanceOf('\FormHandler\Field\Option', $optgroup->getOptions()[0]);
         $this->assertTrue($optgroup->getOptions()[0]->isSelected());
 
 
@@ -149,13 +149,13 @@ class SelectFieldTest extends TestCase
         $this->assertEquals([], $field->getValue());
 
         $option = $field->getOptionByValue(5);
-        $this->assertInstanceOf(Option::class, $option);
+        $this->assertInstanceOf('\FormHandler\Field\Option', $option);
         $this->assertEquals($option->getLabel(), 'Five');
 
         $this->assertEquals(null, $field->getOptionByValue(92));
 
         // Remove the 'None' option
-        $this->assertInstanceOf(SelectField::class, $field->removeOptionByValue(0));
+        $this->assertInstanceOf('\FormHandler\Field\SelectField', $field->removeOptionByValue(0));
 
         $infield = $field->getOptions();
 
@@ -180,7 +180,7 @@ class SelectFieldTest extends TestCase
 
         // we should now have 4 options left.
         $this->assertEquals(4, sizeof($infield));
-        $this->assertContainsOnly(Option::class, $infield);
+        $this->assertContainsOnly('\FormHandler\Field\Option', $infield);
 
         // add it again
         $optgroup->addOption(new Option(99, 'A lot'));

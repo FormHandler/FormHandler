@@ -70,7 +70,7 @@ class CharacterWhitelistTest extends TestCase
         );
 
         // incorrect type as whitelist, expect an exception
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/Incorrect whitelist given/');
         $validator->setWhitelist(new \stdClass());
     }
@@ -94,7 +94,7 @@ class CharacterWhitelistTest extends TestCase
 
         $field->addValidator($validator);
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }

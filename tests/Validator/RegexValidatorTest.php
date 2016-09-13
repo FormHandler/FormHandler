@@ -84,7 +84,7 @@ class RegexValidatorTest extends TestCase
             ->setValue([1, 5, 6, 9])
             ->addValidator(new RegexValidator('/^[a-z]*$/i', true));
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }

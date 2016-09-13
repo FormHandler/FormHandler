@@ -10,7 +10,7 @@ class StringValidatorTest extends TestCase
 
     public function testInvalidValidator()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/AbstractValidator/');
 
         $form = new Form('', false);
@@ -72,7 +72,7 @@ class StringValidatorTest extends TestCase
             ->setValue([1, 5, 6, 9])
             ->addValidator(new StringValidator(2, 50, true));
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }

@@ -224,7 +224,7 @@ class EmailValidatorTest extends TestCase
         // this would be strange, but hey... the world is strange!
         $field->addValidator($validator);
 
-        $this->expectException(\Exception::class);
+        $this->expectException('\Exception');
         $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }
