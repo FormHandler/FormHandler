@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\EqualsValidator;
-use PHPUnit\Framework\TestCase;
 
-class EqualsValidatorTest extends TestCase
+class EqualsValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testEqualsValidatorRequired()
     {

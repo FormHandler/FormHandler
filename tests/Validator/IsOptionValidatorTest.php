@@ -4,9 +4,8 @@ namespace FormHandler\Tests\Validator;
 use FormHandler\Field\Optgroup;
 use FormHandler\Form;
 use FormHandler\Validator\IsOptionValidator;
-use PHPUnit\Framework\TestCase;
 
-class IsOptionValidatorTest extends TestCase
+class IsOptionValidatorTest extends \PHPUnit_Framework_TestCase
 {
     protected $options = [
         'dog',

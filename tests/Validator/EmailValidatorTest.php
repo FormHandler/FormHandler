@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\EmailValidator;
-use PHPUnit\Framework\TestCase;
 
-class EmailValidatorTest extends TestCase
+class EmailValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testRequiredEmailValidator()
     {

@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\DateValidator;
-use PHPUnit\Framework\TestCase;
 
-class DateValidatorTest extends TestCase
+class DateValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test the date validator

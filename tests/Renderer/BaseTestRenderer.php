@@ -2,9 +2,7 @@
 
 namespace FormHandler\Tests\Renderer;
 
-use PHPUnit\Framework\TestCase;
-
-class BaseTestRenderer extends TestCase
+class BaseTestRenderer extends \PHPUnit_Framework_TestCase
 {
     protected function expectAttribute($html, $name, $value)
     {

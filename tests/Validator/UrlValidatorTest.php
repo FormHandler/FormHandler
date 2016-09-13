@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\UrlValidator;
-use PHPUnit\Framework\TestCase;
 
-class UrlValidatorTest extends TestCase
+class UrlValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testUrlValidator()
     {

@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Utils;
 
 use FormHandler\Form;
 use FormHandler\Utils\FormUtils;
-use PHPUnit\Framework\TestCase;
 
-class FormUtilsTest extends TestCase
+class FormUtilsTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetFileExtension()
     {

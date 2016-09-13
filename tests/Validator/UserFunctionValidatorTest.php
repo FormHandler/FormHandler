@@ -3,7 +3,6 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Field\AbstractFormField;
 use FormHandler\Form;
-use PHPUnit\Framework\TestCase;
 
 /**
  * This is our validator function which we use to test
@@ -21,7 +20,7 @@ function validateNameJohn(AbstractFormField $field)
     return "Nope, you are not allowed!";
 }
 
-class UserFunctionValidatorTest extends TestCase
+class UserFunctionValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testUserFunctionValidator()
     {

@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\RegexValidator;
-use PHPUnit\Framework\TestCase;
 
-class RegexValidatorTest extends TestCase
+class RegexValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testRequired()
     {

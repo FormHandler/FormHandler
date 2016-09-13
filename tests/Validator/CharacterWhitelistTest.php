@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\CharacterWhitelistValidator;
-use PHPUnit\Framework\TestCase;
 
-class CharacterWhitelistTest extends TestCase
+class CharacterWhitelistTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test the Whitelist Validator

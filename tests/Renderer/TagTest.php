@@ -3,9 +3,8 @@
 namespace FormHandler\Tests\Renderer;
 
 use FormHandler\Renderer\Tag;
-use PHPUnit\Framework\TestCase;
 
-class TagTest extends TestCase
+class TagTest extends \PHPUnit_Framework_TestCase
 {
     public function testTag()
     {

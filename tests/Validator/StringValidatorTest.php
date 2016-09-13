@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\StringValidator;
-use PHPUnit\Framework\TestCase;
 
-class StringValidatorTest extends TestCase
+class StringValidatorTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testInvalidValidator()

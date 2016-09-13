@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\NumberValidator;
-use PHPUnit\Framework\TestCase;
 
-class NumberValidatorTest extends TestCase
+class NumberValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testNumberValidatorRequired()
     {

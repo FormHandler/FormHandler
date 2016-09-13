@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\SameFieldsValidator;
-use PHPUnit\Framework\TestCase;
 
-class SameFieldsValidatorTest extends TestCase
+class SameFieldsValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testEqualsValidatorRequired()
     {

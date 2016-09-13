@@ -6,9 +6,8 @@ use FormHandler\Form;
 use FormHandler\Renderer\XhtmlRenderer;
 use FormHandler\Validator\CsrfValidator;
 use FormHandler\Validator\StringValidator;
-use PHPUnit\Framework\TestCase;
 
-class FormTest extends TestCase
+class FormTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @todo: also make sure that the formatter is applied

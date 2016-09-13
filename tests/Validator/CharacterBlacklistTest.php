@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\CharacterBlacklistValidator;
-use PHPUnit\Framework\TestCase;
 
-class CharacterBlacklistTest extends TestCase
+class CharacterBlacklistTest extends \PHPUnit_Framework_TestCase
 {
     public function testBlacklistValidator()
     {

@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Field\AbstractFormField;
 use FormHandler\Form;
-use PHPUnit\Framework\TestCase;
 
-class UserMethodValidatorTest extends TestCase
+class UserMethodValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testUserMethod()
     {

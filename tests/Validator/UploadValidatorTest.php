@@ -5,9 +5,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\UploadValidator;
-use PHPUnit\Framework\TestCase;
 
-class UploadValidatorTest extends TestCase
+class UploadValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testValidUpload()
     {

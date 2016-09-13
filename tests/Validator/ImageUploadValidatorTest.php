@@ -4,13 +4,12 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\ImageUploadValidator;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Class ImageUploadValidatorTest
  * @package FormHandler\Tests\Validator
  */
-class ImageUploadValidatorTest extends TestCase
+class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testValidUpload()
     {

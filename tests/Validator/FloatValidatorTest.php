@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\FloatValidator;
-use PHPUnit\Framework\TestCase;
 
-class FloatValidatorTest extends TestCase
+class FloatValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testFloatValidatorRequired()
     {

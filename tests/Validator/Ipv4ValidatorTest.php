@@ -3,9 +3,8 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\Ipv4Validator;
-use PHPUnit\Framework\TestCase;
 
-class Ipv4ValidatorTest extends TestCase
+class Ipv4ValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testIpv4()
     {
