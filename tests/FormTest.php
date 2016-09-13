@@ -308,6 +308,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the form's encoding type.
+     * @expectedException \Exception
      */
     public function testFormEnctype()
     {
@@ -319,7 +320,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\FormHandler\Form', $form->setEnctype(Form::ENCTYPE_MULTIPART));
         $this->assertEquals(Form::ENCTYPE_MULTIPART, $form->getEnctype());
 
-        $this->expectException('\Exception');
         $form->setEnctype('wrong');
     }
 
@@ -595,6 +595,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the form method
+     * @expectedException \Exception
      */
     public function testFormMethod()
     {
@@ -609,7 +610,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\FormHandler\Form', $form->setMethod(Form::METHOD_POST));
         $this->assertEquals(Form::METHOD_POST, $form->getMethod());
 
-        $this->expectException('\Exception');
         $form->setMethod('put');
     }
 
@@ -692,11 +692,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($form->getFieldByName('agree')->isChecked());
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp '/composite types/'
+     */
     public function testIncorrectFill()
     {
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/composite types/');
-
         $form = new Form();
         $form->fill('wrong');
     }

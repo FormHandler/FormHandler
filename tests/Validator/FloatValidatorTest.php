@@ -30,6 +30,8 @@ class FloatValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test non-scalar values in a field for the float validator.
+     * @expectedException \Exception
+     * @expectedExceptionMessage scalar types
      */
     public function testFloatValidatorNonScalar()
     {
