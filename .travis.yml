@@ -9,11 +9,10 @@ php:
   - nightly
 
 before_script:
-    - travis_retry composer self-update
-    - travis_retry composer --prefer-source --dev install --no-interaction
+    - travis_retry composer remove phploc/phploc --update-with-dependencies
 
 script:
-  - ant quick-build
+  - ant travis
 
 after_success:
   - travis_retry php vendor/bin/coveralls -v

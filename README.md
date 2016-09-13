@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/teyeheimans/FormHandler.svg?branch=master)](https://travis-ci.org/teyeheimans/FormHandler)
+[![Build Status](https://travis-ci.org/teyeheimans/FormHandler.svg?branch=master)](https://travis-ci.org/teyeheimans/FormHandler) [![Coverage Status](https://coveralls.io/repos/github/teyeheimans/FormHandler/badge.svg?branch=master)](https://coveralls.io/github/teyeheimans/FormHandler?branch=master)
 
 FormHandler
 ======

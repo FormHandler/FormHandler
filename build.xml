@@ -46,9 +46,19 @@
             depends="prepare,composer,static-analysis-parallel,phpunit,phpdox,-check-failure"
             description="Performs static analysis (executing the tools in parallel), runs the tests, and generates project documentation"/>
 
-    <target name="quick-build"
-            depends="prepare,composer,lint,phpunit-no-coverage"
-            description="Performs a lint check and runs the tests (without generating code coverage reports)"/>
+    <target name="travis"
+            depends="prepare,composer,lint,phpunit"
+            description="Performs a lint check and runs the tests">
+
+        <var name="phpunit" unset="true"/>
+        <property name="phpunit" value="phpunit"/>
+
+        <antcall target="prepare" />
+        <antcall target="composer" />
+        <antcall target="lint" />
+        <antcall target="phpunit" />
+    </target>
+
 
     <target name="static-analysis"
             depends="lint,composer,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci"
