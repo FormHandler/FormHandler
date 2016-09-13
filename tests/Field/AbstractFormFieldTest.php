@@ -4,9 +4,8 @@ namespace FormHandler\Tests\Field;
 use FormHandler\Form;
 use FormHandler\Validator\RegexValidator;
 use FormHandler\Validator\StringValidator;
-use PHPUnit\Framework\TestCase;
 
-class AbstractFormFieldTest extends TestCase
+class AbstractFormFieldTest extends \PHPUnit_Framework_TestCase
 {
     public function testErrorMessage()
     {

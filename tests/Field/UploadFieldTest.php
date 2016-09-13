@@ -3,9 +3,8 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
-use PHPUnit\Framework\TestCase;
 
-class UploadFieldTest extends TestCase
+class UploadFieldTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsUploaded()
     {

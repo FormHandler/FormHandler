@@ -2,11 +2,9 @@
 
 namespace FormHandler\Tests\Field;
 
-use FormHandler\Field\CheckBox;
 use FormHandler\Form;
-use PHPUnit\Framework\TestCase;
 
-class CheckboxTest extends TestCase
+class CheckboxTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test the checkbox

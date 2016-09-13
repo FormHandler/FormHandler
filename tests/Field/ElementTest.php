@@ -2,7 +2,6 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Created by PhpStorm.
@@ -10,7 +9,7 @@ use PHPUnit\Framework\TestCase;
  * Date: 29-08-16
  * Time: 15:01
  */
-class ElementTest extends TestCase
+class ElementTest extends \PHPUnit_Framework_TestCase
 {
     public function testElement()
     {

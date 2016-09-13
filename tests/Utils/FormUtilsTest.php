@@ -1,7 +1,6 @@
 <?php
 namespace FormHandler\Tests\Utils;
 
-use FormHandler\Field\HiddenField;
 use FormHandler\Form;
 use FormHandler\Utils\FormUtils;
 use PHPUnit\Framework\TestCase;

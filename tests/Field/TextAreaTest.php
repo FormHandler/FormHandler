@@ -2,7 +2,6 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Test Passfield.
@@ -10,7 +9,7 @@ use PHPUnit\Framework\TestCase;
  * Date: 23-08-16
  * Time: 16:23
  */
-class TextAreaTest extends TestCase
+class TextAreaTest extends \PHPUnit_Framework_TestCase
 {
     public function testTextAreaTest()
     {

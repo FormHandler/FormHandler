@@ -2,9 +2,8 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
-use PHPUnit\Framework\TestCase;
 
-class HiddenFieldTest extends TestCase
+class HiddenFieldTest extends \PHPUnit_Framework_TestCase
 {
     public function testHiddenField()
     {

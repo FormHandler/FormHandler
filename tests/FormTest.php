@@ -2,10 +2,6 @@
 namespace FormHandler\Tests;
 
 use FormHandler\Encoding\Utf8EncodingFilter;
-use FormHandler\Field\AbstractFormField;
-use FormHandler\Field\HiddenField;
-use FormHandler\Field\RadioButton;
-use FormHandler\Field\TextField;
 use FormHandler\Form;
 use FormHandler\Renderer\XhtmlRenderer;
 use FormHandler\Validator\CsrfValidator;

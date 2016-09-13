@@ -3,9 +3,8 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Field\Option;
-use PHPUnit\Framework\TestCase;
 
-class HasAttributesTest extends TestCase
+class HasAttributesTest extends \PHPUnit_Framework_TestCase
 {
     public function testAttributes()
     {
