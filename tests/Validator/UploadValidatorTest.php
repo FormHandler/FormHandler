@@ -45,7 +45,7 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testDeniedExtensionUpload()
+    public function testExtensionBlacklist()
     {
         $form = new Form('', false);
         $field = $form->uploadField('cv');
@@ -56,6 +56,18 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $validator = new UploadValidator(true, $messages);
         $validator->setMaxFilesize(1024 * 1024);
         $validator->setDeniedExtensions(['pdf']);
+
+        $this->assertEquals(['pdf'], $validator->getDeniedExtensions());
+
+        $validator->addDeniedExtension('doc');
+
+        $this->assertCount(2, $validator->getDeniedExtensions());
+        $this->assertContains('pdf', $validator->getDeniedExtensions());
+        $this->assertContains('doc', $validator->getDeniedExtensions());
+
+        $validator->removeDeniedExtension('doc');
+
+        $this->assertEquals(['pdf'], $validator->getDeniedExtensions());
 
         $field->setValidator($validator);
 
@@ -68,7 +80,7 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$messages['wrong_extension']], $field->getErrorMessages());
     }
 
-    public function testNotAllowedExtensionUpload()
+    public function testExtensionWhitelist()
     {
         $form = new Form('', false);
         $field = $form->uploadField('cv');
@@ -79,6 +91,19 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $validator = new UploadValidator(true, $messages);
         $validator->setMaxFilesize(1024 * 1024);
         $validator->setAllowedExtensions(['doc']);
+
+        $this->assertEquals(['doc'], $validator->getAllowedExtensions());
+
+        $validator->addAllowedExtension('pdf');
+
+        $this->assertCount(2, $validator->getAllowedExtensions());
+        $this->assertContains('pdf', $validator->getAllowedExtensions());
+        $this->assertContains('doc', $validator->getAllowedExtensions());
+
+        $validator->removeAllowedExtension('pdf');
+
+        $this->assertEquals(['doc'], $validator->getAllowedExtensions());
+
 
         $field->setValidator($validator);
 
@@ -91,7 +116,7 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$messages['wrong_extension']], $field->getErrorMessages());
     }
 
-    public function testInvalidMimeType()
+    public function testMimeTypeWhitelist()
     {
         $form = new Form('', false);
         $field = $form->uploadField('cv');
@@ -103,7 +128,17 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $validator->setMaxFilesize(1024 * 1024);
         $validator->setAllowedMimeTypes(['image/jpg']);
 
-        $this -> assertEquals(['image/jpg'], $validator -> getAllowedMimeTypes());
+        $this->assertEquals(['image/jpg'], $validator->getAllowedMimeTypes());
+
+        $validator->addAllowedMimeType('application/pdf');
+
+        $this->assertCount(2, $validator->getAllowedMimeTypes());
+        $this->assertContains('application/pdf', $validator->getAllowedMimeTypes());
+        $this->assertContains('image/jpg', $validator->getAllowedMimeTypes());
+
+        $validator->removeAllowedMimeType('application/pdf');
+
+        $this->assertEquals(['image/jpg'], $validator->getAllowedMimeTypes());
 
         $field->setValidator($validator);
 
@@ -143,13 +178,25 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         unset($GLOBALS['mock_mime_content_type']);
     }
 
-    public function testMimeTypeDenied()
+    public function testMimeTypeBlacklist()
     {
         $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $validator = new UploadValidator(true);
         $validator->setDeniedMimeTypes(['application/pdf']);
+
+        $this->assertEquals(['application/pdf'], $validator->getDeniedMimeTypes());
+
+        $validator->addDeniedMimeType('image/jpg');
+
+        $this->assertCount(2, $validator->getDeniedMimeTypes());
+        $this->assertContains('application/pdf', $validator->getDeniedMimeTypes());
+        $this->assertContains('image/jpg', $validator->getDeniedMimeTypes());
+
+        $validator->removeDeniedMimeType('image/jpg');
+
+        $this->assertEquals(['application/pdf'], $validator->getDeniedMimeTypes());
 
         $field->setValidator($validator);
 
@@ -186,7 +233,7 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
     public function testMinSize()
     {
         $validator = new UploadValidator();
-        $validator -> setMinFilesize(-20);
+        $validator->setMinFilesize(-20);
     }
 
 

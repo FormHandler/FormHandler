@@ -347,7 +347,7 @@ class UploadValidator extends AbstractValidator
         if (is_array($this->allowedMimeTypes)) {
             $key = array_search($type, $this->allowedMimeTypes);
             if ($key !== false) {
-                unlink($this->allowedMimeTypes[$key]);
+                unset($this->allowedMimeTypes[$key]);
                 return true;
             }
         }
@@ -409,7 +409,7 @@ class UploadValidator extends AbstractValidator
         if (is_array($this->allowedExtensions)) {
             $key = array_search($extension, $this->allowedExtensions);
             if ($key !== false) {
-                unlink($this->allowedExtensions[$key]);
+                unset($this->allowedExtensions[$key]);
                 return true;
             }
         }
@@ -466,7 +466,7 @@ class UploadValidator extends AbstractValidator
         if (is_array($this->deniedMimeTypes)) {
             $key = array_search($type, $this->deniedMimeTypes);
             if ($key !== false) {
-                unlink($this->deniedMimeTypes[$key]);
+                unset($this->deniedMimeTypes[$key]);
                 return true;
             }
         }
@@ -528,7 +528,7 @@ class UploadValidator extends AbstractValidator
 
         $key = array_search($extension, $this->deniedExtensions);
         if ($key !== false) {
-            unlink($this->deniedExtensions[$key]);
+            unset($this->deniedExtensions[$key]);
             return true;
         }
 
