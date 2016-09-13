@@ -314,11 +314,8 @@ class UploadValidator extends AbstractValidator
      * @param array $types
      * @throws \Exception
      */
-    public function setAllowedMimeTypes($types)
+    public function setAllowedMimeTypes( array $types)
     {
-        if (!is_array($types)) {
-            throw new \Exception('You can only set an array as allowed mime types');
-        }
         $this->allowedMimeTypes = $types;
     }
 
@@ -433,11 +430,8 @@ class UploadValidator extends AbstractValidator
      * @param array $types
      * @throws \Exception
      */
-    public function setDeniedMimeTypes($types)
+    public function setDeniedMimeTypes( array $types)
     {
-        if (!is_array($types)) {
-            throw new \Exception('You can only set an array as denied mime types');
-        }
         $this->deniedMimeTypes = $types;
     }
 
