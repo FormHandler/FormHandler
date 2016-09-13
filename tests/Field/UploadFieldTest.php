@@ -3,6 +3,7 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
+use FormHandler\Validator\UploadValidator;
 
 class UploadFieldTest extends \PHPUnit_Framework_TestCase
 {

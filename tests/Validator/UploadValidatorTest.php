@@ -45,7 +45,30 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testInvalidExtensionUpload()
+    public function testDeniedExtensionUpload()
+    {
+        $form = new Form('', false);
+        $field = $form->uploadField('cv');
+
+        $messages = [
+            'wrong_extension' => 'You have to supply a .doc file!'
+        ];
+        $validator = new UploadValidator(true, $messages);
+        $validator->setMaxFilesize(1024 * 1024);
+        $validator->setDeniedExtensions(['pdf']);
+
+        $field->setValidator($validator);
+
+        $valid = $field->isValid();
+        $this->assertFalse(
+            $valid,
+            'File should be invalid, incorrect extension (blacklisted)'
+        );
+
+        $this->assertEquals([$messages['wrong_extension']], $field->getErrorMessages());
+    }
+
+    public function testNotAllowedExtensionUpload()
     {
         $form = new Form('', false);
         $field = $form->uploadField('cv');
@@ -62,7 +85,7 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $valid = $field->isValid();
         $this->assertFalse(
             $valid,
-            'File should be invalid, incorrect extension'
+            'File should be invalid, incorrect extension (not whitelisted)'
         );
 
         $this->assertEquals([$messages['wrong_extension']], $field->getErrorMessages());
@@ -79,6 +102,8 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $validator = new UploadValidator(true, $messages);
         $validator->setMaxFilesize(1024 * 1024);
         $validator->setAllowedMimeTypes(['image/jpg']);
+
+        $this -> assertEquals(['image/jpg'], $validator -> getAllowedMimeTypes());
 
         $field->setValidator($validator);
 
@@ -153,6 +178,17 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
             'File should be invalid, mime type is an image, and not a pdf'
         );
     }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage The minimal filesize cannot be a negative integer!
+     */
+    public function testMinSize()
+    {
+        $validator = new UploadValidator();
+        $validator -> setMinFilesize(-20);
+    }
+
 
     public function testUploadFilesize()
     {
