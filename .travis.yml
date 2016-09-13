@@ -9,8 +9,8 @@ php:
   - nightly
 
 before_script:
-    - travis_retry composer require satooshi/php-coveralls '^0.6'
-    - travis_retry composer require phpunit/phpunit '4.*'
+    - travis_retry composer require satooshi/php-coveralls '^0.6' --update-no-dev
+    - travis_retry composer require phpunit/phpunit '4.*' --update-no-dev
     - travis_retry composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
 
 script:
