@@ -47,18 +47,8 @@
             description="Performs static analysis (executing the tools in parallel), runs the tests, and generates project documentation"/>
 
     <target name="travis"
-            depends="prepare,composer,lint,phpunit"
-            description="Performs a lint check and runs the tests">
-
-        <var name="phpunit" unset="true"/>
-        <property name="phpunit" value="phpunit"/>
-
-        <antcall target="prepare" />
-        <antcall target="composer" />
-        <antcall target="lint" />
-        <antcall target="phpunit" />
-    </target>
-
+            depends="prepare,composer,lint,phpunit-travis"
+            description="Build specific for Travis CI" />
 
     <target name="static-analysis"
             depends="lint,composer,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci"
@@ -266,6 +256,18 @@
         </exec>
 
         <property name="phpcpd.done" value="true"/>
+    </target>
+
+    <target name="phpunit-travis"
+            unless="phpunit.done"
+            depends="prepare"
+            description="Run unit tests with PHPUnit">
+        <exec executable="phpunit" resultproperty="result.phpunit" taskname="phpunit">
+            <arg value="--configuration"/>
+            <arg path="${basedir}/build/phpunit.xml"/>
+        </exec>
+
+        <property name="phpunit.done" value="true"/>
     </target>
 
     <target name="phpunit"
