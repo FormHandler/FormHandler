@@ -65,7 +65,7 @@ abstract class AbstractRenderer
      * @param Element $element
      * @return string
      */
-    protected function parseTag(Tag &$tag, Element $element)
+    protected function parseTag(Tag $tag, Element $element)
     {
         $list = [
             'disabled' => 'isDisabled',
