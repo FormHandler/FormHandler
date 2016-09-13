@@ -114,7 +114,7 @@ class XhtmlRenderer extends AbstractRenderer
         $method = $this->getMethodNameForClass($element);
 
         if (!method_exists($this, $method)) {
-            throw new Exception('Error, render method "' . $method . '" was not found');
+            throw new \Exception('Error, render method "' . $method . '" was not found');
         }
 
         $errorHtml = $this->renderErrorMessages($element);

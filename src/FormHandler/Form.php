@@ -488,7 +488,7 @@ class Form extends Element
         if (in_array($method, [Form::METHOD_GET, Form::METHOD_POST])) {
             $this->method = $method;
         } else {
-            throw new Exception('Incorrect method value given');
+            throw new \Exception('Incorrect method value given');
         }
         return $this;
     }
@@ -1231,7 +1231,7 @@ class Form extends Element
         ])) {
             $this->enctype = $enctype;
         } else {
-            throw new Exception('Incorrect enctype given!');
+            throw new \Exception('Incorrect enctype given!');
         }
 
         return $this;
