@@ -87,7 +87,7 @@ class CharacterBlacklistValidator extends AbstractValidator
     {
         if (is_array($blacklist)) {
             $this->blacklist = array_map('strval', $blacklist);
-        } elseif ($blacklist instanceof \ArrayObject) {
+        } elseif ($blacklist instanceof \ArrayObject && true) {
             $this->blacklist = array_map('strval', $blacklist->getArrayCopy());
         } elseif (is_string($blacklist)) {
             $this->blacklist = [];

@@ -254,13 +254,15 @@ abstract class AbstractFormField extends Element
             $validator = new UserFunctionValidator($validator);
         } elseif (is_array($validator) || $validator instanceof \Closure) {
             $validator = new UserMethodValidator($validator);
-        } elseif ($validator instanceof AbstractValidator) {
-            // clone it, because the same validator could be used on an other field,
-            // which leaves us with a reference problem.
-            $validator = clone $validator;
+        } else {
+            if ($validator instanceof AbstractValidator) {
+                // clone it, because the same validator could be used on an other field,
+                // which leaves us with a reference problem.
+                $validator = clone $validator;
+            }
         }
 
-        if (!($validator instanceof AbstractValidator)) {
+        if (!$validator instanceof AbstractValidator) {
             throw new \Exception('Only validators of types "AbstractValidator" are allowed!');
         }
 

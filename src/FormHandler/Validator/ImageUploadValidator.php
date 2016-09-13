@@ -128,7 +128,6 @@ class ImageUploadValidator extends UploadValidator
      * only images with this aspect ratio can be uploaded.
      * @param int $x
      * @param int $y
-     * @SuppressWarnings(PHPMD)
      * @return ImageUploadValidator
      */
     public function setAllowAspectRatio($x, $y)
@@ -145,7 +144,6 @@ class ImageUploadValidator extends UploadValidator
      * images with this aspect ratio are denied for uploading.
      * @param $x
      * @param $y
-     * @SuppressWarnings(PHPMD)
      * @return ImageUploadValidator
      */
     public function setDenyAspectRatio($x, $y)
@@ -206,7 +204,6 @@ class ImageUploadValidator extends UploadValidator
      * @param $width
      * @param $height
      * @return bool
-     * @SuppressWarnings(PHPMD)
      */
     protected function validateAspectRatio($width, $height)
     {
@@ -253,7 +250,6 @@ class ImageUploadValidator extends UploadValidator
      *
      * @param $a
      * @param $b
-     * @SuppressWarnings(PHPMD)
      * @return int
      */
     protected function gcd($a, $b)

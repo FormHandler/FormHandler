@@ -254,9 +254,11 @@ class XhtmlRenderer extends AbstractRenderer
             // set selected if the value matches
             if ($option instanceof Option) {
                 $option->setSelected(in_array((string)$option->getValue(), $values));
-            } elseif ($option instanceof Optgroup) {
-                foreach ($option->getOptions() as $option2) {
-                    $option2->setSelected(in_array((string)$option2->getValue(), $values));
+            } else {
+                if ($option instanceof Optgroup) {
+                    foreach ($option->getOptions() as $option2) {
+                        $option2->setSelected(in_array((string)$option2->getValue(), $values));
+                    }
                 }
             }
 

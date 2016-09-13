@@ -120,14 +120,16 @@ class SelectField extends AbstractFormField
                 } else {
                     $option->setSelected($option->getValue() == $this->value);
                 }
-            } elseif ($option instanceof Optgroup) {
-                $options = $option->getOptions();
-                if ($options) {
-                    foreach ($options as $option2) {
-                        if (is_array($this->value)) {
-                            $option2->setSelected(in_array($option2->getValue(), $this->value));
-                        } else {
-                            $option2->setSelected($option2->getValue() == $this->value);
+            } else {
+                if ($option instanceof Optgroup) {
+                    $options = $option->getOptions();
+                    if ($options) {
+                        foreach ($options as $option2) {
+                            if (is_array($this->value)) {
+                                $option2->setSelected(in_array($option2->getValue(), $this->value));
+                            } else {
+                                $option2->setSelected($option2->getValue() == $this->value);
+                            }
                         }
                     }
                 }
@@ -273,11 +275,13 @@ class SelectField extends AbstractFormField
                 if ($option->isSelected()) {
                     $selected[] = $option->getValue();
                 }
-            } elseif ($option instanceof Optgroup) {
-                $options = $option->getOptions();
-                foreach ($options as $option2) {
-                    if ($option2->isSelected()) {
-                        $selected[] = $option2->getValue();
+            } else {
+                if ($option instanceof Optgroup) {
+                    $options = $option->getOptions();
+                    foreach ($options as $option2) {
+                        if ($option2->isSelected()) {
+                            $selected[] = $option2->getValue();
+                        }
                     }
                 }
             }
@@ -352,11 +356,13 @@ class SelectField extends AbstractFormField
                 if ($option->getValue() == $value) {
                     return $option;
                 }
-            } elseif ($option instanceof Optgroup) {
-                $options = $option->getOptions();
-                foreach ($options as $option2) {
-                    if ($option2->getValue() == $value) {
-                        return $option2;
+            } else {
+                if ($option instanceof Optgroup) {
+                    $options = $option->getOptions();
+                    foreach ($options as $option2) {
+                        if ($option2->getValue() == $value) {
+                            return $option2;
+                        }
                     }
                 }
             }
@@ -388,19 +394,21 @@ class SelectField extends AbstractFormField
                 if ($option->getValue() != $value) {
                     $this->options[] = $option;
                 }
-            } elseif ($option instanceof Optgroup) {
-                $subOptions = [];
-                $options2 = $option->getOptions();
-                foreach ($options2 as $option2) {
-                    if ($option2->getValue() != $value) {
-                        $subOptions[] = $option2;
+            } else {
+                if ($option instanceof Optgroup) {
+                    $subOptions = [];
+                    $options2 = $option->getOptions();
+                    foreach ($options2 as $option2) {
+                        if ($option2->getValue() != $value) {
+                            $subOptions[] = $option2;
+                        }
                     }
-                }
 
-                $option->setOptions($subOptions);
+                    $option->setOptions($subOptions);
 
-                if (sizeof($subOptions) > 0) {
-                    $this->options[] = $option;
+                    if (sizeof($subOptions) > 0) {
+                        $this->options[] = $option;
+                    }
                 }
             }
         }

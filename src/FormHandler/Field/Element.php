@@ -25,7 +25,6 @@ abstract class Element
     /**
      * The unique id of this HTML element
      *
-     * @SuppressWarnings(PHPMD)
      * @var string
      */
     protected $id;
@@ -269,8 +268,6 @@ abstract class Element
 
     /**
      * Set the id of this element and return an instance to itsself
-     *
-     * @SuppressWarnings(PHPMD)
      *
      * @param string $id
      * @return $this

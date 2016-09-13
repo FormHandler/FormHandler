@@ -18,23 +18,57 @@
 	<rule ref="rulesets/controversial.xml/CamelCaseParameterName" />
 	<rule ref="rulesets/controversial.xml/CamelCaseVariableName" />
 
-	<rule ref="rulesets/naming.xml" />
-    <rule ref="rulesets/design.xml" />
+    <rule ref="rulesets/design.xml/EvalExpression" />
+    <rule ref="rulesets/design.xml/GotoStatement" />
+
+    <!--<rule ref="rulesets/design.xml/NumberOfChildren" />-->
+
+    
+    <rule ref="rulesets/design.xml/DepthOfInheritance" />
+    <rule ref="rulesets/design.xml/CouplingBetweenObjects">
+        <priority>1</priority>
+        <properties>
+            <property name="minimum" value="20" />
+        </properties>
+    </rule>
 
 	<!-- Import the entire cyclomatic complexity rule -->
 	<rule ref="rulesets/codesize.xml/CyclomaticComplexity">
 		<priority>1</priority>
 		<properties>
-			<property name="reportLevel" value="20" />
+			<property name="reportLevel" value="50" />
 		</properties>
 	</rule>
 
 	<!--<rule ref="rulesets/codesize.xml/NPathComplexity" />-->
-	<rule ref="rulesets/codesize.xml/ExcessiveMethodLength" />
-	<rule ref="rulesets/codesize.xml/ExcessiveClassLength" />
+	<rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
+        <priority>1</priority>
+        <properties>
+            <property name="minimum" value="100" />
+            <property name="ignore-whitespace" value="true" />
+        </properties>
+    </rule>
+
+
+    <rule ref="rulesets/codesize.xml/ExcessiveClassLength">
+        <priority>1</priority>
+        <properties>
+            <property name="minimum" value="1500" />
+            <property name="ignore-whitespace" value="true" />
+        </properties>
+    </rule>
+
+
 	<rule ref="rulesets/codesize.xml/ExcessiveParameterList" />
 	<rule ref="rulesets/codesize.xml/ExcessivePublicCount" />
 	<rule ref="rulesets/codesize.xml/TooManyFields" />
 	<rule ref="rulesets/codesize.xml/TooManyMethods" />
-	<rule ref="rulesets/codesize.xml/ExcessiveClassComplexity" />
+
+    <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
+        <priority>1</priority>
+        <properties>
+            <property name="maximum" value="80" />
+        </properties>
+    </rule>
+
 </ruleset>

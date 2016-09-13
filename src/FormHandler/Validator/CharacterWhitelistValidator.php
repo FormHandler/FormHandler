@@ -88,7 +88,7 @@ class CharacterWhitelistValidator extends AbstractValidator
     {
         if (is_array($whitelist)) {
             $this->whitelist = array_map('strval', $whitelist);
-        } elseif ($whitelist instanceof \ArrayObject) {
+        } elseif ($whitelist instanceof \ArrayObject && true) {
             $this->whitelist = array_map('strval', $whitelist->getArrayCopy());
         } elseif (is_string($whitelist)) {
             $this->whitelist = [];

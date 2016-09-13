@@ -12,12 +12,6 @@ use FormHandler\Validator\CsrfValidator;
 use FormHandler\Validator\StringValidator;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Created by PhpStorm.
- * User: teye
- * Date: 29-08-16
- * Time: 15:16
- */
 class FormTest extends TestCase
 {
     /**
@@ -34,7 +28,7 @@ class FormTest extends TestCase
     /**
      * Test if our default csrf setting is stored correctly
      */
-    public function testDefaultCsrf()
+    public function testDefaultCsrfLogic()
     {
         // make sure the default CSRF logic works like expected
         $this->assertTrue(Form::isDefaultCsrfProtectionEnabled());
@@ -81,7 +75,10 @@ class FormTest extends TestCase
         $this->assertInstanceOf(HiddenField::class, $field, 'csrf field should exists');
 
         // this should contain a token
-        $this->assertNotEmpty($field->getValue(), 'csrftoken field should contain a value');
+        $this->assertNotEmpty(
+            $field->getValue(),
+            'csrftoken field should contain a value, as a token should be generated'
+        );
 
         $this->assertFalse($form->isSubmitted(), 'the field should not be submitted');
     }
@@ -157,15 +154,16 @@ class FormTest extends TestCase
 
     /**
      * Test token session cleanup
-     * @todo: fixme
      */
-    public function incompleteTestTokenCleanup()
+    public function testTokenCleanup()
     {
         $_SESSION['csrftokens'] = ''; // test incorrect type;
 
         new CsrfValidator();
-        $this->assertTrue(is_array($_SESSION['csrftokens']));
-
+        $this->assertTrue(
+            is_array($_SESSION['csrftokens']),
+            'Session csrftokens should now be an array'
+        );
 
         // add some wrong tokens. They should be removed afterwards
         $_SESSION['csrftokens'][] = 'wrong.token';
@@ -174,24 +172,42 @@ class FormTest extends TestCase
 
         new CsrfValidator();
 
-        $this->assertNotContains('wrong.token', $_SESSION['csrftokens']);
-        $this->assertNotContains($expired, $_SESSION['csrftokens']);
+        $this->assertNotContains(
+            'wrong.token',
+            $_SESSION['csrftokens'],
+            'CSRF session should not contain "wrong.token" anymore as its not a timestamp'
+        );
+        $this->assertNotContains(
+            $expired,
+            $_SESSION['csrftokens'],
+            'CSRF token should be removed because its timestamp is expired'
+        );
 
-        $expired = (time() - 86400) . '.invalid';
-        $notExpired = (time() - 6200) . '.invalid';
+        $expired = (time() - 86400) . '.expired';
+        $notExpired = (time() - 6200) . '.not-expired';
 
+        $_SESSION['csrftokens'] = [$expired, $notExpired];
         define('CSRFTOKEN_EXPIRE', 6600);
 
         new CsrfValidator();
 
-        $this->assertContains($notExpired, $_SESSION['csrftokens']);
-        $this->assertNotContains($expired, $_SESSION['csrftokens']);
+        $this->assertNotContains(
+            $expired,
+            $_SESSION['csrftokens'],
+            'CSRF session should not contain the expired token'
+        );
+
+        $this->assertContains(
+            $notExpired,
+            $_SESSION['csrftokens'],
+            'CSRF session should contain ' . $notExpired . ' because its not expired yet'
+        );
     }
 
     /**
-     * @todo: fixme
+     * Test valid CSRF token
      */
-    public function te1stValidCsrfFlow()
+    public function testValidCsrfFlow()
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
 
@@ -220,6 +236,40 @@ class FormTest extends TestCase
 
         $valid = $form->isValid();
         $this->assertTrue($valid, 'Form should be valid, token is in the POST');
+    }
+
+    public function testDisabledFieldsInSubmit()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST = [
+            'name' => 'Piet'
+        ];
+
+        $form = new Form('', false);
+        $form->textField('name');
+        $form->textField('age')->setDisabled(true);
+
+        $this->assertTrue(
+            $form->isSubmitted(),
+            'Form should be submitted. Age field is not in post but is disabled.'
+        );
+    }
+
+    public function testDisabledButtonsInSubmit()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST = [
+            'name' => 'Piet'
+        ];
+
+        $form = new Form('', false);
+        $form->textField('name');
+        $form->submitButton('submit')->setDisabled(true);
+
+        $this->assertTrue(
+            $form->isSubmitted(),
+            'Form should be submitted. Submit button is not in post but is disabled.'
+        );
     }
 
     /**

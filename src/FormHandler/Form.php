@@ -82,7 +82,6 @@ use Herrera\Json\Exception\Exception;
  * <input type="submit" value="Submit" />
  * </code>
  * ```
- * @SuppressWarnings(PHPMD)
  */
 class Form extends Element
 {
@@ -367,75 +366,80 @@ class Form extends Element
                 $buttonsFound = 0;
 
                 foreach ($this->fields as $field) {
-                    if ($field instanceof AbstractFormField &&
-                        !($field instanceof CheckBox || $field instanceof RadioButton) &&
-                        $field->getName()
+                    // ignore disabled fields/buttons and without a name
+                    if ($field->isDisabled() || !$field->getName()) {
+                        continue;
+                    }
+
+                    $name = $field->getName();
+
+                    // remove possible brackets
+                    if (($i = strpos($name, '[')) !== false) {
+                        $name = substr($name, 0, $i);
+                    }
+
+                    // Upload field ?
+                    // Then we expect the name of the field in the $_FILES array
+                    if ($field instanceof UploadField) {
+                        if (!array_key_exists($name, $_FILES)) {
+                            $reason = 'Upload field "' . $name . '" does not exists in $_FILES array.';
+                            $this->submitted = false;
+                        }
+                    } // Selectfields are not in the "_POST" array when they are "multiple" selectable and
+                    // nothing is selected.
+                    elseif ($field instanceof SelectField && true) {
+                        if (sizeof($field->getOptions()) == 0 && !array_key_exists($name, $list)) {
+                            // form can still be submitted.
+                            // An empty select with no options is not included in the POST field
+                        } // If only 1 option can be selected, it should be in the submitted values!
+                        elseif (!$field->isMultiple() && !array_key_exists($name, $list)) {
+                            $reason = 'Selectfield "' . $name . '" does not exists in submited data array.';
+                            $this->submitted = false;
+                        }
+                    } // Submit button?
+                    // Then it should exists but only if there is just 1 button
+                    elseif ($field instanceof SubmitButton && true) {
+                        if (array_key_exists($field->getName(), $list)) {
+                            $buttonsFound++;
+                        } elseif ($buttonCount == 1) {
+                            $reason = sprintf(
+                                'Submitbutton "%s" does not exists in submited data array.',
+                                $field->getName()
+                            );
+                            $this->submitted = false;
+                        }
+                    } // Image button? Then the name_x and name_y values should exists!
+                    // (but only if its the only 1 button)
+                    elseif ($field instanceof ImageButton && true) {
+                        if (array_key_exists($field->getName() . '_x', $list) &&
+                            array_key_exists($field->getName() . '_y', $list)
+                        ) {
+                            $buttonsFound++;
+                        } elseif ($buttonCount == 1) {
+                            $reason = sprintf(
+                                'Imagebutton "%s" should submit a _x and _y values,' .
+                                'but they are not in the data array.',
+                                $field->getName()
+                            );
+                            $this->submitted = false;
+                        }
+                    } // For all other fields, it should just exists in the $_POST or $_GET array.
+                    // If not, the form is not submitted.
+                    elseif (!$field instanceof CheckBox && !$field instanceof RadioButton &&
+                        !array_key_exists($name, $list)
                     ) {
-                        $name = $field->getName();
-
-                        // remove possible brackets
-                        if (($i = strpos($name, '[')) !== false) {
-                            $name = substr($name, 0, $i);
-                        }
-
-                        if ($field instanceof UploadField) {
-                            if (!$field->isDisabled()) {
-                                if (!array_key_exists($name, $_FILES)) {
-                                    $reason = 'Upload field "' . $name . '" does not exists in $_FILES array.';
-                                    $this->submitted = false;
-                                }
-                            }
-                        } // selectfields are not in the "_POST" array when they are "multiple" selectable and
-                        // nothing is selected.
-                        elseif ($field instanceof SelectField) {
-                            if (sizeof($field->getOptions()) == 0 && !array_key_exists($name, $list)) {
-                                // form can still be submitted.
-                                // An empty select with no options is not included in the POST field
-                            } // If only 1 option can be selected, it should be in the submitted values!
-                            elseif (!$field->isMultiple() && !array_key_exists($name, $list)) {
-                                if (!$field->isDisabled()) {
-                                    $reason = 'Selectfield "' . $name . '" does not exists in submited data array.';
-                                    $this->submitted = false;
-                                }
-                            }
-                        } elseif (!array_key_exists($name, $list)) {
-                            if (!$field->isDisabled()) {
-                                $reason = 'Field "' . $name . '" does not exists in submited data array.';
-                                $this->submitted = false;
-                            }
-                        }
-                    } // submit button? Then the name => value should exists! (but only if its the only one)
-                    elseif ($field instanceof SubmitButton && $field->getName() && $buttonCount == 1) {
-                        if (!$field->isDisabled()) {
-                            if (!array_key_exists($field->getName(), $list)) {
-                                /** @noinspection PhpUndefinedVariableInspection */
-                                $reason = 'Submitbutton "' . $name . '" does not exists in submited data array.';
-                                $this->submitted = false;
-                            } else {
-                                $buttonsFound++;
-                            }
-                        }
-                    } // image button? Then the name_x and name_y values should exists!  (but only if its the only one)
-                    elseif ($field instanceof ImageButton && $field->getName() && $buttonCount == 1) {
-                        if (!$field->isDisabled()) {
-                            if (!array_key_exists($field->getName() . '_x', $list) ||
-                                !array_key_exists($field->getName() . '_y', $list)
-                            ) {
-                                /** @noinspection PhpUndefinedVariableInspection */
-                                $reason = 'Imagebutton "' . $name . '" should submit a _x and _y values,' .
-                                    'but they are not in the data array.';
-                                $this->submitted = false;
-                            } else {
-                                $buttonsFound++;
-                            }
-                        }
+                        $reason = 'Field "' . $name . '" does not exists in submited data array.';
+                        $this->submitted = false;
                     }
                 }
 
                 // if here, and the field is still "submitted", then do our final button check
                 if ($this->submitted && $buttonCount > 0 && $buttonsFound == 0) {
-                    $reason = 'We have found ' . $buttonCount . ' buttons in the form, but we did not found any ' .
-                        'of the buttons in the data array ($_GET or $_POST)';
+                    $reason = sprintf(
+                        'We have found %d buttons in the form, but we did not found any ' .
+                        'of the buttons in the data array ($_GET or $_POST)',
+                        $buttonCount
+                    );
 
                     $this->submitted = false;
                 }
@@ -1015,7 +1019,6 @@ class Form extends Element
                 return false;
             }
         }
-
 
 
         return $this->csrfProtection;
