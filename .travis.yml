@@ -9,7 +9,8 @@ php:
   - nightly
 
 before_script:
-    - travis_retry composer remove phploc/phploc --update-with-dependencies
+    - travis_retry composer require satooshi/php-coveralls
+    - travis_retry composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
 
 script:
   - ant travis
