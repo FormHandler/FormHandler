@@ -57,11 +57,12 @@ class SameFieldsValidatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /has to be/
+     */
     public function testInvalidField()
     {
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/has to be/');
-
         new SameFieldsValidator(1);
     }
 }

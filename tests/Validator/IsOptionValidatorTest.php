@@ -135,12 +135,11 @@ class IsOptionValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test incorrect fields
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /works on select fields/
      */
     public function testIncorrectField()
     {
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/ works on select fields/');
-
         $form = new Form(null, false);
         $form->textField('name')->addValidator(new IsOptionValidator(true));
     }

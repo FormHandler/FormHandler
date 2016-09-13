@@ -68,15 +68,23 @@ class CharacterBlacklistTest extends \PHPUnit_Framework_TestCase
             'Field should be invalid because it contains blacklisted characters'
         );
         $this->assertContains($errormsg, $field->getErrorMessages());
+    }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /Incorrect blacklist given/
+     */
+    public function testIncorrectType()
+    {
+        $validator = new CharacterBlacklistValidator('0123456789abcdef', true);
         // incorrect type as whitelist, expect an exception
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/Incorrect blacklist given/');
         $validator->setBlacklist(new \stdClass());
     }
 
     /**
      * Test non-scalar values in a field for the blacklist validator.
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /scalar types/
      */
     public function testBlacklistValidatorNonScalar()
     {
@@ -93,9 +101,6 @@ class CharacterBlacklistTest extends \PHPUnit_Framework_TestCase
             ->setValue([1, 5, 6, 9]);
 
         $field->addValidator($validator);
-
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }
 }

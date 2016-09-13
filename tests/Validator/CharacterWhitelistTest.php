@@ -67,15 +67,23 @@ class CharacterWhitelistTest extends \PHPUnit_Framework_TestCase
             $field->isValid(),
             'Field should be valid because it contains only whitelisted characters'
         );
+    }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /Incorrect whitelist given/
+     */
+    public function testIncorrectType()
+    {
+        $validator = new CharacterWhitelistValidator('0123456789abcdef', true);
         // incorrect type as whitelist, expect an exception
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/Incorrect whitelist given/');
         $validator->setWhitelist(new \stdClass());
     }
 
     /**
      * Test non-scalar values in a field for the whitelist validator.
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /scalar types/
      */
     public function testWhitelistValidatorNonScalar()
     {
@@ -92,9 +100,6 @@ class CharacterWhitelistTest extends \PHPUnit_Framework_TestCase
             ->setValue([1, 5, 6, 9]);
 
         $field->addValidator($validator);
-
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }
 }

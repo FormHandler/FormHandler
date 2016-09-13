@@ -52,11 +52,12 @@ class UserFunctionValidatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /does not exists/
+     */
     public function testNonExistingFunction()
     {
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/does not exists/');
-
         $form = new Form('', false);
 
         $field = $form->textField('name');

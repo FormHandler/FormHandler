@@ -69,6 +69,8 @@ class NumberValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test non-scalar values in a field for the whitelist validator.
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /scalar types/
      */
     public function testNumberValidatorNonScalar()
     {
@@ -81,9 +83,6 @@ class NumberValidatorTest extends \PHPUnit_Framework_TestCase
             ->setMultiple(true)
             ->setValue([1, 5, 6, 9])
             ->addValidator(new NumberValidator(1, 99, true));
-
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }
 }

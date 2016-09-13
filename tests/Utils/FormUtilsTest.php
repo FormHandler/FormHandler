@@ -21,14 +21,15 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /multiple files/
+     */
     public function testMoveMultipleUploadFileWithName()
     {
         $form = new Form('', false);
         $field = $form->uploadField('cv');
         $field->setMultiple(true); // multiple files allowed
-
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/multiple files/');
 
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf');
     }
@@ -57,6 +58,10 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         @unlink(__DIR__ . '/_tmp/moved.pdf');
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /already exists/
+     */
     public function testMoveUploadedFileExistsException()
     {
         $form = new Form('', false);
@@ -64,20 +69,18 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
 
         @touch(__DIR__ . '/_tmp/moved.pdf');
 
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/already exists/');
-
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf', FormUtils::MODE_EXCEPTION);
     }
 
+    /**
+     * @expectedException \UnexpectedValueException
+     */
     public function testIncorrectExistsValue()
     {
         $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         @touch(__DIR__ . '/_tmp/moved.pdf');
-
-        $this->expectException('\UnexpectedValueException');
 
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf', 'wrong');
     }
@@ -97,41 +100,44 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         @rmdir(__DIR__ . '/_new');
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /Failed to create the destination directory/
+     */
     public function testCreateDirFailure()
     {
         $form = new Form('', false);
         $field = $form->uploadField('cv');
-
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/Failed to create the destination directory/');
 
         $GLOBALS['mock_mkdir_response'] = false;
 
         FormUtils::moveUploadedFile($field, __DIR__ . '/_abc123/', FormUtils::MODE_OVERWRITE, true);
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /directory is not writable/
+     */
     public function testIsNotWritable()
     {
         $form = new Form('', false);
         $field = $form->uploadField('cv');
-
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/directory is not writable/');
 
         $GLOBALS['mock_is_writable_response'] = false;
 
         FormUtils::moveUploadedFile($field, __DIR__ . '/_new/', FormUtils::MODE_OVERWRITE, true);
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /we failed to move file/
+     */
     public function testMoveFailed()
     {
         $form = new Form('', false);
         $field = $form->uploadField('cv');
 
         $GLOBALS['mock_move_uploaded_file_response'] = false;
-
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/we failed to move file/');
 
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/blaat.tmp', FormUtils::MODE_OVERWRITE, true);
     }
@@ -164,6 +170,10 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         @rmdir(__DIR__ . '/_new');
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /we failed to move file/
+     */
     public function testMoveMultipleFilesException()
     {
         $_FILES = array(
@@ -182,9 +192,6 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
 
         $GLOBALS['mock_move_uploaded_file_response'] = false;
 
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/we failed to move file/');
-
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/', FormUtils::MODE_OVERWRITE, true);
     }
 
@@ -198,6 +205,10 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($newfile, __DIR__ . '/_tmp/test(1).pdf');
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /incorrect size given/
+     */
     public function testSizeToBytes()
     {
         $tests = [
@@ -221,9 +232,6 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         }
 
         // test incorrect string given
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/incorrect size given/');
-
         FormUtils::sizeToBytes('wrong');
     }
 

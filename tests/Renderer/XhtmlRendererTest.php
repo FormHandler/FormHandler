@@ -16,10 +16,11 @@ use FormHandler\Validator\UploadValidator;
  */
 class XhtmlRendererTest extends BaseTestRenderer
 {
+    /**
+     * @expectedException \Exception
+     */
     public function testRenderInvalidClass()
     {
-        $this->expectException('\Exception');
-
         $renderer = new XhtmlRenderer();
         $renderer->render(new FakeElement());
     }

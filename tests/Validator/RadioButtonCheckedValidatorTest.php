@@ -45,12 +45,11 @@ class RadioButtonCheckedValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test incorrect fields
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /only works on radio buttons/
      */
     public function testIncorrectField()
     {
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/only works on radio buttons/');
-
         $form = new Form('', false);
         $form->textField('test')
             ->addValidator(new RadioButtonCheckedValidator());

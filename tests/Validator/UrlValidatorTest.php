@@ -72,11 +72,12 @@ class UrlValidatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /not an array/
+     */
     public function testIncorrectSchemesType()
     {
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/not an array/');
-
         $validator = new UrlValidator();
         $validator->setAllowedSchemes('ftp');
     }

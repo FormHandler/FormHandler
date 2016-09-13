@@ -342,6 +342,10 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$messages['wrong_extension']], $field->getErrorMessages());
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /only works on upload fields/
+     */
     public function testInvalidField()
     {
         $form = new Form('', false);
@@ -351,9 +355,6 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
             'wrong_extension' => 'You have to supply a .doc file!'
         ];
         $validator = new UploadValidator(true, $messages);
-
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/only works on upload fields/');
 
         $field->setValidator($validator);
     }

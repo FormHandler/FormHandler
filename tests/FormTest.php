@@ -694,7 +694,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessageRegExp '/composite types/'
+     * @expectedExceptionMessageRegExp /composite types/
      */
     public function testIncorrectFill()
     {

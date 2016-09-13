@@ -70,6 +70,8 @@ class RegexValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test non-scalar values in a field for the regex validator.
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /scalar types/
      */
     public function testRegexValidatorNonScalar()
     {
@@ -83,8 +85,6 @@ class RegexValidatorTest extends \PHPUnit_Framework_TestCase
             ->setValue([1, 5, 6, 9])
             ->addValidator(new RegexValidator('/^[a-z]*$/i', true));
 
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }
 }

@@ -7,11 +7,12 @@ use FormHandler\Validator\StringValidator;
 class StringValidatorTest extends \PHPUnit_Framework_TestCase
 {
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /AbstractValidator/
+     */
     public function testInvalidValidator()
     {
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/AbstractValidator/');
-
         $form = new Form('', false);
 
         $field = $form->textField('name');
@@ -58,6 +59,8 @@ class StringValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test non-scalar values in a field for the string validator.
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /scalar types/
      */
     public function testRegexValidatorNonScalar()
     {
@@ -71,8 +74,6 @@ class StringValidatorTest extends \PHPUnit_Framework_TestCase
             ->setValue([1, 5, 6, 9])
             ->addValidator(new StringValidator(2, 50, true));
 
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }
 }

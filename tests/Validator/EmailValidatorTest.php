@@ -205,6 +205,8 @@ class EmailValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test non-scalar values in a field for the whitelist validator.
+     * @expectedException \Exception
+     * @expectedExceptionMessageRegExp /scalar types/
      */
     public function testEmailValidatorNonScalar()
     {
@@ -222,9 +224,6 @@ class EmailValidatorTest extends \PHPUnit_Framework_TestCase
 
         // this would be strange, but hey... the world is strange!
         $field->addValidator($validator);
-
-        $this->expectException('\Exception');
-        $this->expectExceptionMessageRegExp('/scalar types/');
         $field->isValid();
     }
 }
