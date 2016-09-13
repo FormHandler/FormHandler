@@ -20,7 +20,8 @@
     "pdepend/pdepend" : "2.2.4",
     "mayflower/php-codebrowser": "~1.1",
     "theseer/phpdox": "*",
-    "johnkary/phpunit-speedtrap": "^1.0"
+    "johnkary/phpunit-speedtrap": "^1.0",
+    "satooshi/php-coveralls": "*"
   },
   "require": {
     "neitanod/forceutf8": "dev-master"
