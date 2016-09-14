@@ -4,6 +4,7 @@ namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
 use FormHandler\Validator\CsrfValidator;
+use FormHandler\Validator\StringValidator;
 
 class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -219,6 +220,47 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
         $valid = $form->isValid();
         $this->assertTrue($valid, 'Form should be valid, token is in the POST');
         $this->assertTrue($form->isCsrfValid());
+    }
+
+    public function testCsrfDisabled()
+    {
+        // now fake a post and retry
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST = [
+            'name' => 'Piet'
+        ];
+
+        $form = new Form('', false);
+        $form->textField('name');
+
+        $this->assertTrue($form->isCsrfValid(), 'CSRF should be valid as it is disabled');
+    }
+
+    public function testCsrfValidOnNonSubmittedForm()
+    {
+        // now fake a post and retry
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $form = new Form('', false);
+        $form->textField('name');
+
+        $this->assertFalse($form->isSubmitted(), 'Form is not submitted');
+        $this->assertTrue($form->isCsrfValid(), 'CSRF should be valid as the form is not submitted');
+    }
+
+    public function testInvalidField()
+    {
+        // now fake a post and retry
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST = [
+            'name' => 'Pi'
+        ];
+
+        $form = new Form('', false);
+        $form->textField('name') -> addValidator(new StringValidator(3));
+
+        $this->assertFalse($form -> isValid(), 'Form should not be valid');
+        $this->assertTrue($form->isCsrfValid(), 'CSRF should be valid as the form is invalid');
     }
 
     /**

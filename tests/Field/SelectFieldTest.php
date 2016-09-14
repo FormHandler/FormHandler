@@ -14,20 +14,20 @@ use FormHandler\Form;
 class SelectFieldTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetOptionByValue()
-{
-    $form = new Form();
-    $field = $form -> selectField('options');
+    {
+        $form = new Form();
+        $field = $form -> selectField('options');
 
-    $dragon = new Option('dragon', 'Dragon');
+        $dragon = new Option('dragon', 'Dragon');
 
-    $field -> addOption( new Option('cat', 'Cat'));
-    $field -> addOption( new Option('dog', 'Dog'));
-    $field -> addOption( $dragon );
+        $field -> addOption(new Option('cat', 'Cat'));
+        $field -> addOption(new Option('dog', 'Dog'));
+        $field -> addOption($dragon);
 
-    $option = $field -> getOptionByValue('dragon');
+        $option = $field -> getOptionByValue('dragon');
 
-    $this -> assertEquals( $dragon, $option );
-}
+        $this -> assertEquals($dragon, $option);
+    }
 
 
     public function testSelectField()

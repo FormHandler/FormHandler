@@ -456,7 +456,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $form = new Form('', false);
         $form->textField('name')->setValue('Piet');
         $form->checkBox('agree', 'ok')->setChecked(true);
-        $form -> radioButton('gender', 'm') -> setChecked( false );
+        $form -> radioButton('gender', 'm') -> setChecked(false);
         $form->submitButton('submit', 'Submit');
 
         $this->assertEquals(['name' => 'Piet', 'agree' => 'ok', 'gender' => ''], $form->getDataAsArray());
