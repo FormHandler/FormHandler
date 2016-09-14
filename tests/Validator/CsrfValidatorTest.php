@@ -241,7 +241,7 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
         // now fake a post and retry
         $_SERVER['REQUEST_METHOD'] = 'GET';
 
-        $form = new Form('', false);
+        $form = new Form('', true);
         $form->textField('name');
 
         $this->assertFalse($form->isSubmitted(), 'Form is not submitted');
