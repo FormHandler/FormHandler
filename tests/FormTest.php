@@ -21,7 +21,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
     }
 
 
-
     public function testDisabledFieldsInSubmit()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -452,6 +451,21 @@ class FormTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expected, $form->getDataAsArray($form));
+
+        // new test
+        $form = new Form('', false);
+        $form->textField('name')->setValue('Piet');
+        $form->checkBox('agree', 'ok')->setChecked(true);
+        $form -> radioButton('gender', 'm') -> setChecked( false );
+        $form->submitButton('submit', 'Submit');
+
+        $this->assertEquals(['name' => 'Piet', 'agree' => 'ok', 'gender' => ''], $form->getDataAsArray());
+    }
+
+    public function testClose()
+    {
+        $form = new Form();
+        $this -> assertEquals('</form>', $form -> close());
     }
 
     public function testFill()

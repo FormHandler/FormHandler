@@ -218,6 +218,7 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
 
         $valid = $form->isValid();
         $this->assertTrue($valid, 'Form should be valid, token is in the POST');
+        $this->assertTrue($form->isCsrfValid());
     }
 
     /**
@@ -252,6 +253,8 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
 
         $valid = $form->isValid();
         $this->assertFalse($valid, 'Form should be valid, token is in the POST');
+
+        $this->assertFalse($form->isCsrfValid());
     }
 
     protected function setUp()

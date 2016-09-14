@@ -318,14 +318,20 @@ class FormUtils
 
         switch (substr(strtolower($parts[3]), 0, 1)) {
             case 'g':
-                return (int)($parts[1] * 1073741824);
+                $size = (int)($parts[1] * 1073741824);
+                break;
             case 'm':
-                return (int)($parts[1] * 1048576);
+                $size = (int)($parts[1] * 1048576);
+                break;
             case 'k':
-                return (int)($parts[1] * 1024);
+                $size = (int)($parts[1] * 1024);
+                break;
             case 'b':
             default:
-                return (int)$parts[1];
+                $size = (int)$parts[1];
+                break;
         }
+
+        return $size;
     }
 }
