@@ -14,6 +14,8 @@ class RegexValidatorTest extends \PHPUnit_Framework_TestCase
 
         $validator = new RegexValidator('/^[a-z]{2,50}$/i', false);
 
+        $this->assertEquals('/^[a-z]{2,50}$/i', $validator -> getRegularExpression());
+
         $field->setValidator($validator);
         $this->assertTrue(
             $field->isValid(),
@@ -48,9 +50,11 @@ class RegexValidatorTest extends \PHPUnit_Framework_TestCase
             $field->isValid(),
             'Field should be valid as it contains an valid value'
         );
+        $this->assertFalse($validator->isNot());
 
         // test the NOT logic
         $validator->setNot(true);
+        $this -> assertTrue($validator -> isNot());
         $field->setValidator($validator);
 
         // test a valid value, but now with NOT. thus this should be invalid

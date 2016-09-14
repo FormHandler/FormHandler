@@ -17,6 +17,12 @@ class CharacterWhitelistTest extends \PHPUnit_Framework_TestCase
 
         // create a required validator and add it.
         $validator = new CharacterWhitelistValidator('0123456789abcdef', true);
+
+        $this->assertEquals([
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
+
+        ], $validator->getWhitelist());
+
         $field->addValidator($validator);
         $this->assertCount(1, $field->getValidators());
 

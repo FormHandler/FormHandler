@@ -15,6 +15,9 @@ class CharacterBlacklistTest extends \PHPUnit_Framework_TestCase
         // create a required validator and add it.
         $validator = new CharacterBlacklistValidator('<>()-:PX', true, 'Smilies are not allowed!');
         $field->addValidator($validator);
+
+        $this->assertEquals(['<', '>', '(', ')', '-', ':', 'P', 'X' ], $validator -> getBlacklist());
+
         $this->assertCount(1, $field->getValidators());
 
         $this->assertFalse($field->isValid(), 'Field should be invalid as it is empty and validator says its required');

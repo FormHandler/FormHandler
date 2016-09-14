@@ -13,6 +13,8 @@ class EqualsValidatorTest extends \PHPUnit_Framework_TestCase
 
         $validator = new EqualsValidator("OK", false);
 
+        $this->assertEquals('OK', $validator->getCompareToValue());
+
         $field->setValidator($validator);
 
         $this->assertTrue(
@@ -35,7 +37,10 @@ class EqualsValidatorTest extends \PHPUnit_Framework_TestCase
         $field = $form->textField('agree');
 
         $validator = new EqualsValidator("OK", false);
+
+        $this->assertFalse($validator->isNot());
         $validator->setNot(true);
+        $this->assertTrue($validator->isNot());
 
         $field->setValidator($validator);
         $field->setValue('OK');
