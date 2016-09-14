@@ -314,7 +314,7 @@ class UploadValidator extends AbstractValidator
      * @param array $types
      * @throws \Exception
      */
-    public function setAllowedMimeTypes( array $types)
+    public function setAllowedMimeTypes(array $types)
     {
         $this->allowedMimeTypes = $types;
     }
@@ -326,10 +326,6 @@ class UploadValidator extends AbstractValidator
      */
     public function addAllowedMimeType($type)
     {
-        if (!is_array($this->allowedMimeTypes)) {
-            $this->allowedMimeTypes = [];
-        }
-
         $this->allowedMimeTypes[] = $type;
     }
 
@@ -341,13 +337,12 @@ class UploadValidator extends AbstractValidator
      */
     public function removeAllowedMimeType($type)
     {
-        if (is_array($this->allowedMimeTypes)) {
-            $key = array_search($type, $this->allowedMimeTypes);
-            if ($key !== false) {
-                unset($this->allowedMimeTypes[$key]);
-                return true;
-            }
+        $key = array_search($type, $this->allowedMimeTypes);
+        if ($key !== false) {
+            unset($this->allowedMimeTypes[$key]);
+            return true;
         }
+
 
         return false;
     }
@@ -403,12 +398,10 @@ class UploadValidator extends AbstractValidator
      */
     public function removeAllowedExtension($extension)
     {
-        if (is_array($this->allowedExtensions)) {
-            $key = array_search($extension, $this->allowedExtensions);
-            if ($key !== false) {
-                unset($this->allowedExtensions[$key]);
-                return true;
-            }
+        $key = array_search($extension, $this->allowedExtensions);
+        if ($key !== false) {
+            unset($this->allowedExtensions[$key]);
+            return true;
         }
 
         return false;
@@ -430,7 +423,7 @@ class UploadValidator extends AbstractValidator
      * @param array $types
      * @throws \Exception
      */
-    public function setDeniedMimeTypes( array $types)
+    public function setDeniedMimeTypes(array $types)
     {
         $this->deniedMimeTypes = $types;
     }
@@ -442,10 +435,6 @@ class UploadValidator extends AbstractValidator
      */
     public function addDeniedMimeType($type)
     {
-        if (!is_array($this->deniedMimeTypes)) {
-            $this->deniedMimeTypes = [];
-        }
-
         $this->deniedMimeTypes[] = $type;
     }
 
@@ -457,12 +446,10 @@ class UploadValidator extends AbstractValidator
      */
     public function removeDeniedMimeType($type)
     {
-        if (is_array($this->deniedMimeTypes)) {
-            $key = array_search($type, $this->deniedMimeTypes);
-            if ($key !== false) {
-                unset($this->deniedMimeTypes[$key]);
-                return true;
-            }
+        $key = array_search($type, $this->deniedMimeTypes);
+        if ($key !== false) {
+            unset($this->deniedMimeTypes[$key]);
+            return true;
         }
 
         return false;

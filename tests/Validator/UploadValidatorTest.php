@@ -65,7 +65,8 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('pdf', $validator->getDeniedExtensions());
         $this->assertContains('doc', $validator->getDeniedExtensions());
 
-        $validator->removeDeniedExtension('doc');
+        $this -> assertTrue($validator->removeDeniedExtension('doc'));
+        $this -> assertFalse($validator->removeDeniedExtension('gif'));
 
         $this->assertEquals(['pdf'], $validator->getDeniedExtensions());
 
@@ -100,7 +101,8 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('pdf', $validator->getAllowedExtensions());
         $this->assertContains('doc', $validator->getAllowedExtensions());
 
-        $validator->removeAllowedExtension('pdf');
+        $this -> assertTrue($validator->removeAllowedExtension('pdf'));
+        $this -> assertFalse($validator->removeAllowedExtension('gif'));
 
         $this->assertEquals(['doc'], $validator->getAllowedExtensions());
 
@@ -136,7 +138,8 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('application/pdf', $validator->getAllowedMimeTypes());
         $this->assertContains('image/jpg', $validator->getAllowedMimeTypes());
 
-        $validator->removeAllowedMimeType('application/pdf');
+        $this->assertTrue($validator->removeAllowedMimeType('application/pdf'));
+        $this->assertFalse($validator->removeAllowedMimeType('image/gif'));
 
         $this->assertEquals(['image/jpg'], $validator->getAllowedMimeTypes());
 
@@ -194,7 +197,8 @@ class UploadValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('application/pdf', $validator->getDeniedMimeTypes());
         $this->assertContains('image/jpg', $validator->getDeniedMimeTypes());
 
-        $validator->removeDeniedMimeType('image/jpg');
+        $this -> assertTrue($validator->removeDeniedMimeType('image/jpg'));
+        $this -> assertFalse($validator->removeDeniedMimeType('image/gif'));
 
         $this->assertEquals(['application/pdf'], $validator->getDeniedMimeTypes());
 
