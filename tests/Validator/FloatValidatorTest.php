@@ -94,7 +94,9 @@ class FloatValidatorTest extends \PHPUnit_Framework_TestCase
 
         $errormsg = 'Enter correct amount';
         foreach ([FloatValidator::DECIMAL_COMMA, ','] as $type) {
-            $validator = new FloatValidator(0, 5, true, $errormsg, FloatValidator::DECIMAL_COMMA);
+            $validator = new FloatValidator(0, 5, true, $errormsg, $type);
+
+            $this -> assertEquals(FloatValidator::DECIMAL_COMMA, $validator -> getDecimalPoint());
 
             $field->addValidator($validator);
 
@@ -115,6 +117,8 @@ class FloatValidatorTest extends \PHPUnit_Framework_TestCase
         foreach ([FloatValidator::DECIMAL_POINT, '.'] as $type) {
             $validator = new FloatValidator(0, 5, true, $errormsg, $type);
 
+            $this -> assertEquals(FloatValidator::DECIMAL_POINT, $validator -> getDecimalPoint());
+
             $field->setValidator($validator);
 
             $field->setValue('1,0');
@@ -132,6 +136,9 @@ class FloatValidatorTest extends \PHPUnit_Framework_TestCase
 
         foreach ([FloatValidator::DECIMAL_POINT_OR_COMMA, '.,', ',.'] as $type) {
             $validator = new FloatValidator(0, 5, true, $errormsg, $type);
+
+            $this -> assertEquals(FloatValidator::DECIMAL_POINT_OR_COMMA, $validator -> getDecimalPoint());
+
 
             $field->setValidator($validator);
 

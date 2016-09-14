@@ -180,7 +180,9 @@ class EmailValidatorTest extends \PHPUnit_Framework_TestCase
 
         // first skip domain check
         $validator = new EmailValidator(true);
+        $this->assertFalse($validator->isCheckIfDomainExist());
         $validator->setCheckIfDomainExist(true);
+        $this->assertTrue($validator->isCheckIfDomainExist());
 
         $field = $form->textField('email');
         $field->setValidator($validator);

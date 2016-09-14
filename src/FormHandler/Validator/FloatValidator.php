@@ -118,15 +118,20 @@ class FloatValidator extends AbstractValidator
     {
         switch ($this->decimalPoint) {
             case self::DECIMAL_COMMA:
-                return '/^-?\d+(,\d+)?$/';
+                $regex = '/^-?\d+(,\d+)?$/';
+                break;
 
             case self::DECIMAL_POINT_OR_COMMA:
-                return '/^-?\d+((\.|,)\d+)?$/';
+                $regex = '/^-?\d+((\.|,)\d+)?$/';
+                break;
 
             case self::DECIMAL_POINT:
             default:
-                return '/^-?\d+(\.\d+)?$/';
+                $regex = '/^-?\d+(\.\d+)?$/';
+                break;
         }
+
+        return $regex;
     }
 
     /**
