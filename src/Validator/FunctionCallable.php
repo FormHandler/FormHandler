@@ -59,7 +59,7 @@ class FunctionCallable extends Validator implements ValidatorInterface
      */
     public function validate($value)
     {
-        $result = call_user_func($this->callable, $value, $this->form_object);
+        $result = call_user_func($this->callable, $value, $this->form_object, $this->getField());
 
         if($result !== true && $result !== 1)
         {
