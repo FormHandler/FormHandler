@@ -16,7 +16,6 @@ use FormHandler\Field\TextArea;
 use FormHandler\Field\TextField;
 use FormHandler\Field\UploadField;
 use FormHandler\Form;
-use Herrera\Json\Exception\Exception;
 
 class XhtmlRenderer extends AbstractRenderer
 {
@@ -107,7 +106,7 @@ class XhtmlRenderer extends AbstractRenderer
      *
      * @param Element $element
      * @return string The HTML of the element
-     * @throws Exception
+     * @throws \Exception
      */
     public function render(Element $element)
     {
@@ -201,7 +200,6 @@ class XhtmlRenderer extends AbstractRenderer
         $tag = new Tag('input');
         $tag->setAttribute('type', 'password');
         $tag->setAttribute('maxlength', $passField->getMaxlength());
-
 
         return $this->parseTag($tag, $passField);
     }

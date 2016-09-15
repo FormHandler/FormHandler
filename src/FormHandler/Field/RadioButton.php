@@ -33,7 +33,7 @@ class RadioButton extends AbstractFormField
      * @param string $name
      * @param string $value
      */
-    public function __construct(Form &$form, $name = '', $value = null)
+    public function __construct(Form &$form, $name = '', $value = '')
     {
         $this->form = $form;
         $this->form->addField($this);

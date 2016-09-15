@@ -19,7 +19,6 @@ use FormHandler\Field\UploadField;
 use FormHandler\Renderer\AbstractRenderer;
 use FormHandler\Renderer\XhtmlRenderer;
 use FormHandler\Validator\CsrfValidator;
-use Herrera\Json\Exception\Exception;
 
 /**
  * The Form Object which represents a form and all it's functionality.
@@ -479,7 +478,7 @@ class Form extends Element
      *
      * @param string $method
      * @return Form
-     * @throws Exception
+     * @throws \Exception
      */
     public function setMethod($method)
     {
@@ -1218,7 +1217,7 @@ class Form extends Element
      *
      * @param string $enctype
      * @return Form
-     * @throws Exception
+     * @throws \Exception
      */
     public function setEnctype($enctype)
     {

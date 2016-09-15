@@ -38,6 +38,11 @@ class PassField extends AbstractFormField
      */
     protected $placeholder;
 
+    /**
+     * Constructor.
+     * @param Form $form
+     * @param string $name
+     */
     public function __construct(Form &$form, $name = '')
     {
         $this->form = $form;

@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/teyeheimans/FormHandler.svg?branch=master)](https://travis-ci.org/teyeheimans/FormHandler) [![Coverage Status](https://coveralls.io/repos/github/teyeheimans/FormHandler/badge.svg?branch=master)](https://coveralls.io/github/teyeheimans/FormHandler?branch=master)
+[![Build Status](https://travis-ci.org/teyeheimans/FormHandler.svg?branch=master)](https://travis-ci.org/teyeheimans/FormHandler) 
+[![Coverage Status](https://coveralls.io/repos/github/teyeheimans/FormHandler/badge.svg?branch=master)](https://coveralls.io/github/teyeheimans/FormHandler?branch=master)
 
 FormHandler
 ======
@@ -7,16 +8,25 @@ This FormHandler is a PHP solution to generate form fields and validate them.
 Making forms is in general a time-taking job. In this package we try to offer
 a solution so that making forms is easy. 
 
-
-FormHandler has a few assumptions:
-  - A form is **always** submitted to itsself. That means, to the same script/page where the form is defined.
-  - We assume that when you create a ```SubmitButton``` or ```ImageButton```, that you don't use 
-    own HTML tag buttons.
+FormHandler implements the PSR-1 and PSR-2 coding standards. FormHandler implements the PSR-4 autoloading standard.
 
 To create a form you have to:
   * Define the form and it's fields
   * Check if the form is submitted and if it's vald
   * Parse the form's fields in your HTML / view
+
+Installation
+------
+
+@todo
+
+Usage 
+------
+
+FormHandler has a few assumptions:
+  - A form is **always** submitted to itsself. That means, to the same script/page where the form is defined.
+  - We assume that when you create a ```SubmitButton``` or ```ImageButton```, that you don't use 
+    own HTML tag buttons.
 
 A very basic example is:
 ```php
@@ -160,7 +170,7 @@ In short, you have these fields available.
   * hiddenField(`$name`)
   * passField(`$name`)
   * selectField(`$name`)
-  * radioButton(`$name`, `$value = null`)
+  * radioButton(`$name`, `$value = ''`)
   * selectField(`$name`)
   * textarea(`$name`, `$cols = 40`, `$rows = 7`)
   * checkBox(`$name`, `$value = 1`)

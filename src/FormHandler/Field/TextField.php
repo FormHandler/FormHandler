@@ -2,8 +2,6 @@
 
 namespace FormHandler\Field;
 
-use FormHandler\Form;
-
 /**
  * Create a text input field.
  *
@@ -37,25 +35,10 @@ class TextField extends PassField
     protected $type = self::TYPE_TEXT;
 
     /**
-     * TextField constructor.
-     * @param Form $form
-     * @param string $name
-     */
-    public function __construct(Form &$form, $name = '')
-    {
-        $this->form = $form;
-        $this->form->addField($this);
-
-        if (!empty($name)) {
-            $this->setName($name);
-        }
-    }
-
-    /**
      * Set the name
      *
      * @param string $name
-     * @return TextArea
+     * @return TextField
      */
     public function setName($name)
     {
