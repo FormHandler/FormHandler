@@ -2,7 +2,13 @@
   "name": "teyeheimans/FormHandler",
   "type": "library",
   "description": "Easy to use object which allows you to create and process forms",
-  "keywords": ["forms", "form", "textfield", "formhandler", "form handler"],
+  "keywords": [
+    "forms",
+    "form",
+    "textfield",
+    "formhandler",
+    "form handler"
+  ],
   "license": "MIT",
   "authors": [
     {
@@ -18,9 +24,10 @@
     "phpdocumentor/phpdocumentor": "2.*",
     "phpunit/phpunit": "5.5.*",
     "phploc/phploc": "*",
-    "pdepend/pdepend" : "2.2.4",
+    "pdepend/pdepend": "2.2.4",
     "mayflower/php-codebrowser": "~1.1",
-    "theseer/phpdox": "*",
+    "nikic/php-parser": "3.0.x-dev",
+    "theseer/phpdox": "0.9.0",
     "johnkary/phpunit-speedtrap": "^1.0"
   },
   "require": {
