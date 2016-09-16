@@ -275,6 +275,7 @@ class XhtmlRendererTest extends BaseTestRenderer
         $this->expectAttribute($html, 'cols', 40);
         $this->expectAttribute($html, 'rows', 7);
         $this->assertContains('<textarea', $html);
+        $this->assertContains('</textarea>', $html);
     }
 
     public function testTextField()

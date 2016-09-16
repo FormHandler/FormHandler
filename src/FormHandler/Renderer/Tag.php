@@ -56,7 +56,7 @@ class Tag
             }
         }
 
-        if ($this->innerHtml) {
+        if ($this->innerHtml || $this->name == 'textarea') {
             $str .= sprintf('>%s</%s>', $this->innerHtml, $this->name);
         } else {
             $str .= '/>';
@@ -84,6 +84,14 @@ class Tag
     }
 
     /**
+     * @return string
+     */
+    public function getInnerHtml()
+    {
+        return $this->innerHtml;
+    }
+
+    /**
      * @param string $innerHtml
      * @return Tag
      */
@@ -91,13 +99,5 @@ class Tag
     {
         $this->innerHtml = $innerHtml;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInnerHtml()
-    {
-        return $this->innerHtml;
     }
 }
