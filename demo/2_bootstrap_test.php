@@ -5,9 +5,20 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 $form = new \FormHandler\Form();
 $form->setRenderer(new \FormHandler\Renderer\Bootstrap3Renderer());
 
-$form->textField('email')->setTitle('Email')->setPlaceholder('Email');
+$form->textField('email')
+    ->setTitle('Email')
+    ->setPlaceholder('Email')
+    ->setHelpText('Please enter your email address');
 
-$form->passField('password')->setTitle('Password')->setPlaceholder('Password');
+$form->passField('password')
+    ->setTitle('Password')
+    ->setPlaceholder('Password');
+
+$form->textArea('message');
+
+$form->submitButton('submit', 'Submit');
+
+
 ?>
 
 <!DOCTYPE html>
@@ -40,6 +51,7 @@ $form->passField('password')->setTitle('Password')->setPlaceholder('Password');
 <?php echo $form; ?>
 <?php echo $form('email'); ?>
 <?php echo $form('password'); ?>
+<?php echo $form('message'); ?>
 
 <div class="form-group">
     <label for="exampleInputFile">File input</label>
@@ -51,7 +63,7 @@ $form->passField('password')->setTitle('Password')->setPlaceholder('Password');
         <input type="checkbox"> Check me out
     </label>
 </div>
-<button type="submit" class="btn btn-default">Submit</button>
+<?php echo $form('submit') ?>
 <?php echo $form->close(); ?>
 
 </body>
