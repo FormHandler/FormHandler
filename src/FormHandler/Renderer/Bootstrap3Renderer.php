@@ -16,7 +16,6 @@ class Bootstrap3Renderer extends XhtmlRenderer
     public function render(Element $element)
     {
         if ($element instanceof AbstractFormField) {
-
             if (!$element->getId()) {
                 $element->setId('field-' . uniqid());
             }
