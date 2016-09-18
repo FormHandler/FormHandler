@@ -14,6 +14,11 @@ To create a form you have to:
   * Define the form and it's fields
   * Check if the form is submitted and if it's vald
   * Parse the form's fields in your HTML / view
+  
+Requirements
+------
+
+FormHandler requires PHP 5.4 or higher.
 
 Installation
 ------
