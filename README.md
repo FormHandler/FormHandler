@@ -23,7 +23,10 @@ FormHandler requires PHP 5.4 or higher.
 Installation
 ------
 
-@todo
+You can install FormHandler by downloading the [latest](https://github.com/teyeheimans/FormHandler/archive/master.zip) 
+zip file and include this in your project.
+ 
+We are working on availability for composer.
 
 Usage 
 ------
@@ -118,13 +121,12 @@ $form -> textField( 'name' )
       -> addValidator( new StringValidator( 2, 50, true ) );
 ```
 
-
-  
 General methods 
 -----
 
-Most objects (the form, fields and the buttons) represent an HTML tag. All of these objects have some general 
-available getters and setters to influence some of the attributes of the HTML tag. For example:
+Most objects (the form, fields and the buttons) represent an HTML tag. All of these objects have some [global 
+attributes](http://www.w3schools.com/tags/ref_standardattributes.asp) available.
+In FormHandler, these global attributes are also available through getters and setters. For example:
 
   * setTabindex(`$index`)
   * getTabindex()
