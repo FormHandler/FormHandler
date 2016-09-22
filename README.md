@@ -18,7 +18,15 @@ To create a form you have to:
 Requirements
 ------
 
-FormHandler requires PHP 5.4 or higher.
+FormHandler requires PHP 5.4 or higher. 
+
+FormHandler is tested on: 
+   * PHP 5.4
+   * PHP 5.5
+   * PHP 5.6
+   * PHP 7.0
+   * PHP HHVM 
+   * PHP Latest 'nightly' build
 
 Installation
 ------
