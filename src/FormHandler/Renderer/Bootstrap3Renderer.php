@@ -4,7 +4,9 @@ namespace FormHandler\Renderer;
 
 use FormHandler\Field\AbstractFormButton;
 use FormHandler\Field\AbstractFormField;
+use FormHandler\Field\CheckBox;
 use FormHandler\Field\Element;
+use FormHandler\Field\RadioButton;
 use FormHandler\Form;
 
 class Bootstrap3Renderer extends XhtmlRenderer
@@ -21,25 +23,36 @@ class Bootstrap3Renderer extends XhtmlRenderer
         $this->setHelpFormat(self::RENDER_NONE);
     }
 
+    /**
+     * This method is executed when an Element needs to be rendered.
+     * Here we add some logic to add the label, an optional help block and the form group.
+     * @param Element $element
+     * @return string
+     */
     public function render(Element $element)
     {
-        if ($element instanceof AbstractFormField) {
+        // For all non-checkbox fields...
+        if ($element instanceof AbstractFormField && !$element instanceof CheckBox) {
             if (!$element->getId()) {
                 $element->setId('field-' . uniqid());
             }
 
+            // Render our label
             $label = new Tag('label');
             $label->setAttribute('for', $element->getId());
             $label->setInnerHtml($element->getTitle());
 
-            // if no labels are
+            // If no labels are wanted, we set it to "Screen Reader" only,
+            // @see http://getbootstrap.com/css/#callout-inline-form-labels
             if ($this->mode == self::MODE_INLINE_NO_LABELS) {
                 $label->setAttribute('class', 'sr-only');
             }
 
+            // Render our field, but with an css class "form-control"
             $element->addClass('form-control');
             $field = parent::render($element);
 
+            // Render a help block if an help-text is set.
             $helpBlock = '';
             if ($element->getHelpText()) {
                 $helpTag = new Tag('p');
@@ -48,8 +61,20 @@ class Bootstrap3Renderer extends XhtmlRenderer
                 $helpBlock = $helpTag->render();
             }
 
+            // Now render our container div, which will contain all of the above
             $tag = new Tag('div');
-            $tag->setAttribute('class', 'form-group');
+            $cssClass = 'form-group';
+
+            if ($element->getForm()->isSubmitted()) {
+                if (!$element->isValid()) {
+                    $cssClass .= ' has-error has-feedback';
+                } else {
+                    $cssClass .= ' has-success has-feedback';
+                }
+            }
+
+            $tag->setAttribute('class', $cssClass);
+
             $tag->setInnerHtml(
                 $label->render() . PHP_EOL .
                 $field . PHP_EOL .
@@ -72,6 +97,123 @@ class Bootstrap3Renderer extends XhtmlRenderer
     }
 
     /**
+     * Render a RadioButton
+     *
+     * @param RadioButton $radioButton
+     * @return string
+     */
+    public function radioButton(RadioButton $radioButton)
+    {
+        $label = new Tag('label');
+
+        $tag = new Tag('input');
+        $tag->setAttribute('type', 'checkbox');
+
+        if ($radioButton->isChecked()) {
+            $tag->setAttribute('checked', 'checked');
+        }
+
+        $tagHtml = $this->parseTag($tag, $radioButton);
+
+        $label->setInnerHtml(
+            $tagHtml . ' ' . ($radioButton->getLabel() ?: $radioButton->getTitle())
+        );
+
+        $div = new Tag('div');
+
+        $cssClass = 'radio';
+        if( $radioButton->isDisabled() ) {
+            $cssClass .= ' disabled';
+        }
+
+        if ($radioButton->getForm()->isSubmitted()) {
+            if (!$radioButton->isValid()) {
+                $cssClass .= ' has-error has-feedback';
+            } else {
+                $cssClass .= ' has-success has-feedback';
+            }
+        }
+
+        $div->setAttribute('class', $cssClass);
+        $div->setInnerHtml($label->render());
+        $html = $div->render();
+
+        // if it's an horizontal form, then add some more classes
+        if ($this->mode == self::MODE_HORIZONTAL) {
+            $innerDiv = new Tag('div');
+            $innerDiv->setAttribute('class', 'col-sm-offset-2 col-sm-10');
+            $innerDiv->setInnerHtml($html);
+
+            $outerDiv = new Tag('div');
+            $outerDiv->setAttribute('class', 'form-group');
+            $outerDiv->setInnerHtml($innerDiv->render());
+
+            $html = $outerDiv->render();
+        }
+
+        return $html;
+    }
+
+    /**
+     * Render a CheckBox
+     *
+     * @param CheckBox $checkbox
+     * @return string
+     */
+    protected function checkBox(CheckBox $checkbox)
+    {
+        $label = new Tag('label');
+
+        $tag = new Tag('input');
+        $tag->setAttribute('type', 'checkbox');
+
+        if ($checkbox->isChecked()) {
+            $tag->setAttribute('checked', 'checked');
+        }
+
+        $tagHtml = $this->parseTag($tag, $checkbox);
+
+        $label->setInnerHtml(
+            $tagHtml . ' ' . ($checkbox->getLabel() ?: $checkbox->getTitle())
+        );
+
+        $div = new Tag('div');
+
+        $cssClass = 'checkbox';
+        if( $checkbox->isDisabled() ) {
+            $cssClass .= ' disabled';
+        }
+
+        if ($checkbox->getForm()->isSubmitted()) {
+            if (!$checkbox->isValid()) {
+                $cssClass .= ' has-error has-feedback';
+            } else {
+                $cssClass .= ' has-success has-feedback';
+            }
+        }
+
+        $div->setAttribute('class', $cssClass);
+
+        $div->setInnerHtml($label->render());
+        $html = $div->render();
+
+        // if it's an horizontal form, then add some more classes
+        if ($this->mode == self::MODE_HORIZONTAL) {
+            $innerDiv = new Tag('div');
+            $innerDiv->setAttribute('class', 'col-sm-offset-2 col-sm-10');
+            $innerDiv->setInnerHtml($html);
+
+            $outerDiv = new Tag('div');
+            $outerDiv->setAttribute('class', 'form-group');
+            $outerDiv->setInnerHtml($innerDiv->render());
+
+            $html = $outerDiv->render();
+        }
+
+        return $html;
+    }
+
+    /**
      * Render a Form,
      *
      * @param Form $form
@@ -85,6 +227,6 @@ class Bootstrap3Renderer extends XhtmlRenderer
             $form->addClass('form-horizontal');
         }
 
-        return parent::form( $form );
+        return parent::form($form);
     }
 }
