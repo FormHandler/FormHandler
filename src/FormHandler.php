@@ -942,7 +942,10 @@ class FormHandler
         // is it a value from the $_POST array ?
         elseif(isset($_POST[$field]))
         {
-            $value = $_POST[$field];
+            //convert value
+            $value = (substr($_POST[$field], 0, 11) == '__FH_JSON__')
+                ? json_decode(substr($_POST[$field], 11), true)
+                : $_POST[$field];
         }
 
         return $value;
