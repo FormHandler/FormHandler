@@ -245,8 +245,19 @@ its thus inevitable that FormHandler has some responsibility of generating HTML 
 FormHandler comes with a class called a `Renderer`. This class is responsible for rendering the element 
 (field/button/form) and all its related information (error messages, titles, etc).
   
-It's quite easy to create your own class which will render the elements in the way you expect them. 
+A `Renderer` is a simple class which should have at least 1 method: `render( Element $element)`. This method
+is in control to generate the correct HTML for the given `Element`. This could be a field, button, form or option.   
 
-@todo: example here?
+The `XhtmlRenderer` is the default renderer. This class will make sure that all elements are rendered als XHTML.
+This class will also make sure that:
+
+  * Error messages are rendered as an `<tt>` tag
+  * Help messages are rendered as an `<dfn>` tag 
+  
+You can change this logic to setting it to render them as an attribute, or not render them at all.
+
+Because the `Renderer` is responsible for all rendering, it's quite easy to create your own class which will render 
+the elements in the way you expect them. The easiest way of doing this is by extending the XhtmlRenderer. For example 
+please take a look at the `CowSayRenderer`, which will render all _Fields_ with a nice CowSay around them.
   
   
