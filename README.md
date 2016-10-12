@@ -46,7 +46,6 @@ FormHandler has a few assumptions:
 
 A very basic example is:
 ```php
-
 #
 # This code defines your form and what to do with it when it's valid.
 # This code is probably defined in your controller.
@@ -55,23 +54,19 @@ A very basic example is:
 // Create the form
 $form = new Form();
 
-// Create a field in the form. Fluent method chaining is supported. 
-$form -> textField('name')
-      -> addValidator( new StringValidator( 2, 50, true, 'You have to supply your name (between 2 and 50 characters)' ) )
-      -> setPlaceholder( 'Enter your name' );
+// Create a field in the form. Fluent method chaining is supported.
+$form->textField('name')
+    ->addValidator(new StringValidator(2, 50, true, 'You have to supply your name (between 2 and 50 characters)'))
+    ->setPlaceholder('Enter your name');
 
 // Check if the form is submitted
-if( $form -> isSubmitted() )
-{
+if ($form->isSubmitted()) {
+
     // Check if the form is valid.
-    if( $form -> isValid() )
-    {
-        // Do your stuff here with the form, for example, store something
-        // in a database.
+    if ($form->isValid()) {
+        // Do your stuff here with the form, for example, store something in a database.
     }
-}
-else
-{
+} else {
     // Here, the form is not yet submitted!
     // You could for example set some predefined values in the form.
 }
@@ -81,10 +76,10 @@ else
 #
 
 // This will display the <form> html tag.
-echo $form; 
+echo $form;
 
 // This will display the HTML tag for the "name" field.
-echo $form('name');  
+echo $form('name');
 
 // You can mix plain old html with "dynamic" generated fields
 // Of course you could also generate a SubmitButton object and use that one.
@@ -118,15 +113,16 @@ FormHandler implements a fluent interface. This means that you *can* use method 
 
 Example:
 ```php
+<?php
 $form = new Form();
 
 // An example using method chaining.
-$form -> textField( 'name' )
-      -> setSize( 10 )
-      -> setId( 'myName' )
-      -> setTitle( 'Enter your name' )
-      -> setPlaceholder( '<name here>' )
-      -> addValidator( new StringValidator( 2, 50, true ) );
+$form->textField('name')
+     ->setSize(10)
+     ->setId('myName')
+     ->setTitle('Enter your name')
+     ->setPlaceholder('<name here>')
+     ->addValidator(new StringValidator(2, 50, true));
 ```
 
 General methods 
@@ -168,10 +164,13 @@ like this:
 $form = new Form();
 
 // Create a field in the form
-$form -> textField('name');
+$form->textField('name');
 
 // Retrieve the form by it's name using the shorthand:
 $field = $form('name');
+
+// Or use the "classic" way:
+$field = $form->getFieldByName('name');
 
 // ... Etc
 ```
