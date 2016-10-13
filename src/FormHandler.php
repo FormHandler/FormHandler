@@ -124,7 +124,11 @@ class FormHandler
         }
         else
         {
-            $this->action = $_SERVER['PHP_SELF'];
+            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == true
+                ? 'https://'
+                : 'http://';
+
+            $this->action = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['URL'];
             if(!empty($_SERVER['QUERY_STRING']))
             {
                 $this->action .= '?' . $_SERVER['QUERY_STRING'];
