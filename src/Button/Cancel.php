@@ -73,11 +73,10 @@ class Cancel extends \FormHandler\Button\Button
      */
     public function getButton()
     {
-        $this->extra .= ' onclick="';
-        $this->extra .= (is_null($this->url))
+        $this->extra .= ' onclick="'.
+            (is_null($this->url)
             ? 'history.back(-1)'
-            : 'document.location.href=\''.$this->url.'\'';
-        $this->extra .= '"';
+            : 'document.location.href=\''.\FormHandler\Utils::url($this->url).'\'').'"';
 
         if(is_null($this->caption))
         {
