@@ -8,19 +8,38 @@ use \FormHandler\Utils;
  */
 class UtilsTest extends \PHPUnit_Framework_TestCase
 {
-    public function testHtml()
+    public function testUrl()
     {
         $list = array(
             'https://test.com/' => 'https://test.com/',
             'https://test.com/<script>' => 'https://test.com/&lt;script&gt;',
-            'https://test.com/<script>alert(\'1\')</script>' => 'https://test.com/&lt;script&gt;alert(&#039;1&#039;)&lt;/script&gt;',
+            'https://test.com/<script>alert(\'1\')</script>' => 'https://test.com/&lt;script&gt;alert(&#x27;1&#x27;)&lt;/script&gt;',
             'https://test.com/<script>alert("1")</script>' => 'https://test.com/&lt;script&gt;alert(&quot;1&quot;)&lt;/script&gt;',
-            'https://test.com/test.php?">' => 'https://test.com/test.php?&quot;&gt;',
+            'https://test.com/test.php?">' => 'https://test.com/test.php?%22%3E=',
+            'test.com/test.php?">' => 'http://test.com/test.php?%22%3E=',
+            './test.php?">' => './test.php?%22%3E=',
         );
 
         foreach($list as $input => $check)
         {
-            $this->assertEquals(Utils::html($input), $check);
+            $this->assertEquals(Utils::url($input), $check);
+        }
+    }
+
+    public function testHtml()
+    {
+        $list = array(
+            'https://test.com/' => 'https:&#x2F;&#x2F;test.com&#x2F;',
+            'https://test.com/<script>' => 'https:&#x2F;&#x2F;test.com&#x2F;&lt;script&gt;',
+            'https://test.com/<script>alert(\'1\')</script>' => 'https:&#x2F;&#x2F;test.com&#x2F;&lt;script&gt;alert(&#x27;1&#x27;)&lt;&#x2F;script&gt;',
+            'https://test.com/<script>alert("1")</script>' => 'https:&#x2F;&#x2F;test.com&#x2F;&lt;script&gt;alert(&quot;1&quot;)&lt;&#x2F;script&gt;',
+            'https://test.com/test.php?">=' => 'https:&#x2F;&#x2F;test.com&#x2F;test.php?&quot;&gt;=',
+            'test.com/test.php?">' => 'test.com&#x2F;test.php?&quot;&gt;',
+        );
+
+        foreach($list as $input => $check)
+        {
+            $this->assertEquals($check, Utils::html($input));
         }
     }
 

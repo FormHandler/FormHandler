@@ -1341,7 +1341,7 @@ class FormHandler
                 $key = ($use_array_key_as_value === true) ? $key : $v;
                 $new[] = array(
                     'key' => (string) $key,
-                    'value' => (string) \FormHandler\Utils::html($v, ENT_NOQUOTES | ENT_IGNORE)
+                    'value' => (string) \FormHandler\Utils::html($v)
                 );
                 $new_given[$key] = $v;
             }
@@ -2016,7 +2016,7 @@ class FormHandler
                 if($this->onReturn !== false && is_string($this->onReturn) && !headers_sent())
                 {
                     header('Location: ' . $this->onReturn . $this->onReturnParameter);
-                    echo '<a href="' . \FormHandler\Utils::html($this->onReturn . $this->onReturnParameter) . '">continue</a>';
+                    echo '<a href="' . \FormHandler\Utils::url($this->onReturn . $this->onReturnParameter) . '">continue</a>';
                     exit();
                 }
                 else
@@ -2541,7 +2541,7 @@ class FormHandler
         // escape the values from dangerous characters
         $title = is_null($title)
             ? $field_title . ' - ' . \FormHandler\Language::get(41)
-            : \FormHandler\Utils::html($title, ENT_NOQUOTES | ENT_IGNORE);
+            : \FormHandler\Utils::html($title);
 
         return str_replace(
             array(
@@ -3120,7 +3120,7 @@ class FormHandler
                 $values = array("fh_initial" => 1);
                 foreach($childs as $child)
                 {
-                    $values[$child] = $this->getValue($child);
+                    $values[$child] = \FormHandler\Utils::html($this->getValue($child));
                 }
 
                 if(!$this->isFieldViewMode($parent) && !get_class($this->fields[$parent][1]) instanceof Field\Hidden)
@@ -3199,7 +3199,7 @@ class FormHandler
             $css .
             $this->getJavascriptCode(true)
             . '<form data-fh="true" id="' . $this->name . '" method="post" action="'
-            . \FormHandler\Utils::html($this->action) . '"' .
+            . \FormHandler\Utils::url($this->action) . '"' .
             ($this->encoding === self::ENCODING_MULTIPART ? ' enctype="multipart/form-data"' : '') .
             (!empty($this->extra) ? " " . $this->extra : "" ) . ">\n" .
             '<ins>' . "\n" . $hidden . '</ins>';

@@ -35,10 +35,97 @@ class Utils
      * @param string $string The input string
      * @return string The converted string
      */
-    public static function html($string, $flags = null, $charset = 'UTF-8')
+    static public function html($string,$with_forward_slash = true)
     {
-        $flags = (!is_null($flags)) ? $flags : ENT_COMPAT | ENT_IGNORE | ENT_QUOTES;
-        return @htmlspecialchars($string, $flags, $charset);
+        $replace = array(
+            '&' => '&amp;',
+            '<' => '&lt;',
+            '>' => '&gt;',
+            '"' => '&quot;',
+            '\'' => '&#x27;',
+        );
+
+        if($with_forward_slash)
+        {
+            $replace['/'] = '&#x2F;';
+        }
+
+        return str_replace(array_keys($replace), $replace, $string);
+    }
+
+    /**
+     * Format a given input to a valid url
+     *
+     * @param string $input URL to be formatted
+     * @param boolean $force_https Force to a HTTPS link
+     * @return string empty string when not possible to parse
+     */
+    public static function url($input, $force_https = false)
+    {
+        $url = parse_url($input);
+        $isRelative = substr($input, 0, 2) == './';
+
+        //return when parsing is not possible
+        if($url === false)
+        {
+            return '';
+        }
+
+        //parse scheme
+        $parsed_scheme = (!empty($url['scheme'])) ? $url['scheme'] : 'http';
+        $scheme = ($force_https ? 'https' : $parsed_scheme) .'://';
+        $is_http = ($scheme === 'http://');
+
+        //parse parts
+        $user = (!empty($url['user'])) ? $url['user'] : '';
+        $password = (!empty($url['pass'])) ? $url['pass'] : '';
+        $auth = (!empty($user) && !empty($password)) ? $user .':'. $password : $user . $password;
+        $host = (!empty($url['host'])) ? $url['host'] : '';
+        $path = (!empty($url['path'])) ? $url['path'] : '/';
+        if(substr($path, 0, 1) == '/')
+        {
+            $path = substr($path, 1);
+        }
+
+        $port = (!empty($url['port']) && !($url['port'] === 80 && $is_http) && !($url['port'] === 433 && !$is_http))
+            ? ':'. $url['port']
+            : '';
+
+        $query = (!empty($url['query'])) ? $url['query'] : '';
+        $fragment = (!empty($url['fragment'])) ? '#'. $url['fragment'] : '';
+
+        $host = $host != '' && (substr($host, -1, 1) != '/')
+            ? $host . '/'
+            : $host;
+
+        //parse end slash if not existent
+        $base = $isRelative
+            ? $path
+            : $scheme . $auth . (!empty($auth) ? '@' : '') . $host . $path . $port;
+
+        $query_data = array();
+        foreach(explode('&', $query) as $item)
+        {
+            $item = explode('=', $item);
+            $key = $item[0];
+            $value = array_key_exists(1, $item)
+                ? $item[1]
+                : '';
+
+            if(trim($key) != '')
+            {
+                $query_data[$key] = self::html($value);
+            }
+        }
+
+        $query = http_build_query($query_data, null, '&');
+        if($query != '')
+        {
+            $query = '?'.$query;
+        }
+
+        //assemble and return
+        return self::html($base,false) . $query . $fragment;
     }
 
     /**
@@ -100,7 +187,7 @@ class Utils
             }
         }
         $query = (!empty($params) ? '?'. http_build_query($params,null,'&') : '');
-        
+
         return $protocol .'://'.  $page . $query;
     }
 }

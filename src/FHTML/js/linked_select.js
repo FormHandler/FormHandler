@@ -340,6 +340,17 @@
             FormHandler.removeErrorState($field_from);
         }
 
+        if(initial && typeof values === 'object')
+        {
+            $.each(values,function(key,item)
+            {
+                if(typeof item === 'string')
+                {
+                    values[key] = item.htmlEntitiesDecode();
+                }
+            });
+        }
+
         $.ajax(filename,{
             type: 'POST',
             data: 'linkselect=true&field_from='+ from +'&filter='+ filter +'&fields='+ fields +'&form_name='+ (typeof form_name != 'undefined' ? form_name : 'FH') + ((extra != '') ? '&'+ extra : '') + (typeof values != 'undefined' ? '&initial='+ initial : ''),

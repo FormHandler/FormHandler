@@ -4,6 +4,47 @@
  * @author marien
  * @copyright ColorBase™
  */
+String.prototype.htmlEntitiesEncode = function()
+{
+    var replace_map;
+
+    replace_map = {
+        '&' : '&amp;',
+        '<' : '&lt;',
+        '>' : '&gt;',
+        '"' : '&quot;',
+        "'": '&#x27;',
+        '/' : '&#x2F;',
+    };
+
+    return this.replace(/[&<>"'/"]/g, function(match)
+    {
+        return typeof replace_map[match] !== 'undefined'
+            ? replace_map[match]
+            : match;
+    });
+};
+
+String.prototype.htmlEntitiesDecode = function()
+{
+    var replace_map;
+
+    replace_map = {
+        '&amp;' : '&',
+        '&lt;' : '<',
+        '&gt;' : '>',
+        '&quot;' : '"',
+        '&#x27;' :  "'",
+        '&#x2F;' : '/',
+    };
+
+    return this.replace(/(&amp;|&lt;|&gt;|&quot;|&#x27;|&#x2F;)/g, function(match)
+    {
+        return typeof replace_map[match] !== 'undefined'
+            ? replace_map[match]
+            : match;
+    });
+};
 
 (function(FormHandler,$,undefined)
 {
