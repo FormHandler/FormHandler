@@ -2574,7 +2574,7 @@ class FormHandler
         {
             $processed[$field] = array(
                 $this->getField($field)->getJsSelectorValue(),
-                $value
+                \FormHandler\Utils::html($value)
             );
         }
 
