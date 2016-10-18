@@ -53,6 +53,31 @@ class Utils
         return str_replace(array_keys($replace), $replace, $string);
     }
 
+    public static function url_unparse($url)
+    {
+        $parsed_url = parse_url($url);
+        $scheme   = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . '://' : '';
+        $host     = isset($parsed_url['host']) ? $parsed_url['host'] : '';
+        $port     = isset($parsed_url['port']) ? ':' . $parsed_url['port'] : '';
+        $user     = isset($parsed_url['user']) ? $parsed_url['user'] : '';
+        $pass     = isset($parsed_url['pass']) ? ':' . $parsed_url['pass']  : '';
+        $pass     = ($user || $pass) ? "$pass@" : '';
+        $path     = isset($parsed_url['path']) ? $parsed_url['path'] : '';
+        $query    = isset($parsed_url['query']) ? '?' . $parsed_url['query'] : '';
+        $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
+
+        return array(
+            'scheme' => $scheme,
+            'host' => $host,
+            'port' => $port,
+            'user' => $user,
+            'pass' => $pass,
+            'path' => $path,
+            'query' => $query,
+            'fragment' => $fragment,
+        );
+    }
+
     /**
      * Format a given input to a valid url
      *
@@ -62,8 +87,21 @@ class Utils
      */
     public static function url($input, $force_https = false)
     {
-        $url = parse_url($input);
-        $isRelative = substr($input, 0, 2) == './';
+        $isRelative2C = substr($input, 0, 2) == './'
+            || substr($input, 0, 2) == '//';
+        $isRelative1C = !$isRelative2C && substr($input, 0, 1) == '/';
+        $isRelative = $isRelative1C || $isRelative2C;
+
+        $prefix = $isRelative1C
+            ? substr($input, 0, 1)
+            : ($isRelative2C ? substr($input, 0, 2) : '');
+
+        if($prefix != '')
+        {
+            $input = substr($input, strlen($prefix));
+        }
+
+        $url = self::url_unparse($input);
 
         //return when parsing is not possible
         if($url === false)
@@ -72,60 +110,48 @@ class Utils
         }
 
         //parse scheme
-        $parsed_scheme = (!empty($url['scheme'])) ? $url['scheme'] : 'http';
-        $scheme = ($force_https ? 'https' : $parsed_scheme) .'://';
-        $is_http = ($scheme === 'http://');
-
-        //parse parts
-        $user = (!empty($url['user'])) ? $url['user'] : '';
-        $password = (!empty($url['pass'])) ? $url['pass'] : '';
-        $auth = (!empty($user) && !empty($password)) ? $user .':'. $password : $user . $password;
-        $host = (!empty($url['host'])) ? $url['host'] : '';
-        $path = (!empty($url['path'])) ? $url['path'] : '/';
-        if(substr($path, 0, 1) == '/')
+        $url['scheme'] = ($force_https ? 'https://' : $url['scheme']);
+        if(empty($url['scheme']) && !$isRelative)
         {
-            $path = substr($path, 1);
+            $url['scheme'] = 'http://';
         }
 
-        $port = (!empty($url['port']) && !($url['port'] === 80 && $is_http) && !($url['port'] === 433 && !$is_http))
-            ? ':'. $url['port']
+        $is_http = ($url['scheme'] === 'http://');
+
+        $url['port'] = (!empty($url['port']) && !($url['port'] === 80 && $is_http) && !($url['port'] === 433 && !$is_http))
+            ? $url['port']
             : '';
 
-        $query = (!empty($url['query'])) ? $url['query'] : '';
-        $fragment = (!empty($url['fragment'])) ? '#'. $url['fragment'] : '';
-
-        $host = $host != '' && (substr($host, -1, 1) != '/')
-            ? $host . '/'
-            : $host;
-
-        //parse end slash if not existent
-        $base = $isRelative
-            ? $path
-            : $scheme . $auth . (!empty($auth) ? '@' : '') . $host . $path . $port;
-
+        //query data to array
         $query_data = array();
-        foreach(explode('&', $query) as $item)
-        {
-            $item = explode('=', $item);
-            $key = $item[0];
-            $value = array_key_exists(1, $item)
-                ? $item[1]
-                : '';
+        empty($url['query'])
+            ?: parse_str(substr($url['query'],1), $query_data);
 
-            if(trim($key) != '')
-            {
-                $query_data[$key] = self::html($value);
-            }
+        $query = array();
+        foreach($query_data as $key => $value)
+        {
+            $query[] = urlencode(urldecode($key)).'='.urlencode(urldecode($value));
         }
 
-        $query = http_build_query($query_data, null, '&');
-        if($query != '')
+        $url['query'] = empty($query)
+            ? ''
+            : '?'.implode('&', $query);
+
+        //make modifications for relative URLs
+        if($isRelative)
         {
-            $query = '?'.$query;
+            $url['scheme'] = '';
         }
 
-        //assemble and return
-        return self::html($base,false) . $query . $fragment;
+        //safely encode url parts here
+        $pathList = explode('/', $url['path']);
+        foreach($pathList as &$path)
+        {
+            $path = urlencode(urldecode($path));
+        }
+        $url['path'] = implode('/',$pathList);
+
+        return $prefix . implode('', $url);
     }
 
     /**
