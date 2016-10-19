@@ -124,7 +124,7 @@ class FormHandler
         }
         else
         {
-            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == true
+            $protocol = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on'
                 ? 'https://'
                 : 'http://';
 
