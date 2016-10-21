@@ -130,12 +130,20 @@ class Utils
         $query = array();
         foreach($query_data as $key => $value)
         {
-            $query[] = urlencode(urldecode($key)).'='.urlencode(urldecode($value));
+            if(is_array($value))
+            {
+                foreach($value as $k => $v)
+                {
+                    $query[urlencode(urldecode($key))][urlencode(urldecode($k))] = urlencode(urldecode($v));
+                }
+                continue;
+            }
+            $query[urlencode(urldecode($key))] = urlencode(urldecode($value));
         }
 
         $url['query'] = empty($query)
             ? ''
-            : '?'.implode('&', $query);
+            : '?'.http_build_query($query, null, '&');
 
         //make modifications for relative URLs
         if($isRelative)
