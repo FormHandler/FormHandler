@@ -87,18 +87,14 @@ class Utils
      */
     public static function url($input, $force_https = false)
     {
-        $isRelative2C = substr($input, 0, 2) == './'
-            || substr($input, 0, 2) == '//';
-        $isRelative1C = !$isRelative2C && substr($input, 0, 1) == '/';
-        $isRelative = $isRelative1C || $isRelative2C;
-
-        $prefix = $isRelative1C
-            ? substr($input, 0, 1)
-            : ($isRelative2C ? substr($input, 0, 2) : '');
-
-        if($prefix != '')
+        $isRelative = false;
+        $prefix = '';
+        while(substr($input, 0, 1) == '.'
+            || substr($input, 0, 1) == '/')
         {
-            $input = substr($input, strlen($prefix));
+            $prefix .= substr($input, 0, 1);
+            $input = substr($input, 1);
+            $isRelative = true;
         }
 
         $url = self::url_unparse($input);
@@ -127,23 +123,9 @@ class Utils
         empty($url['query'])
             ?: parse_str(substr($url['query'],1), $query_data);
 
-        $query = array();
-        foreach($query_data as $key => $value)
-        {
-            if(is_array($value))
-            {
-                foreach($value as $k => $v)
-                {
-                    $query[urlencode(urldecode($key))][urlencode(urldecode($k))] = urlencode(urldecode($v));
-                }
-                continue;
-            }
-            $query[urlencode(urldecode($key))] = urlencode(urldecode($value));
-        }
-
-        $url['query'] = empty($query)
+        $url['query'] = empty($query_data)
             ? ''
-            : '?'.http_build_query($query, null, '&');
+            : '?'.http_build_query($query_data, null, '&');
 
         //make modifications for relative URLs
         if($isRelative)
