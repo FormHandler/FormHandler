@@ -47,7 +47,7 @@
             description="Performs static analysis (executing the tools in parallel), runs the tests, and generates project documentation"/>
 
     <target name="travis"
-            depends="prepare,lint,phpunit-travis"
+            depends="prepare,lint,phpunit-travis,-check-failure"
             description="Build specific for Travis CI" />
 
     <target name="static-analysis"
