@@ -218,7 +218,7 @@ class Select extends \FormHandler\Field\Field
                 . (isset($this->tab_index) ? ' tabindex="' . $this->tab_index . '" ' : '')
                 . (isset($this->extra) ? ' ' . $this->extra : '' )
                 . ($this->getDisabled() && !$this->getDisabledInExtra() ? 'disabled="disabled" ' : '')
-                . 'data-option-count="'.count($sOptions).'" ',
+                . 'data-option-count="'.count($options).'" ',
             $sOptions,
             (isset($this->extra_after) ? $this->extra_after : '')
         );
