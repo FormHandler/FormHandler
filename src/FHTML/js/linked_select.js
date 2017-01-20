@@ -178,6 +178,7 @@
                 oFld.append(group);
             }
             oFld[0].selectedIndex = 0;
+            oFld.attr('data-option-count',aOptions.length);
         }
         else if(field_type === 'checkbox')
         {
