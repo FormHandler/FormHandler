@@ -4,7 +4,7 @@
  * MaskLoader
  *
  * Look for more info at http://www.formhandler.net
- * 
+ *
  * Copyright (C) 2015 FormHandler
  *
  * This library is free software; you can redistribute it and/or
@@ -57,7 +57,7 @@ class MaskLoader
      */
     public function __construct()
     {
-        
+
     }
 
     /**

@@ -1980,7 +1980,7 @@ class FormHandler
                     $data[$field] = $fld->getValue();
                 }
             }
-
+            
             // call the users oncorrect function
             if(count($this->onCorrect) != 0)
             {

@@ -87,10 +87,27 @@ class Utils
      */
     public static function url($input, $force_https = false)
     {
-        $isRelative = false;
-        $prefix = '';
-        while(substr($input, 0, 1) == '.'
-            || substr($input, 0, 1) == '/')
+        //check for url starting with domain or file name
+        //if so, do not prepend protocol
+        preg_match("/\A([\w])+\.[\w]+(\?|\/|\Z)/", $input, $output_array);
+        $prefix = empty($output_array) ? '' : current($output_array);
+
+        //remove ? from prefix
+        if(substr($prefix, -1) == '?')
+        {
+            $prefix = substr($prefix, 0, -1);
+        }
+
+        $input = substr($input, strlen($prefix));
+
+        $isRelative = !empty($prefix) || substr($input, 0, 1) == '?';
+
+        $relativeList = [
+            '.',
+            '/',
+        ];
+
+        while(in_array(substr($input, 0, 1), $relativeList))
         {
             $prefix .= substr($input, 0, 1);
             $input = substr($input, 1);
@@ -106,13 +123,14 @@ class Utils
         }
 
         //parse scheme
-        $url['scheme'] = ($force_https ? 'https://' : $url['scheme']);
-        if(empty($url['scheme']) && !$isRelative)
+        $protocol = ($force_https ? 'https://' : $url['scheme']);
+        unset($url['scheme']);
+        if(empty($protocol) && !$isRelative)
         {
-            $url['scheme'] = 'http://';
+            $protocol = 'http://';
         }
 
-        $is_http = ($url['scheme'] === 'http://');
+        $is_http = ($protocol === 'http://');
 
         $url['port'] = (!empty($url['port']) && !($url['port'] === 80 && $is_http) && !($url['port'] === 433 && !$is_http))
             ? $url['port']
@@ -130,7 +148,7 @@ class Utils
         //make modifications for relative URLs
         if($isRelative)
         {
-            $url['scheme'] = '';
+            $protocol = '';
         }
 
         //safely encode url parts here
@@ -141,7 +159,7 @@ class Utils
         }
         $url['path'] = implode('/',$pathList);
 
-        return $prefix . implode('', $url);
+        return $protocol . $prefix . implode('', $url);
     }
 
     /**

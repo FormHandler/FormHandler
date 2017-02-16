@@ -32,6 +32,9 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     public function dataProviderTestUrl()
     {
         return array(
+            array('index.php', 'index.php'),
+            array('index.php?test=1', 'index.php?test=1'),
+            array('phpunit.formhandlet.net/test/"><script>', 'http://phpunit.formhandlet.net/test/%22%3E%3Cscript%3E'),
             array('phpunit.formhandlet.net/test/"><script>', 'http://phpunit.formhandlet.net/test/%22%3E%3Cscript%3E'),
             array('//test.phpunit.formhandlet.net:443/form/handler/index.php?firstparam=1&secondparam=2#str', '//test.phpunit.formhandlet.net:443/form/handler/index.php?firstparam=1&secondparam=2#str'),
             array('https://phpunit.formhandlet.net:443/form/handler/index.php?firstparam=1&secondparam=2#str', 'https://phpunit.formhandlet.net:443/form/handler/index.php?firstparam=1&secondparam=2#str'),
@@ -63,7 +66,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Utils::buildRequestUrl
+     * @covers FormHandler\Utils::buildRequestUrl
      */
     public function testbuildRequestUrl()
     {
