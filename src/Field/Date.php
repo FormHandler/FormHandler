@@ -124,7 +124,7 @@ class Date extends \FormHandler\Field\Field
                 $this->name,
                 $this->getMinDate(),
                 $this->getMaxDate(),
-                htmlspecialchars($this->getValue()->format('Y-m-d')),
+                htmlspecialchars($this->getValue()),
                     (isset($this->extra) ? ' ' . $this->extra . ' ' : '')
                     . ($this->getDisabled() && !$this->getDisabledInExtra() ? 'disabled="disabled" ' : ''),
                 (isset($this->extra_after) ? $this->extra_after : '')
