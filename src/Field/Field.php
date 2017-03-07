@@ -41,6 +41,7 @@ class Field
 {
     /** @var FormHandler */
     protected $form_object;
+    private $wrapper_attributes = [];
     protected $name;
     protected $validators = array();
     protected $value;
@@ -84,6 +85,41 @@ class Field
             ->setOnCorrectField($name);
 
         return $fld;
+    }
+
+    /**
+     * Get all attributes
+     *
+     * @param boolean $parseHtml
+     * @return array|string
+     */
+    public function getWrapperAttributes($parseHtml = false)
+    {
+        if(!$parseHtml)
+        {
+            return $this->wrapper_attributes;
+        }
+
+        $html = '';
+        foreach($this->wrapper_attributes as $key => $value)
+        {
+            $html .= ' '. $key .'="'. \FormHandler\Utils::html($value) .'"';
+        }
+        return $html;
+    }
+
+    /**
+     * Set attribute
+     *
+     * @param scalar $key
+     * @param scalar $value
+     * @return \FormHandler\Field\Field
+     *
+     */
+    public function setWrapperAttribute($key, $value)
+    {
+        $this->wrapper_attributes[$key] = $value;
+        return $this;
     }
 
     /**

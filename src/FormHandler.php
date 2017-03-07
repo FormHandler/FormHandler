@@ -1980,7 +1980,7 @@ class FormHandler
                     $data[$field] = $fld->getValue();
                 }
             }
-            
+
             // call the users oncorrect function
             if(count($this->onCorrect) != 0)
             {
@@ -2676,7 +2676,8 @@ class FormHandler
                 '/%error_id%/',
                 '/%value%/',
                 '/%help%/',
-                '/%field_wrapper%/'
+                '/%field_wrapper%/',
+                '/%wrapper_attributes%/',
             )
         );
 
@@ -2805,6 +2806,10 @@ class FormHandler
                 $fld = '';
             }
 
+            $fieldWrapperAttributes = $obj instanceof Field\Field
+                ? $obj->getWrapperAttributes(true)
+                : '';
+
             // escape dangerous characters
             $fld = str_replace('%', '____FH-percent____', $fld);
 
@@ -2869,7 +2874,9 @@ class FormHandler
                 /* %help% */
                 $help,
                 /* %field_wrapper% */
-                $id . '_field'
+                $id . '_field',
+                /* %wrapper_attributes% */
+                $fieldWrapperAttributes,
             );
 
             // fill the mask

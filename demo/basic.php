@@ -36,7 +36,8 @@ $form = new FormHandler();
 //some fields.. (see manual for examples)
 Field\Text::set($form, 'Name', 'name')
     ->setRequired(true)
-    ->setMaxlength(40);
+    ->setMaxlength(40)
+    ->setWrapperAttribute('extraAttribute', 'basicField');
 
 Field\Number::set($form, 'Age', 'age')
     ->setRequired(true)

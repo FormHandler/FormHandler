@@ -179,6 +179,12 @@
             }
             oFld[0].selectedIndex = 0;
             oFld.attr('data-option-count',aOptions.length);
+
+            // also add data attribute to field wrapper
+            if(oFld.parents('.field').length !== 0)
+            {
+                oFld.parents('.field').attr('data-option-count',aOptions.length);
+            }
         }
         else if(field_type === 'checkbox')
         {
