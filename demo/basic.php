@@ -46,13 +46,16 @@ Field\Number::set($form, 'Age', 'age')
     ->setMax(110)
     ->setStep(1);
 
+Field\Select::set($form, 'Hobby', 'hobby');
+
 //button for submitting
 Button\Submit::set($form, 'Send');
 
 //set the 'commit-after-form' function
-$form->onCorrect(function($data)
+$form->onCorrect(function($data, FormHandler $form)
 {
-    return "Hello " . $data['name'] . ", you are " . $data['age'] . " years old!";
+    $hobbyText = $form->getField('hobby')->getOptionText($data['hobby']);
+    return "Hello " . $data['name'] . ", you are " . $data['age'] . " years old and you have selected the hobby: $hobbyText";
 });
 
 //process all form results, needs to be done before any output has been done

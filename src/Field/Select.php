@@ -55,6 +55,8 @@ class Select extends \FormHandler\Field\Field
      */
     public function __construct(FormHandler $form, $name)
     {
+        $this->setWrapperAttribute('data-option-count', 0);
+        
         // call the constructor of the Field class
         return parent::__construct($form, $name)
             ->setJsSelectorValue('#' . $form->getFormName() . ' select[name="' . $name . '"]')

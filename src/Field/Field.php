@@ -906,8 +906,23 @@ class Field
         if(!is_null($options))
         {
             $this->options = $options;
+            $this->setWrapperAttribute('data-option-count', is_array($options) ? count($options) : 0);
         }
         return $this;
+    }
+
+    /**
+     * Get option text when available
+     *
+     * @param scalar $option
+     * @return scalar|null
+     */
+    public function getOptionText($option)
+    {
+        return (is_array($this->options)
+            && array_key_exists($option, $this->options))
+            ? $this->options[$option]
+            : null;
     }
 
     /**
