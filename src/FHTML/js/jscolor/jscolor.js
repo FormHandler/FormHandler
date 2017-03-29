@@ -308,6 +308,16 @@ function jscolor_init() {
 		}
 	}
 
+        function triggerChange(element)
+        {
+            if ("createEvent" in document) {
+                var evt = document.createEvent("HTMLEvents");
+                evt.initEvent("change", false, true);
+                element.dispatchEvent(evt);
+            } else
+                element.fireEvent("onchange");
+        }
+
 
 	function updateInput(e, color, realValue) {
 		if(allowEmpty && realValue != null && !/^\s*#?([0-9A-F]{3}([0-9A-F]{3})?)\s*$/i.test(realValue)) {
@@ -315,6 +325,7 @@ function jscolor_init() {
 			if(reflectOnBackground) {
 				e.style.backgroundColor = e.originalStyle.backgroundColor
 				e.style.color = e.originalStyle.color
+                                triggerChange(e);
 			}
 		} else {
 			e.value = (leadingHash?'#':'')+color
@@ -325,6 +336,7 @@ function jscolor_init() {
 					0.715160 * color.green +
 					0.072169 * color.blue
 					< 0.5 ? '#FFF' : '#000'
+                                triggerChange(e);
 			}
 		}
 	}
