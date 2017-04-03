@@ -278,7 +278,14 @@
     {
         if($field.is(':radio'))
         {
-            $field.filter('input[value='+ value +']').prop('checked', true);
+            //remove checks
+            $field.prop('checked', false);
+
+            //add checks
+            if(value !== '')
+            {
+                $field.filter('input[value='+ value +']').prop('checked', true);
+            }
             return;
         }
         if($field.is(':checkbox')
