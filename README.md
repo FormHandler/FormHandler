@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/teyeheimans/FormHandler.svg?branch=master)](https://travis-ci.org/teyeheimans/FormHandler) 
+[![Build Status](https://travis-ci.org/teyeheimans/FormHandler.svg?branch=master)](https://travis-ci.org/teyeheimans/FormHandler)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://php.net/) 
 [![Coverage Status](https://coveralls.io/repos/github/teyeheimans/FormHandler/badge.svg?branch=master)](https://coveralls.io/github/teyeheimans/FormHandler?branch=master)
 
 FormHandler
