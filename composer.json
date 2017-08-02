@@ -22,14 +22,13 @@
     "sebastian/phpcpd": "*",
     "squizlabs/php_codesniffer": "2.*",
     "phpdocumentor/phpdocumentor": "2.*",
-    "phpunit/phpunit": "5.5.*",
     "phploc/phploc": "*",
     "pdepend/pdepend": "2.2.4",
     "mayflower/php-codebrowser": "~1.1",
     "johnkary/phpunit-speedtrap": "^1.0"
   },
   "require": {
-    "php": ">=5.4.0",
+    "php": ">=5.6.0",
     "neitanod/forceutf8": "dev-master"
   },
   "autoload": {
@@ -37,5 +36,5 @@
       "": "src/"
     }
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "stable"
 }

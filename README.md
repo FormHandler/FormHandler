@@ -18,14 +18,14 @@ To create a form you have to:
 Requirements
 ------
 
-FormHandler requires PHP 5.4 or higher. 
+FormHandler requires PHP 5.6 or higher. It should also work on 5.5 and 5.4, but automated Travis testing does 
+not work for these versions. 
 
-FormHandler is tested on: 
-   * PHP 5.4
-   * PHP 5.5
+FormHandler is tested on:
    * PHP 5.6
    * PHP 7.0
-   * PHP HHVM 
+   * PHP 7.1
+   * PHP 7.2    
    * PHP Latest 'nightly' build
 
 Installation
