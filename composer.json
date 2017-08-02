@@ -38,5 +38,6 @@
     "psr-4": {
       "": "src/"
     }
-  }
+  },
+  "minimum-stability": "stable"
 }
