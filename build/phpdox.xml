@@ -1,0 +1,19 @@
+<phpdox xmlns="http://xml.phpdox.net/config" silent="false">
+    <project name="FormHandler" source="../src" workdir="./api/xml">
+        <collector publiconly="false">
+            <include mask="*.php" />
+        </collector>
+
+        <generator output="./api">
+            <enrich base="./logs">
+                <source type="phploc">
+                    <file name="phploc.xml" />
+                </source>
+            </enrich>
+            <build engine="html" enabled="true" output="html">
+                <file extension="html" />
+            </build>
+            <build engine="xml" enabled="true" output="xml" />
+        </generator>
+    </project>
+</phpdox>
