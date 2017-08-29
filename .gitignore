@@ -1,0 +1,22 @@
+vendor
+build/logs
+build/coverage
+build/api/
+build/pdepend/
+build/phpdox/
+cache.properties
+docs
+
+.buildpath
+.DS_Store
+.project
+.idea
+.env
+
+# Miscellaneous files
+*.log
+*.tmp
+*.old
+*.bak
+*.jar
+
