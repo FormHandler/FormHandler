@@ -16,6 +16,16 @@ To create a form you have to:
   * Check if the form is submitted and if it's vald
   * Parse the form's fields in your HTML / view
   
+Older Versions
+------
+
+There are several older versions available of FormHandler. These are discontinued. 
+
+See here some older versions:
+  * https://github.com/FormHandler/FormHandler/releases
+  * https://github.com/FormHandler/FormHandler-legacy 
+
+  
 Requirements
 ------
 
