@@ -1,5 +1,5 @@
 {
-  "name": "FormHandler/FormHandler",
+  "name": "teyeheimans/FormHandler",
   "type": "library",
   "description": "Easy to use object which allows you to create and process forms",
   "keywords": [
@@ -22,19 +22,21 @@
     "sebastian/phpcpd": "*",
     "squizlabs/php_codesniffer": "2.*",
     "phpdocumentor/phpdocumentor": "2.*",
+    "phpunit/phpunit": "5.5.*",
     "phploc/phploc": "*",
     "pdepend/pdepend": "2.2.4",
     "mayflower/php-codebrowser": "~1.1",
-    "phpunit/phpunit": "5.7.*"
+    "nikic/php-parser": "3.0.x-dev",
+    "theseer/phpdox": "0.9.0",
+    "johnkary/phpunit-speedtrap": "^1.0"
   },
   "require": {
-    "php": ">=5.6.0",
+    "php": ">=5.4.0",
     "neitanod/forceutf8": "dev-master"
   },
   "autoload": {
     "psr-4": {
       "": "src/"
     }
-  },
-  "minimum-stability": "stable"
+  }
 }

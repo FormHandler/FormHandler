@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/FormHandler/FormHandler.svg?branch=master)](https://travis-ci.org/teyeheimans/FormHandler)
-[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://php.net/) 
+[![Build Status](https://travis-ci.org/teyeheimans/FormHandler.svg?branch=master)](https://travis-ci.org/teyeheimans/FormHandler) 
 [![Coverage Status](https://coveralls.io/repos/github/teyeheimans/FormHandler/badge.svg?branch=master)](https://coveralls.io/github/teyeheimans/FormHandler?branch=master)
 
 FormHandler
@@ -16,27 +15,17 @@ To create a form you have to:
   * Check if the form is submitted and if it's vald
   * Parse the form's fields in your HTML / view
   
-Older Versions
-------
-
-There are several older versions available of FormHandler. These are discontinued. 
-
-See here some older versions:
-  * https://github.com/FormHandler/FormHandler/releases
-  * https://github.com/FormHandler/FormHandler-legacy 
-
-  
 Requirements
 ------
 
-FormHandler requires PHP 5.6 or higher. It should also work on 5.5 and 5.4, but automated Travis testing does 
-not work for these versions. 
+FormHandler requires PHP 5.4 or higher. 
 
-FormHandler is tested on:
+FormHandler is tested on: 
+   * PHP 5.4
+   * PHP 5.5
    * PHP 5.6
    * PHP 7.0
-   * PHP 7.1
-   * PHP 7.2    
+   * PHP HHVM 
    * PHP Latest 'nightly' build
 
 Installation
@@ -57,6 +46,7 @@ FormHandler has a few assumptions:
 
 A very basic example is:
 ```php
+
 #
 # This code defines your form and what to do with it when it's valid.
 # This code is probably defined in your controller.
@@ -65,19 +55,23 @@ A very basic example is:
 // Create the form
 $form = new Form();
 
-// Create a field in the form. Fluent method chaining is supported.
-$form->textField('name')
-    ->addValidator(new StringValidator(2, 50, true, 'You have to supply your name (between 2 and 50 characters)'))
-    ->setPlaceholder('Enter your name');
+// Create a field in the form. Fluent method chaining is supported. 
+$form -> textField('name')
+      -> addValidator( new StringValidator( 2, 50, true, 'You have to supply your name (between 2 and 50 characters)' ) )
+      -> setPlaceholder( 'Enter your name' );
 
 // Check if the form is submitted
-if ($form->isSubmitted()) {
-
+if( $form -> isSubmitted() )
+{
     // Check if the form is valid.
-    if ($form->isValid()) {
-        // Do your stuff here with the form, for example, store something in a database.
+    if( $form -> isValid() )
+    {
+        // Do your stuff here with the form, for example, store something
+        // in a database.
     }
-} else {
+}
+else
+{
     // Here, the form is not yet submitted!
     // You could for example set some predefined values in the form.
 }
@@ -87,10 +81,10 @@ if ($form->isSubmitted()) {
 #
 
 // This will display the <form> html tag.
-echo $form;
+echo $form; 
 
 // This will display the HTML tag for the "name" field.
-echo $form('name');
+echo $form('name');  
 
 // You can mix plain old html with "dynamic" generated fields
 // Of course you could also generate a SubmitButton object and use that one.
@@ -124,16 +118,15 @@ FormHandler implements a fluent interface. This means that you *can* use method 
 
 Example:
 ```php
-<?php
 $form = new Form();
 
 // An example using method chaining.
-$form->textField('name')
-     ->setSize(10)
-     ->setId('myName')
-     ->setTitle('Enter your name')
-     ->setPlaceholder('<name here>')
-     ->addValidator(new StringValidator(2, 50, true));
+$form -> textField( 'name' )
+      -> setSize( 10 )
+      -> setId( 'myName' )
+      -> setTitle( 'Enter your name' )
+      -> setPlaceholder( '<name here>' )
+      -> addValidator( new StringValidator( 2, 50, true ) );
 ```
 
 General methods 
@@ -175,13 +168,10 @@ like this:
 $form = new Form();
 
 // Create a field in the form
-$form->textField('name');
+$form -> textField('name');
 
 // Retrieve the form by it's name using the shorthand:
 $field = $form('name');
-
-// Or use the "classic" way:
-$field = $form->getFieldByName('name');
 
 // ... Etc
 ```
@@ -237,7 +227,6 @@ Therefore it needs to be absolutly clear how FormHandler displays strings and wh
 
 This means that button values are thus also not escaped, as they cannot be filled from the `$_GET` or `$_POST`.
 
-
 Rendering
 ------
 FormHandler tries to limit it's functionality to what it should do: handle forms. However, displaying the forms is 
@@ -251,24 +240,113 @@ are always elements which are related:
   * Displaying if the field is required or not
 
 FormHandler tries to not to interfere with the design part of your application. However, it should be clear that 
-its thus inevitable that FormHandler has some responsibility of generating HTML content.
+its inevitable that FormHandler has some responsibility of generating HTML content.
 
 FormHandler comes with a class called a `Renderer`. This class is responsible for rendering the element 
 (field/button/form) and all its related information (error messages, titles, etc).
   
-A `Renderer` is a simple class which should have at least 1 method: `render( Element $element)`. This method
-is in control to generate the correct HTML for the given `Element`. This could be a field, button, form or option.   
+Our default Renderer is the `XhtmlRenderer`. This will render each field as an XHTML tag. 
+You can also influence the rendering of titles and error messages, or disable these at all.
+ 
+It's quite easy to create your own class which will render the elements in the way you expect them. For example, 
+if you want to render titles and add a red asterisk (*) near each field, you could extend the `XhtmlRenderer`, override the 
+`render` method and add this logic to it. 
 
-The `XhtmlRenderer` is the default renderer. This class will make sure that all elements are rendered als XHTML.
-This class will also make sure that:
+Example:
 
-  * Error messages are rendered as an `<tt>` tag
-  * Help messages are rendered as an `<dfn>` tag 
-  
-You can change this logic to setting it to render them as an attribute, or not render them at all.
+```
 
-Because the `Renderer` is responsible for all rendering, it's quite easy to create your own class which will render 
-the elements in the way you expect them. The easiest way of doing this is by extending the XhtmlRenderer. For example 
-please take a look at the `CowSayRenderer`, which will render all _Fields_ with a nice CowSay around them.
+
+```
   
+Validation
+------
+
+One of the most important parts of handling forms is validation. FormHandler comes with a complete set of 
+*Validators* which can be used to validate a field. You can also enter your own method/function/closure which will be 
+used to validate the specific field.
+
+#### Using your own Validator
+
+A simple example with a own validator (closure) is:
+```php
+// Create a new field with a custom validator
+$form->textField('terms')->addValidator(function (TextField $field) {
+    if ($field->getValue() == 'agree') {
+        return true;
+    } else {
+        return 'You have to enter "agree"';
+    }
+});
+```
+
+The same principle also works with function names and methods. Example:
+```php
+// Just a field...
+$field = $form->textField('name');
+
+// Add a function as validator
+$field->addValidator('myFunction');
+
+// Add a static method as validator
+$field->addValidator('myclass::staticMethod');
+
+// Add a method as validator
+$field->addValidator([$object, 'myMethod']);
+```
+#### Using an existing validator
+
+FormHandler comes with a whole list of validators. Per validator you can define if the field should be required or not.
+You can choose from the following validators:
+
+  * CharacterBlacklistValidator - Check if all characters of the value are in the predefined list of characters
+  * CharacterWhitelistValidator - Check that all characters of the value are not in a list of blacklisted characters   
+  * DateValidator - Check if the entered value is a valid date. The input is considered valid if it can be parsed by the PHP function `date_parse`
+  * EmailValidator - Check if the value is a valid email address
+  * EqualsValidator - Check if the value is equal to a given value.
+  * FloatValidator - Check if the value is a valid float. Possible to check for comma, point or both.
+  * ImageUploadValidator - Check if the uploaded file is a valid image. Optional check proportions, aspect ratio, filesize, extension, etc.
+  * IpValidator - Check if the value is a valid ip. Checking for private ranges, ipv6 or reserved ranges is supported.
+  * IsOptionValidator - Check if the value is an existing option.
+  * NumberValidator - Check if the value is a valid number and between optional min and max value.
+  * RadioButtonCheckedValidator - Check if at least one radio button is checked of all radio buttons with the same name.
+  * RegexValidator - Check if the value matches a given regular expression
+  * SameFieldsValidator - Check if two fields have the same value
+  * StringValidator - Check if the given value is a valid string and optionally between min and max length.
+  * UploadValidator - Check if the uploaded field is valid. Check for correct mime type, extension and size are supported. 
+  * UrlValidator - Check if the given value is a valid URL.  
   
+FAQ
+-----
+
+##### How can I check if an element is an field or a button?
+
+You can check if the element is an instanceof `AbstractFormField` or `AbstractFormButton`.
+
+##### The form is never submitted, I tried everything!
+
+You can retrieve the reason why the form is not submitted by giving it an argument `$reason`. This variable will be
+filled with a reason message why FormHandler has decided that the form was not submitted.
+
+Example:
+```php
+// Create a new form
+$form = new Form();
+
+// ... the rest of the form here ...
+
+// When the form was not submitted, this variable is filled with the reason.
+$reason = '';
+
+if ($form->isSubmitted($reason)) {
+    
+    // When the form was marked as valid.
+    if ($form->isValid()) {
+        // valid!
+    } 
+    
+} else {
+    // The form was not submitted. Also display why
+    echo "Form is not submitted. Reason: " . htmlentities( $reason );
+}
+```

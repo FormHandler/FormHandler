@@ -60,7 +60,11 @@ class StringValidator extends AbstractValidator
             return true;
         }
 
-        $len = strlen($value);
+        if( function_exists('mb_strlen') ) {
+            $len = mb_strlen($value);
+        } else {
+            $len = strlen($value);
+        }
 
         // shorter then min length
         if ($len < $this->getMinLength()) {

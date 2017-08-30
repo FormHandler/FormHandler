@@ -249,9 +249,9 @@ class Form extends Element
     {
         $this->csrfProtection = (bool)$value;
 
-        if (!$value) {
-            $this->removeFieldByName('csrftoken');
-        } else {
+        // Is CSRF protection enabled? Could be still disabled
+        // because there is no session support.
+        if( $this -> isCsrfProtectionEnabled()) {
             $field = $this->getFieldByName('csrftoken');
 
             // if the field does not exists yet, lets add it.
@@ -267,6 +267,9 @@ class Form extends Element
                     $field->setValue(CsrfValidator::generateToken());
                 }
             }
+        } else {
+            $this -> csrfProtection = false;
+            $this->removeFieldByName('csrftoken');
         }
 
         return $this;
@@ -1012,13 +1015,8 @@ class Form extends Element
     {
         // is there no session available? Then always disable CSRF protection.
         if (session_id() == '') {
-            if (!headers_sent()) {
-                // @todo: cookie wegschrijven en controleren of deze matched in de post waarde
-            } else {
-                return false;
-            }
+            return false;
         }
-
 
         return $this->csrfProtection;
     }

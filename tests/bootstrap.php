@@ -11,6 +11,24 @@ namespace FormHandler\Tests {
 }
 
 // @codingStandardsIgnoreStart
+namespace FormHandler {
+
+    function session_id($val = null)
+    {
+        if (isset($GLOBALS['mock_session_id_response'])) {
+            return $GLOBALS['mock_session_id_response'];
+        } else {
+            if ($val) {
+                return \session_id($val);
+            } else {
+                return \session_id();
+            }
+
+        }
+    }
+}
+
+
 namespace FormHandler\Utils {
 
     function extension_loaded($ext)
