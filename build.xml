@@ -6,7 +6,6 @@
     <property name="phpcpd"   value="phpcpd"/>
     <property name="phpcs"    value="phpcs"/>
     <property name="phpcbf"   value="phpcbf"/>
-    <property name="phpdox"   value="phpdox"/>
     <property name="phploc"   value="phploc"/>
     <property name="phpmd"    value="phpmd"/>
     <property name="phpunit"  value="phpunit"/>
@@ -17,7 +16,6 @@
     <property name="phpcpd"   value="${basedir}/build/tools/phpcpd.phar"/>
     <property name="phpcbf"   value="${basedir}/build/tools/phpcbf.phar"/>
     <property name="phpcs"    value="${basedir}/build/tools/phpcs.phar"/>
-    <property name="phpdox"   value="${basedir}/build/tools/phpdox.phar"/>
     <property name="phploc"   value="${basedir}/build/tools/phploc.phar"/>
     <property name="phpmd"    value="${basedir}/build/tools/phpmd.phar"/>
     <property name="composer" value="${basedir}/build/tools/composer.phar"/>
@@ -28,14 +26,13 @@
     <property name="phpcpd"   value="${basedir}/vendor/bin/phpcpd"/>
     <property name="phpcbf"   value="${basedir}/vendor/bin/phpcbf"/>
     <property name="phpcs"    value="${basedir}/vendor/bin/phpcs"/>
-    <property name="phpdox"   value="${basedir}/vendor/bin/phpdox"/>
     <property name="phploc"   value="${basedir}/vendor/bin/phploc"/>
     <property name="phpmd"    value="${basedir}/vendor/bin/phpmd"/>
     <property name="composer" value="composer"/> <!-- composer should be installed global -->
     <property name="phpunit"  value="${basedir}/vendor/bin/phpunit"/>
 
     <target name="full-build"
-            depends="prepare,composer,static-analysis,phpunit,phpdox,-check-failure"
+            depends="prepare,composer,static-analysis,phpunit,-check-failure"
             description="Performs static analysis, runs the tests, and generates project documentation"/>
 
     <target name="precommit"
@@ -43,11 +40,11 @@
             description="Performs precommit checks"/>
 
     <target name="full-build-parallel"
-            depends="prepare,composer,static-analysis-parallel,phpunit,phpdox,-check-failure"
+            depends="prepare,composer,static-analysis-parallel,phpunit,-check-failure"
             description="Performs static analysis (executing the tools in parallel), runs the tests, and generates project documentation"/>
 
     <target name="travis"
-            depends="prepare,lint,phpunit-travis"
+            depends="prepare,lint,phpunit,-check-failure"
             description="Build specific for Travis CI" />
 
     <target name="static-analysis"
@@ -77,7 +74,6 @@
         <delete dir="${basedir}/build/coverage"/>
         <delete dir="${basedir}/build/logs"/>
         <delete dir="${basedir}/build/pdepend"/>
-        <delete dir="${basedir}/build/phpdox"/>
         <property name="clean.done" value="true"/>
     </target>
 
@@ -89,7 +85,6 @@
         <mkdir dir="${basedir}/build/coverage"/>
         <mkdir dir="${basedir}/build/logs"/>
         <mkdir dir="${basedir}/build/pdepend"/>
-        <mkdir dir="${basedir}/build/phpdox"/>
         <property name="prepare.done" value="true"/>
     </target>
 
@@ -258,18 +253,6 @@
         <property name="phpcpd.done" value="true"/>
     </target>
 
-    <target name="phpunit-travis"
-            unless="phpunit.done"
-            depends="prepare"
-            description="Run unit tests with PHPUnit">
-        <exec executable="phpunit" resultproperty="result.phpunit" taskname="phpunit">
-            <arg value="--configuration"/>
-            <arg path="${basedir}/build/phpunit.xml"/>
-        </exec>
-
-        <property name="phpunit.done" value="true"/>
-    </target>
-
     <target name="phpunit"
             unless="phpunit.done"
             depends="prepare"
@@ -299,15 +282,6 @@
         </exec>
 
         <property name="phpunit.done" value="true"/>
-    </target>
-
-    <target name="phpdox"
-            unless="phpdox.done"
-            depends="phploc-ci,phpcs-ci,phpmd-ci"
-            description="Generate project documentation using phpDox">
-        <exec executable="${phpdox}" dir="${basedir}/build" taskname="phpdox"/>
-
-        <property name="phpdox.done" value="true"/>
     </target>
 
     <target name="-check-failure">

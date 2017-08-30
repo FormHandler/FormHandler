@@ -38,40 +38,6 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * When sessions are not available, csrf should not work and always be valid
-     */
-    public function testSessionDisaled()
-    {
-        $GLOBALS['mock_session_id_response'] = '';
-
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = ['name' => 'John'];
-
-        $form = new Form('', true );
-        $form -> textField('name') -> addValidator( new StringValidator( 2, 0, true ));
-
-        $this -> assertFalse(
-            $form -> isCsrfProtectionEnabled(),
-            'csrf should be disabled because there is no session available'
-        );
-
-        $submitted = $form -> isSubmitted( $reason );
-        $this -> assertTrue(
-            $submitted,
-            'The form should be submitted. CSRF is disabled because sessions are not available. The form is '.
-            'not submitted because of reason: '. $reason
-        );
-
-        $this -> assertTrue(
-            $form -> isValid(),
-            'The form should be valid because the posted value is valid. CSRF should be not available because ' .
-            'there are no sessions available.'
-        );
-
-        unset( $GLOBALS['mock_session_id_response'] );
-    }
-
-    /**
      * Test CSRF protection
      */
     public function testCsrf()

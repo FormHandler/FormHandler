@@ -1,4 +1,5 @@
 <?php
+
 namespace FormHandler\Validator;
 
 /**
@@ -97,7 +98,7 @@ class CsrfValidator extends AbstractValidator
         $token = time() . '.';
 
         // Start with an empty string.
-        $length = 32;
+        $length       = 32;
         $characterset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890';
 
         // For the desired length, keep adding random characters from the character set.
@@ -105,8 +106,16 @@ class CsrfValidator extends AbstractValidator
             $token .= $characterset[mt_rand(0, strlen($characterset) - 1)];
         }
 
+        $sessions = [];
+
+        if (isset($_SESSION['csrftokens'])) {
+            $sessions = array_slice($_SESSION['csrftokens'], -50, 50);
+        }
+
         // Add the token to the "token-basket", a place in which we store all the currently valid CSRF tokens.
-        $_SESSION['csrftokens'][] = $token;
+        $sessions[] = $token;
+
+        $_SESSION['csrftokens'] = $sessions;
 
         return $token;
     }
