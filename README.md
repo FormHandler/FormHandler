@@ -12,8 +12,8 @@ a solution so that making forms is easy.
 FormHandler implements the PSR-1 and PSR-2 coding standards. FormHandler implements the PSR-4 autoloading standard.
 
 To create a form you have to:
-  * Define the form and it's fields
-  * Check if the form is submitted and if it's vald
+  * Define the form and its fields
+  * Check if the form is submitted and if it's valid
   * Parse the form's fields in your HTML / view
   
 Requirements
@@ -41,7 +41,7 @@ Usage
 ------
 
 FormHandler has a few assumptions:
-  - A form is **always** submitted to itsself. That means, to the same script/page where the form is defined.
+  - A form is **always** submitted to itself. That means, to the same script/page where the form is defined.
   - We assume that when you create a ```SubmitButton``` or ```ImageButton```, that you don't use 
     own HTML tag buttons.
 
@@ -87,7 +87,7 @@ echo $form('name');
 echo '<input type="submit" value="Submit" />';
 ```
 
-So, this was our first basic example. Lets see what happens here. 
+So, this was our first basic example. Let's see what happens here. 
 
 - First we create the form and add a textfield called "name". 
   We append a ```StringValidator``` to the field where we allow values between 2 and 50 characters.  
@@ -230,7 +230,7 @@ This means that button values are thus also not escaped, as they cannot be fille
 
 Rendering
 ------
-FormHandler tries to limit it's functionality to what it should do: handle forms. However, displaying the forms is 
+FormHandler tries to limit its functionality to what it should do: handle forms. However, displaying the forms is 
 related to this topic. When displaying forms, you cannot limit yourself to only display the form fields. There
 are always elements which are related: 
 
@@ -241,7 +241,7 @@ are always elements which are related:
   * Displaying if the field is required or not
 
 FormHandler tries to not to interfere with the design part of your application. However, it should be clear that 
-its thus inevitable that FormHandler has some responsibility of generating HTML content.
+it's thus inevitable that FormHandler has some responsibility of generating HTML content.
 
 FormHandler comes with a class called a `Renderer`. This class is responsible for rendering the element 
 (field/button/form) and all its related information (error messages, titles, etc).
@@ -249,7 +249,7 @@ FormHandler comes with a class called a `Renderer`. This class is responsible fo
 A `Renderer` is a simple class which should have at least 1 method: `render( Element $element)`. This method
 is in control to generate the correct HTML for the given `Element`. This could be a field, button, form or option.   
 
-The `XhtmlRenderer` is the default renderer. This class will make sure that all elements are rendered als XHTML.
+The `XhtmlRenderer` is the default renderer. This class will make sure that all elements are rendered as XHTML.
 This class will also make sure that:
 
   * Error messages are rendered as an `<tt>` tag
@@ -260,5 +260,3 @@ You can change this logic to setting it to render them as an attribute, or not r
 Because the `Renderer` is responsible for all rendering, it's quite easy to create your own class which will render 
 the elements in the way you expect them. The easiest way of doing this is by extending the XhtmlRenderer. For example 
 please take a look at the `CowSayRenderer`, which will render all _Fields_ with a nice CowSay around them.
-  
-  
