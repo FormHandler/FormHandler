@@ -6,6 +6,7 @@ build/pdepend/
 build/phpdox/
 cache.properties
 docs
+.composer.lock
 
 .buildpath
 .DS_Store
