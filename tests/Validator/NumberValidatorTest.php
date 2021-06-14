@@ -1,14 +1,16 @@
 <?php
 namespace FormHandler\Tests\Validator;
 
+use Exception;
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\NumberValidator;
 
-class NumberValidatorTest extends \PHPUnit_Framework_TestCase
+class NumberValidatorTest extends TestCase
 {
     public function testNumberValidatorRequired()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('age');
 
         $validator = new NumberValidator(1, 99, true);
@@ -30,7 +32,7 @@ class NumberValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testFloadValidatorValue()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('age');
 
         $validator = new NumberValidator(1, 99, true);
@@ -69,11 +71,12 @@ class NumberValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test non-scalar values in a field for the whitelist validator.
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /scalar types/
      */
     public function testNumberValidatorNonScalar()
     {
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/scalar types/');
+
         // create a form and the field
         $form = new Form('', false);
 

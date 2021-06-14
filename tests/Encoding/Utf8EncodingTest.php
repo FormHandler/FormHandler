@@ -1,10 +1,11 @@
 <?php
 namespace FormHandler\Tests\Encoding;
 
-use FormHandler\Encoding\Utf8EncodingFilter;
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
+use FormHandler\Encoding\Utf8EncodingFilter;
 
-class Utf8EncodingTest extends \PHPUnit_Framework_TestCase
+class Utf8EncodingTest extends TestCase
 {
     public function testUtf8EncodingFilter()
     {

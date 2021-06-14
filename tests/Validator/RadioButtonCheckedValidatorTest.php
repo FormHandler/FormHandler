@@ -1,16 +1,18 @@
 <?php
 namespace FormHandler\Tests\Validator;
 
+use Exception;
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\RadioButtonCheckedValidator;
 
-class RadioButtonCheckedValidatorTest extends \PHPUnit_Framework_TestCase
+class RadioButtonCheckedValidatorTest extends TestCase
 {
     public function testRadioButton()
     {
         $form = new Form('', false);
 
-        $male = $form->radioButton('gender', 'm')->setId('genderM');
+        $male   = $form->radioButton('gender', 'm')->setId('genderM');
         $female = $form->radioButton('gender', 'f')->setId('genderF');
 
         $validator = new RadioButtonCheckedValidator();
@@ -40,16 +42,17 @@ class RadioButtonCheckedValidatorTest extends \PHPUnit_Framework_TestCase
             'Field should be invalid as its not checked, nor is any radio button with the same name'
         );
 
-        $this->assertContains($errormsg, $male->getErrorMessages());
+        $this->assertTrue(in_array($errormsg, $male->getErrorMessages()));
     }
 
     /**
      * Test incorrect fields
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /only works on radio buttons/
      */
     public function testIncorrectField()
     {
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/only works on radio buttons/');
+
         $form = new Form('', false);
         $form->textField('test')
             ->addValidator(new RadioButtonCheckedValidator());

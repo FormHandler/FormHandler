@@ -1,18 +1,19 @@
 <?php
 namespace FormHandler\Tests\Validator;
 
-use FormHandler\Field\Optgroup;
 use FormHandler\Form;
+use FormHandler\Field\Optgroup;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\IsOptionValidator;
 
-class IsOptionValidatorTest extends \PHPUnit_Framework_TestCase
+class IsOptionValidatorTest extends TestCase
 {
-    protected $options = [
+    protected array $options = [
         'dog',
         'cat',
         'horse',
         'mouse',
-        'dragon'
+        'dragon',
     ];
 
     public function testIsOptionRequired()
@@ -135,11 +136,12 @@ class IsOptionValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test incorrect fields
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /works on select fields/
      */
     public function testIncorrectField()
     {
+        $this->expectException(\Exception::class);
+        $this->expectDeprecationMessageMatches('/works on select fields/');
+
         $form = new Form(null, false);
         $form->textField('name')->addValidator(new IsOptionValidator(true));
     }
@@ -148,7 +150,7 @@ class IsOptionValidatorTest extends \PHPUnit_Framework_TestCase
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $_POST = [];
     }

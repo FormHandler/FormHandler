@@ -1,14 +1,16 @@
 <?php
 namespace FormHandler\Tests\Validator;
 
+use Exception;
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\SameFieldsValidator;
 
-class SameFieldsValidatorTest extends \PHPUnit_Framework_TestCase
+class SameFieldsValidatorTest extends TestCase
 {
     public function testEqualsValidatorRequired()
     {
-        $form = new Form(null, false);
+        $form   = new Form(null, false);
         $field1 = $form->textField('email1');
         $field2 = $form->textField('email2');
 
@@ -29,12 +31,12 @@ class SameFieldsValidatorTest extends \PHPUnit_Framework_TestCase
             $field1->isValid(),
             'Value should be invalid because validator is required and field is empty'
         );
-        $this->assertContains($errormsg, $field1->getErrorMessages());
+        $this->assertTrue(in_array($errormsg, $field1->getErrorMessages()));
     }
 
     public function testFieldByName()
     {
-        $form = new Form(null, false);
+        $form   = new Form(null, false);
         $field1 = $form->textField('email1');
         $field2 = $form->textField('email2');
 
@@ -57,12 +59,12 @@ class SameFieldsValidatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /has to be/
-     */
     public function testInvalidField()
     {
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/has to be/');
+
+        // @phpstan-ignore-next-line
         new SameFieldsValidator(1);
     }
 }

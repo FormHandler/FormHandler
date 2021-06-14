@@ -2,18 +2,13 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 
-/**
- * Created by PhpStorm.
- * User: teye
- * Date: 23-08-16
- * Time: 16:23
- */
-class TextFieldTest extends \PHPUnit_Framework_TestCase
+class TextFieldTest extends TestCase
 {
     public function testTextField()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('name');
         $field->setPlaceholder('Enter your name');
 

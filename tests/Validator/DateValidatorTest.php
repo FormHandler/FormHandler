@@ -2,16 +2,17 @@
 namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\DateValidator;
 
-class DateValidatorTest extends \PHPUnit_Framework_TestCase
+class DateValidatorTest extends TestCase
 {
     /**
      * Test the date validator
      */
     public function testDateValidator()
     {
-        $form = new Form('', false);
+        $form  = new Form('', false);
         $field = $form->textField('date');
 
         $validator = new DateValidator(true);
@@ -64,6 +65,6 @@ class DateValidatorTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $this->assertContains($errormsg, $field->getErrorMessages());
+        $this->assertTrue(in_array($errormsg, $field->getErrorMessages()));
     }
 }

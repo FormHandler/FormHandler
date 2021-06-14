@@ -1,18 +1,24 @@
 <?php
 namespace FormHandler\Tests\Validator;
 
+use stdClass;
+use Exception;
+use ArrayObject;
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\CharacterWhitelistValidator;
 
-class CharacterWhitelistTest extends \PHPUnit_Framework_TestCase
+class CharacterWhitelistTest extends TestCase
 {
     /**
      * Test the Whitelist Validator
+     *
+     * @throws \Exception
      */
     public function testWhitelistValidator()
     {
         // create a form and the field
-        $form = new Form('', false);
+        $form  = new Form('', false);
         $field = $form->textField('hex');
 
         // create a required validator and add it.
@@ -49,7 +55,7 @@ class CharacterWhitelistTest extends \PHPUnit_Framework_TestCase
         );
 
         // set whitelist as array, should be invalid
-        $whitelist = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        $whitelist = [0, 1, 2, 3, 4, 5, 6, 7, 8, '9'];
         $validator->setWhitelist($whitelist);
         $field->setValidator($validator);
 
@@ -59,7 +65,7 @@ class CharacterWhitelistTest extends \PHPUnit_Framework_TestCase
         );
 
         // array-object as whitelist, should be valid
-        $whitelist = new \ArrayObject($whitelist);
+        $whitelist = new ArrayObject($whitelist);
         $whitelist->append('a');
         $whitelist->append('b');
         $whitelist->append('c');
@@ -75,24 +81,25 @@ class CharacterWhitelistTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Incorrect whitelist given/
-     */
     public function testIncorrectType()
     {
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/Incorrect whitelist given/');
+
         $validator = new CharacterWhitelistValidator('0123456789abcdef', true);
         // incorrect type as whitelist, expect an exception
-        $validator->setWhitelist(new \stdClass());
+        // @phpstan-ignore-next-line
+        $validator->setWhitelist(new stdClass());
     }
 
     /**
      * Test non-scalar values in a field for the whitelist validator.
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /scalar types/
      */
     public function testWhitelistValidatorNonScalar()
     {
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/scalar types/');
+
         // create a form and the field
         $form = new Form('', false);
 

@@ -2,13 +2,14 @@
 namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\EqualsValidator;
 
-class EqualsValidatorTest extends \PHPUnit_Framework_TestCase
+class EqualsValidatorTest extends TestCase
 {
     public function testEqualsValidatorRequired()
     {
-        $form = new Form(null, false);
+        $form  = new Form(null, false);
         $field = $form->textField('agree');
 
         $validator = new EqualsValidator("OK", false);

@@ -3,13 +3,13 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
-use FormHandler\Validator\UploadValidator;
+use FormHandler\Tests\TestCase;
 
-class UploadFieldTest extends \PHPUnit_Framework_TestCase
+class UploadFieldTest extends TestCase
 {
     public function testIsUploaded()
     {
-        $form = new Form('', false);
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
 
         $this->assertTrue($field->isUploaded());
@@ -56,22 +56,21 @@ class UploadFieldTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         mkdir(__DIR__ . '/_tmp');
 
-        $GLOBALS['mock_file_size'] = 542;
+        $GLOBALS['mock_file_size']  = 542;
         $GLOBALS['mock_finfo_file'] = 'application/pdf';
-
 
         $_FILES = array(
             'cv' => array(
-                'name' => 'test.pdf',
-                'type' => 'application/pdf',
-                'size' => 542,
+                'name'     => 'test.pdf',
+                'type'     => 'application/pdf',
+                'size'     => 542,
                 'tmp_name' => __DIR__ . '/_tmp/test.pdf',
-                'error' => 0
-            )
+                'error'    => 0,
+            ),
         );
     }
 
@@ -79,7 +78,7 @@ class UploadFieldTest extends \PHPUnit_Framework_TestCase
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($_FILES);
         unset($GLOBALS['mock_file_size']);

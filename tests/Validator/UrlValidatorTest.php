@@ -2,13 +2,14 @@
 namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\UrlValidator;
 
-class UrlValidatorTest extends \PHPUnit_Framework_TestCase
+class UrlValidatorTest extends TestCase
 {
     public function testUrlValidator()
     {
-        $form = new Form('', false);
+        $form  = new Form('', false);
         $field = $form->textField('url');
 
         $validator = new UrlValidator(true, null, 20);
@@ -70,15 +71,5 @@ class UrlValidatorTest extends \PHPUnit_Framework_TestCase
             $field->isValid(),
             'Field should be valid, we skipped the TLD check'
         );
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /not an array/
-     */
-    public function testIncorrectSchemesType()
-    {
-        $validator = new UrlValidator();
-        $validator->setAllowedSchemes('ftp');
     }
 }

@@ -1,7 +1,9 @@
 <?php
+
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 
 /**
  * Created by PhpStorm.
@@ -9,7 +11,7 @@ use FormHandler\Form;
  * Date: 29-08-16
  * Time: 09:36
  */
-class RadioButtonTest extends \PHPUnit_Framework_TestCase
+class RadioButtonTest extends TestCase
 {
     public function testRadioButton()
     {
@@ -20,8 +22,11 @@ class RadioButtonTest extends \PHPUnit_Framework_TestCase
         $form->radioButton('gender', 'female')->setId('female');
         $form->radioButton('gender', 'alien')->setId('alien');
 
+        /** @var \FormHandler\Field\RadioButton $male */
         $male = $form->getFieldById('male');
+        /** @var \FormHandler\Field\RadioButton $female */
         $female = $form->getFieldById('female');
+        /** @var \FormHandler\Field\RadioButton $alien */
         $alien = $form->getFieldById('alien');
 
         $male->setLabel('Male');
@@ -55,9 +60,9 @@ class RadioButtonTest extends \PHPUnit_Framework_TestCase
     {
         // we fake a form submit
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = array();
-        $_POST['gender'] = 'male';
-        $_POST['hidden'] = '1';
+        $_POST                     = [];
+        $_POST['gender']           = 'male';
+        $_POST['hidden']           = '1';
 
         $form = new Form();
 
@@ -66,8 +71,11 @@ class RadioButtonTest extends \PHPUnit_Framework_TestCase
         $form->radioButton('gender', 'female')->setId('female');
         $form->radioButton('gender', 'alien')->setId('alien');
 
+        /** @var \FormHandler\Field\RadioButton $male */
         $male = $form->getFieldById('male');
+        /** @var \FormHandler\Field\RadioButton $female */
         $female = $form->getFieldById('female');
+        /** @var \FormHandler\Field\RadioButton $alien */
         $alien = $form->getFieldById('alien');
 
         $this->assertTrue($male->isChecked());
@@ -79,7 +87,7 @@ class RadioButtonTest extends \PHPUnit_Framework_TestCase
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $_POST = [];
     }

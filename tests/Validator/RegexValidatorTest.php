@@ -1,11 +1,17 @@
 <?php
+
 namespace FormHandler\Tests\Validator;
 
+use Exception;
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\RegexValidator;
 
-class RegexValidatorTest extends \PHPUnit_Framework_TestCase
+class RegexValidatorTest extends TestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function testRequired()
     {
         $form = new Form('', false);
@@ -14,7 +20,7 @@ class RegexValidatorTest extends \PHPUnit_Framework_TestCase
 
         $validator = new RegexValidator('/^[a-z]{2,50}$/i', false);
 
-        $this->assertEquals('/^[a-z]{2,50}$/i', $validator -> getRegularExpression());
+        $this->assertEquals('/^[a-z]{2,50}$/i', $validator->getRegularExpression());
 
         $field->setValidator($validator);
         $this->assertTrue(
@@ -32,10 +38,10 @@ class RegexValidatorTest extends \PHPUnit_Framework_TestCase
             'Field should be invalid as its empty and required'
         );
 
-        $this->assertContains(
+        $this->assertTrue(in_array(
             $errormsg,
             $field->getErrorMessages()
-        );
+        ));
 
         // test a invalid value
         $field->setValue('Piet06');
@@ -54,7 +60,7 @@ class RegexValidatorTest extends \PHPUnit_Framework_TestCase
 
         // test the NOT logic
         $validator->setNot(true);
-        $this -> assertTrue($validator -> isNot());
+        $this->assertTrue($validator->isNot());
         $field->setValidator($validator);
 
         // test a valid value, but now with NOT. thus this should be invalid
@@ -74,11 +80,12 @@ class RegexValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test non-scalar values in a field for the regex validator.
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /scalar types/
      */
     public function testRegexValidatorNonScalar()
     {
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/scalar types/');
+
         // create a form and the field
         $form = new Form('', false);
 

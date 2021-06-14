@@ -2,18 +2,19 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\RegexValidator;
 use FormHandler\Validator\StringValidator;
 
-class AbstractFormFieldTest extends \PHPUnit_Framework_TestCase
+class AbstractFormFieldTest extends TestCase
 {
     public function testErrorMessage()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('name');
         $field->addErrorMessage('Test error message', true);
 
-        $this->assertContains('Test error message', $field->getErrorMessages());
+        $this->assertTrue(in_array('Test error message', $field->getErrorMessages()));
         $this->assertFalse($field->isValid());
     }
 

@@ -1,18 +1,20 @@
 <?php
+
 namespace FormHandler\Tests\Validator;
 
+use Exception;
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\StringValidator;
 
-class StringValidatorTest extends \PHPUnit_Framework_TestCase
+class StringValidatorTest extends TestCase
 {
-
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /AbstractValidator/
      */
     public function testInvalidValidator()
     {
+        $this->expectException(\Exception::class);
+        $this->expectErrorMessageMatches('/AbstractValidator/');
         $form = new Form('', false);
 
         $field = $form->textField('name');
@@ -27,7 +29,6 @@ class StringValidatorTest extends \PHPUnit_Framework_TestCase
 
         $validator = new StringValidator(2, 10, true);
         $field->addValidator($validator);
-
 
         $this->assertTrue($validator->isRequired());
         $this->assertFalse(
@@ -59,11 +60,12 @@ class StringValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test non-scalar values in a field for the string validator.
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /scalar types/
      */
     public function testRegexValidatorNonScalar()
     {
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/scalar types/');
+
         // create a form and the field
         $form = new Form('', false);
 

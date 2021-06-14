@@ -1,9 +1,12 @@
 <?php
+
 namespace FormHandler\Tests\Field;
 
-use FormHandler\Field\Optgroup;
-use FormHandler\Field\Option;
 use FormHandler\Form;
+use FormHandler\Field\Option;
+use FormHandler\Field\Optgroup;
+use FormHandler\Tests\TestCase;
+use FormHandler\Field\SelectField;
 
 /**
  * Created by PhpStorm.
@@ -11,29 +14,28 @@ use FormHandler\Form;
  * Date: 22-08-16
  * Time: 09:36
  */
-class SelectFieldTest extends \PHPUnit_Framework_TestCase
+class SelectFieldTest extends TestCase
 {
     public function testGetOptionByValue()
     {
-        $form = new Form();
-        $field = $form -> selectField('options');
+        $form  = new Form();
+        $field = $form->selectField('options');
 
         $dragon = new Option('dragon', 'Dragon');
 
-        $field -> addOption(new Option('cat', 'Cat'));
-        $field -> addOption(new Option('dog', 'Dog'));
-        $field -> addOption($dragon);
+        $field->addOption(new Option('cat', 'Cat'));
+        $field->addOption(new Option('dog', 'Dog'));
+        $field->addOption($dragon);
 
-        $option = $field -> getOptionByValue('dragon');
+        $option = $field->getOptionByValue('dragon');
 
-        $this -> assertEquals($dragon, $option);
+        $this->assertEquals($dragon, $option);
     }
-
 
     public function testSelectField()
     {
         // we begin simple by creating a field
-        $form = new Form();
+        $form  = new Form();
         $field = $form->selectField('kids');
 
         // is the name correct?
@@ -45,7 +47,7 @@ class SelectFieldTest extends \PHPUnit_Framework_TestCase
         $expect = [
             new Option(1, 1),
             new Option(2, 2),
-            new Option(3, 3)
+            new Option(3, 3),
         ];
         $this->assertEquals($expect, $field->getOptions());
 
@@ -59,7 +61,7 @@ class SelectFieldTest extends \PHPUnit_Framework_TestCase
         $options = [
             new Option(1, 'One'),
             new Option(2, 'Two'),
-            new Option(3, 'Three')
+            new Option(3, 'Three'),
         ];
 
         $field->setOptions($options);
@@ -79,11 +81,14 @@ class SelectFieldTest extends \PHPUnit_Framework_TestCase
         // get the options in the field.
         $infield = $field->getOptions();
 
+        /** @var Option $option */
+        $option = $infield[4];
+
         // make sure that the "None" field is not automatically selected because it's value is "0"
         // and no value ("null") is not the same as zero!
-        $this->assertInstanceOf('\FormHandler\Field\Option', $infield[4]);
-        $this->assertEquals('None', $infield[4]->getLabel());
-        $this->assertEquals(false, $infield[4]->isSelected());
+        $this->assertInstanceOf(Option::class, $option);
+        $this->assertEquals('None', $option->getLabel());
+        $this->assertEquals(false, $option->isSelected());
 
         // check if all options are still okay
         $this->assertEquals($options, $field->getOptions());
@@ -102,12 +107,26 @@ class SelectFieldTest extends \PHPUnit_Framework_TestCase
 
         // only the 4th field ("None") should be selected
         $infield = $field->getOptions();
-        $this->assertEquals(false, $infield[0]->isSelected());
-        $this->assertEquals(false, $infield[1]->isSelected());
-        $this->assertEquals(false, $infield[2]->isSelected());
-        $this->assertEquals(false, $infield[3]->isSelected());
-        $this->assertTrue($infield[4]->isSelected());
-        $this->assertEquals('None', $infield[4]->getLabel());
+        /** @var Option $option0 */
+        $option0 = $infield[0];
+        $this->assertFalse($option0->isSelected());
+
+        /** @var Option $option1 */
+        $option1 = $infield[1];
+        $this->assertFalse($option1->isSelected());
+
+        /** @var Option $option2 */
+        $option2 = $infield[2];
+        $this->assertFalse($option2->isSelected());
+
+        /** @var Option $option3 */
+        $option3 = $infield[3];
+        $this->assertFalse($option3->isSelected());
+
+        /** @var Option $option4 */
+        $option4 = $infield[4];
+        $this->assertTrue($option4->isSelected());
+        $this->assertEquals('None', $option4->getLabel());
 
         // multiple should be false (by default)
         $this->assertEquals(false, $field->isMultiple());
@@ -120,7 +139,6 @@ class SelectFieldTest extends \PHPUnit_Framework_TestCase
         $optgroup->addOption(new Option(5, 'Five'));
         $field->addOptgroup($optgroup);
 
-
         // set some fields as selected
         $setValue = [0, 2, 5];
         $field->setValue($setValue);
@@ -128,24 +146,39 @@ class SelectFieldTest extends \PHPUnit_Framework_TestCase
         // get the options in the field.
         $infield = $field->getOptions();
 
-        $this->assertEquals(false, $infield[0]->isSelected());
-        $this->assertTrue($infield[1]->isSelected());
-        $this->assertEquals(false, $infield[2]->isSelected());
-        $this->assertEquals(false, $infield[3]->isSelected());
-        $this->assertTrue($infield[4]->isSelected());
+        /** @var Option $option0 */
+        $option0 = $infield[0];
+
+        /** @var Option $option1 */
+        $option1 = $infield[1];
+
+        /** @var Option $option2 */
+        $option2 = $infield[2];
+
+        /** @var Option $option3 */
+        $option3 = $infield[3];
+
+        /** @var Option $option4 */
+        $option4 = $infield[4];
+
+        $this->assertFalse($option0->isSelected());
+        $this->assertTrue($option1->isSelected());
+        $this->assertFalse($option2->isSelected());
+        $this->assertFalse($option3->isSelected());
+        $this->assertTrue($option4->isSelected());
 
         // 5th element should be an Optgroup
-        $this->assertInstanceOf('\FormHandler\Field\Optgroup', $infield[5]);
+        $this->assertInstanceOf(Optgroup::class, $infield[5]);
 
         // this optgroup should have 1 Option and it should be selected
+        /** @var Optgroup $optgroup */
         $optgroup = $infield[5];
         $this->assertEquals(1, sizeof($optgroup->getOptions()));
-        $this->assertInstanceOf('\FormHandler\Field\Option', $optgroup->getOptions()[0]);
+        $this->assertInstanceOf(Option::class, $optgroup->getOptions()[0]);
         $this->assertTrue($optgroup->getOptions()[0]->isSelected());
 
-
         // sort the results, because it could be different
-        $value = $field->getValue();
+        $value = (array)$field->getValue();
         $this->assertEquals(sort($setValue), sort($value));
 
         // now set the multiple value to false. We should only expect 1 result, the last one, which is 5
@@ -163,14 +196,15 @@ class SelectFieldTest extends \PHPUnit_Framework_TestCase
         $field->setMultiple(true);
         $this->assertEquals([], $field->getValue());
 
-        $option = $field->getOptionByValue(5);
-        $this->assertInstanceOf('\FormHandler\Field\Option', $option);
-        $this->assertEquals($option->getLabel(), 'Five');
+        /** @var Option $option */
+        $option = $field->getOptionByValue('5');
+        $this->assertInstanceOf(Option::class, $option);
+        $this->assertEquals('Five', $option->getLabel());
 
-        $this->assertEquals(null, $field->getOptionByValue(92));
+        $this->assertEquals(null, $field->getOptionByValue('92'));
 
         // Remove the 'None' option
-        $this->assertInstanceOf('\FormHandler\Field\SelectField', $field->removeOptionByValue(0));
+        $this->assertInstanceOf(SelectField::class, $field->removeOptionByValue(0));
 
         $infield = $field->getOptions();
 
@@ -195,7 +229,7 @@ class SelectFieldTest extends \PHPUnit_Framework_TestCase
 
         // we should now have 4 options left.
         $this->assertEquals(4, sizeof($infield));
-        $this->assertContainsOnly('\FormHandler\Field\Option', $infield);
+        $this->assertContainsOnly(Option::class, $infield);
 
         // add it again
         $optgroup->addOption(new Option(99, 'A lot'));

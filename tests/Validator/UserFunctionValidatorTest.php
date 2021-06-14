@@ -1,12 +1,16 @@
 <?php
+
 namespace FormHandler\Tests\Validator;
 
-use FormHandler\Field\AbstractFormField;
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
+use FormHandler\Field\AbstractFormField;
 
 /**
  * This is our validator function which we use to test
+ *
  * @param AbstractFormField $field
+ *
  * @return string|bool
  */
 function validateNameJohn(AbstractFormField $field)
@@ -20,7 +24,7 @@ function validateNameJohn(AbstractFormField $field)
     return "Nope, you are not allowed!";
 }
 
-class UserFunctionValidatorTest extends \PHPUnit_Framework_TestCase
+class UserFunctionValidatorTest extends TestCase
 {
     public function testUserFunctionValidator()
     {
@@ -34,10 +38,10 @@ class UserFunctionValidatorTest extends \PHPUnit_Framework_TestCase
             'Field should be invalid because its empty'
         );
 
-        $this->assertContains(
+        $this->assertTrue(in_array(
             "You have to supply a value",
             $field->getErrorMessages()
-        );
+        ));
 
         $field->setValue('Jane');
         $this->assertFalse(
@@ -50,17 +54,5 @@ class UserFunctionValidatorTest extends \PHPUnit_Framework_TestCase
             $field->isValid(),
             'Field should be valid because its John'
         );
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /does not exists/
-     */
-    public function testNonExistingFunction()
-    {
-        $form = new Form('', false);
-
-        $field = $form->textField('name');
-        $field->addValidator('ThisFunctionDoesNotExist');
     }
 }

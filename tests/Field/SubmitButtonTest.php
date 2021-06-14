@@ -2,6 +2,7 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 
 /**
  * Test Submit Button.
@@ -9,12 +10,12 @@ use FormHandler\Form;
  * Date: 23-08-16
  * Time: 16:23
  */
-class SubmitButtonTest extends \PHPUnit_Framework_TestCase
+class SubmitButtonTest extends TestCase
 {
     public function testSubmitButton()
     {
         $form = new Form();
-        $btn = $form->submitButton('submit', 'Submit Form');
+        $btn  = $form->submitButton('submit', 'Submit Form');
 
         $this->assertEquals('submit', $btn->getName());
         $this->assertEquals('Submit Form', $btn->getValue());
