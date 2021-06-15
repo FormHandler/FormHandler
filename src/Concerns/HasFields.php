@@ -3,7 +3,6 @@
 namespace FormHandler\Concerns;
 
 use ReflectionClass;
-use FormHandler\Form;
 use FormHandler\Field\Element;
 use FormHandler\Field\AbstractFormField;
 
@@ -21,9 +20,9 @@ trait HasFields
      *
      * @param Element $field
      *
-     * @return Form
+     * @return $this
      */
-    public function removeField(Element $field): Form
+    public function removeField(Element $field): self
     {
         foreach ($this->fields as $i => $elem) {
             if ($elem == $field) {
@@ -41,9 +40,9 @@ trait HasFields
      *
      * @param string $name
      *
-     * @return Form
+     * @return $this
      */
-    public function removeAllFieldsByName(string $name): Form
+    public function removeAllFieldsByName(string $name): self
     {
         foreach ($this->fields as $i => $field) {
             if ($field->getName() == $name) {
@@ -59,9 +58,9 @@ trait HasFields
      *
      * @param string $id
      *
-     * @return Form
+     * @return $this
      */
-    public function removeFieldById(string $id): Form
+    public function removeFieldById(string $id): self
     {
         foreach ($this->fields as $i => $field) {
             if ($field->getId() == $id) {
@@ -96,9 +95,9 @@ trait HasFields
      *
      * @param Element $field
      *
-     * @return \FormHandler\Form
+     * @return $this
      */
-    public function addField(Element $field): Form
+    public function addField(Element $field): self
     {
         $this->fields[] = $field;
 
@@ -168,9 +167,9 @@ trait HasFields
      *
      * @param string $name
      *
-     * @return Form
+     * @return $this
      */
-    public function removeFieldByName(string $name): Form
+    public function removeFieldByName(string $name): self
     {
         foreach ($this->fields as $i => $field) {
             if ($field->getName() == $name) {

@@ -81,10 +81,10 @@ trait HasFormAttributes
      *
      * @param string $accept
      *
-     * @return Form
+     * @return $this
      * @deprecated
      */
-    public function setAccept(string $accept): Form
+    public function setAccept(string $accept): self
     {
         $this->accept = $accept;
 
@@ -110,10 +110,10 @@ trait HasFormAttributes
      *
      * @param string $enctype
      *
-     * @return Form
+     * @return $this
      * @throws \Exception
      */
-    public function setEnctype(string $enctype): Form
+    public function setEnctype(string $enctype): self
     {
         $enctype = strtolower(trim($enctype));
 
@@ -146,9 +146,9 @@ trait HasFormAttributes
      *
      * @param string $charset
      *
-     * @return Form
+     * @return $this
      */
-    public function setAcceptCharset(string $charset): Form
+    public function setAcceptCharset(string $charset): self
     {
         $this->acceptCharset = $charset;
 
@@ -170,9 +170,9 @@ trait HasFormAttributes
      *
      * @param string $name
      *
-     * @return Form
+     * @return $this
      */
-    public function setName(string $name): Form
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -197,13 +197,13 @@ trait HasFormAttributes
      *
      * @param string $target
      *
-     * @return Form
+     * @return $this
      * @see http://www.w3schools.com/tags/tag_form.asp
      * @deprecated
      * @deprecated
      *
      */
-    public function setTarget(string $target): Form
+    public function setTarget(string $target): self
     {
         $this->target = $target;
 
@@ -227,9 +227,9 @@ trait HasFormAttributes
      *
      * @param string $action
      *
-     * @return Form
+     * @return $this
      */
-    public function setAction(string $action): Form
+    public function setAction(string $action): self
     {
         $this->action = $action;
 
@@ -251,10 +251,10 @@ trait HasFormAttributes
      *
      * @param string $method
      *
-     * @return Form
+     * @return $this
      * @throws \Exception
      */
-    public function setMethod(string $method): Form
+    public function setMethod(string $method): self
     {
         $method = strtolower($method);
 

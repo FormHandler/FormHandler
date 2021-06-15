@@ -362,7 +362,7 @@ class Form extends Element
                 'submitted form. If you want this, please call clearCache() first.';
         }
 
-        return $this->submitted;
+        return (bool)$this->submitted;
     }
 
     /**

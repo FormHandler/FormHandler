@@ -2,7 +2,6 @@
 
 namespace FormHandler\Concerns;
 
-use FormHandler\Form;
 use FormHandler\Encoding\InterfaceEncodingFilter;
 
 trait HasEncodingFilter
@@ -67,9 +66,9 @@ trait HasEncodingFilter
      *
      * @param InterfaceEncodingFilter $value
      *
-     * @return Form
+     * @return $this
      */
-    public function setEncodingFilter(InterfaceEncodingFilter $value): Form
+    public function setEncodingFilter(InterfaceEncodingFilter $value): self
     {
         $this->encodingFilter = $value;
 
