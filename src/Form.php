@@ -3,7 +3,6 @@
 namespace FormHandler;
 
 use Exception;
-use ReflectionClass;
 use FormHandler\Field\Element;
 use FormHandler\Field\CheckBox;
 use FormHandler\Field\TextArea;
@@ -15,11 +14,14 @@ use FormHandler\Field\RadioButton;
 use FormHandler\Field\SelectField;
 use FormHandler\Field\UploadField;
 use FormHandler\Field\SubmitButton;
+use FormHandler\Concerns\HasFields;
+use FormHandler\Concerns\HasRenderer;
 use FormHandler\Renderer\XhtmlRenderer;
 use FormHandler\Field\AbstractFormField;
 use FormHandler\Validator\CsrfValidator;
 use FormHandler\Field\AbstractFormButton;
-use FormHandler\Renderer\AbstractRenderer;
+use FormHandler\Concerns\HasEncodingFilter;
+use FormHandler\Concerns\HasFormAttributes;
 use FormHandler\Encoding\Utf8EncodingFilter;
 use FormHandler\Encoding\InterfaceEncodingFilter;
 
@@ -87,6 +89,8 @@ use FormHandler\Encoding\InterfaceEncodingFilter;
  */
 class Form extends Element
 {
+    use HasFields, HasRenderer, HasEncodingFilter, HasFormAttributes;
+
     /**
      * Constant which can be used to set the form's submit method to GET
      */
@@ -110,20 +114,6 @@ class Form extends Element
     const ENCTYPE_URLENCODED = 'application/x-www-form-urlencoded';
 
     /**
-     * The default renderer which will be used for all FromHandler instances.
-     *
-     * @var Renderer\AbstractRenderer|null
-     */
-    protected static ?AbstractRenderer $defaultRenderer = null;
-
-    /**
-     * The default encoding filter which will be used for all FormHandler instances.
-     *
-     * @var Encoding\InterfaceEncodingFilter|null
-     */
-    protected static ?InterfaceEncodingFilter $defaultEncodingFilter = null;
-
-    /**
      * Out default settings for our csrf protection which will be used for all FormHandler instances.
      *
      * @var boolean
@@ -136,81 +126,6 @@ class Form extends Element
      * @var array
      */
     protected static array $cache = [];
-
-    /**
-     * The action of the Form (location where the form is sent to).
-     * When the action is empty, it will be posted to itself (default)
-     *
-     * @var string
-     */
-    protected string $action = '';
-
-    /**
-     * The target window where the form should post to
-     *
-     * @var string
-     * @deprecated
-     */
-    protected string $target = '';
-
-    /**
-     * The name of the form.
-     *
-     * @var string
-     */
-    protected string $name = '';
-
-    /**
-     * The method how the form is submitted. Can either be POST or GET
-     *
-     * @var string
-     */
-    protected string $method = self::METHOD_POST;
-
-    /**
-     * The encoding type of the form. Use one of the ENCTYPE_* constants.
-     *
-     * @var string
-     */
-    protected string $enctype = self::ENCTYPE_URLENCODED;
-
-    /**
-     * Specifies the character encodings that are to be used for the form submission
-     *
-     * @var string
-     */
-    protected string $acceptCharset = '';
-
-    /**
-     * Not supported in HTML5.
-     * Specifies a comma-separated list of file types that the server accepts
-     * (that can be submitted through the file upload)
-     *
-     * @var string
-     * @deprecated
-     */
-    protected string $accept = '';
-
-    /**
-     * List of all fields in this form
-     *
-     * @var array
-     */
-    protected array $fields = [];
-
-    /**
-     * An renderer which will be used to render the fields.
-     *
-     * @var Renderer\AbstractRenderer
-     */
-    protected AbstractRenderer $renderer;
-
-    /**
-     * An encoding filter which will be used to filter the data
-     *
-     * @var Encoding\InterfaceEncodingFilter|null
-     */
-    protected ?InterfaceEncodingFilter $encodingFilter = null;
 
     /**
      * Remember if this form was submitted or not. When this is null, we did not check
@@ -242,11 +157,11 @@ class Form extends Element
     public function __construct(?string $action = '', ?bool $csrfProtection = null)
     {
         // store our CSRF state.
-        $this->setCsrfProtection($csrfProtection === null ? static::$defaultCsrfProtectionEnabled : $csrfProtection);
+        $this->setCsrfProtection($csrfProtection === null ? self::$defaultCsrfProtectionEnabled : $csrfProtection);
 
         $this->action = (string)$action;
-        $this->setRenderer(Form::$defaultRenderer ?: new XhtmlRenderer());
-        $this->setEncodingFilter(Form::$defaultEncodingFilter ?: new Utf8EncodingFilter());
+        $this->setRenderer(self::$defaultRenderer ?: new XhtmlRenderer());
+        $this->setEncodingFilter(self::$defaultEncodingFilter ?: new Utf8EncodingFilter());
 
         // make sure that cache is cleared.
         $this->clearCache();
@@ -291,42 +206,21 @@ class Form extends Element
     }
 
     /**
-     * Remove a field from the form by the name of the field.
-     * If there are more than 1 field with the given name, then only the first one will
-     * be removed.
+     * Fetch all error messages for fields
      *
-     * @param string $name
-     *
-     * @return Form
+     * @return array
      */
-    public function removeFieldByName(string $name): Form
+    public function getErrorMessages(): array
     {
-        foreach ($this->fields as $i => $field) {
-            if ($field->getName() == $name) {
-                unset($this->fields[$i]);
-                break;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Return a field by its name. We will return null if it's not found.
-     *
-     * @param string $name
-     *
-     * @return AbstractFormField|null
-     */
-    public function getFieldByName(string $name): ?AbstractFormField
-    {
+        $errors = [];
         foreach ($this->fields as $field) {
-            if ($field->getName() == $name) {
-                return $field;
+            if ($field instanceof AbstractFormField && !$field->isValid()) {
+                $fldErrors = $field->getErrorMessages();
+                $errors    = array_merge($errors, $fldErrors);
             }
         }
 
-        return null;
+        return $errors;
     }
 
     /**
@@ -345,7 +239,7 @@ class Form extends Element
      *
      * @return boolean
      */
-    public function isSubmitted(string &$reason = ''): ?bool
+    public function isSubmitted(string &$reason = ''): bool
     {
         $reason = '';
 
@@ -488,49 +382,6 @@ class Form extends Element
     }
 
     /**
-     * Return the method how this form should be submitted
-     *
-     * @return string
-     */
-    public function getMethod(): string
-    {
-        return $this->method;
-    }
-
-    /**
-     * Set the method how this form should be submitted
-     *
-     * @param string $method
-     *
-     * @return Form
-     * @throws \Exception
-     */
-    public function setMethod(string $method): Form
-    {
-        $method = strtolower($method);
-
-        if (in_array($method, [Form::METHOD_GET, Form::METHOD_POST])) {
-            $this->method = $method;
-        } else {
-            throw new Exception('Incorrect method value given');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Return a new HiddenField
-     *
-     * @param string $name
-     *
-     * @return HiddenField
-     */
-    public function hiddenField(string $name): HiddenField
-    {
-        return new HiddenField($this, $name);
-    }
-
-    /**
      * Clear our cache of the submitted values.
      * This could be useful when you have changed the submitted values and want to re-analyze them.
      *
@@ -551,69 +402,6 @@ class Form extends Element
         }
 
         return $this;
-    }
-
-    /**
-     * Get the default formatter.
-     *
-     * For more information about formatters, {@see AbstractRenderer}
-     *
-     * @return AbstractRenderer|null
-     */
-    public static function getDefaultRenderer(): ?AbstractRenderer
-    {
-        return Form::$defaultRenderer;
-    }
-
-    /**
-     * Set a default formatter for all the form objects which are created.
-     *
-     * This could be useful when creating multiple forms in your project, and
-     * if you don't want to set a custom formatter for every Form object.
-     *
-     * Example:
-     * ```php
-     * // set the default formatter which should be used
-     * Form::setDefaultRenderer( new MyCustomRenderer() );
-     * ```
-     *
-     * For more information about renderers, {@see AbstractRenderer}
-     *
-     * @param AbstractRenderer $renderer
-     */
-    public static function setDefaultRenderer(AbstractRenderer $renderer)
-    {
-        Form::$defaultRenderer = $renderer;
-    }
-
-    /**
-     * Return the default encoding filter.
-     *
-     * @return InterfaceEncodingFilter|null
-     */
-    public static function getDefaultEncodingFilter(): ?InterfaceEncodingFilter
-    {
-        return Form::$defaultEncodingFilter;
-    }
-
-    /**
-     * Set a default encoding filter.
-     * This will be used to filter the input to make sure it's the correct encoding.
-     *
-     * This could be useful when creating multiple forms in your project, and
-     * if you don't want to set a custom encoding filter for every Form object.
-     *
-     * Example:
-     * ```php
-     * // set the default formatter which should be used
-     * Form::setDefaultEncodingFilter( new Utf8EncodingFilter() );
-     * ```
-     *
-     * @param InterfaceEncodingFilter $filter
-     */
-    public static function setDefaultEncodingFilter(InterfaceEncodingFilter $filter)
-    {
-        Form::$defaultEncodingFilter = $filter;
     }
 
     /**
@@ -681,7 +469,7 @@ class Form extends Element
                 }
             } elseif ($field instanceof UploadField) {
                 $value = $field->getValue();
-                if (!$value ||
+                if (empty($value) ||
                     !isset($value['error']) ||
                     $value['error'] == UPLOAD_ERR_NO_FILE ||
                     empty($value['name'])
@@ -698,15 +486,20 @@ class Form extends Element
     }
 
     /**
-     * Return an array with all fields from this form.
-     * This method will return an array.
-     * When there are no fields, it will return an empty array.
+     * Check if the fields within the form are valid
      *
-     * @return array
+     * @return boolean
      */
-    public function getFields(): array
+    public function isValid(): bool
     {
-        return $this->fields;
+        $valid = true;
+        foreach ($this->fields as $field) {
+            if ($field instanceof AbstractFormField && !$field->isValid()) {
+                $valid = false;
+            }
+        }
+
+        return $valid;
     }
 
     /**
@@ -776,50 +569,6 @@ class Form extends Element
                 }
             }
         }
-    }
-
-    /**
-     * Return a list of fields which have the name which equals the given name
-     *
-     * @param string $name
-     *
-     * @return AbstractFormField[]
-     */
-    public function getFieldsByName(string $name): array
-    {
-        $result = [];
-
-        foreach ($this->fields as $field) {
-            if ($field->getName() == $name) {
-                $result[] = $field;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Return a list of fields which have the name which equals the given name
-     *
-     * @param string $className
-     *
-     * @return AbstractFormField[]
-     * @throws \ReflectionException
-     */
-    public function getFieldsByClass(string $className): array
-    {
-        $result = [];
-
-        foreach ($this->fields as $field) {
-            if ($field instanceof $className ||
-                get_class($field) == $className ||
-                (new ReflectionClass($field))->getShortName() == $className
-            ) {
-                $result[] = $field;
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -927,63 +676,6 @@ class Form extends Element
     }
 
     /**
-     * Remove a field from the form
-     *
-     * @param Element $field
-     *
-     * @return Form
-     */
-    public function removeField(Element $field): Form
-    {
-        foreach ($this->fields as $i => $elem) {
-            if ($elem == $field) {
-                unset($this->fields[$i]);
-                break;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove all fields by the given name.
-     * If there are more than 1 field with the given name, then all will be removed.
-     *
-     * @param string $name
-     *
-     * @return Form
-     */
-    public function removeAllFieldsByName(string $name): Form
-    {
-        foreach ($this->fields as $i => $field) {
-            if ($field->getName() == $name) {
-                unset($this->fields[$i]);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove a field from the form by the name of the field
-     *
-     * @param string $id
-     *
-     * @return Form
-     */
-    public function removeFieldById(string $id): Form
-    {
-        foreach ($this->fields as $i => $field) {
-            if ($field->getId() == $id) {
-                unset($this->fields[$i]);
-                break;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Return the form close tag: ```</form>```
      *
      * @return string
@@ -991,24 +683,6 @@ class Form extends Element
     public function close(): string
     {
         return '</form>';
-    }
-
-    /**
-     * Return a field by its ID, or null when it's not found.
-     *
-     * @param string $id
-     *
-     * @return AbstractFormField
-     */
-    public function getFieldById(string $id): ?AbstractFormField
-    {
-        foreach ($this->fields as $field) {
-            if ($field->getId() == $id) {
-                return $field;
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -1068,258 +742,6 @@ class Form extends Element
     }
 
     /**
-     * Check if the fields within the form are valid
-     *
-     * @return boolean
-     */
-    public function isValid(): bool
-    {
-        $valid = true;
-        foreach ($this->fields as $field) {
-            if ($field instanceof AbstractFormField && !$field->isValid()) {
-                $valid = false;
-            }
-        }
-
-        return $valid;
-    }
-
-    /**
-     * Fetch all error messages for fields
-     *
-     * @return array
-     */
-    public function getErrorMessages(): array
-    {
-        $errors = [];
-        foreach ($this->fields as $field) {
-            if ($field instanceof AbstractFormField && !$field->isValid()) {
-                $fldErrors = $field->getErrorMessages();
-                $errors    = array_merge($errors, $fldErrors);
-            }
-        }
-
-        return $errors;
-    }
-
-    /**
-     * Return the EncodingFilter, which is used to filter all the input so that its of the correct character encoding.
-     *
-     * @return InterfaceEncodingFilter|null
-     */
-    public function getEncodingFilter(): ?InterfaceEncodingFilter
-    {
-        return $this->encodingFilter;
-    }
-
-    /**
-     * Set an encodingFilter.
-     * This filter will be used to filter all the input so that its of the correct character encoding.
-     *
-     * @param InterfaceEncodingFilter $value
-     *
-     * @return Form
-     */
-    public function setEncodingFilter(InterfaceEncodingFilter $value): Form
-    {
-        $this->encodingFilter = $value;
-
-        // initialize the encoder.
-        $this->encodingFilter->init($this);
-
-        return $this;
-    }
-
-    /**
-     * add a field to this form, so that it can be retrieved by the method getFieldByName
-     *
-     * @param Element $field
-     *
-     * @return \FormHandler\Form
-     */
-    public function addField(Element $field): Form
-    {
-        $this->fields[] = $field;
-
-        return $this;
-    }
-
-    /**
-     * Return the action of this form
-     *
-     * @return string
-     */
-    public function getAction(): string
-    {
-        return $this->action;
-    }
-
-    /**
-     * Set the action of this form and return the Form reference.
-     * NOTE: The action is added in the HTML without any escaping!
-     * Make sure YOU have escaped possible dangerous characters!
-     *
-     * @param string $action
-     *
-     * @return Form
-     */
-    public function setAction(string $action): Form
-    {
-        $this->action = $action;
-
-        return $this;
-    }
-
-    /**
-     * Return the target
-     *
-     * @return string
-     * @see http://www.w3schools.com/tags/tag_form.asp
-     * @deprecated
-     *
-     */
-    public function getTarget(): string
-    {
-        return $this->target;
-    }
-
-    /**
-     * Set the target and return the Form reference
-     *
-     * @param string $target
-     *
-     * @return Form
-     * @see http://www.w3schools.com/tags/tag_form.asp
-     * @deprecated
-     * @deprecated
-     *
-     */
-    public function setTarget(string $target): Form
-    {
-        $this->target = $target;
-
-        return $this;
-    }
-
-    /**
-     * Return the name of the form
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set the name of the form and return the Form reference
-     *
-     * @param string $name
-     *
-     * @return Form
-     */
-    public function setName(string $name): Form
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Return mime-types of files that can be submitted through a file upload.
-     *
-     * Specifies a comma-separated list of file types that the server accepts
-     * (that can be submitted through the file upload)
-     *
-     * @return string
-     * @deprecated
-     */
-    public function getAccept(): string
-    {
-        return $this->accept;
-    }
-
-    /**
-     * Set the mime-types of files that can be submitted through a file upload
-     * and return the Form reference
-     *
-     * @param string $accept
-     *
-     * @return Form
-     * @deprecated
-     */
-    public function setAccept(string $accept): Form
-    {
-        $this->accept = $accept;
-
-        return $this;
-    }
-
-    /**
-     * Return how form-data should be encoded before sending it to a server
-     *
-     * @return string
-     */
-    public function getEnctype(): string
-    {
-        return $this->enctype;
-    }
-
-    /**
-     * Set how form-data should be encoded before sending it to a server
-     * Possible values:
-     * - application/x-www-form-urlencoded
-     * - multipart/form-data
-     * - text/plain
-     *
-     * @param string $enctype
-     *
-     * @return Form
-     * @throws \Exception
-     */
-    public function setEnctype(string $enctype): Form
-    {
-        $enctype = strtolower(trim($enctype));
-
-        if (in_array($enctype, [
-            self::ENCTYPE_MULTIPART,
-            self::ENCTYPE_PLAIN,
-            self::ENCTYPE_URLENCODED,
-        ])) {
-            $this->enctype = $enctype;
-        } else {
-            throw new Exception('Incorrect enctype given!');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns the character-sets the server can handle for form-data
-     *
-     * @return string
-     */
-    public function getAcceptCharset(): string
-    {
-        return $this->acceptCharset;
-    }
-
-    /**
-     * Specifies the character-sets the server can handle for form-data
-     * Returns the Form reference
-     *
-     * @param string $charset
-     *
-     * @return Form
-     */
-    public function setAcceptCharset(string $charset): Form
-    {
-        $this->acceptCharset = $charset;
-
-        return $this;
-    }
-
-    /**
      * Create a new TextField
      *
      * @param string $name
@@ -1341,6 +763,18 @@ class Form extends Element
     public function passField(string $name): PassField
     {
         return new PassField($this, $name);
+    }
+
+    /**
+     * Return a new HiddenField
+     *
+     * @param string $name
+     *
+     * @return HiddenField
+     */
+    public function hiddenField(string $name): HiddenField
+    {
+        return new HiddenField($this, $name);
     }
 
     /**
@@ -1458,29 +892,5 @@ class Form extends Element
     public function render(): string
     {
         return $this->getRenderer()->render($this);
-    }
-
-    /**
-     * Return the formatter
-     *
-     * @return AbstractRenderer
-     */
-    public function getRenderer(): AbstractRenderer
-    {
-        return $this->renderer;
-    }
-
-    /**
-     * Set a renderer object
-     *
-     * @param AbstractRenderer $renderer
-     *
-     * @return Form
-     */
-    public function setRenderer(AbstractRenderer $renderer): Form
-    {
-        $this->renderer = $renderer;
-
-        return $this;
     }
 }

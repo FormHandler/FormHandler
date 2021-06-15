@@ -110,7 +110,7 @@ class SelectField extends AbstractFormField
      */
     protected function selectOptionsFromValue(): void
     {
-        if (!$this->options) {
+        if (empty($this->options)) {
             return;
         }
 

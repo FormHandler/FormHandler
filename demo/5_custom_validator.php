@@ -1,7 +1,7 @@
 <?php
 
-use FormHandler\Field\TextField;
 use FormHandler\Form;
+use FormHandler\Field\TextField;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -41,23 +41,23 @@ if ($form->isSubmitted($reason)) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-</head>
-<body>
-<h1>This is pretty easy!</h1>
-<?php echo $form; ?>
-<?php echo $form('terms'); ?><br/>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h1>This is pretty easy!</h1>
+        <?php echo $form; ?>
+        <?php echo $form('terms'); ?><br/>
 
-<?php echo $form('submit') ?>
-<?php echo $form->close(); ?>
+        <?php echo $form('submit') ?>
+        <?php echo $form->close(); ?>
 
-<b style='color:red;'>
-    <?php if (!empty($message)) {
-        echo nl2br(htmlentities($message));
-    } ?>
-</b>
+        <b style='color:red;'>
+            <?php if (!empty($message)) {
+                echo nl2br(htmlentities($message));
+            } ?>
+        </b>
 
-</body>
+    </body>
 </html>
 
