@@ -2,6 +2,7 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 
 /**
  * Test Image Button.
@@ -9,12 +10,12 @@ use FormHandler\Form;
  * Date: 23-08-16
  * Time: 16:23
  */
-class ImageButtonTest extends \PHPUnit_Framework_TestCase
+class ImageButtonTest extends TestCase
 {
     public function testImageButton()
     {
         $form = new Form();
-        $btn = $form->imageButton('submit', 'images/button.png');
+        $btn  = $form->imageButton('submit', 'images/button.png');
 
         $this->assertEquals('submit', $btn->getName());
         $this->assertEquals('images/button.png', $btn->getSrc());

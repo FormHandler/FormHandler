@@ -1,6 +1,9 @@
-[![Build Status](https://travis-ci.org/FormHandler/FormHandler.svg?branch=master)](https://travis-ci.org/teyeheimans/FormHandler)
-[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://php.net/) 
-[![Coverage Status](https://coveralls.io/repos/github/FormHandler/FormHandler/badge.svg?branch=master)](https://coveralls.io/github/teyeheimans/FormHandler?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/FormHandler/FormHandler/badges/build.png?b=master)](https://scrutinizer-ci.com/g/FormHandler/FormHandler/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/FormHandler/FormHandler/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/FormHandler/FormHandler/?branch=master)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.4-8892BF.svg?style=flat-square)](https://php.net/)
+[![Code Coverage](https://scrutinizer-ci.com/g/FormHandler/FormHandler/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/FormHandler/FormHandler/?branch=master)
+[![Packagist Version](https://img.shields.io/packagist/v/formhandler/formhandler.svg)](https://packagist.org/packages/formhandler/formhandler)
+[![Total Downloads](https://img.shields.io/packagist/dt/formhandler/formhandler.svg)](https://packagist.org/packages/formhandler/formhandler)
 
 FormHandler
 ======
@@ -19,22 +22,20 @@ To create a form you have to:
 Requirements
 ------
 
-FormHandler requires PHP 5.6 or higher. It should also work on 5.5 and 5.4, but automated Travis testing does 
-not work for these versions. 
+FormHandler requires PHP 7.4 or higher.
 
 FormHandler is tested on:
-   * PHP 5.6
-   * PHP 7.0
-   * PHP 7.1
-   * PHP 7.2    
-   * PHP Latest 'nightly' build
+
+* PHP 7.4
+* PHP 8.0
+* PHP Latest 'nightly' build
 
 Installation
 ------
 
-You can install FormHandler by downloading the [latest](https://github.com/teyeheimans/FormHandler/archive/master.zip) 
+You can install FormHandler by downloading the [latest](https://github.com/formhandler/formHandler/archive/master.zip)
 zip file and include this in your project.
- 
+
 We are working on availability for composer.
 
 Usage 

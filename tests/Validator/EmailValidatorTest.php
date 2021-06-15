@@ -1,10 +1,12 @@
 <?php
 namespace FormHandler\Tests\Validator;
 
+use Exception;
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\EmailValidator;
 
-class EmailValidatorTest extends \PHPUnit_Framework_TestCase
+class EmailValidatorTest extends TestCase
 {
     public function testRequiredEmailValidator()
     {
@@ -36,7 +38,6 @@ class EmailValidatorTest extends \PHPUnit_Framework_TestCase
         $field = $form->textField('email');
 
         $field->addValidator(new EmailValidator(true));
-
 
         $valid = [
             'email@example.com',
@@ -151,7 +152,7 @@ class EmailValidatorTest extends \PHPUnit_Framework_TestCase
         $field = $form->textField('email');
         $field->setValidator($validator);
 
-        $GLOBALS['mock_mxrr_response'] = false;
+        $GLOBALS['mock_mxrr_response']  = false;
         $GLOBALS['mock_dnsrr_response'] = false;
 
         $field->setValue('john@iamabsolutlysurethatthisdomainwillneverexistsbecauseits.bogus');
@@ -187,7 +188,7 @@ class EmailValidatorTest extends \PHPUnit_Framework_TestCase
         $field = $form->textField('email');
         $field->setValidator($validator);
 
-        $GLOBALS['mock_mxrr_response'] = false;
+        $GLOBALS['mock_mxrr_response']  = false;
         $GLOBALS['mock_dnsrr_response'] = true;
 
         $field->setValue('john@iamabsolutlysurethatthisdomainwillneverexistsbecauseits.bogus');
@@ -207,11 +208,12 @@ class EmailValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test non-scalar values in a field for the whitelist validator.
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /scalar types/
      */
     public function testEmailValidatorNonScalar()
     {
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/scalar types/');
+
         // create a form and the field
         $form = new Form('', false);
 

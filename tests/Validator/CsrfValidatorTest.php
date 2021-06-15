@@ -3,10 +3,12 @@
 namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
+use FormHandler\Field\HiddenField;
 use FormHandler\Validator\CsrfValidator;
 use FormHandler\Validator\StringValidator;
 
-class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
+class CsrfValidatorTest extends TestCase
 {
     /**
      * Test if our default csrf setting is stored correctly
@@ -39,6 +41,8 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test CSRF protection
+     *
+     * @throws \Exception
      */
     public function testCsrf()
     {
@@ -54,8 +58,9 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($form->isCsrfProtectionEnabled());
 
         // this should exists
+        /** @var \FormHandler\Field\HiddenField $field */
         $field = $form->getFieldByName('csrftoken');
-        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $field, 'csrf field should exists');
+        $this->assertInstanceOf(HiddenField::class, $field, 'csrf field should exists');
 
         // this should contain a token
         $this->assertNotEmpty(
@@ -66,15 +71,18 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($form->isSubmitted(), 'the field should not be submitted');
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testCsrfWithoutTokenPosted()
     {
         // Now fake a "wrong" submit
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = [
-            'name' => 'John'
+        $_POST                     = [
+            'name' => 'John',
         ];
 
-        // create a simular form.
+        // create a similar form.
         $form = new Form('', false);
         $this->assertTrue($form->isSubmitted(), 'Form should be submitted');
 
@@ -91,25 +99,28 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($form->isSubmitted(), 'Form should be not submitted, csrf token not in POST field');
 
         // after checking it should exists, but if should be invalid.
+        /** @var HiddenField $field */
         $field = $form->getFieldByName('csrftoken');
-        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $field);
+        $this->assertInstanceOf(HiddenField::class, $field);
 
-        $this->assertEmpty($field->getValue(), 'csrf token should be emty');
+        $this->assertEmpty($field->getValue(), 'csrf token should be empty');
     }
 
     /**
      * Test form with invalid token
+     *
+     * @throws \Exception
      */
     public function testCsrfWithWrongTokenPosted()
     {
         // Now fake a "wrong" submit
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = [
-            'name' => 'John',
-            'csrftoken' => 'wrong.value'
+        $_POST                     = [
+            'name'      => 'John',
+            'csrftoken' => 'wrong.value',
         ];
 
-        // create a simular form.
+        // create a similar form.
         $form = new Form('', false);
         $this->assertTrue($form->isSubmitted(), 'Form should be submitted');
 
@@ -124,13 +135,15 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
 
         $form->clearCache(); // clear static cache
 
+        $reason = '';
         $this->assertTrue($form->isSubmitted($reason), 'Form should be submitted, csrf token is in POST field');
 
         $this->assertFalse($form->isValid(), 'Form should be invalid, csrf token is not correct');
 
         // after checking it should exists, but if should be invalid.
+        /** @var HiddenField $field */
         $field = $form->getFieldByName('csrftoken');
-        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $field);
+        $this->assertInstanceOf(HiddenField::class, $field);
 
         $this->assertEquals('wrong.value', $field->getValue(), 'csrf token should be wrong.value');
     }
@@ -148,25 +161,22 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
             'Session csrftokens should now be an array'
         );
 
-        // add some wrong tokens. They should be removed afterwards
-        $_SESSION['csrftokens'][] = 'wrong.token';
         $expired = (time() - 86400) . '.invalid';
-        $_SESSION['csrftokens'][] = $expired;
+        // add some wrong tokens. They should be removed afterwards
+        $_SESSION['csrftokens'] = ['wrong.token', $expired];
 
         new CsrfValidator();
 
-        $this->assertNotContains(
-            'wrong.token',
-            $_SESSION['csrftokens'],
+        $this->assertFalse(
+            in_array('wrong.token', (array)$_SESSION['csrftokens']),
             'CSRF session should not contain "wrong.token" anymore as its not a timestamp'
         );
-        $this->assertNotContains(
-            $expired,
-            $_SESSION['csrftokens'],
+        $this->assertFalse(
+            in_array($expired, (array)$_SESSION['csrftokens']),
             'CSRF token should be removed because its timestamp is expired'
         );
 
-        $expired = (time() - 86400) . '.expired';
+        $expired    = (time() - 86400) . '.expired';
         $notExpired = (time() - 6200) . '.not-expired';
 
         $_SESSION['csrftokens'] = [$expired, $notExpired];
@@ -174,15 +184,13 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
 
         new CsrfValidator();
 
-        $this->assertNotContains(
-            $expired,
-            $_SESSION['csrftokens'],
+        $this->assertFalse(
+            in_array($expired, $_SESSION['csrftokens']),
             'CSRF session should not contain the expired token'
         );
 
-        $this->assertContains(
-            $notExpired,
-            $_SESSION['csrftokens'],
+        $this->assertTrue(
+            in_array($notExpired, $_SESSION['csrftokens']),
             'CSRF session should contain ' . $notExpired . ' because its not expired yet'
         );
     }
@@ -200,15 +208,18 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($form->isSubmitted(), 'Form should not be submitted');
 
-        $token = $form('csrftoken')->getValue();
+        /** @var HiddenField $field */
+        $field = $form('csrftoken');
+
+        $token = $field->getValue();
 
         $this->assertTrue(is_array($_SESSION['csrftokens']));
 
         // now fake a post and retry
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = [
-            'name' => 'Piet',
-            'csrftoken' => $token
+        $_POST                     = [
+            'name'      => 'Piet',
+            'csrftoken' => $token,
         ];
 
         // form should be submitted.
@@ -226,8 +237,8 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
     {
         // now fake a post and retry
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = [
-            'name' => 'Piet'
+        $_POST                     = [
+            'name' => 'Piet',
         ];
 
         $form = new Form('', false);
@@ -248,18 +259,22 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($form->isCsrfValid(), 'CSRF should be valid as the form is not submitted');
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testInvalidField()
     {
         // now fake a post and retry
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = [
-            'name' => 'Pi'
+        $_POST                     = [
+            'name' => 'Pi',
         ];
 
-        $form = new Form('', false);
-        $form->textField('name') -> addValidator(new StringValidator(3));
+        $form  = new Form('', false);
+        $field = $form->textField('name');
+        $field->addValidator(new StringValidator(3));
 
-        $this->assertFalse($form -> isValid(), 'Form should not be valid');
+        $this->assertFalse($form->isValid(), 'Form should not be valid');
         $this->assertTrue($form->isCsrfValid(), 'CSRF should be valid as the form is invalid');
     }
 
@@ -276,15 +291,17 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($form->isSubmitted(), 'Form should not be submitted');
 
-        $token = $form('csrftoken')->getValue();
+        /** @var HiddenField $field */
+        $field = $form('csrftoken');
+        $token = $field->getValue();
 
         $this->assertTrue(is_array($_SESSION['csrftokens']));
 
         // now fake a post and retry
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = [
-            'name' => 'Piet',
-            'csrftoken' => $token . 'wrong'
+        $_POST                     = [
+            'name'      => 'Piet',
+            'csrftoken' => $token . 'wrong',
         ];
 
         // form should be submitted.
@@ -299,11 +316,11 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($form->isCsrfValid());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $_GET = [];
-        $_POST = [];
-        $_FILES = [];
+        $_GET     = [];
+        $_POST    = [];
+        $_FILES   = [];
         $_SESSION = [];
     }
 
@@ -311,11 +328,11 @@ class CsrfValidatorTest extends \PHPUnit_Framework_TestCase
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
-        $_GET = [];
-        $_POST = [];
-        $_FILES = [];
+        $_GET     = [];
+        $_POST    = [];
+        $_FILES   = [];
         $_SESSION = [];
     }
 }

@@ -1,7 +1,9 @@
 <?php
+
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 
 /**
  * Created by PhpStorm.
@@ -9,18 +11,18 @@ use FormHandler\Form;
  * Date: 29-08-16
  * Time: 15:01
  */
-class ElementTest extends \PHPUnit_Framework_TestCase
+class ElementTest extends TestCase
 {
     public function testElement()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('name');
 
-        $this->assertNull($field->getId());
+        $this->assertEquals('', $field->getId());
         $field->setId("nameFld");
         $this->assertEquals('nameFld', $field->getId());
 
-        $this->assertNull($field->getTitle());
+        $this->assertEquals('', $field->getTitle());
         $field->setTitle("Enter your name");
         $this->assertEquals('Enter your name', $field->getTitle());
 
@@ -28,17 +30,17 @@ class ElementTest extends \PHPUnit_Framework_TestCase
         $field->setTabindex(5);
         $this->assertEquals(5, $field->getTabindex());
 
-        $this->assertNull($field->getAccesskey());
+        $this->assertEquals('', $field->getAccesskey());
         $field->setAccesskey('n');
         $this->assertEquals('n', $field->getAccesskey());
 
-        $this->assertNull($field->getClass());
+        $this->assertEquals('', $field->getClass());
         $field->addClass('bold');
         $this->assertEquals('bold', $field->getClass());
         $field->addClass('underline');
         $this->assertEquals('bold underline', $field->getClass());
 
-        $this->assertNull($field->getStyle());
+        $this->assertEquals('', $field->getStyle());
         $field->addStyle('color:red');
         $this->assertEquals('color:red', $field->getStyle());
         $field->addStyle(';');

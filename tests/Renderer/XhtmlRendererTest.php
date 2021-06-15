@@ -1,10 +1,12 @@
 <?php
+
 namespace FormHandler\Tests\Renderer;
 
-use FormHandler\Field\Optgroup;
-use FormHandler\Field\Option;
-use FormHandler\Field\TextField;
+use Exception;
 use FormHandler\Form;
+use FormHandler\Field\Option;
+use FormHandler\Field\Optgroup;
+use FormHandler\Field\TextField;
 use FormHandler\Renderer\XhtmlRenderer;
 use FormHandler\Validator\UploadValidator;
 
@@ -16,18 +18,16 @@ use FormHandler\Validator\UploadValidator;
  */
 class XhtmlRendererTest extends BaseTestRenderer
 {
-    /**
-     * @expectedException \Exception
-     */
     public function testRenderInvalidClass()
     {
+        $this->expectException(Exception::class);
         $renderer = new XhtmlRenderer();
         $renderer->render(new FakeElement());
     }
 
     public function testHelpTextAsAttribute()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('name');
         $field->setHelpText('Enter your name');
 
@@ -52,7 +52,7 @@ class XhtmlRendererTest extends BaseTestRenderer
 
     public function testHelpTextAsTag()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('name');
         $field->setHelpText('Enter your name');
 
@@ -65,12 +65,12 @@ class XhtmlRendererTest extends BaseTestRenderer
 
         $this->assertEquals(XhtmlRenderer::RENDER_AS_TAG, $renderer->getHelpFormat());
         $this->assertEquals('dfn', $renderer->getHelpTagOrAttr());
-        $this->assertContains('<dfn>Enter your name</dfn>', $html);
+        $this->assertStringContainsString('<dfn>Enter your name</dfn>', $html);
     }
 
     public function testErrorAsTag()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('name');
         $field->addErrorMessage('Your name is too long.');
 
@@ -83,12 +83,12 @@ class XhtmlRendererTest extends BaseTestRenderer
 
         $this->assertEquals('label', $renderer->getErrorTagOrAttr());
         $this->assertEquals(XhtmlRenderer::RENDER_AS_TAG, $renderer->getErrorFormat());
-        $this->assertContains('<label>Your name is too long.</label>', $html);
+        $this->assertStringContainsString('<label>Your name is too long.</label>', $html);
     }
 
     public function testErrorAsAttribute()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('name');
         $field->addErrorMessage('Your name is too long.');
 
@@ -104,9 +104,12 @@ class XhtmlRendererTest extends BaseTestRenderer
         $this->expectAttribute($html, 'data-error', 'Your name is too long.');
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testUploadRender()
     {
-        $form = new Form('', false);
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
 
         $field->setMultiple(true);
@@ -120,7 +123,7 @@ class XhtmlRendererTest extends BaseTestRenderer
         ob_start();
         $renderer = $form->getRenderer();
         echo $renderer($field);
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'type', 'file');
         $this->expectAttribute($html, 'size', 20);
@@ -139,16 +142,13 @@ class XhtmlRendererTest extends BaseTestRenderer
         $optgroup->addOption(new Option('be', 'Belgium'));
         $optgroup->addOption(new Option('lu', 'Luxemburg'));
 
-        $html = $optgroup->render();
-        $this->assertEquals('', $html, 'Response should be empty as no renderer is known');
-
         $form = new Form();
         $optgroup->setForm($form);
         $this->assertEquals($form, $optgroup->getForm());
 
         ob_start();
         echo $optgroup;
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'label', 'Favorite Benelux Country');
     }
@@ -158,24 +158,21 @@ class XhtmlRendererTest extends BaseTestRenderer
         $option = new Option('name', 'Label');
         $option->setSelected(true);
 
-        $html = $option->render();
-        $this->assertEquals('', $html, 'Response should be empty as no renderer is known');
-
         $form = new Form();
         $option->setForm($form);
 
         ob_start();
         echo $option;
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'value', 'name');
         $this->expectAttribute($html, 'selected', 'selected');
-        $this->assertContains('Label', $html);
+        $this->assertStringContainsString('Label', $html);
     }
 
     public function testSelectField()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->selectField('country');
         $field->setMultiple(true);
 
@@ -186,41 +183,41 @@ class XhtmlRendererTest extends BaseTestRenderer
 
         ob_start();
         echo $field;
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'name', 'country[]');
         $this->expectAttribute($html, 'multiple', 'multiple');
-        $this->assertContains('<select', $html);
-        $this->assertContains('<option', $html);
-        $this->assertContains('</option', $html);
-        $this->assertContains('</select', $html);
+        $this->assertStringContainsString('<select', $html);
+        $this->assertStringContainsString('<option', $html);
+        $this->assertStringContainsString('</option', $html);
+        $this->assertStringContainsString('</select', $html);
         $this->expectAttribute($html, 'value', 'be');
     }
 
     public function testCheckbox()
     {
-        $form = new Form('');
-        $field = $form->checkBox('test', '1');
+        $form  = new Form('');
+        $field = $form->checkBox('test');
         $field->setChecked(true);
         $field->setDisabled(true);
         $field->setLabel('Should we test?');
 
         ob_start();
         echo $field;
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'type', 'checkbox');
         $this->expectAttribute($html, 'value', '1');
         $this->expectAttribute($html, 'checked', 'checked');
         $this->expectAttribute($html, 'disabled', 'disabled');
-        $this->assertContains('<label', $html);
-        $this->assertContains($field->getLabel(), $html);
+        $this->assertStringContainsString('<label', $html);
+        $this->assertStringContainsString($field->getLabel(), $html);
         $this->assertNotEmpty($field->getId());
     }
 
     public function testHiddenField()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->hiddenField('test');
 
         ob_start();
@@ -234,12 +231,12 @@ class XhtmlRendererTest extends BaseTestRenderer
 
     public function testImageButton()
     {
-        $form = new Form();
+        $form   = new Form();
         $button = $form->imageButton('submit', 'test.png');
 
         ob_start();
         echo $button;
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'type', 'image');
         $this->expectAttribute($html, 'src', 'test.png');
@@ -247,14 +244,14 @@ class XhtmlRendererTest extends BaseTestRenderer
 
     public function testPassField()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->passField('password');
         $field->setMaxlength(15);
         $field->setReadonly(true);
 
         ob_start();
         echo $field;
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'type', 'password');
         $this->expectAttribute($html, 'name', 'password');
@@ -264,67 +261,71 @@ class XhtmlRendererTest extends BaseTestRenderer
 
     public function testTextArea()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textArea('message');
 
         ob_start();
         echo $field;
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'name', 'message');
         $this->expectAttribute($html, 'cols', 40);
         $this->expectAttribute($html, 'rows', 7);
-        $this->assertContains('<textarea', $html);
-        $this->assertContains('</textarea>', $html);
+        $this->assertStringContainsString('<textarea', $html);
+        $this->assertStringContainsString('</textarea>', $html);
     }
 
     public function testTextField()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('phone');
         $field->setType(TextField::TYPE_TEL);
 
         ob_start();
         echo $field;
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'name', 'phone');
         $this->expectAttribute($html, 'type', 'tel');
-        $this->assertContains('<input', $html);
+        $this->assertStringContainsString('<input', $html);
     }
 
     /**
      * Test the HTML form tags of the form
+     *
+     * @throws \Exception
      */
     public function testFormTag()
     {
         $form = new Form('/form');
         $form->setMethod(Form::METHOD_GET);
         $form->setAcceptCharset('UTF-8');
+        // @phpstan-ignore-next-line
         $form->setTarget('_blank');
+        // @phpstan-ignore-next-line
         $form->setAccept('text/plain');
         $form->setEnctype(Form::ENCTYPE_PLAIN);
 
         ob_start();
         echo $form;
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'method', 'get');
         $this->expectAttribute($html, 'accept-charset', 'UTF-8');
         $this->expectAttribute($html, 'accept', 'text/plain');
         $this->expectAttribute($html, 'enctype', 'text/plain');
         $this->expectAttribute($html, 'target', '_blank');
-        $this->assertContains('<form', $html);
+        $this->assertStringContainsString('<form', $html);
     }
 
     public function testSubmitButton()
     {
-        $form = new Form();
+        $form   = new Form();
         $button = $form->submitButton('submit', 'Send');
 
         ob_start();
         echo $button;
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'type', 'submit');
         $this->expectAttribute($html, 'name', 'submit');
@@ -333,19 +334,19 @@ class XhtmlRendererTest extends BaseTestRenderer
 
     public function testRadioButton()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->radioButton('gender', 'm')->setLabel('Male')->setChecked(true);
 
         ob_start();
         echo $field;
-        $html = ob_get_clean();
+        $html = (string)ob_get_clean();
 
         $this->expectAttribute($html, 'type', 'radio');
         $this->expectAttribute($html, 'name', 'gender');
         $this->expectAttribute($html, 'value', 'm');
         $this->expectAttribute($html, 'checked', 'checked');
-        $this->assertContains('<label', $html);
-        $this->assertContains('Male', $html);
+        $this->assertStringContainsString('<label', $html);
+        $this->assertStringContainsString('Male', $html);
         $this->assertNotEmpty($field->getId());
     }
 
@@ -353,7 +354,7 @@ class XhtmlRendererTest extends BaseTestRenderer
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         Form::setDefaultRenderer(new XhtmlRenderer());
     }

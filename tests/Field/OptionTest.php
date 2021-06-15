@@ -2,6 +2,7 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Field\Option;
+use FormHandler\Tests\TestCase;
 
 /**
  * Created by PhpStorm.
@@ -9,7 +10,7 @@ use FormHandler\Field\Option;
  * Date: 29-08-16
  * Time: 09:02
  */
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends TestCase
 {
     public function testOption()
     {

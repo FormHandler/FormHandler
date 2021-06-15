@@ -1,14 +1,16 @@
 <?php
 namespace FormHandler\Tests\Validator;
 
+use Exception;
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\FloatValidator;
 
-class FloatValidatorTest extends \PHPUnit_Framework_TestCase
+class FloatValidatorTest extends TestCase
 {
     public function testFloatValidatorRequired()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('amount');
 
         $validator = new FloatValidator(0.0, 50.0, true);
@@ -30,11 +32,12 @@ class FloatValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test non-scalar values in a field for the float validator.
-     * @expectedException \Exception
-     * @expectedExceptionMessage scalar types
      */
     public function testFloatValidatorNonScalar()
     {
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/scalar types/');
+
         // create a form and the field
         $form = new Form('', false);
 
@@ -50,7 +53,7 @@ class FloatValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testFloadValidatorValue()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('amount');
 
         $validator = new FloatValidator(0.0, 50.0, true);
@@ -87,16 +90,19 @@ class FloatValidatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testFloatDecimalSigns()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textField('amount');
 
         $errormsg = 'Enter correct amount';
         foreach ([FloatValidator::DECIMAL_COMMA, ','] as $type) {
             $validator = new FloatValidator(0, 5, true, $errormsg, $type);
 
-            $this -> assertEquals(FloatValidator::DECIMAL_COMMA, $validator -> getDecimalPoint());
+            $this->assertEquals(FloatValidator::DECIMAL_COMMA, $validator->getDecimalPoint());
 
             $field->addValidator($validator);
 
@@ -105,7 +111,7 @@ class FloatValidatorTest extends \PHPUnit_Framework_TestCase
                 $field->isValid(),
                 'Value should be invalid because it uses the wrong decimal sign'
             );
-            $this->assertContains($errormsg, $field->getErrorMessages());
+            $this->assertTrue(in_array($errormsg, $field->getErrorMessages()));
 
             $field->setValue('1,0');
             $this->assertTrue(
@@ -138,7 +144,6 @@ class FloatValidatorTest extends \PHPUnit_Framework_TestCase
             $validator = new FloatValidator(0, 5, true, $errormsg, $type);
 
             $this -> assertEquals(FloatValidator::DECIMAL_POINT_OR_COMMA, $validator -> getDecimalPoint());
-
 
             $field->setValidator($validator);
 

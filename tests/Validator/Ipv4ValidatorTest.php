@@ -2,16 +2,17 @@
 namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\Ipv4Validator;
 
-class Ipv4ValidatorTest extends \PHPUnit_Framework_TestCase
+class Ipv4ValidatorTest extends TestCase
 {
     public function testIpv4()
     {
-        $form = new Form('', false);
+        $form  = new Form('', false);
         $field = $form->textField('ip');
 
-        $errormsg = 'Invalid ipv4';
+        $errormsg  = 'Invalid ipv4';
         $validator = new Ipv4Validator(true);
         $field->setValidator($validator);
 
@@ -46,9 +47,8 @@ class Ipv4ValidatorTest extends \PHPUnit_Framework_TestCase
             'Should be false, invalid ip address'
         );
 
-        $this->assertContains(
-            $errormsg,
-            $field->getErrorMessages(),
+        $this->assertTrue(
+            in_array($errormsg, $field->getErrorMessages()),
             'Error message should now be set'
         );
     }

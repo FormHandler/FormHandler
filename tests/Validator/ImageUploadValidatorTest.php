@@ -3,17 +3,19 @@
 namespace FormHandler\Tests\Validator;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 use FormHandler\Validator\ImageUploadValidator;
 
 /**
  * Class ImageUploadValidatorTest
+ *
  * @package FormHandler\Tests\Validator
  */
-class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
+class ImageUploadValidatorTest extends TestCase
 {
     public function testValidUpload()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->uploadField('pic');
 
         $validator = new ImageUploadValidator(true);
@@ -60,14 +62,13 @@ class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
         $form = new Form();
 
         $messages = ['size_width_max' => 'Too wide man!'];
-        $field = $form->uploadField('pic');
+        $field    = $form->uploadField('pic');
 
         $validator = new ImageUploadValidator(true, $messages);
 
         $validator->setMaximumWidth(50);
 
         $this->assertEquals(50, $validator->getMaximumWidth());
-
 
         $field->setValidator($validator);
 
@@ -85,7 +86,7 @@ class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
         $form = new Form();
 
         $messages = ['size_height_max' => 'Too high man!'];
-        $field = $form->uploadField('pic');
+        $field    = $form->uploadField('pic');
 
         $validator = new ImageUploadValidator(true, $messages);
         $validator->setMaximumHeight(50);
@@ -108,7 +109,7 @@ class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
         $form = new Form();
 
         $messages = ['size_width_min' => 'File is not wide enough'];
-        $field = $form->uploadField('pic');
+        $field    = $form->uploadField('pic');
 
         $validator = new ImageUploadValidator(true, $messages);
 
@@ -132,7 +133,7 @@ class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
         $form = new Form();
 
         $messages = ['size_height_min' => 'File is not high enough'];
-        $field = $form->uploadField('pic');
+        $field    = $form->uploadField('pic');
 
         $validator = new ImageUploadValidator(true, $messages);
         $validator->setMinimumHeight(500);
@@ -175,7 +176,7 @@ class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
         $form = new Form();
 
         $messages = ['aspect_ratio_denied' => 'We dont allow 2:1 images!'];
-        $field = $form->uploadField('pic');
+        $field    = $form->uploadField('pic');
 
         $validator = new ImageUploadValidator(true, $messages);
 
@@ -198,7 +199,7 @@ class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
         $form = new Form();
 
         $messages = ['aspect_ratio' => 'We want a square!'];
-        $field = $form->uploadField('pic');
+        $field    = $form->uploadField('pic');
 
         $validator = new ImageUploadValidator(true, $messages);
 
@@ -221,7 +222,7 @@ class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
         $form = new Form();
 
         $messages = ['aspect_ratio' => 'We want a 2:1 aspect ratio'];
-        $field = $form->uploadField('pic');
+        $field    = $form->uploadField('pic');
 
         $validator = new ImageUploadValidator(true, $messages);
 
@@ -239,10 +240,10 @@ class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testNotAnImage()
     {
-        $_FILES['pic']['tmp_name'] = __DIR__ . '/_tmp/test.pdf';
+        $_FILES['pic']['tmp_name']  = __DIR__ . '/_tmp/test.pdf';
         $GLOBALS['mock_image_size'] = false;
 
-        $form = new Form();
+        $form  = new Form();
         $field = $form->uploadField('pic');
 
         $messages = ['not_an_image' => 'Please supply an image'];
@@ -264,7 +265,7 @@ class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidUpload()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->uploadField('pic');
 
         $validator = new ImageUploadValidator(true);
@@ -284,34 +285,34 @@ class ImageUploadValidatorTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         mkdir(__DIR__ . '/_tmp');
 
-        $GLOBALS['mock_file_size'] = 542;
+        $GLOBALS['mock_file_size']  = 542;
         $GLOBALS['mock_image_size'] = [
             200, // width
             100, // height
             IMAGETYPE_GIF,
-            'height="100" width="200"'
+            'height="100" width="200"',
         ];
 
-        $_FILES = array(
-            'pic' => array(
-                'name' => 'avatar.gif',
-                'type' => 'image.gif',
-                'size' => 542,
+        $_FILES = [
+            'pic' => [
+                'name'     => 'avatar.gif',
+                'type'     => 'image.gif',
+                'size'     => 542,
                 'tmp_name' => __DIR__ . '/_tmp/avatar.gif',
-                'error' => 0
-            )
-        );
+                'error'    => 0,
+            ],
+        ];
     }
 
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($GLOBALS['mock_file_size']);
         unset($GLOBALS['mock_image_size']);

@@ -1,19 +1,24 @@
 <?php
+
 namespace FormHandler\Tests\Utils;
 
+use Exception;
 use FormHandler\Form;
+use UnexpectedValueException;
+use FormHandler\Tests\TestCase;
 use FormHandler\Utils\FormUtils;
+use FormHandler\Field\HiddenField;
 
-class FormUtilsTest extends \PHPUnit_Framework_TestCase
+class FormUtilsTest extends TestCase
 {
     public function testGetFileExtension()
     {
         $tests = [
-            'test.pdf' => 'pdf',
-            'justAFile.CsV' => 'csv',
-            'anoter.test.xhtml' => 'xhtml',
-            'filewithnoextension' => '',
-            'test.psd?with=query&string=1' => 'psd'
+            'test.pdf'                     => 'pdf',
+            'justAFile.CsV'                => 'csv',
+            'anoter.test.xhtml'            => 'xhtml',
+            'filewithnoextension'          => '',
+            'test.psd?with=query&string=1' => 'psd',
         ];
 
         foreach ($tests as $filename => $extension) {
@@ -21,50 +26,59 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /multiple files/
-     */
     public function testMoveMultipleUploadFileWithName()
     {
-        $form = new Form('', false);
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/multiple files/');
+
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
         $field->setMultiple(true); // multiple files allowed
 
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf');
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testMoveUploadedFile()
     {
-        $form = new Form('', false);
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
 
         $dest = FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf');
+        $this->assertIsString($dest);
+        $dest = is_array($dest) ? implode(',', $dest) : $dest; // shut up stan.
         $this->assertFileExists($dest);
 
         @unlink($dest);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testMoveUploadedFileExistsRename()
     {
-        $form = new Form('', false);
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
 
         @touch(__DIR__ . '/_tmp/moved.pdf');
-        $dest = FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf', FormUtils::MODE_RENAME);
+        $dest = FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf');
+        $this->assertIsString($dest);
+        $dest = is_array($dest) ? implode(',', $dest) : $dest; // shut up stan.
         $this->assertFileExists(__DIR__ . '/_tmp/moved(1).pdf');
 
         @unlink($dest);
         @unlink(__DIR__ . '/_tmp/moved.pdf');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /already exists/
-     */
     public function testMoveUploadedFileExistsException()
     {
-        $form = new Form('', false);
+
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/already exists/');
+
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
 
         @touch(__DIR__ . '/_tmp/moved.pdf');
@@ -73,24 +87,31 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @throws \Exception
      */
     public function testIncorrectExistsValue()
     {
-        $form = new Form('', false);
+        $this->expectException(UnexpectedValueException::class);
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
 
         @touch(__DIR__ . '/_tmp/moved.pdf');
 
-        FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf', 'wrong');
+        FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/moved.pdf', 17);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testCreateDirIfNotExists()
     {
-        $form = new Form('', false);
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
 
         $dest = FormUtils::moveUploadedFile($field, __DIR__ . '/_new/', FormUtils::MODE_OVERWRITE, true);
+
+        $this->assertIsString($dest);
+        $dest = is_array($dest) ? implode(',', $dest) : $dest; // shut up stan.
 
         $this->assertEquals(__DIR__ . '/_new/test.pdf', $dest);
         $this->assertTrue(is_dir(__DIR__ . '/_new/'));
@@ -100,13 +121,12 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         @rmdir(__DIR__ . '/_new');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Failed to create the destination directory/
-     */
     public function testCreateDirFailure()
     {
-        $form = new Form('', false);
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/Failed to create the destination directory/');
+
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
 
         $GLOBALS['mock_mkdir_response'] = false;
@@ -114,13 +134,12 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         FormUtils::moveUploadedFile($field, __DIR__ . '/_abc123/', FormUtils::MODE_OVERWRITE, true);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /directory is not writable/
-     */
     public function testIsNotWritable()
     {
-        $form = new Form('', false);
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/directory is not writable/');
+
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
 
         $GLOBALS['mock_is_writable_response'] = false;
@@ -128,13 +147,12 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         FormUtils::moveUploadedFile($field, __DIR__ . '/_new/', FormUtils::MODE_OVERWRITE, true);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /we failed to move file/
-     */
     public function testMoveFailed()
     {
-        $form = new Form('', false);
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/we failed to move file/');
+
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
 
         $GLOBALS['mock_move_uploaded_file_response'] = false;
@@ -142,25 +160,36 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         FormUtils::moveUploadedFile($field, __DIR__ . '/_tmp/blaat.tmp', FormUtils::MODE_OVERWRITE, true);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testMoveMultipleFiles()
     {
-        $_FILES = array(
-            'cv' => array(
-                'name' => ['test.pdf', 'test1.pdf'],
-                'type' => ['application/pdf', 'application/pdf'],
-                'size' => [542, 541],
+        $_FILES = [
+            'cv' => [
+                'name'     => ['test.pdf', 'test1.pdf'],
+                'type'     => ['application/pdf', 'application/pdf'],
+                'size'     => [542, 541],
                 'tmp_name' => [__DIR__ . '/_tmp/test.pdf', __DIR__ . '/_tmp/test1.pdf'],
-                'error' => [0, 0]
-            )
-        );
+                'error'    => [0, 0],
+            ],
+        ];
 
         @touch(__DIR__ . '/_tmp/test1.pdf');
 
-        $form = new Form('', false);
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
         $field->setMultiple(true); // multiple files allowed
 
-        $dest = FormUtils::moveUploadedFile($field, __DIR__ . '/_new/', FormUtils::MODE_OVERWRITE, true);
+        $dest = FormUtils::moveUploadedFile(
+            $field,
+            __DIR__ . '/_new/',
+            FormUtils::MODE_OVERWRITE,
+            true
+        );
+
+        $this->assertIsArray($dest);
+        $dest = (array)$dest;
 
         $this->assertCount(2, $dest);
         $this->assertEquals([__DIR__ . '/_new/test.pdf', __DIR__ . '/_new/test1.pdf'], $dest);
@@ -170,23 +199,22 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         @rmdir(__DIR__ . '/_new');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /we failed to move file/
-     */
     public function testMoveMultipleFilesException()
     {
-        $_FILES = array(
-            'cv' => array(
-                'name' => ['test.pdf', 'test1.pdf'],
-                'type' => ['application/pdf', 'application/pdf'],
-                'size' => [542, 541],
-                'tmp_name' => [__DIR__ . '/_tmp/test.pdf', __DIR__ . '/_tmp/test1.pdf'],
-                'error' => [0, 0]
-            )
-        );
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/we failed to move file/');
 
-        $form = new Form('', false);
+        $_FILES = [
+            'cv' => [
+                'name'     => ['test.pdf', 'test1.pdf'],
+                'type'     => ['application/pdf', 'application/pdf'],
+                'size'     => [542, 541],
+                'tmp_name' => [__DIR__ . '/_tmp/test.pdf', __DIR__ . '/_tmp/test1.pdf'],
+                'error'    => [0, 0],
+            ],
+        ];
+
+        $form  = new Form('', false);
         $field = $form->uploadField('cv');
         $field->setMultiple(true);
 
@@ -205,22 +233,21 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($newfile, __DIR__ . '/_tmp/test(1).pdf');
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /incorrect size given/
-     */
     public function testSizeToBytes()
     {
+        $this->expectException(Exception::class);
+        $this->expectErrorMessageMatches('/incorrect size given/');
+
         $tests = [
             '1024b' => '1024',
-            '1B' => '1',
-            '1kb' => '1024',
-            '21k' => '21504',
-            '5m' => '5242880',
-            '5M' => '5242880',
-            '1G' => '1073741824',
-            '4g' => '4294967296',
-            '1.4mb' => '1468006'
+            '1B'    => '1',
+            '1kb'   => '1024',
+            '21k'   => '21504',
+            '5m'    => '5242880',
+            '5M'    => '5242880',
+            '1G'    => '1073741824',
+            '4g'    => '4294967296',
+            '1.4mb' => '1468006',
         ];
 
         foreach ($tests as $size => $expected) {
@@ -245,32 +272,30 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         unset($GLOBALS['mock_ini_get']);
 
         $GLOBALS['mock_ini_get']['upload_max_filesize'] = '5m';
-        $GLOBALS['mock_ini_get']['post_max_size'] = '2m';
+        $GLOBALS['mock_ini_get']['post_max_size']       = '2m';
 
         $this->assertEquals((2 * 1024 * 1024), FormUtils::getMaxUploadSize());
 
-
         $GLOBALS['mock_ini_get']['upload_max_filesize'] = '2kb';
-        $GLOBALS['mock_ini_get']['post_max_size'] = '2m';
+        $GLOBALS['mock_ini_get']['post_max_size']       = '2m';
 
         $this->assertEquals((2 * 1024), FormUtils::getMaxUploadSize());
 
-
         $GLOBALS['mock_ini_get']['upload_max_filesize'] = '2q'; // wrong
-        $GLOBALS['mock_ini_get']['post_max_size'] = '2m';
+        $GLOBALS['mock_ini_get']['post_max_size']       = '2m';
 
         $this->assertEquals((2 * 1024 * 1024), FormUtils::getMaxUploadSize());
 
         $GLOBALS['mock_ini_get']['upload_max_filesize'] = '2m';
-        $GLOBALS['mock_ini_get']['post_max_size'] = 'left'; // wrong
+        $GLOBALS['mock_ini_get']['post_max_size']       = 'left'; // wrong
 
         $this->assertEquals((2 * 1024 * 1024), FormUtils::getMaxUploadSize());
     }
 
     public function testQueryStringToFormWithWhitelist()
     {
-        $_GET['name'] = 'John';
-        $_GET['age'] = 16;
+        $_GET['name']   = 'John';
+        $_GET['age']    = 16;
         $_GET['gender'] = 'm';
 
         $form = new Form();
@@ -279,19 +304,23 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         $blacklist = null;
         FormUtils::queryStringToForm($form, $whitelist, $blacklist);
 
-        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $form->getFieldByName('name'));
-        $this->assertEquals('John', $form->getFieldByName('name')->getValue());
+        /** @var HiddenField $nameFld */
+        $nameFld = $form->getFieldByName('name');
+        $this->assertInstanceOf(HiddenField::class, $nameFld);
+        $this->assertEquals('John', $nameFld->getValue());
 
-        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $form->getFieldByName('gender'));
-        $this->assertEquals('m', $form->getFieldByName('gender')->getValue());
+        /** @var HiddenField $genderFld */
+        $genderFld = $form->getFieldByName('gender');
+        $this->assertInstanceOf(HiddenField::class, $genderFld);
+        $this->assertEquals('m', $genderFld->getValue());
 
         $this->assertNull($form->getFieldByName('age'));
     }
 
     public function testQueryStringToFormWithBlacklist()
     {
-        $_GET['name'] = 'John';
-        $_GET['age'] = 16;
+        $_GET['name']   = 'John';
+        $_GET['age']    = 16;
         $_GET['gender'] = 'm';
 
         $form = new Form();
@@ -300,11 +329,15 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
         $blacklist = ['age'];
         FormUtils::queryStringToForm($form, $whitelist, $blacklist);
 
-        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $form->getFieldByName('name'));
-        $this->assertEquals('John', $form->getFieldByName('name')->getValue());
+        /** @var HiddenField $nameFld */
+        $nameFld = $form->getFieldByName('name');
+        $this->assertInstanceOf(HiddenField::class, $nameFld);
+        $this->assertEquals('John', $nameFld->getValue());
 
-        $this->assertInstanceOf('\FormHandler\Field\HiddenField', $form->getFieldByName('gender'));
-        $this->assertEquals('m', $form->getFieldByName('gender')->getValue());
+        /** @var HiddenField $genderFld */
+        $genderFld = $form->getFieldByName('gender');
+        $this->assertInstanceOf(HiddenField::class, $genderFld);
+        $this->assertEquals('m', $genderFld->getValue());
 
         $this->assertNull($form->getFieldByName('age'));
     }
@@ -313,27 +346,26 @@ class FormUtilsTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         @mkdir(__DIR__ . '/_tmp');
         @touch(__DIR__ . '/_tmp/test.pdf');
 
-        $GLOBALS['mock_file_size'] = 542;
+        $GLOBALS['mock_file_size']  = 542;
         $GLOBALS['mock_finfo_file'] = 'application/pdf';
 
-
-        $_FILES = array(
-            'cv' => array(
-                'name' => 'test.pdf',
-                'type' => 'application/pdf',
-                'size' => 542,
+        $_FILES = [
+            'cv' => [
+                'name'     => 'test.pdf',
+                'type'     => 'application/pdf',
+                'size'     => 542,
                 'tmp_name' => __DIR__ . '/_tmp/test.pdf',
-                'error' => 0
-            )
-        );
+                'error'    => 0,
+            ],
+        ];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ($GLOBALS as $key => $value) {
             if (substr($key, 0, 5) == 'mock_') {

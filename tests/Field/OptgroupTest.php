@@ -1,8 +1,9 @@
 <?php
 namespace FormHandler\Tests\Field;
 
-use FormHandler\Field\Optgroup;
 use FormHandler\Field\Option;
+use FormHandler\Field\Optgroup;
+use FormHandler\Tests\TestCase;
 
 /**
  * Created by PhpStorm.
@@ -10,7 +11,7 @@ use FormHandler\Field\Option;
  * Date: 22-08-16
  * Time: 09:36
  */
-class OptgroupTest extends \PHPUnit_Framework_TestCase
+class OptgroupTest extends TestCase
 {
     public function testOptgroup()
     {

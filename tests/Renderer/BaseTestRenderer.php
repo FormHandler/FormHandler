@@ -2,10 +2,21 @@
 
 namespace FormHandler\Tests\Renderer;
 
-class BaseTestRenderer extends \PHPUnit_Framework_TestCase
+use FormHandler\Tests\TestCase;
+
+class BaseTestRenderer extends TestCase
 {
-    protected function expectAttribute($html, $name, $value)
+    /**
+     * @param string $html
+     * @param string $name
+     * @param mixed  $value
+     */
+    protected function expectAttribute(string $html, string $name, $value)
     {
-        $this->assertContains($name . '="' . $value . '"', $html, 'Tag should contain attribute ' . $name);
+        $this->assertStringContainsString(
+            $name . '="' . $value . '"',
+            $html,
+            'Tag should contain attribute ' . $name
+        );
     }
 }

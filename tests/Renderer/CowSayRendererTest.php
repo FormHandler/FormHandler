@@ -4,7 +4,6 @@ namespace FormHandler\Tests\Renderer;
 
 use FormHandler\Form;
 use FormHandler\Renderer\CowSayRenderer;
-use FormHandler\Renderer\ErrorAsTagRenderer;
 
 class CowSayRendererTest extends BaseTestRenderer
 {
@@ -17,8 +16,8 @@ class CowSayRendererTest extends BaseTestRenderer
 
         $html = $field->render();
 
-        $this->assertContains('<pre>', $html);
-        $this->assertContains('</pre>', $html);
+        $this->assertStringContainsString('<pre>', $html);
+        $this->assertStringContainsString('</pre>', $html);
     }
 
     public function testNonCowSay()
@@ -30,7 +29,7 @@ class CowSayRendererTest extends BaseTestRenderer
 
         $html = $btn->render();
 
-        $this->assertNotContains('<pre>', $html);
-        $this->assertNotContains('</pre>', $html);
+        $this->assertStringNotContainsString('<pre>', $html);
+        $this->assertStringNotContainsString('</pre>', $html);
     }
 }

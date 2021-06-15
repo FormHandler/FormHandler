@@ -2,6 +2,7 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
 
 /**
  * Test Passfield.
@@ -9,11 +10,11 @@ use FormHandler\Form;
  * Date: 23-08-16
  * Time: 16:23
  */
-class TextAreaTest extends \PHPUnit_Framework_TestCase
+class TextAreaTest extends TestCase
 {
     public function testTextAreaTest()
     {
-        $form = new Form();
+        $form  = new Form();
         $field = $form->textArea('msg');
 
         $field->setPlaceholder('Enter a message');

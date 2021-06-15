@@ -13,7 +13,7 @@ namespace FormHandler\Tests {
 // @codingStandardsIgnoreStart
 namespace FormHandler\Utils {
 
-    function extension_loaded($ext)
+    function extension_loaded(string $ext): bool
     {
         if (isset($GLOBALS['mock_extension_not_loaded']) && $GLOBALS['mock_extension_not_loaded'] == $ext) {
             return false;
@@ -24,43 +24,27 @@ namespace FormHandler\Utils {
         }
     }
 
-    function mkdir($dirname, $mode = 0777, $recursive = false)
+    function mkdir(string $dirname, int $mode = 0777, bool $recursive = false): bool
     {
-        if (isset($GLOBALS['mock_mkdir_response'])) {
-            return $GLOBALS['mock_mkdir_response'];
-        } else {
-            return \mkdir($dirname, $mode, $recursive);
-        }
+        return $GLOBALS['mock_mkdir_response'] ?? \mkdir($dirname, $mode, $recursive);
     }
 
-    function is_writable($filename)
+    function is_writable(string $filename): bool
     {
-        if (isset($GLOBALS['mock_is_writable_response'])) {
-            return $GLOBALS['mock_is_writable_response'];
-        } else {
-            return \is_writable($filename);
-        }
+        return $GLOBALS['mock_is_writable_response'] ?? \is_writable($filename);
     }
 
-    function move_uploaded_file($file, $dest)
+    function move_uploaded_file(string $file, string $dest): bool
     {
-        if (isset($GLOBALS['mock_move_uploaded_file_response'])) {
-            return $GLOBALS['mock_move_uploaded_file_response'];
-        } else {
-            return rename($file, $dest);
-        }
+        return $GLOBALS['mock_move_uploaded_file_response'] ?? rename($file, $dest);
     }
 
     function gd_info()
     {
-        if (isset($GLOBALS['mock_gd_info'])) {
-            return $GLOBALS['mock_gd_info'];
-        } else {
-            return \function_exists('gd_info') ? \gd_info() : [];
-        }
+        return $GLOBALS['mock_gd_info'] ?? (\function_exists('gd_info') ? \gd_info() : []);
     }
 
-    function function_exists($func)
+    function function_exists(string $func): bool
     {
         if (isset($GLOBALS['mock_function_exists']) && $GLOBALS['mock_function_exists'] == $func) {
             return true;
@@ -71,17 +55,18 @@ namespace FormHandler\Utils {
         }
     }
 
-    function phpinfo($int)
+    function phpinfo(int $int): bool
     {
         if (isset($GLOBALS['mock_php_info'])) {
             echo $GLOBALS['mock_php_info'];
+
             return true;
         } else {
             return \phpinfo($int);
         }
     }
 
-    function ini_get($var)
+    function ini_get(string $var)
     {
         if (isset($GLOBALS['mock_ini_get']) && isset($GLOBALS['mock_ini_get'][$var])) {
             return $GLOBALS['mock_ini_get'][$var];
@@ -89,31 +74,31 @@ namespace FormHandler\Utils {
             return \ini_get($var);
         }
     }
-
-
 }
 
 namespace FormHandler\Validator {
 
-    function filesize($file)
+    /**
+     * @param string $file
+     *
+     * @return int|false
+     */
+    function filesize(string $file)
     {
-        if (isset($GLOBALS['mock_file_size'])) {
-            return $GLOBALS['mock_file_size'];
-        } else {
-            return \filesize($file);
-        }
+        return $GLOBALS['mock_file_size'] ?? \filesize($file);
     }
 
-    function getimagesize($image)
+    /**
+     * @param string $image
+     *
+     * @return array|false
+     */
+    function getimagesize(string $image)
     {
-        if (isset($GLOBALS['mock_image_size'])) {
-            return $GLOBALS['mock_image_size'];
-        } else {
-            return \getimagesize($image);
-        }
+        return $GLOBALS['mock_image_size'] ?? \getimagesize($image);
     }
 
-    function function_exists($func)
+    function function_exists(string $func): bool
     {
         if (isset($GLOBALS['mock_function_exists']) && $GLOBALS['mock_function_exists'] == $func) {
             return true;
@@ -124,40 +109,40 @@ namespace FormHandler\Validator {
         }
     }
 
-    function getmxrr($host, $tmp)
+    /**
+     * @param string $host
+     * @param array  $tmp
+     *
+     * @return bool
+     */
+    function getmxrr(string $host, array &$tmp): bool
     {
-        if (isset($GLOBALS['mock_mxrr_response'])) {
-            return $GLOBALS['mock_mxrr_response'];
-        } else {
-            return \function_exists('getmxrr') ? \getmxrr($host, $tmp) : false;
-        }
+        return $GLOBALS['mock_mxrr_response'] ?? \function_exists('getmxrr') && \getmxrr($host, $tmp);
     }
 
-    function mime_content_type($file)
+    /**
+     * @param string $file
+     *
+     * @return false|string
+     */
+    function mime_content_type(string $file)
     {
-        if (isset($GLOBALS['mock_mime_content_type'])) {
-            return $GLOBALS['mock_mime_content_type'];
-        } else {
-            return \function_exists('mime_content_type') ? \mime_content_type($file) : false;
-        }
+        return $GLOBALS['mock_mime_content_type'] ?? (\function_exists('mime_content_type') ? \mime_content_type($file) : false);
     }
 
-    function checkdnsrr($host, $type = 'MX')
+    function checkdnsrr(string $host, string $type = 'MX'): bool
     {
-        if (isset($GLOBALS['mock_dnsrr_response'])) {
-            return $GLOBALS['mock_dnsrr_response'];
-        } else {
-            return \function_exists('checkdnsrr') ? \checkdnsrr($host, $type) : false;
-        }
-
+        return $GLOBALS['mock_dnsrr_response'] ?? \function_exists('checkdnsrr') && \checkdnsrr($host, $type);
     }
 
-    function finfo_file($finfo, $filename)
+    /**
+     * @param resource $finfo
+     * @param string   $filename
+     *
+     * @return false|string
+     */
+    function finfo_file($finfo, string $filename)
     {
-        if (isset($GLOBALS['mock_finfo_file'])) {
-            return $GLOBALS['mock_finfo_file'];
-        } else {
-            return \finfo_file($finfo, $filename);
-        }
+        return $GLOBALS['mock_finfo_file'] ?? \finfo_file($finfo, $filename);
     }
 }

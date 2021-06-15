@@ -3,8 +3,9 @@
 namespace FormHandler\Tests\Renderer;
 
 use FormHandler\Renderer\Tag;
+use FormHandler\Tests\TestCase;
 
-class TagTest extends \PHPUnit_Framework_TestCase
+class TagTest extends TestCase
 {
     public function testTag()
     {

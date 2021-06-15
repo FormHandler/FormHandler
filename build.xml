@@ -30,6 +30,7 @@
     <property name="phpmd"    value="${basedir}/vendor/bin/phpmd"/>
     <property name="composer" value="composer"/> <!-- composer should be installed global -->
     <property name="phpunit"  value="${basedir}/vendor/bin/phpunit"/>
+    <property name="phpstan" value="${basedir}/vendor/bin/phpstan"/>
 
     <target name="full-build"
             depends="prepare,composer,static-analysis,phpunit,-check-failure"
@@ -121,12 +122,23 @@
             unless="phploc.done"
             description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
         <exec executable="${phploc}" taskname="phploc">
-            <arg value="--count-tests" />
-            <arg path="${basedir}/src" />
-            <arg path="${basedir}/tests" />
+            <arg value="--count-tests"/>
+            <arg path="${basedir}/src"/>
+            <arg path="${basedir}/tests"/>
         </exec>
 
         <property name="phploc.done" value="true"/>
+    </target>
+
+    <target name="phpstan" description="Run phpstan">
+        <exec executable="${phpstan}" failonerror="true">
+            <arg value="analyse"/>
+            <arg value="--no-progress"/>
+            <arg value="--no-ansi"/>
+            <arg value="--no-interaction"/>
+            <arg value="--memory-limit"/>
+            <arg value="512m"/>
+        </exec>
     </target>
 
     <target name="phploc-ci"
@@ -134,13 +146,13 @@
             depends="prepare"
             description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within a continuous integration environment.">
         <exec executable="${phploc}" taskname="phploc">
-            <arg value="--count-tests" />
-            <arg value="--log-csv" />
-            <arg path="${basedir}/build/logs/phploc.csv" />
-            <arg value="--log-xml" />
-            <arg path="${basedir}/build/logs/phploc.xml" />
-            <arg path="${basedir}/src" />
-            <arg path="${basedir}/tests" />
+            <arg value="--count-tests"/>
+            <arg value="--log-csv"/>
+            <arg path="${basedir}/build/logs/phploc.csv"/>
+            <arg value="--log-xml"/>
+            <arg path="${basedir}/build/logs/phploc.xml"/>
+            <arg path="${basedir}/src"/>
+            <arg path="${basedir}/tests"/>
         </exec>
 
         <property name="phploc.done" value="true"/>

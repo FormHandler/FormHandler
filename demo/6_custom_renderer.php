@@ -1,23 +1,24 @@
 <?php
 
-use FormHandler\Field\AbstractFormField;
-use FormHandler\Field\Element;
 use FormHandler\Form;
+use FormHandler\Field\Element;
 use FormHandler\Renderer\XhtmlRenderer;
+use FormHandler\Field\AbstractFormField;
 use FormHandler\Validator\StringValidator;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-
 class RequiredRenderer extends XhtmlRenderer
 {
-
     /**
      * Extend the default rendering: Also render
+     *
      * @param Element $element
+     *
      * @return string
+     * @throws \Exception
      */
-    public function render(Element $element)
+    public function render(Element $element): string
     {
         // our HTML container
         $html = '';
@@ -42,7 +43,6 @@ class RequiredRenderer extends XhtmlRenderer
         return $html;
     }
 }
-
 
 $form = new Form();
 $form->setRenderer(new RequiredRenderer());

@@ -3,8 +3,9 @@
 namespace FormHandler\Tests\Field;
 
 use FormHandler\Field\Option;
+use FormHandler\Tests\TestCase;
 
-class HasAttributesTest extends \PHPUnit_Framework_TestCase
+class HasAttributesTest extends TestCase
 {
     public function testAttributes()
     {

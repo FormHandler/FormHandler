@@ -1,7 +1,7 @@
 <?php
 
 use FormHandler\Form;
-use FormHandler\Formatter\CowSayFormatter;
+use FormHandler\Renderer\CowSayRenderer;
 use FormHandler\Validator\StringValidator;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
@@ -10,7 +10,7 @@ session_start();
 
 $form = new Form('');
 
-$form->setFormatter(new CowSayFormatter());
+$form->setRenderer(new CowSayRenderer());
 $form->textField('name')->addValidator(new StringValidator(2, 50, true));
 
 $form->selectField('gender')
@@ -28,16 +28,16 @@ if ($form->isSubmitted()) {
 
 ?>
 <html>
-<head></head>
-<body>
-<?= $form ?>
-Enter your name: <?= $form('name'); ?>
-<br/>
-Select your gender: <?=$form('gender')?>
+    <head></head>
+    <body>
+        <?= $form ?>
+        Enter your name: <?= $form('name'); ?>
+        <br/>
+        Select your gender: <?= $form('gender') ?>
 
-<?= $form('submit') ?>
+        <?= $form('submit') ?>
 
-<?= $form->close() ?>
+        <?= $form->close() ?>
 
-</body>
+    </body>
 </html>

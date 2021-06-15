@@ -6,19 +6,19 @@ session_start();
 
 $form = new \FormHandler\Form('');
 
-$form -> textField('name');
+$form->textField('name');
 
-$form -> submitButton('submit', 'Submit');
-$form -> imageButton('cancel', 'images/cancel.png');
+$form->submitButton('submit', 'Submit');
+$form->imageButton('cancel', 'images/cancel.png');
 
-var_dump( $_POST );
+var_dump($_POST);
 ?>
 
-<?=$form?>
-    Enter your name: <?=$form('name');?>
-    <br />
+<?= $form ?>
+Enter your name: <?= $form('name'); ?>
+<br/>
 
-    <?=$form('submit')?>
-    <?=$form('cancel')?>
+<?= $form('submit') ?>
+<?= $form('cancel') ?>
 
-<?=$form->close()?>
+<?= $form->close() ?>

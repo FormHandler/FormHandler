@@ -1,27 +1,29 @@
 <?php
+
 namespace FormHandler\Tests\Validator;
 
-use FormHandler\Field\AbstractFormField;
 use FormHandler\Form;
+use FormHandler\Tests\TestCase;
+use FormHandler\Field\AbstractFormField;
 
-class UserMethodValidatorTest extends \PHPUnit_Framework_TestCase
+class UserMethodValidatorTest extends TestCase
 {
     public function testUserMethod()
     {
         $form = new Form('', false);
 
         $field = $form->textField('name');
-        $field->addValidator(array($this, 'validateNameJohn'));
+        $field->addValidator([$this, 'validateNameJohn']);
 
         $this->assertFalse(
             $field->isValid(),
             'Field should be invalid because its empty'
         );
 
-        $this->assertContains(
+        $this->assertTrue(in_array(
             "You have to supply a value",
             $field->getErrorMessages()
-        );
+        ));
 
         $field->setValue('Jane');
         $this->assertFalse(
@@ -54,7 +56,9 @@ class UserMethodValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * This is our validator function which we use to test
+     *
      * @param AbstractFormField $field
+     *
      * @return string|bool
      */
     public static function validateNameJohn(AbstractFormField $field)
