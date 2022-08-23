@@ -130,7 +130,7 @@ $form->textField('name')
 General methods 
 -----
 
-Most objects (the form, fields and the buttons) represent an HTML tag. All of these objects have some [global 
+Most objects (the form, fields and the buttons) represent an [HTML tag](https://www.scaler.com/topics/html/html-tags/). All of these objects have some [global 
 attributes](http://www.w3schools.com/tags/ref_standardattributes.asp) available.
 In FormHandler, these global attributes are also available through getters and setters. For example:
 
